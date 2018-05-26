@@ -320,6 +320,239 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/05/26/教你免费搭建个人博客，Hexo-Github/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Ruan">
+      <meta itemprop="description" content="呜啦啦♪(^∇^*)德玛西亚!!! Welcome to the Sea of Stars.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/26/教你免费搭建个人博客，Hexo-Github/" itemprop="url">
+                  教你免费搭建个人博客，Hexo&Github
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-26 17:39:47 / 修改时间：18:11:28" itemprop="dateCreated datePublished" datetime="2018-05-26T17:39:47+08:00">2018-05-26</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Hexo使用攻略/" itemprop="url" rel="index"><span itemprop="name">Hexo使用攻略</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="什么是-Hexo？"><a href="#什么是-Hexo？" class="headerlink" title="什么是 Hexo？"></a>什么是 Hexo？</h1><p><a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">https://hexo.io/zh-cn/docs/</a></p>
+<p>Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。</p>
+<h1 id="一、配置Github"><a href="#一、配置Github" class="headerlink" title="一、配置Github"></a>一、配置Github</h1><p>首先注册、登录 <a href="https://github.com/" target="_blank" rel="noopener">https://github.com/</a></p>
+<p>记住自己的Username（很重要）</p>
+<p>然后右上角选择 Create a new repository <a href="https://github.com/new" target="_blank" rel="noopener">https://github.com/new</a></p>
+<p>Repository name （填自己的名字） <strong>yourname.github.io</strong>(yourname与你的注册用户名一致,这个就是你博客的域名了)</p>
+<p>例如，我的域名是github.com/zhihuya，就填入zhihuya.github.io。成功后出现下面的画面</p>
+<p><img src="/2018/05/26/教你免费搭建个人博客，Hexo-Github/JNWXHHS.jpg" alt="img"></p>
+<h1 id="二、环境安装（node、git）"><a href="#二、环境安装（node、git）" class="headerlink" title="二、环境安装（node、git）"></a>二、环境安装（node、git）</h1><p>1、安装 Node.js <a href="https://nodejs.org/en/" target="_blank" rel="noopener">https://nodejs.org/en/</a></p>
+<p>2、安装 Git <a href="https://github.com/waylau/git-for-win" target="_blank" rel="noopener">https://github.com/waylau/git-for-win</a></p>
+<p>Git教程 <a href="https://github.com/waylau/git-for-win" target="_blank" rel="noopener">https://github.com/waylau/git-for-win</a>廖雪峰老师的教程，非常好。</p>
+<p>3、安装完成后，在开始菜单里找到“Git”-&gt;“Git Bash”，名称和邮箱是Github上的</p>
+<p><img src="/2018/05/26/教你免费搭建个人博客，Hexo-Github/FAVYz0C.jpg" alt="img"></p>
+<p>4、安装 Hexo。所有必备的应用程序安装完成后，即可使用 npm 安装 Hexo。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/05/26/教你免费搭建个人博客，Hexo-Github/xWjp6U3.jpg" alt="img"></p>
+<p>（使用的cmder，超级好用~~。等待时间可能有点长）</p>
+<p>好了到这一步我们环境全部安装好了。</p>
+<h1 id="三、设置"><a href="#三、设置" class="headerlink" title="三、设置"></a>三、设置</h1><p>在电脑F盘（自己随意）目录下新建文件夹 test，进入test，按住Shift键点击鼠标右键</p>
+<p><img src="/2018/05/26/教你免费搭建个人博客，Hexo-Github/jOekzIE.png" alt="img"></p>
+<p>因为我有安装Cmder，没有安装的点击“在此处打开命令窗口”，输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init blog</span><br></pre></td></tr></table></figure>
+<p>稍微等待下，速度有点慢。成功提示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INFO  Start blogging with Hexo!</span><br></pre></td></tr></table></figure>
+<p>因为你初始化hexo 之后source目录下自带一篇hello world文章, 所以直接执行下方命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br><span class="line"># 启动本地服务器</span><br><span class="line">$ hexo server</span><br><span class="line"># 在浏览器输入 http://localhost:4000/就可以看见网页和模板了</span><br><span class="line">INFO  Start processing</span><br><span class="line">INFO  Hexo is running at http://localhost:4000/. Press Ctrl+C to stop.</span><br></pre></td></tr></table></figure>
+<p>访问<a href="http://localhost:4000/" target="_blank" rel="noopener">http://localhost:4000/</a>，便可以看到网站初步的模样，不要激动，我们还要把网页发布到Github上去。</p>
+<p><img src="/2018/05/26/教你免费搭建个人博客，Hexo-Github/wk2ybMK.jpg" alt="img"></p>
+<p>重新打开CMD，输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;Github的注册邮箱地址&quot;</span><br></pre></td></tr></table></figure>
+<p>一路Enter过来就好，得到信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Your public key has been saved in /c/Users/user/.ssh/id_rsa.pub.</span><br></pre></td></tr></table></figure>
+<p>找到该文件，打开（sublime text），Ctrl + a复制里面的所有内容，然后进入Sign in to GitHub：<a href="https://github.com/settings/ssh" target="_blank" rel="noopener">https://github.com/settings/ssh</a></p>
+<p>New SSH key ——Title：blog —— Key：输入刚才复制的—— Add SSH key</p>
+<h1 id="四、配置博客"><a href="#四、配置博客" class="headerlink" title="四、配置博客"></a>四、配置博客</h1><p>在blog目录下，用sublime打开_config.yml文件，修改参数信息</p>
+<p><strong>特别提醒，在每个参数的：后都要加一个空格</strong></p>
+<p>修改网站相关信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">title: 崔斯特测试所用博客</span><br><span class="line">subtitle: 副标题</span><br><span class="line">description: 网页描述</span><br><span class="line">author: 崔斯特</span><br><span class="line">language: zh-CN</span><br><span class="line">timezone: Asia/Shanghai</span><br></pre></td></tr></table></figure>
+<p>配置部署（我的是zhihuya，修改成自己的）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy: </span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/zhihuya/zhihuya.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+<h1 id="五、发表文章"><a href="#五、发表文章" class="headerlink" title="五、发表文章"></a>五、发表文章</h1><p>在CMD中输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new &quot;崔斯特测试文章&quot;</span><br><span class="line">INFO  Created: F:\test\blog\source\_posts\崔斯特测试文章.md</span><br></pre></td></tr></table></figure>
+<p>找到该文章，打开，使用Markdown语法，该语法介绍可以查看<a href="https://zhangslob.github.io/2017/02/26/%E5%88%A9%E7%94%A8HEXO%E6%90%AD%E5%BB%BA%E7%9A%84%E5%8D%9A%E5%AE%A2/" target="_blank" rel="noopener">https://zhangslob.github.io/2017/02/26/%E5%88%A9%E7%94%A8HEXO%E6%90%AD%E5%BB%BA%E7%9A%84%E5%8D%9A%E5%AE%A2/</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 崔斯特测试文章</span><br><span class="line">date: 2017-02-28 13:03:44</span><br><span class="line">tags:</span><br><span class="line">---</span><br><span class="line">这是一篇测试文章，欢迎关注作者博客[1]: https://zhangslob.github.io/</span><br></pre></td></tr></table></figure>
+<p>保存，然后执行下列步骤：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">F:\test\blog</span><br><span class="line">$ hexo clean</span><br><span class="line">INFO  Deleted database.</span><br><span class="line">INFO  Deleted public folder.</span><br><span class="line"></span><br><span class="line">F:\test\blog</span><br><span class="line">$ hexo generate</span><br><span class="line">INFO  Start processing</span><br><span class="line">INFO  Files loaded in 1.48 s</span><br><span class="line">#省略</span><br><span class="line">INFO  29 files generated in 4.27 s</span><br><span class="line"></span><br><span class="line">F:\test\blog</span><br><span class="line">$ hexo server</span><br><span class="line">INFO  Start processing</span><br><span class="line">INFO  Hexo is running at http://localhost:4000/. Press Ctrl+C to stop.</span><br></pre></td></tr></table></figure>
+<p>这个时候，打开<a href="http://localhost:4000/" target="_blank" rel="noopener">http://localhost:4000/</a>，发现刚才的文章已经成功了</p>
+<p><img src="/2018/05/26/教你免费搭建个人博客，Hexo-Github/fGVNxkn.jpg" alt="img"></p>
+<p>最后一步，发布到网上，执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">F:\test\blog</span><br><span class="line">$ hexo deploy</span><br><span class="line">INFO  Deploying: git</span><br><span class="line">INFO  Clearing .deploy_git folder...</span><br><span class="line">INFO  Copying files from public folder...</span><br><span class="line">#省略</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/05/26/教你免费搭建个人博客，Hexo-Github/kKRV0UB.jpg" alt="img"></p>
+<p>其中会跳出Github登录，直接登录，如果没有问题输入zhihuya（换成你的）.github.io/</p>
+<p>崔斯特测试所用博客<a href="https://zhihuya.github.io/" target="_blank" rel="noopener">https://zhihuya.github.io/</a></p>
+<p>然后就可以看到已经发布了</p>
+<p><img src="/2018/05/26/教你免费搭建个人博客，Hexo-Github/g9wtZVk.jpg" alt="img"></p>
+<h1 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h1><p>发布文章的步骤：</p>
+<p>1、hexo new 创建文章</p>
+<p>2、Markdown语法编辑文章</p>
+<p>3、部署（所有打开CMD都是在blog目录下）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hexo clean #清除缓存 网页正常情况下可以忽略此条命令</span><br><span class="line">hexo generate #生成</span><br><span class="line">hexo server #启动服务预览，非必要，可本地浏览网页</span><br><span class="line">hexo deploy #部署发布</span><br></pre></td></tr></table></figure>
+<p>简写Tips：</p>
+<blockquote>
+<p>hexo n “我的博客” == hexo new “我的博客” #新建文章</p>
+<p>hexo p == hexo publish</p>
+<p>hexo g == hexo generate#生成</p>
+<p>hexo s == hexo server #启动服务预览</p>
+<p>hexo d == hexo deploy#部署</p>
+</blockquote>
+<p>如果在执行 hexo deploy 后,出现 error deployer not found:github 的错误，执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<p>出错是正常的，出错了自己先百度或google，实在不知道的可以询问我。</p>
+<p>托管的话不仅有github可以用，还有个国内的<a href="https://coding.net/" target="_blank" rel="noopener">https://coding.net/</a>可选</p>
+<h3 id="引用说明"><a href="#引用说明" class="headerlink" title="引用说明"></a>引用说明</h3><ul>
+<li>作者：zhangslob</li>
+<li>链接：<a href="https://zhangslob.github.io/2017/02/28/教你免费搭建个人博客，Hexo-Github" target="_blank" rel="noopener">https://zhangslob.github.io/2017/02/28/教你免费搭建个人博客，Hexo-Github</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/05/26/Hexo使用攻略-添加分类及标签/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -505,7 +738,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 <a class="post-title-link" href="/2018/05/20/Markdown吃了吗/" itemprop="url">
-                  吃了吗?
+                  Markdown吃了吗?
                 </a>
               
             
@@ -548,7 +781,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-26 17:24:13" itemprop="dateModified" datetime="2018-05-26T17:24:13+08:00">2018-05-26</time>
+                <time title="修改时间：2018-05-26 17:38:15" itemprop="dateModified" datetime="2018-05-26T17:38:15+08:00">2018-05-26</time>
               
             
           </span>
@@ -708,7 +941,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/05/20/hello-world/">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/05/20/hexo-hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Vincent Ruan">
@@ -727,8 +960,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/05/20/hello-world/" itemprop="url">
-                  Hello World
+                <a class="post-title-link" href="/2018/05/20/hexo-hello-world/" itemprop="url">
+                  Hexo Hello World
                 </a>
               
             
@@ -771,7 +1004,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-26 17:24:31" itemprop="dateModified" datetime="2018-05-26T17:24:31+08:00">2018-05-26</time>
+                <time title="修改时间：2018-05-26 17:38:05" itemprop="dateModified" datetime="2018-05-26T17:38:05+08:00">2018-05-26</time>
               
             
           </span>
@@ -914,7 +1147,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -946,7 +1179,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">2</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -956,6 +1193,15 @@
 
           
 
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/vincentruan" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
           
 
           
