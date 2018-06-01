@@ -320,6 +320,173 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Ruan">
+      <meta itemprop="description" content="呜啦啦♪(^∇^*) Welcome to the Sea of Stars.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/01/Hexo集成Algolia搜索插件/" itemprop="url">
+                  Hexo集成Algolia搜索插件
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-01 23:14:36 / 修改时间：23:17:02" itemprop="dateCreated datePublished" datetime="2018-06-01T23:14:36+08:00">2018-06-01</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong><em>本文转载自</em></strong><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/" target="_blank" rel="noopener">Hexo集成Algolia搜索插件</a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>个人博客自从2016年10月21日搭建以来，迄今为止已经有49 篇日志了。虽然不是很多篇文章，但是搜索站内的内容已经力不从心了。</p>
+<p>搜索了网上很多关于“Hexo 站内搜索”的内容，发现大部分都是使用<a href="https://swiftype.com/" target="_blank" rel="noopener">Swiftype</a>，但是发现Swiftype 搜索只有15 天的免费，之后就需要开始收费了。</p>
+<p>因为只是为自己的<a href="https://jobbym.github.io/" target="_blank" rel="noopener">个人博客 </a>使用站内搜索，所以希望找一个类似与Swiftype 的，但是<strong>免费的</strong>站内搜索。最后找了Algolia 这个免费版本替代。</p>
+<p>下面简单说下搭建过程：</p>
+<h2 id="搭建过程"><a href="#搭建过程" class="headerlink" title="搭建过程"></a>搭建过程</h2><h3 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h3><p>如果你的Next 版本为5.1.0 之后，可以使用Algolia。如果不是，请先升级到5.1.0 版本之后</p>
+<h3 id="一个Algolia-帐号"><a href="#一个Algolia-帐号" class="headerlink" title="一个Algolia 帐号"></a>一个Algolia 帐号</h3><p><a href="https://www.algolia.com/users/sign_in" target="_blank" rel="noopener">官网地址</a> 使用GitHub 或Google 帐号登录。<br><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_login.jpg" target="_blank" rel="noopener"><img src="/2018/06/01/Hexo集成Algolia搜索插件/algolia_login.jpg" alt="img"></a></p>
+<h3 id="创建Index"><a href="#创建Index" class="headerlink" title="创建Index"></a>创建Index</h3><p>进入<a href="https://www.algolia.com/dashboard" target="_blank" rel="noopener">Dashboard</a>，<br>选择<a href="https://www.algolia.com/explorer#?index=getstarted_actors" target="_blank" rel="noopener">Indices</a> 新建一个Index。<br><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_explorer.jpg" target="_blank" rel="noopener"><img src="/2018/06/01/Hexo集成Algolia搜索插件/algolia_explorer.jpg" alt="img"></a><br><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_newindex.jpg" target="_blank" rel="noopener"><img src="/2018/06/01/Hexo集成Algolia搜索插件/algolia_newindex.jpg" alt="img"></a></p>
+<h3 id="安装Hexo-Algolia"><a href="#安装Hexo-Algolia" class="headerlink" title="安装Hexo Algolia"></a>安装Hexo Algolia</h3><p>Index 创建完成后，此时Index 为包含任何数据。需要安装Hexo Aloglia 扩展，这个扩展的功能是搜集站点的内容并通过API 发送给Aloglia。前往站点根目录，执行命令安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save hexo-algolia</span><br></pre></td></tr></table></figure>
+<h3 id="获取Key，更新站点信配置"><a href="#获取Key，更新站点信配置" class="headerlink" title="获取Key，更新站点信配置"></a>获取Key，更新站点信配置</h3><p>点击Dashborad 左侧的<a href="https://www.algolia.com/api-keys" target="_blank" rel="noopener">API Keys</a>，其中的信息接下来将会被用到。<br><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_apikeys.jpg" target="_blank" rel="noopener"><img src="/2018/06/01/Hexo集成Algolia搜索插件/algolia_apikeys.jpg" alt="img"></a><br>包括<code>Application ID</code> 、<code>Search-Only API Key</code> 和 <code>Admin API Key</code>，其中<code>Admin API Key</code>需要保密保存</p>
+<p>编辑站点配置文件，新增以下配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">algolia:</span><br><span class="line">  applicationID: &apos;SV57WJ53OS&apos;</span><br><span class="line">  apiKey: &apos;c7d219504e44d09ab55f5f7a195fce98&apos;</span><br><span class="line">  adminApiKey: &apos;adminApiKey&apos;</span><br><span class="line">  indexName: &apos;dev_jobbymsblog&apos;</span><br><span class="line">  chunkSize: 5000</span><br></pre></td></tr></table></figure>
+<h3 id="更新Index"><a href="#更新Index" class="headerlink" title="更新Index"></a>更新Index</h3><p>当配置完成，在站点根目录下执行<code>hexo algolia</code> 来更新Index。请注意观察命令的输出。<br><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_hexo_algolia.jpg" target="_blank" rel="noopener"><img src="/2018/06/01/Hexo集成Algolia搜索插件/algolia_hexo_algolia.jpg" alt="img"></a></p>
+<h3 id="主题集成"><a href="#主题集成" class="headerlink" title="主题集成"></a>主题集成</h3><p>更改主题配置文件，找到Algolia Search 配置部分：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Algolia Search</span><br><span class="line">algolia_search:</span><br><span class="line">  enable: false</span><br><span class="line">  hits:</span><br><span class="line">    per_page: 10</span><br><span class="line">  labels:</span><br><span class="line">    input_placeholder: Search for Posts</span><br><span class="line">    hits_empty: &quot;We didn&apos;t find any results for the search: $&#123;query&#125;&quot;</span><br><span class="line">    hits_stats: &quot;$&#123;hits&#125; results found in $&#123;time&#125; ms&quot;</span><br></pre></td></tr></table></figure>
+<p>将<code>enable</code> 改为<code>true</code> 即可，根据需要你可以调整<code>labels</code> 中的文本。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1. 点击搜索结果，结果跳转地址为：</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cannot GET /undefined/</span><br></pre></td></tr></table></figure>
+<p>按照<a href="https://github.com/iissnan/hexo-theme-next/issues/1084" target="_blank" rel="noopener">5.1.0使用algolia搜索问题</a>这里进行的处理，在这里总结一下：</p>
+<ul>
+<li>因为hexo-aloglia 的作者没有把<code>post.path</code> 加入index，所以<code>data.path</code> 是<code>undefined</code>。</li>
+<li>遇到这个问题，首先运行<code>npm uninstll hexo-algolia</code> 卸载之前的版本，再运行<code>npm install hexo-algolia@0.2.0 --save</code>,最后运行<code>hexo algolia</code> 命令重新index 就可以了。</li>
+</ul>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ol>
+<li><a href="https://github.com/iissnan/hexo-theme-next/wiki/Swiftype%E7%AB%99%E5%86%85%E6%90%9C%E7%B4%A2" target="_blank" rel="noopener">Swiftype站内搜索</a></li>
+<li><a href="http://theme-next.iissnan.com/third-party-services.html" target="_blank" rel="noopener">Next 第三方服务集成</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/06/01/Hexo-Next-添加-Gitment-评论系统/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -542,7 +709,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-06-01 23:07:01" itemprop="dateModified" datetime="2018-06-01T23:07:01+08:00">2018-06-01</time>
+                <time title="修改时间：2018-06-01 23:13:17" itemprop="dateModified" datetime="2018-06-01T23:13:17+08:00">2018-06-01</time>
               
             
           </span>
@@ -617,6 +784,7 @@
 <p>In that case you can force CUDA to use an older compiler in the following way:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -DCUDA_HOST_COMPILER=/usr/bin/gcc-5 ..</span><br></pre></td></tr></table></figure></p>
 <h3 id="To-do-a-generic-and-static-build-for-a-system-without-gcc-5-1"><a href="#To-do-a-generic-and-static-build-for-a-system-without-gcc-5-1" class="headerlink" title="To do a generic and static build for a system without gcc 5.1+"></a>To do a generic and static build for a system without gcc 5.1+</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cmake -DCMAKE_LINK_STATIC=ON -DXMR-STAK_COMPILE=generic .</span><br><span class="line">make install</span><br><span class="line">cd bin\Release</span><br><span class="line">copy C:\xmr-stak-dep\openssl\bin\* .</span><br></pre></td></tr></table></figure>
 <p>Note - cmake caches variables, so if you want to do a dynamic build later you need to specify ‘-DCMAKE_LINK_STATIC=OFF’</p>
+<p>Reference <a href="https://github.com/fireice-uk/xmr-stak" target="_blank" rel="noopener">xmr-stak</a></p>
 
           
         
@@ -1913,7 +2081,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

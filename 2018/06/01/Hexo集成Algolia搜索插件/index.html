@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '085Q2989Y8',
+      apiKey: '245c3b151c43ac65989ab011c1382e9d',
+      indexName: 'hexo_vincentruan_starocean',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文转载自Hexo集成Algolia搜索插件 前言个人博客自从2016年10月21日搭建以来，迄今为止已经有49 篇日志了。虽然不是很多篇文章，但是搜索站内的内容已经力不从心了。 搜索了网上很多关于“Hexo 站内搜索”的内容，发现大部分都是使用Swiftype，但是发现Swiftype 搜索只有15 天的免费，之后就需要开始收费了。 因为只是为自己的个人博客 使用站内搜索，所以希望找一个类似与S">
+<meta name="keywords" content="tech">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo集成Algolia搜索插件">
+<meta property="og:url" content="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/index.html">
+<meta property="og:site_name" content="星辰大海">
+<meta property="og:description" content="本文转载自Hexo集成Algolia搜索插件 前言个人博客自从2016年10月21日搭建以来，迄今为止已经有49 篇日志了。虽然不是很多篇文章，但是搜索站内的内容已经力不从心了。 搜索了网上很多关于“Hexo 站内搜索”的内容，发现大部分都是使用Swiftype，但是发现Swiftype 搜索只有15 天的免费，之后就需要开始收费了。 因为只是为自己的个人博客 使用站内搜索，所以希望找一个类似与S">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/algolia_login.jpg">
+<meta property="og:image" content="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/algolia_explorer.jpg">
+<meta property="og:image" content="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/algolia_newindex.jpg">
+<meta property="og:image" content="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/algolia_apikeys.jpg">
+<meta property="og:image" content="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/algolia_hexo_algolia.jpg">
+<meta property="og:updated_time" content="2018-06-01T15:17:02.296Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo集成Algolia搜索插件">
+<meta name="twitter:description" content="本文转载自Hexo集成Algolia搜索插件 前言个人博客自从2016年10月21日搭建以来，迄今为止已经有49 篇日志了。虽然不是很多篇文章，但是搜索站内的内容已经力不从心了。 搜索了网上很多关于“Hexo 站内搜索”的内容，发现大部分都是使用Swiftype，但是发现Swiftype 搜索只有15 天的免费，之后就需要开始收费了。 因为只是为自己的个人博客 使用站内搜索，所以希望找一个类似与S">
+<meta name="twitter:image" content="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/algolia_login.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Hexo集成Algolia搜索插件 | 星辰大海</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">星辰大海</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">My Conquest Is the Sea of Stars.</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Ruan">
+      <meta itemprop="description" content="呜啦啦♪(^∇^*) Welcome to the Sea of Stars.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hexo集成Algolia搜索插件
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-01 23:14:36 / 修改时间：23:17:02" itemprop="dateCreated datePublished" datetime="2018-06-01T23:14:36+08:00">2018-06-01</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong><em>本文转载自</em></strong><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/" target="_blank" rel="noopener">Hexo集成Algolia搜索插件</a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>个人博客自从2016年10月21日搭建以来，迄今为止已经有49 篇日志了。虽然不是很多篇文章，但是搜索站内的内容已经力不从心了。</p>
+<p>搜索了网上很多关于“Hexo 站内搜索”的内容，发现大部分都是使用<a href="https://swiftype.com/" target="_blank" rel="noopener">Swiftype</a>，但是发现Swiftype 搜索只有15 天的免费，之后就需要开始收费了。</p>
+<p>因为只是为自己的<a href="https://jobbym.github.io/" target="_blank" rel="noopener">个人博客 </a>使用站内搜索，所以希望找一个类似与Swiftype 的，但是<strong>免费的</strong>站内搜索。最后找了Algolia 这个免费版本替代。</p>
+<p>下面简单说下搭建过程：</p>
+<h2 id="搭建过程"><a href="#搭建过程" class="headerlink" title="搭建过程"></a>搭建过程</h2><h3 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h3><p>如果你的Next 版本为5.1.0 之后，可以使用Algolia。如果不是，请先升级到5.1.0 版本之后</p>
+<h3 id="一个Algolia-帐号"><a href="#一个Algolia-帐号" class="headerlink" title="一个Algolia 帐号"></a>一个Algolia 帐号</h3><p><a href="https://www.algolia.com/users/sign_in" target="_blank" rel="noopener">官网地址</a> 使用GitHub 或Google 帐号登录。<br><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_login.jpg" target="_blank" rel="noopener"><img src="/2018/06/01/Hexo集成Algolia搜索插件/algolia_login.jpg" alt="img"></a></p>
+<h3 id="创建Index"><a href="#创建Index" class="headerlink" title="创建Index"></a>创建Index</h3><p>进入<a href="https://www.algolia.com/dashboard" target="_blank" rel="noopener">Dashboard</a>，<br>选择<a href="https://www.algolia.com/explorer#?index=getstarted_actors" target="_blank" rel="noopener">Indices</a> 新建一个Index。<br><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_explorer.jpg" target="_blank" rel="noopener"><img src="/2018/06/01/Hexo集成Algolia搜索插件/algolia_explorer.jpg" alt="img"></a><br><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_newindex.jpg" target="_blank" rel="noopener"><img src="/2018/06/01/Hexo集成Algolia搜索插件/algolia_newindex.jpg" alt="img"></a></p>
+<h3 id="安装Hexo-Algolia"><a href="#安装Hexo-Algolia" class="headerlink" title="安装Hexo Algolia"></a>安装Hexo Algolia</h3><p>Index 创建完成后，此时Index 为包含任何数据。需要安装Hexo Aloglia 扩展，这个扩展的功能是搜集站点的内容并通过API 发送给Aloglia。前往站点根目录，执行命令安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save hexo-algolia</span><br></pre></td></tr></table></figure>
+<h3 id="获取Key，更新站点信配置"><a href="#获取Key，更新站点信配置" class="headerlink" title="获取Key，更新站点信配置"></a>获取Key，更新站点信配置</h3><p>点击Dashborad 左侧的<a href="https://www.algolia.com/api-keys" target="_blank" rel="noopener">API Keys</a>，其中的信息接下来将会被用到。<br><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_apikeys.jpg" target="_blank" rel="noopener"><img src="/2018/06/01/Hexo集成Algolia搜索插件/algolia_apikeys.jpg" alt="img"></a><br>包括<code>Application ID</code> 、<code>Search-Only API Key</code> 和 <code>Admin API Key</code>，其中<code>Admin API Key</code>需要保密保存</p>
+<p>编辑站点配置文件，新增以下配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">algolia:</span><br><span class="line">  applicationID: &apos;SV57WJ53OS&apos;</span><br><span class="line">  apiKey: &apos;c7d219504e44d09ab55f5f7a195fce98&apos;</span><br><span class="line">  adminApiKey: &apos;adminApiKey&apos;</span><br><span class="line">  indexName: &apos;dev_jobbymsblog&apos;</span><br><span class="line">  chunkSize: 5000</span><br></pre></td></tr></table></figure>
+<h3 id="更新Index"><a href="#更新Index" class="headerlink" title="更新Index"></a>更新Index</h3><p>当配置完成，在站点根目录下执行<code>hexo algolia</code> 来更新Index。请注意观察命令的输出。<br><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_hexo_algolia.jpg" target="_blank" rel="noopener"><img src="/2018/06/01/Hexo集成Algolia搜索插件/algolia_hexo_algolia.jpg" alt="img"></a></p>
+<h3 id="主题集成"><a href="#主题集成" class="headerlink" title="主题集成"></a>主题集成</h3><p>更改主题配置文件，找到Algolia Search 配置部分：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Algolia Search</span><br><span class="line">algolia_search:</span><br><span class="line">  enable: false</span><br><span class="line">  hits:</span><br><span class="line">    per_page: 10</span><br><span class="line">  labels:</span><br><span class="line">    input_placeholder: Search for Posts</span><br><span class="line">    hits_empty: &quot;We didn&apos;t find any results for the search: $&#123;query&#125;&quot;</span><br><span class="line">    hits_stats: &quot;$&#123;hits&#125; results found in $&#123;time&#125; ms&quot;</span><br></pre></td></tr></table></figure>
+<p>将<code>enable</code> 改为<code>true</code> 即可，根据需要你可以调整<code>labels</code> 中的文本。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1. 点击搜索结果，结果跳转地址为：</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cannot GET /undefined/</span><br></pre></td></tr></table></figure>
+<p>按照<a href="https://github.com/iissnan/hexo-theme-next/issues/1084" target="_blank" rel="noopener">5.1.0使用algolia搜索问题</a>这里进行的处理，在这里总结一下：</p>
+<ul>
+<li>因为hexo-aloglia 的作者没有把<code>post.path</code> 加入index，所以<code>data.path</code> 是<code>undefined</code>。</li>
+<li>遇到这个问题，首先运行<code>npm uninstll hexo-algolia</code> 卸载之前的版本，再运行<code>npm install hexo-algolia@0.2.0 --save</code>,最后运行<code>hexo algolia</code> 命令重新index 就可以了。</li>
+</ul>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ol>
+<li><a href="https://github.com/iissnan/hexo-theme-next/wiki/Swiftype%E7%AB%99%E5%86%85%E6%90%9C%E7%B4%A2" target="_blank" rel="noopener">Swiftype站内搜索</a></li>
+<li><a href="http://theme-next.iissnan.com/third-party-services.html" target="_blank" rel="noopener">Next 第三方服务集成</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/01/Hexo-Next-添加-Gitment-评论系统/" rel="next" title="Hexo-Next 添加 Gitment 评论系统">
+                <i class="fa fa-chevron-left"></i> Hexo-Next 添加 Gitment 评论系统
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Vincent Ruan</p>
+              <p class="site-description motion-element" itemprop="description">呜啦啦♪(^∇^*) Welcome to the Sea of Stars.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/vincentruan" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建过程"><span class="nav-number">2.</span> <span class="nav-text">搭建过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前提条件"><span class="nav-number">2.1.</span> <span class="nav-text">前提条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一个Algolia-帐号"><span class="nav-number">2.2.</span> <span class="nav-text">一个Algolia 帐号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建Index"><span class="nav-number">2.3.</span> <span class="nav-text">创建Index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Hexo-Algolia"><span class="nav-number">2.4.</span> <span class="nav-text">安装Hexo Algolia</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取Key，更新站点信配置"><span class="nav-number">2.5.</span> <span class="nav-text">获取Key，更新站点信配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更新Index"><span class="nav-number">2.6.</span> <span class="nav-text">更新Index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主题集成"><span class="nav-number">2.7.</span> <span class="nav-text">主题集成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">3.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">4.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Vincent Ruan</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
