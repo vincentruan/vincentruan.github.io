@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '085Q2989Y8',
+      apiKey: '245c3b151c43ac65989ab011c1382e9d',
+      indexName: 'hexo_vincentruan_starocean',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Compile xmr-stak for LinuxInstall DependenciesAMD APP SDK 3.0 (only needed to use AMD GPUs) download and install the latest version from https://www.dropbox.com/sh/mpg882ekirnsfa7/AADWz5X-TgVdsmWt0QwM">
+<meta name="keywords" content="xmr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux xmr-stak挖矿教程">
+<meta property="og:url" content="https://vincentruan.github.io/2018/05/27/Linux-xmr-stak挖矿教程/index.html">
+<meta property="og:site_name" content="星辰大海">
+<meta property="og:description" content="Compile xmr-stak for LinuxInstall DependenciesAMD APP SDK 3.0 (only needed to use AMD GPUs) download and install the latest version from https://www.dropbox.com/sh/mpg882ekirnsfa7/AADWz5X-TgVdsmWt0QwM">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-01T15:13:17.545Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux xmr-stak挖矿教程">
+<meta name="twitter:description" content="Compile xmr-stak for LinuxInstall DependenciesAMD APP SDK 3.0 (only needed to use AMD GPUs) download and install the latest version from https://www.dropbox.com/sh/mpg882ekirnsfa7/AADWz5X-TgVdsmWt0QwM">
+
+
+
+
+
+
+  <link rel="canonical" href="https://vincentruan.github.io/2018/05/27/Linux-xmr-stak挖矿教程/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Linux xmr-stak挖矿教程 | 星辰大海</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">星辰大海</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">My Conquest Is the Sea of Stars.</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/05/27/Linux-xmr-stak挖矿教程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Ruan">
+      <meta itemprop="description" content="呜啦啦♪(^∇^*) Welcome to the Sea of Stars.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux xmr-stak挖矿教程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-27 21:51:10" itemprop="dateCreated datePublished" datetime="2018-05-27T21:51:10+08:00">2018-05-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-01 23:13:17" itemprop="dateModified" datetime="2018-06-01T23:13:17+08:00">2018-06-01</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/block-chain/" itemprop="url" rel="index"><span itemprop="name">block-chain</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Compile-xmr-stak-for-Linux"><a href="#Compile-xmr-stak-for-Linux" class="headerlink" title="Compile xmr-stak for Linux"></a>Compile <strong>xmr-stak</strong> for Linux</h1><h2 id="Install-Dependencies"><a href="#Install-Dependencies" class="headerlink" title="Install Dependencies"></a>Install Dependencies</h2><h3 id="AMD-APP-SDK-3-0-only-needed-to-use-AMD-GPUs"><a href="#AMD-APP-SDK-3-0-only-needed-to-use-AMD-GPUs" class="headerlink" title="AMD APP SDK 3.0 (only needed to use AMD GPUs)"></a>AMD APP SDK 3.0 (only needed to use AMD GPUs)</h3><ul>
+<li>download and install the latest version from <a href="https://www.dropbox.com/sh/mpg882ekirnsfa7/AADWz5X-TgVdsmWt0QwMgTWLa/AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2?dl=0" target="_blank" rel="noopener">https://www.dropbox.com/sh/mpg882ekirnsfa7/AADWz5X-TgVdsmWt0QwMgTWLa/AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2?dl=0</a><br>(do not wonder why it is a link to a dropbox but AMD has removed the SDK downloads, see <a href="https://community.amd.com/thread/228059" target="_blank" rel="noopener">https://community.amd.com/thread/228059</a>)</li>
+</ul>
+<h3 id="Cuda-8-0-only-needed-to-use-NVIDIA-GPUs"><a href="#Cuda-8-0-only-needed-to-use-NVIDIA-GPUs" class="headerlink" title="Cuda 8.0+ (only needed to use NVIDIA GPUs)"></a>Cuda 8.0+ (only needed to use NVIDIA GPUs)</h3><ul>
+<li>download and install <a href="https://developer.nvidia.com/cuda-downloads" target="_blank" rel="noopener">https://developer.nvidia.com/cuda-downloads</a></li>
+<li>for minimal install choose <code>Custom installation options</code> during the install and select<ul>
+<li>CUDA/Develpment</li>
+<li>CUDA/Runtime</li>
+<li>Driver components</li>
+</ul>
+</li>
+</ul>
+<h3 id="GNU-Compiler"><a href="#GNU-Compiler" class="headerlink" title="GNU Compiler"></a>GNU Compiler</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"># Ubuntu / Debian</span><br><span class="line">sudo apt install libmicrohttpd-dev libssl-dev cmake build-essential libhwloc-dev</span><br><span class="line">git clone https://github.com/fireice-uk/xmr-stak.git</span><br><span class="line">mkdir xmr-stak/build</span><br><span class="line">cd xmr-stak/build</span><br><span class="line">cmake ..</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"># Arch</span><br><span class="line">sudo pacman -S --needed base-devel hwloc openssl cmake libmicrohttpd</span><br><span class="line">git clone https://github.com/fireice-uk/xmr-stak.git</span><br><span class="line">mkdir xmr-stak/build</span><br><span class="line">cd xmr-stak/build</span><br><span class="line">cmake ..</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"># Fedora</span><br><span class="line">sudo dnf install gcc gcc-c++ hwloc-devel libmicrohttpd-devel libstdc++-static make openssl-devel cmake</span><br><span class="line">git clone https://github.com/fireice-uk/xmr-stak.git</span><br><span class="line">mkdir xmr-stak/build</span><br><span class="line">cd xmr-stak/build</span><br><span class="line">cmake ..</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"># CentOS</span><br><span class="line">sudo yum install centos-release-scl epel-release</span><br><span class="line">sudo yum install cmake3 devtoolset-4-gcc* hwloc-devel libmicrohttpd-devel openssl-devel make</span><br><span class="line">scl enable devtoolset-4 bash</span><br><span class="line">git clone https://github.com/fireice-uk/xmr-stak.git</span><br><span class="line">mkdir xmr-stak/build</span><br><span class="line">cd xmr-stak/build</span><br><span class="line">cmake3 ..</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"># Ubuntu 14.04</span><br><span class="line">sudo add-apt-repository ppa:ubuntu-toolchain-r/test</span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt install gcc-5 g++-5 make</span><br><span class="line">sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 1 --slave /usr/bin/g++ g++ /usr/bin/g++-5</span><br><span class="line">curl -L http://www.cmake.org/files/v3.4/cmake-3.4.1.tar.gz | tar -xvzf - -C /tmp/</span><br><span class="line">cd /tmp/cmake-3.4.1/ &amp;&amp; ./configure &amp;&amp; make &amp;&amp; sudo make install &amp;&amp; cd -</span><br><span class="line">sudo update-alternatives --install /usr/bin/cmake cmake /usr/local/bin/cmake 1 --force</span><br><span class="line">sudo apt install libmicrohttpd-dev libssl-dev libhwloc-dev</span><br><span class="line">git clone https://github.com/fireice-uk/xmr-stak.git</span><br><span class="line">mkdir xmr-stak/build</span><br><span class="line">cd xmr-stak/build</span><br><span class="line">cmake ..</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"># TinyCore Linux 8.x</span><br><span class="line"># TinyCore is 32-bit only, but there is an x86-64 port, known as &quot;Pure 64,&quot;</span><br><span class="line"># hosted on the TinyCore home page, and it works well.</span><br><span class="line"># Beware that huge page support is not enabled in the kernel distributed</span><br><span class="line"># with Pure 64.  Consider http://wiki.tinycorelinux.net/wiki:custom_kernel</span><br><span class="line"># Note that as of yet there are no distro packages for microhttpd or hwloc.</span><br><span class="line"># hwloc is easy enough to install manually though, shown below.</span><br><span class="line"># Also note that only CPU mining has been tested on this platform, thus the</span><br><span class="line"># disabling of CUDA and OpenCL shown below.</span><br><span class="line">tce-load -iw openssl-dev.tcz cmake.tcz make.tcz gcc.tcz git.tcz \</span><br><span class="line">             glibc_base-dev.tcz linux-4.8.1_api_headers.tcz \</span><br><span class="line">             glibc_add_lib.tcz</span><br><span class="line">wget https://www.open-mpi.org/software/hwloc/v1.11/downloads/hwloc-1.11.8.tar.gz</span><br><span class="line">tar xzvf hwloc-1.11.8.tar.gz</span><br><span class="line">cd hwloc-1.11.8</span><br><span class="line">./configure --prefix=/usr/local</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br><span class="line">cd ..</span><br><span class="line">git clone http://github.com/fireice-uk/xmr-stak</span><br><span class="line">cd xmr-stak</span><br><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line">CC=gcc cmake .. -DCUDA_ENABLE=OFF \</span><br><span class="line">                -DOpenCL_ENABLE=OFF \</span><br><span class="line">                -DMICROHTTPD_ENABLE=OFF</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>g++ version 5.1 or higher is required for full C++11 support.<br>If you want to compile the binary without installing libraries / compiler or just compile binary for some other distribution, please check the <a href="scripts/build_xmr-stak_docker/build_xmr-stak_docker.sh">build_xmr-stak_docker.sh script</a>.</p>
+</li>
+<li><p>Some newer gcc versions are not supported by CUDA (e.g. Ubuntu 17.10). It will require installing gcc 5 but you can avoid changing defaults.</p>
+</li>
+</ul>
+<p>In that case you can force CUDA to use an older compiler in the following way:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -DCUDA_HOST_COMPILER=/usr/bin/gcc-5 ..</span><br></pre></td></tr></table></figure></p>
+<h3 id="To-do-a-generic-and-static-build-for-a-system-without-gcc-5-1"><a href="#To-do-a-generic-and-static-build-for-a-system-without-gcc-5-1" class="headerlink" title="To do a generic and static build for a system without gcc 5.1+"></a>To do a generic and static build for a system without gcc 5.1+</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cmake -DCMAKE_LINK_STATIC=ON -DXMR-STAK_COMPILE=generic .</span><br><span class="line">make install</span><br><span class="line">cd bin\Release</span><br><span class="line">copy C:\xmr-stak-dep\openssl\bin\* .</span><br></pre></td></tr></table></figure>
+<p>Note - cmake caches variables, so if you want to do a dynamic build later you need to specify ‘-DCMAKE_LINK_STATIC=OFF’</p>
+<p>Reference <a href="https://github.com/fireice-uk/xmr-stak" target="_blank" rel="noopener">xmr-stak</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/xmr/" rel="tag"># xmr</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/26/Day-1-Bower-——-管理你的客户端依赖关系/" rel="next" title="Day 1: Bower —— 管理你的客户端依赖关系">
+                <i class="fa fa-chevron-left"></i> Day 1: Bower —— 管理你的客户端依赖关系
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/01/Hexo-Next-添加-Gitment-评论系统/" rel="prev" title="Hexo-Next 添加 Gitment 评论系统">
+                Hexo-Next 添加 Gitment 评论系统 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Vincent Ruan</p>
+              <p class="site-description motion-element" itemprop="description">呜啦啦♪(^∇^*) Welcome to the Sea of Stars.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/vincentruan" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Compile-xmr-stak-for-Linux"><span class="nav-number">1.</span> <span class="nav-text">Compile xmr-stak for Linux</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-Dependencies"><span class="nav-number">1.1.</span> <span class="nav-text">Install Dependencies</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AMD-APP-SDK-3-0-only-needed-to-use-AMD-GPUs"><span class="nav-number">1.1.1.</span> <span class="nav-text">AMD APP SDK 3.0 (only needed to use AMD GPUs)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cuda-8-0-only-needed-to-use-NVIDIA-GPUs"><span class="nav-number">1.1.2.</span> <span class="nav-text">Cuda 8.0+ (only needed to use NVIDIA GPUs)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GNU-Compiler"><span class="nav-number">1.1.3.</span> <span class="nav-text">GNU Compiler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#To-do-a-generic-and-static-build-for-a-system-without-gcc-5-1"><span class="nav-number">1.1.4.</span> <span class="nav-text">To do a generic and static build for a system without gcc 5.1+</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Vincent Ruan</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+  
+    //_config.yml文件若没有添加enable: true可删除该判断
+
+    
+
+  
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
