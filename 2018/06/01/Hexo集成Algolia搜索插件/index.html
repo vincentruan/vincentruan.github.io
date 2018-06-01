@@ -522,6 +522,10 @@
           
 
   
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+
+  
 
 
 
@@ -833,13 +837,25 @@
 
 
 
-  
-    //_config.yml文件若没有添加enable: true可删除该判断
 
+  
     
-
+      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+      <script type="text/javascript">
+        const gitalk = new Gitalk({
+          clientID: '77de951f4b5c331b23b4',
+          clientSecret: '41f88d6edb14f19e3ac0f49acc84c100debcdf7d',
+          repo: 'vincentruan.github.io',
+          owner: 'vincentruan',
+          admin: 'vincentruan'.split(','),
+          pagerDirection: 'first',
+          // facebook-like distraction free mode
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')
+      </script>
+    
   
-
 
   
 
