@@ -6,7 +6,7 @@ tags:
 - xmr
 ---
 
-# Compile **xmr-stak** for Linux
+# 在Linux上编译 **xmr-stak**
 
 ## Install Dependencies
 
