@@ -48,3 +48,16 @@ $ export HEXO_ALGOLIA_INDEXING_KEY=[algolia.apiKey]
 $ hexo algolia
 ```
 
+### CI with jenkins
+
+[使用Jenkins实现Hexo自动部署](http://www.niugm.me/2018/02/16/jenkins/)
+
+[hexo使用jenkins自动部署到阿里云](https://juejin.im/post/5adae7ee51882567127817ea)
+
+###Cooperation
+
+1. 使用git clonegit@github.com:vincentruan/vincentruan.github.io.git拷贝仓库（git checkout -b hexo）； 
+
+2. 在新拷贝的vincentruan.github.io文件夹下通过Git bash依次执行下列指令：
+
+   npm install hexo-cli -g(首次安装)、npm install hexo、npm install、npm install hexo-deployer-git（记得，不需要***hexo init***这条指令,如果不慎在此时用了hexo init，则站点的配置文件_config.yml里面内容会被清空使用默认值，所以这一步一定要慎重 ）
