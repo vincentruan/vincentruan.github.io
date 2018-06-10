@@ -61,3 +61,4 @@ $ hexo algolia
 2. 在新拷贝的vincentruan.github.io文件夹下通过Git bash依次执行下列指令：
 
    npm install hexo-cli -g(首次安装)、npm install hexo、npm install、npm install hexo-deployer-git（记得，不需要***hexo init***这条指令,如果不慎在此时用了hexo init，则站点的配置文件_config.yml里面内容会被清空使用默认值，所以这一步一定要慎重 ）
+
