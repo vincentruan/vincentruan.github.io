@@ -82,8 +82,14 @@ deploy:
   repo: git@github.com:vincentruan/vincentruan.github.io.git
   branch: master
 
-algolia:
-  applicationID: 085Q2989Y8
-  apiKey: 245c3b151c43ac65989ab011c1382e9d
-  indexName: hexo_vincentruan_starocean
-  chunkSize: 5000
+# algolia:
+#   applicationID: 085Q2989Y8
+#   apiKey: 245c3b151c43ac65989ab011c1382e9d
+#   indexName: hexo_vincentruan_starocean
+#   chunkSize: 5000
+
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
