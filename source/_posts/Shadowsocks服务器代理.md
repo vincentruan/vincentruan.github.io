@@ -8,7 +8,7 @@ tags:
 
 ## 前言
 
-Shadowsocks Server支持直连因特网，或者通过代理方式（http/sock v4/5)连接因特网.
+本文讲述如何安装配置Shadowsocks Server，并支持通过代理方式（http/sock v4/5)连接因特网.
 
 
 
