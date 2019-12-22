@@ -1,6 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>[转载]从零开始：史上最详尽V2Ray搭建图文教程</title>
+    <url>/2019/12/22/%E8%BD%AC%E8%BD%BD-%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%EF%BC%9A%E5%8F%B2%E4%B8%8A%E6%9C%80%E8%AF%A6%E5%B0%BDV2Ray%E6%90%AD%E5%BB%BA%E5%9B%BE%E6%96%87%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<p>本文转载自从零开始：<a href="https://www.4spaces.org/digitalocean-build-v2ray-0-1/" target="_blank" rel="noopener">史上最详尽V2Ray搭建图文教程</a>，根据实际服务器配置做部分修改。</p>
+<h2 id="一、服务端安装"><a href="#一、服务端安装" class="headerlink" title="一、服务端安装"></a>一、服务端安装</h2><p>以下所有操作都是使用root用户（普通用户自行sudo）进行操作的，服务器centos7。</p>
+<p><strong>1.安装wget</strong></p>
+<p>如提示没有安装wget，在登录完成的窗口输入下面命令并回车进行wget安装：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum -y install wget</span><br></pre></td></tr></table></figure>
+<p><strong>2.下载脚本</strong></p>
+<p>安装完wget之后就可以进行下载安装v2ray的脚本了，输入如下命令并回车：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget https://install.direct/go.sh</span><br></pre></td></tr></table></figure>
+<p><strong>3.安装unzip</strong></p>
+<p>因为centos不支持apt-get，我们需要安装unzip，详见<a href="https://www.v2ray.com/chapter_00/install.html" target="_blank" rel="noopener">官方说明</a>：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install -y zip unzip</span><br></pre></td></tr></table></figure>
+<p><strong>4.执行安装</strong></p>
+<p>输入下面的命令并回车执行安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[michael@centos74 v2ray]$ bash go.sh </span><br><span class="line">Installing V2Ray v3.14 on x86_64</span><br><span class="line">Downloading V2Ray.</span><br><span class="line"><span class="meta">  %</span><span class="bash"> Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span></span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">100   608    0   608    0     0   2229      0 --:--:-- --:--:-- --:--:--  2235</span><br><span class="line">100 8482k  100 8482k    0     0  2501k      0  0:00:03  0:00:03 --:--:-- 2813k</span><br><span class="line">Extracting V2Ray package to /tmp/v2ray.</span><br><span class="line">Archive:  /tmp/v2ray/v2ray.zip</span><br><span class="line">   creating: /tmp/v2ray/v2ray-v3.14-linux-64/</span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/geoip.dat  </span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/geosite.dat  </span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/readme.md  </span><br><span class="line">   creating: /tmp/v2ray/v2ray-v3.14-linux-64/systemd/</span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/systemd/v2ray.service  </span><br><span class="line">   creating: /tmp/v2ray/v2ray-v3.14-linux-64/systemv/</span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/systemv/v2ray  </span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/v2ctl  </span><br><span class="line"> extracting: /tmp/v2ray/v2ray-v3.14-linux-64/v2ctl.sig  </span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/v2ray  </span><br><span class="line"> extracting: /tmp/v2ray/v2ray-v3.14-linux-64/v2ray.sig  </span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/vpoint_socks_vmess.json  </span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/vpoint_vmess_freedom.json  </span><br><span class="line">PORT:13437</span><br><span class="line">UUID:f500ecf5-e135-49c6-9ce2-78eb490d0aa9</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/v2ray.service to /etc/systemd/system/v2ray.service.</span><br><span class="line">V2Ray v3.14 is installed.</span><br></pre></td></tr></table></figure>
+<p><strong>5.相关命令</strong></p>
+<p>在首次安装完成之后，V2Ray不会自动启动，需要手动运行上述启动命令。而在已经运行V2Ray的VPS上再次执行安装脚本，安装脚本会自动停止V2Ray 进程，升级V2Ray程序，然后自动运行V2Ray。在升级过程中，配置文件不会被修改。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 启动</span></span></span><br><span class="line">systemctl start v2ray</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 停止</span></span></span><br><span class="line">systemctl stop v2ray</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 重启</span></span></span><br><span class="line">systemctl restart v2ray</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 开机自启</span></span></span><br><span class="line">systemctl enable v2ray</span><br></pre></td></tr></table></figure>
+<p>关于软件更新：<strong>更新 V2Ray 的方法是再次执行安装脚本！再次执行安装脚本！再次执行安装脚本！</strong></p>
+<p><strong>6.配置</strong></p>
+<p>如果你按照上面的命令执行安装完成之后，服务端其实是不需要再进行任何配置的，配置文件位于<code>/etc/v2ray/config.json</code>，使用<code>cat /etc/v2ray/config.json</code>查看配置信息。接下来进行客户端配置就行了。</p>
+<p><strong>说明：</strong></p>
+<ul>
+<li><em>配置文件中的id、端口、alterId需要和客户端的配置保持一致</em>；</li>
+<li><em>服务端使用脚本安装成功之后默认就是vmess协议</em>；</li>
+</ul>
+<p>配置完成之后重启v2ray。</p>
+<p><strong>9.防火墙开放端口</strong></p>
+<p>有的vps端口默认不开放，可能导致连接不成功，如果有这种情况，详细配置，见<a href="https://www.4spaces.org/centos-open-porter/" target="_blank" rel="noopener">CentOs开放端口的方法—二、firewalld</a>。部分服务器的防火墙配置只能在服务提供商的控制台操作，请注意。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">## 查看已开放端口</span><br><span class="line">firewall-cmd --zone=public --list-ports</span><br><span class="line"></span><br><span class="line">## 添加开放端口</span><br><span class="line">firewall-cmd --zone=public --add-port=80/tcp --permanent</span><br></pre></td></tr></table></figure>
+<h2 id="二、Windows-客户端"><a href="#二、Windows-客户端" class="headerlink" title="二、Windows 客户端"></a>二、Windows 客户端</h2><p><strong>1.下载</strong></p>
+<p>目前不支持水果系列，水果机只能自行走野路子解决。</p>
+<p>1)下载【<a href="https://github.com/v2ray/v2ray-core/releases" target="_blank" rel="noopener">v2ray-windows-64.zip Github Release</a>】;<br>2)下载【<a href="https://github.com/2dust/v2rayN/releases" target="_blank" rel="noopener">v2rayN-v2rayN.exe-Github Release</a>】；</p>
+<p>对<code>v2ray-windows-64.zip</code>进行解压，然后将下载的<code>V2RayN.exe</code>复制到解压后的目录，即两个下载好的文件需要在同一目录。</p>
+<p><img src="/2019/12/22/转载-从零开始：史上最详尽V2Ray搭建图文教程/vmess-windows-client-dir.jpg" alt="img"></p>
+<p><strong>2.配置</strong></p>
+<p>运行V2RayN.exe，然后进行配置，下图中的配置信息，需要和你VPS搭建的时候的配置信息对应，VPS的v2ray配置信息位于<code>/etc/v2ray/config.json</code>文件里。</p>
+<p>如果采用上面的默认方式安装，服务端配置是协议vmess，则配置如下：</p>
+<p><img src="/2019/12/22/转载-从零开始：史上最详尽V2Ray搭建图文教程/new-vmess-config.jpg" alt="img"></p>
+<p><img src="/2019/12/22/转载-从零开始：史上最详尽V2Ray搭建图文教程/vmess-windows-client.jpg" alt="img"></p>
+<p><img src="/2019/12/22/转载-从零开始：史上最详尽V2Ray搭建图文教程/1577006106052.png" alt="1577006106052"></p>
+<h2 id="三、测试"><a href="#三、测试" class="headerlink" title="三、测试"></a>三、测试</h2><p>打开浏览器，访问<code>www.google.com</code></p>
+<h2 id="四、进阶"><a href="#四、进阶" class="headerlink" title="四、进阶"></a>四、进阶</h2><p>现在你已经学会使用v2ray了，为了更好的上网效果，建议继续了解一下下面文章：</p>
+<ul>
+<li><a href="https://www.4spaces.org/v2ray-nginx-tls-websocket/" target="_blank" rel="noopener">centos7基于nginx搭建v2ray服务端配置vmess+tls+websocket完全手册</a>；【推荐】</li>
+<li><a href="https://www.4spaces.org/speed-up-your-vps-with-bbr-plus/" target="_blank" rel="noopener">使用Google BBR PLUS加速你的VPS网络</a>；</li>
+<li><a href="https://www.4spaces.org/digitalocean-build-v2ray-mkcp/" target="_blank" rel="noopener">如何以mkcp方式部署v2ray</a>；</li>
+</ul>
+<h2 id="五、相关问题"><a href="#五、相关问题" class="headerlink" title="五、相关问题"></a>五、相关问题</h2><ul>
+<li><a href="https://www.4spaces.org/v2ray-google-check/" target="_blank" rel="noopener">使用v2ray访问谷歌提示异常流量</a>；</li>
+<li><a href="https://www.4spaces.org/v2ray-cloudflare-cdn-403/" target="_blank" rel="noopener">启用cloudflare cdn之后v2ray报403错误</a>；</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>v2ray</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>详解分布式协调服务 ZooKeeper</title>
     <url>/2018/10/07/%E8%AF%A6%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E5%8D%8F%E8%B0%83%E6%9C%8D%E5%8A%A1-ZooKeeper/</url>
     <content><![CDATA[<p><code>作者 | Draveness</code></p>
