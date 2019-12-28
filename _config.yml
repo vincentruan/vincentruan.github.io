@@ -118,9 +118,3 @@ live2d:
     height: 375
   mobile:
     show: false # 手机中是否展示
-pace:
-  enable: true
-  # Themes list:
-  # big-counter | bounce | barber-shop | center-atom | center-circle | center-radar | center-simple
-  # corner-indicator | fill-left | flat-top | flash | loading-bar | mac-osx | material | minimal
-  theme: minimal
