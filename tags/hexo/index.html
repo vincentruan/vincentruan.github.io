@@ -119,7 +119,7 @@
 <meta name="keywords" content="tech">
 <meta property="og:type" content="website">
 <meta property="og:title" content="星辰大海">
-<meta property="og:url" content="https://vincentruan.github.io/tags/Hexo/index.html">
+<meta property="og:url" content="https://vincentruan.github.io/tags/hexo/index.html">
 <meta property="og:site_name" content="星辰大海">
 <meta property="og:description" content="The King is dead, long live the King!">
 <meta property="og:locale" content="zh-CN">
@@ -132,7 +132,7 @@
 
 
 
-  <link rel="canonical" href="https://vincentruan.github.io/tags/Hexo/">
+  <link rel="canonical" href="https://vincentruan.github.io/tags/hexo/">
 
 
 
@@ -142,7 +142,7 @@
   };
 </script>
 
-  <title>标签: Hexo | 星辰大海</title>
+  <title>标签: hexo | 星辰大海</title>
   
 
 
@@ -324,7 +324,7 @@
 
     <div id="posts" class="posts-collapse">
       <div class="collection-title">
-        <h1>Hexo<small>标签</small>
+        <h1>hexo<small>标签</small>
         </h1>
       </div>
 
@@ -336,17 +336,95 @@
 
       <h2 class="post-title">
         
-            <a class="post-title-link" href="/2018/06/01/Hexo集成Algolia搜索插件/" itemprop="url">
+            <a class="post-title-link" href="/2018/06/01/Hexo添加Gitalk评论插件/" itemprop="url">
               
-                <span itemprop="name">Hexo集成Algolia搜索插件</span>
+                <span itemprop="name">Hexo添加Gitalk评论插件</span>
               
             </a>
         
       </h2>
 
       <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-06-01T23:14:36+08:00" content="2018-06-01">
+        <time class="post-time" itemprop="dateCreated" datetime="2018-06-01T23:55:56+08:00" content="2018-06-01">
           06-01
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+      
+        
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h2 class="post-title">
+        
+            <a class="post-title-link" href="/2018/05/26/教你免费搭建个人博客，Hexo-Github/" itemprop="url">
+              
+                <span itemprop="name">教你免费搭建个人博客，Hexo&Github</span>
+              
+            </a>
+        
+      </h2>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated" datetime="2018-05-26T17:39:47+08:00" content="2018-05-26">
+          05-26
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+      
+        
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h2 class="post-title">
+        
+            <a class="post-title-link" href="/2018/05/26/Hexo使用攻略-添加分类及标签/" itemprop="url">
+              
+                <span itemprop="name">Hexo使用攻略-添加分类及标签</span>
+              
+            </a>
+        
+      </h2>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated" datetime="2018-05-26T17:16:29+08:00" content="2018-05-26">
+          05-26
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+      
+        
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h2 class="post-title">
+        
+            <a class="post-title-link" href="/2018/05/26/hexo-hello-world/" itemprop="url">
+              
+                <span itemprop="name">Hexo Hello World</span>
+              
+            </a>
+        
+      </h2>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated" datetime="2018-05-26T17:16:29+08:00" content="2018-05-26">
+          05-26
         </time>
       </div>
 
@@ -948,87 +1026,6 @@
                 } else {
                   return resultRight.id - resultLeft.id;
                 }
-              });
-              var searchResultList = '<ul class=\"search-result-list\">';
-              resultItems.forEach(function (result) {
-                searchResultList += result.item;
-              })
-              searchResultList += "</ul>";
-              resultContent.innerHTML = searchResultList;
-            }
-          }
-
-          if ('auto' === 'auto') {
-            input.addEventListener('input', inputEventFunction);
-          } else {
-            $('.search-icon').click(inputEventFunction);
-            input.addEventListener('keypress', function (event) {
-              if (event.keyCode === 13) {
-                inputEventFunction();
-              }
-            });
-          }
-
-          // remove loading animation
-          $(".local-search-pop-overlay").remove();
-          $('body').css('overflow', '');
-
-          proceedsearch();
-        }
-      });
-    }
-
-    // handle and trigger popup window;
-    $('.popup-trigger').click(function(e) {
-      e.stopPropagation();
-      if (isfetched === false) {
-        searchFunc(path, 'local-search-input', 'local-search-result');
-      } else {
-        proceedsearch();
-      };
-    });
-
-    $('.popup-btn-close').click(onPopupClose);
-    $('.popup').click(function(e){
-      e.stopPropagation();
-    });
-    $(document).on('keyup', function (event) {
-      var shouldDismissSearchPopup = event.which === 27 &&
-        $('.search-popup').is(':visible');
-      if (shouldDismissSearchPopup) {
-        onPopupClose();
-      }
-    });
-  </script>
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/xiaomai.model.json"},"display":{"position":"left","width":280,"height":375},"mobile":{"show":false},"log":false});</script></body>
-</html>
-     }
               });
               var searchResultList = '<ul class=\"search-result-list\">';
               resultItems.forEach(function (result) {
