@@ -6,19 +6,17 @@
     <content><![CDATA[<p>​        memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。</p>
 <p>​        文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。</p>
 <h1 id="1-综述"><a href="#1-综述" class="headerlink" title="1. 综述"></a>1. 综述</h1><p>​        读一个软件的源码，首先要弄懂软件是用作干什么的，那memcached和redis是干啥的？众所周知，数据一般会放在数据库中，但是查询数据会相对比较慢，特别是用户很多时，频繁的查询，需要耗费大量的时间。怎么办呢？数据放在哪里查询快？那肯定是内存中。memcached和redis就是将数据存储在内存中，按照key-value的方式查询，可以大幅度提高效率。所以一般它们都用做缓存服务器，缓存常用的数据，需要查询的时候，直接从它们那儿获取，减少查询数据库的次数，提高查询效率。</p>
-<h1 id="2-服务方式"><a href="#2-服务方式" class="headerlink" title="2. 服务方式"></a>2. 服务方式</h1><pre><code>memcached和redis怎么提供服务呢？它们是独立的进程，需要的话，还可以让他们变成daemon进程，所以我们的用户进程要使用memcached和redis的服务的话，就需要进程间通信了。考虑到用户进程和memcached和redis不一定在同一台机器上，所以还需要支持网络间通信。因此，memcached和redis自己本身就是网络服务器，用户进程通过与他们通过网络来传输数据，显然最简单和最常用的就是使用tcp连接了。另外，memcached和redis都支持udp协议。而且当用户进程和memcached和redis在同一机器时，还可以使用unix域套接字通信。
-</code></pre><h1 id="3-事件模型"><a href="#3-事件模型" class="headerlink" title="3. 事件模型"></a>3. 事件模型</h1><pre><code>下面开始讲他们具体是怎么实现的了。首先来看一下它们的事件模型。
-</code></pre><p>​        自从epoll出来以后，几乎所有的网络服务器全都抛弃select和poll，换成了epoll。redis也一样，只不多它还提供对select和poll的支持，可以自己配置使用哪一个，但是一般都是用epoll。另外针对BSD，还支持使用kqueue。而memcached是基于libevent的，不过libevent底层也是使用epoll的，所以可以认为它们都是使用epoll。epoll的特性这里就不介绍了，网上介绍文章很多。</p>
-<p>​        它们都使用epoll来做事件循环，不过redis是单线程的服务器（redis也是多线程的，只不过除了主线程以外，其他线程没有event loop，只是会进行一些后台存储工作），而memcached是多线程的。 redis的事件模型很简单，只有一个event loop，是简单的reactor实现。不过redis事件模型中有一个亮点，我们知道epoll是针对fd的，它返回的就绪事件也是只有fd，redis里面的fd就是服务器与客户端连接的socket的fd，但是处理的时候，需要根据这个fd找到具体的客户端的信息，怎么找呢？通常的处理方式就是用红黑树将fd与客户端信息保存起来，通过fd查找，效率是lgn。不过redis比较特殊，redis的客户端的数量上限可以设置，即可以知道同一时刻，redis所打开的fd的上限，而我们知道，进程的fd在同一时刻是不会重复的（fd只有关闭后才能复用），所以redis使用一个数组，将fd作为数组的下标，数组的元素就是客户端的信息，这样，直接通过fd就能定位客户端信息，查找效率是O(1)，还省去了复杂的红黑树的实现（我曾经用c写一个网络服务器，就因为要保持fd和connect对应关系，不想自己写红黑树，然后用了STL里面的set，导致项目变成了c++的，最后项目使用g++编译，这事我不说谁知道？）。显然这种方式只能针对connection数量上限已确定，并且不是太大的网络服务器，像nginx这种http服务器就不适用，nginx就是自己写了红黑树。</p>
-<pre><code>而memcached是多线程的，使用master-worker的方式，主线程监听端口，建立连接，然后顺序分配给各个工作线程。每一个从线程都有一个event loop，它们服务不同的客户端。master线程和worker线程之间使用管道通信，每一个工作线程都会创建一个管道，然后保存写端和读端，并且将读端加入event loop，监听可读事件。同时，每个从线程都有一个就绪连接队列，主线程连接连接后，将连接的item放入这个队列，然后往该线程的管道的写端写入一个connect命令，这样event loop中加入的管道读端就会就绪，从线程读取命令，解析命令发现是有连接，然后就会去自己的就绪队列中获取连接，并进行处理。多线程的优势就是可以充分发挥多核的优势，不过编写程序麻烦一点，memcached里面就有各种锁和条件变量来进行线程同步。
-</code></pre><h1 id="4-内存分配"><a href="#4-内存分配" class="headerlink" title="4. 内存分配"></a>4. 内存分配</h1><pre><code>   memcached和redis的核心任务都是在内存中操作数据，内存管理自然是核心的内容。
-
-首先看看他们的内存分配方式。memcached是有自己得内存池的，即预先分配一大块内存，然后接下来分配内存就从内存池中分配，这样可以减少内存分配的次数，提高效率，这也是大部分网络服务器的实现方式，只不过各个内存池的管理方式根据具体情况而不同。而redis没有自己得内存池，而是直接使用时分配，即什么时候需要什么时候分配，内存管理的事交给内核，自己只负责取和释放（redis既是单线程，又没有自己的内存池，是不是感觉实现的太简单了？那是因为它的重点都放在数据库模块了）。不过redis支持使用tcmalloc来替换glibc的malloc，前者是google的产品，比glibc的malloc快。
+<h1 id="2-服务方式"><a href="#2-服务方式" class="headerlink" title="2. 服务方式"></a>2. 服务方式</h1><p>memcached和redis怎么提供服务呢？它们是独立的进程，需要的话，还可以让他们变成daemon进程，所以我们的用户进程要使用memcached和redis的服务的话，就需要进程间通信了。考虑到用户进程和memcached和redis不一定在同一台机器上，所以还需要支持网络间通信。因此，memcached和redis自己本身就是网络服务器，用户进程通过与他们通过网络来传输数据，显然最简单和最常用的就是使用tcp连接了。另外，memcached和redis都支持udp协议。而且当用户进程和memcached和redis在同一机器时，还可以使用unix域套接字通信。</p>
+<h1 id="3-事件模型"><a href="#3-事件模型" class="headerlink" title="3. 事件模型"></a>3. 事件模型</h1><p>下面开始讲他们具体是怎么实现的了。首先来看一下它们的事件模型。</p>
+<p>​        自从epoll出来以后，几乎所有的网络服务器全都抛弃select和poll，换成了epoll。redis也一样，只不多它还提供对select和poll的支持，可以自己配置使用哪一个，但是一般都是用epoll。另外针对BSD，还支持使用kqueue。而memcached是基于libevent的，不过libevent底层也是使用epoll的，所以可以认为它们都是使用epoll。epoll的特性这里就不介绍了，网上介绍文章很多。</p>
+<p>它们都使用epoll来做事件循环，不过redis是单线程的服务器（redis也是多线程的，只不过除了主线程以外，其他线程没有event loop，只是会进行一些后台存储工作），而memcached是多线程的。 redis的事件模型很简单，只有一个event loop，是简单的reactor实现。不过redis事件模型中有一个亮点，我们知道epoll是针对fd的，它返回的就绪事件也是只有fd，redis里面的fd就是服务器与客户端连接的socket的fd，但是处理的时候，需要根据这个fd找到具体的客户端的信息，怎么找呢？通常的处理方式就是用红黑树将fd与客户端信息保存起来，通过fd查找，效率是lgn。不过redis比较特殊，redis的客户端的数量上限可以设置，即可以知道同一时刻，redis所打开的fd的上限，而我们知道，进程的fd在同一时刻是不会重复的（fd只有关闭后才能复用），所以redis使用一个数组，将fd作为数组的下标，数组的元素就是客户端的信息，这样，直接通过fd就能定位客户端信息，查找效率是O(1)，还省去了复杂的红黑树的实现（我曾经用c写一个网络服务器，就因为要保持fd和connect对应关系，不想自己写红黑树，然后用了STL里面的set，导致项目变成了c++的，最后项目使用g++编译，这事我不说谁知道？）。显然这种方式只能针对connection数量上限已确定，并且不是太大的网络服务器，像nginx这种http服务器就不适用，nginx就是自己写了红黑树。</p>
+<p>而memcached是多线程的，使用master-worker的方式，主线程监听端口，建立连接，然后顺序分配给各个工作线程。每一个从线程都有一个event loop，它们服务不同的客户端。master线程和worker线程之间使用管道通信，每一个工作线程都会创建一个管道，然后保存写端和读端，并且将读端加入event loop，监听可读事件。同时，每个从线程都有一个就绪连接队列，主线程连接连接后，将连接的item放入这个队列，然后往该线程的管道的写端写入一个connect命令，这样event loop中加入的管道读端就会就绪，从线程读取命令，解析命令发现是有连接，然后就会去自己的就绪队列中获取连接，并进行处理。多线程的优势就是可以充分发挥多核的优势，不过编写程序麻烦一点，memcached里面就有各种锁和条件变量来进行线程同步。</p>
+<h1 id="4-内存分配"><a href="#4-内存分配" class="headerlink" title="4. 内存分配"></a>4. 内存分配</h1><p>memcached和redis的核心任务都是在内存中操作数据，内存管理自然是核心的内容。</p>
+<pre><code>首先看看他们的内存分配方式。memcached是有自己得内存池的，即预先分配一大块内存，然后接下来分配内存就从内存池中分配，这样可以减少内存分配的次数，提高效率，这也是大部分网络服务器的实现方式，只不过各个内存池的管理方式根据具体情况而不同。而redis没有自己得内存池，而是直接使用时分配，即什么时候需要什么时候分配，内存管理的事交给内核，自己只负责取和释放（redis既是单线程，又没有自己的内存池，是不是感觉实现的太简单了？那是因为它的重点都放在数据库模块了）。不过redis支持使用tcmalloc来替换glibc的malloc，前者是google的产品，比glibc的malloc快。
 </code></pre><p>​        由于redis没有自己的内存池，所以内存申请和释放的管理就简单很多，直接malloc和free即可，十分方便。而memcached是支持内存池的，所以内存申请是从内存池中获取，而free也是还给内存池，所以需要很多额外的管理操作，实现起来麻烦很多，具体的会在后面memcached的slab机制讲解中分析。 </p>
-<h1 id="5-数据库实现"><a href="#5-数据库实现" class="headerlink" title="5. 数据库实现"></a>5. 数据库实现</h1><pre><code>接下来看看他们的最核心内容，各自数据库的实现。
-</code></pre><h2 id="5-1-memcached数据库实现"><a href="#5-1-memcached数据库实现" class="headerlink" title="5.1 memcached数据库实现"></a>5.1 memcached数据库实现</h2><pre><code>memcached只支持key-value，即只能一个key对于一个value。它的数据在内存中也是这样以key-value对的方式存储，它使用slab机制。
-
- 首先看memcached是如何存储数据的，即存储key-value对。如下图，每一个key-value对都存储在一个item结构中，包含了相关的属性和key和value的值。
+<h1 id="5-数据库实现"><a href="#5-数据库实现" class="headerlink" title="5. 数据库实现"></a>5. 数据库实现</h1><p>接下来看看他们的最核心内容，各自数据库的实现。</p>
+<h2 id="5-1-memcached数据库实现"><a href="#5-1-memcached数据库实现" class="headerlink" title="5.1 memcached数据库实现"></a>5.1 memcached数据库实现</h2><p>memcached只支持key-value，即只能一个key对于一个value。它的数据在内存中也是这样以key-value对的方式存储，它使用slab机制。</p>
+<pre><code>首先看memcached是如何存储数据的，即存储key-value对。如下图，每一个key-value对都存储在一个item结构中，包含了相关的属性和key和value的值。
 </code></pre><p><img src="/2019/12/29/memcached与redis实现的对比/0.6910520100500435.png" alt="img"> </p>
 <p>​        item是保存key-value对的，当item多的时候，怎么查找特定的item是个问题。所以memcached维护了一个hash表，它用于快速查找item。hash表适用开链法（与redis一样）解决键的冲突，每一个hash表的桶里面存储了一个链表，链表节点就是item的指针，如上图中的h_next就是指桶里面的链表的下一个节点。 hash表支持扩容（item的数量是桶的数量的1.5以上时扩容），有一个primary_hashtable，还有一个old_hashtable，其中正常适用primary_hashtable，但是扩容的时候，将old_hashtable = primary_hashtable，然后primary_hashtable设置为新申请的hash表（桶的数量乘以2），然后依次将old_hashtable 里面的数据往新的hash表里面移动，并用一个变量expand_bucket记录以及移动了多少个桶，移动完成后，再free原来的old_hashtable 即可（redis也是有两个hash表，也是移动，不过不是后台线程完成，而是每次移动一个桶）。扩容的操作，专门有一个后台扩容的线程来完成，需要扩容的时候，使用条件变量通知它，完成扩容后，它又考试阻塞等待扩容的条件变量。这样在扩容的时候，查找一个item可能会在primary_hashtable和old_hashtable的任意一个中，需要根据比较它的桶的位置和expand_bucket的大小来比较确定它在哪个表里。</p>
 <pre><code>item是从哪里分配的呢？从slab中。如下图，memcached有很多slabclass，它们管理slab，每一个slab其实是trunk的集合，真正的item是在trunk中分配的，一个trunk分配一个item。一个slab中的trunk的大小一样，不同的slab，trunk的大小按比例递增，需要新申请一个item的时候，根据它的大小来选择trunk，规则是比它大的最小的那个trunk。这样，不同大小的item就分配在不同的slab中，归不同的slabclass管理。 这样的缺点是会有部分内存浪费，因为一个trunk可能比item大，如图2，分配100B的item的时候，选择112的trunk，但是会有12B的浪费，这部分内存资源没有使用。
@@ -35,9 +33,8 @@
 
 memcached是多线程的，而且只维护了一个数据库，所以可能有多个客户进程操作同一个数据，这就有可能产生问题。比如，A已经把数据更改了，然后B也更改了改数据，那么A的操作就被覆盖了，而可能A不知道，A任务数据现在的状态时他改完后的那个值，这样就可能产生问题。为了解决这个问题，memcached使用了CAS协议，简单说就是item保存一个64位的unsigned int值，标记数据的版本，每更新一次（数据值有修改），版本号增加，然后每次对数据进行更改操作，需要比对客户进程传来的版本号和服务器这边item的版本号是否一致，一致则可进行更改操作，否则提示脏数据。
 </code></pre><p>   以上就是memcached如何实现一个key-value的数据库的介绍。</p>
-<h2 id="5-2-redis数据库实现"><a href="#5-2-redis数据库实现" class="headerlink" title="5.2 redis数据库实现"></a>5.2 redis数据库实现</h2><pre><code> 首先redis数据库的功能强大一些，因为不像memcached只支持保存字符串，redis支持string， list， set，sorted set，hash table 5种数据结构。例如存储一个人的信息就可以使用hash table，用人的名字做key，然后name super， age 24， 通过key 和 name，就可以取到名字super，或者通过key和age，就可以取到年龄24。这样，当只需要取得age的时候，不需要把人的整个信息取回来，然后从里面找age，直接获取age即可，高效方便。
-
-为了实现这些数据结构，redis定义了抽象的对象redis object，如下图。每一个对象有类型，一共5种：字符串，链表，集合，有序集合，哈希表。 同时，为了提高效率，redis为每种类型准备了多种实现方式，根据特定的场景来选择合适的实现方式，encoding就是表示对象的实现方式的。然后还有记录了对象的lru，即上次被访问的时间，同时在redis 服务器中会记录一个当前的时间（近似值，因为这个时间只是每隔一定时间，服务器进行自动维护的时候才更新），它们两个只差就可以计算出对象多久没有被访问了。 然后redis object中还有引用计数，这是为了共享对象，然后确定对象的删除时间用的。最后使用一个void*指针来指向对象的真正内容。正式由于使用了抽象redis object，使得数据库操作数据时方便很多，全部统一使用redis object对象即可，需要区分对象类型的时候，再根据type来判断。而且正式由于采用了这种面向对象的方法，让redis的代码看起来很像c++代码，其实全是用c写的。
+<h2 id="5-2-redis数据库实现"><a href="#5-2-redis数据库实现" class="headerlink" title="5.2 redis数据库实现"></a>5.2 redis数据库实现</h2><p>首先redis数据库的功能强大一些，因为不像memcached只支持保存字符串，redis支持string， list， set，sorted set，hash table 5种数据结构。例如存储一个人的信息就可以使用hash table，用人的名字做key，然后name super， age 24， 通过key 和 name，就可以取到名字super，或者通过key和age，就可以取到年龄24。这样，当只需要取得age的时候，不需要把人的整个信息取回来，然后从里面找age，直接获取age即可，高效方便。</p>
+<pre><code>为了实现这些数据结构，redis定义了抽象的对象redis object，如下图。每一个对象有类型，一共5种：字符串，链表，集合，有序集合，哈希表。 同时，为了提高效率，redis为每种类型准备了多种实现方式，根据特定的场景来选择合适的实现方式，encoding就是表示对象的实现方式的。然后还有记录了对象的lru，即上次被访问的时间，同时在redis 服务器中会记录一个当前的时间（近似值，因为这个时间只是每隔一定时间，服务器进行自动维护的时候才更新），它们两个只差就可以计算出对象多久没有被访问了。 然后redis object中还有引用计数，这是为了共享对象，然后确定对象的删除时间用的。最后使用一个void*指针来指向对象的真正内容。正式由于使用了抽象redis object，使得数据库操作数据时方便很多，全部统一使用redis object对象即可，需要区分对象类型的时候，再根据type来判断。而且正式由于采用了这种面向对象的方法，让redis的代码看起来很像c++代码，其实全是用c写的。
 </code></pre><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//#define REDIS_STRING 0	// 字符串类型//#define REDIS_LIST 1		// 链表类型//#define REDIS_SET 2		// 集合类型(无序的)，可以求差集，并集等//#define REDIS_ZSET 3		// 有序的集合类型//#define REDIS_HASH 4		// 哈希类型//#define REDIS_ENCODING_RAW 0     /* Raw representation */ //raw  未加工//#define REDIS_ENCODING_INT 1     /* Encoded as integer *///#define REDIS_ENCODING_HT 2      /* Encoded as hash table *///#define REDIS_ENCODING_ZIPMAP 3  /* Encoded as zipmap *///#define REDIS_ENCODING_LINKEDLIST 4 /* Encoded as regular linked list *///#define REDIS_ENCODING_ZIPLIST 5 /* Encoded as ziplist *///#define REDIS_ENCODING_INTSET 6  /* Encoded as intset *///#define REDIS_ENCODING_SKIPLIST 7  /* Encoded as skiplist *///#define REDIS_ENCODING_EMBSTR 8  /* Embedded sds string encoding */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span> &#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> type:<span class="number">4</span>;			<span class="comment">// 对象的类型，包括 /* Object types */unsigned encoding:4;		// 底部为了节省空间，一种type的数据，// 可   以采用不同的存储方式unsigned lru:REDIS_LRU_BITS; /* lru time (relative to server.lruclock) */int refcount;         // 引用计数void *ptr;</span></span><br><span class="line">&#125; robj;</span><br></pre></td></tr></table></figure>
 <pre><code>说到底redis还是一个key-value的数据库，不管它支持多少种数据结构，最终存储的还是以key-value的方式，只不过value可以是链表，set，sorted set，hash table等。和memcached一样，所有的key都是string，而set，sorted set，hash table等具体存储的时候也用到了string。 而c没有现成的string，所以redis的首要任务就是实现一个string，取名叫sds（simple dynamic string），如下的代码， 非常简单的一个结构体，len存储改string的内存总长度，free表示还有多少字节没有使用，而buf存储具体的数据，显然len-free就是目前字符串的长度。
 </code></pre><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> len;</span><br><span class="line">    <span class="keyword">int</span> <span class="built_in">free</span>;</span><br><span class="line">    <span class="keyword">char</span> buf[];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -62,10 +59,9 @@ redis也支持expire time的设置，我们看上面的redis object，里面没�
 redis的expire 机制是怎样的呢？ 与memcahed类似，redis也是惰性删除，即要用到数据时，先检查key是否过期，过期则删除，然后返回错误。单纯的靠惰性删除，上面说过可能会导致内存浪费，所以redis也有补充方案，redis里面有个定时执行的函数，叫servercron，它是维护服务器的函数，在它里面，会对过期数据进行删除，注意不是全删，而是在一定的时间内，对每个数据库的expire dict里面的数据随机选取出来，如果过期，则删除，否则再选，直到规定的时间到。即随机选取过期的数据删除，这个操作的时间分两种，一种较长，一种较短，一般执行短时间的删除，每隔一定的时间，执行一次长时间的删除。这样可以有效的缓解光采用惰性删除而导致的内存浪费问题。
 
 以上就是redis的数据的实现，与memcached不同，redis还支持数据持久化，这个下面介绍。
-</code></pre><h2 id="5-4-redis数据库持久化"><a href="#5-4-redis数据库持久化" class="headerlink" title="5.4 redis数据库持久化"></a>5.4 redis数据库持久化</h2><pre><code>redis和memcached的最大不同，就是redis支持数据持久化，这也是很多人选择使用redis而不是memcached的最大原因。 redis的持久化，分为两种策略，用户可以配置使用不同的策略。
-</code></pre><h3 id="5-4-1-RDB持久化"><a href="#5-4-1-RDB持久化" class="headerlink" title="5.4.1 RDB持久化"></a>5.4.1 RDB持久化</h3><pre><code>用户执行save或者bgsave的时候，就会触发RDB持久化操作。RDB持久化操作的核心思想就是把数据库原封不动的保存在文件里。
-
-那如何存储呢？如下图， 首先存储一个REDIS字符串，起到验证的作用，表示是RDB文件，然后保存redis的版本信息，然后是具体的数据库，然后存储结束符EOF，最后用检验和。关键就是databases，看它的名字也知道，它存储了多个数据库，数据库按照编号顺序存储，0号数据库存储完了，才轮到1，然后是2, 一直到最后一个数据库。
+</code></pre><h2 id="5-4-redis数据库持久化"><a href="#5-4-redis数据库持久化" class="headerlink" title="5.4 redis数据库持久化"></a>5.4 redis数据库持久化</h2><p>redis和memcached的最大不同，就是redis支持数据持久化，这也是很多人选择使用redis而不是memcached的最大原因。 redis的持久化，分为两种策略，用户可以配置使用不同的策略。</p>
+<h3 id="5-4-1-RDB持久化"><a href="#5-4-1-RDB持久化" class="headerlink" title="5.4.1 RDB持久化"></a>5.4.1 RDB持久化</h3><p>用户执行save或者bgsave的时候，就会触发RDB持久化操作。RDB持久化操作的核心思想就是把数据库原封不动的保存在文件里。</p>
+<pre><code>那如何存储呢？如下图， 首先存储一个REDIS字符串，起到验证的作用，表示是RDB文件，然后保存redis的版本信息，然后是具体的数据库，然后存储结束符EOF，最后用检验和。关键就是databases，看它的名字也知道，它存储了多个数据库，数据库按照编号顺序存储，0号数据库存储完了，才轮到1，然后是2, 一直到最后一个数据库。
 </code></pre><p><img src="/2019/12/29/memcached与redis实现的对比/0.9401236739940941.png" alt="img"></p>
 <p>​        每一个数据库存储方式如下，首先一个1字节的常量SELECTDB，表示切换db了，然后下一个接上数据库的编号，它的长度是可变的，然后接下来就是具体的key-value对的数据了。</p>
 <p><img src="/2019/12/29/memcached与redis实现的对比/0.19187591481022537.png" alt="img"></p>
@@ -78,11 +74,9 @@ redis的expire 机制是怎样的呢？ 与memcahed类似，redis也是惰性删
 保存RDB文件是一个很巨大的工程，所以redis还提供后台保存的机制。即执行bgsave的时候，redis fork出一个子进程，让子进程来执行保存的工作，而父进程继续提供redis正常的数据库服务。由于子进程复制了父进程的地址空间，即子进程拥有父进程fork时的数据库，子进程执行save的操作，把它从父进程那儿继承来的数据库写入一个temp文件即可。在子进程复制期间，redis会记录数据库的修改次数（dirty）。当子进程完成时，发送给父进程SIGUSR1信号，父进程捕捉到这个信号，就知道子进程完成了复制，然后父进程将子进程保存的temp文件改名为真正的rdb文件（即真正保存成功了才改成目标文件，这才是保险的做法）。然后记录下这一次save的结束时间。
 </code></pre><p>​        这里有一个问题，在子进程保存期间，父进程的数据库已经被修改了，而父进程只是记录了修改的次数（dirty），被没有进行修正操作。似乎使得RDB保存的不是实时的数据库，有点不太高大上的样子。 不过后面要介绍的AOF持久化，就解决了这个问题。</p>
 <pre><code>除了客户执行sava或者bgsave命令，还可以配置RDB保存条件。即在配置文件中配置，在t时间内，数据库被修改了dirty次，则进行后台保存。redis在serve cron的时候，会根据dirty数目和上次保存的时间，来判断是否符合条件，符合条件的话，就进行bg save，注意，任意时刻只能有一个子进程来进行后台保存，因为保存是个很费io的操作，多个进程大量io效率不行，而且不好管理。
-</code></pre><h3 id="5-4-2-AOF持久化"><a href="#5-4-2-AOF持久化" class="headerlink" title="5.4.2 AOF持久化"></a>5.4.2 AOF持久化</h3><pre><code>首先想一个问题，保存数据库一定需要像RDB那样把数据库里面的所有数据保存下来么？有没有别的方法？
-
-RDB保存的只是最终的数据库，它是一个结果。结果是怎么来的？是通过用户的各个命令建立起来的，所以可以不保存结果，而只保存建立这个结果的命令。 redis的AOF就是这个思想，它不同RDB保存db的数据，它保存的是一条一条建立数据库的命令。
-
-我们首先来看AOF文件的格式，它里面保存的是一条一条的命令，首先存储命令长度，然后存储命令，具体的分隔符什么的可以自己深入研究，这都不是重点，反正知道AOF文件存储的是redis客户端执行的命令即可。
+</code></pre><h3 id="5-4-2-AOF持久化"><a href="#5-4-2-AOF持久化" class="headerlink" title="5.4.2 AOF持久化"></a>5.4.2 AOF持久化</h3><p>  首先想一个问题，保存数据库一定需要像RDB那样把数据库里面的所有数据保存下来么？有没有别的方法？</p>
+<p>  RDB保存的只是最终的数据库，它是一个结果。结果是怎么来的？是通过用户的各个命令建立起来的，所以可以不保存结果，而只保存建立这个结果的命令。 redis的AOF就是这个思想，它不同RDB保存db的数据，它保存的是一条一条建立数据库的命令。</p>
+<pre><code>我们首先来看AOF文件的格式，它里面保存的是一条一条的命令，首先存储命令长度，然后存储命令，具体的分隔符什么的可以自己深入研究，这都不是重点，反正知道AOF文件存储的是redis客户端执行的命令即可。
 
 redis server中有一个sds  aof_buf, 如果aof持久化打开的话，每个修改数据库的命令都会存入这个aof_buf（保存的是aof文件中命令格式的字符串），然后event loop没循环一次，在server cron中调用flushaofbuf，把aof_buf中的命令写入aof文件（其实是write，真正写入的是内核缓冲区），再清空aof_buf，进入下一次loop。这样所有的数据库的变化，都可以通过aof文件中的命令来还原，达到了保存数据库的效果。
 
@@ -109,8 +103,8 @@ aof格式也支持后台模式。执行aof_bgrewrite的时候，也是fork一个
 </code></pre><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">pubsubPattern</span> &#123;</span></span><br><span class="line">    redisClient *client;	<span class="comment">// 监听的client</span></span><br><span class="line">    robj *pattern;			<span class="comment">// 模式</span></span><br><span class="line">&#125; pubsubPattern;</span><br></pre></td></tr></table></figure>
 <pre><code>当用户往一个频道发送消息的时候，首先会在redis server中的pubsub_channels里面查找该频道，然后往它的客户列表发送消息。然后在redis server里面的pubsub_patterns里面查找匹配的模式，然后往client里面发送消息。 这里并没有去除重复的客户，在pubsub_channels可能已经给某一个client发过message了，然后在pubsub_patterns中可能还会给用户再发一次（甚至更多次）。 估计redis认为这是客户程序自己的问题，所以不处理。
 </code></pre><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* Publish a message */</span><span class="function"><span class="keyword">int</span> <span class="title">pubsubPublishMessage</span><span class="params">(robj *channel, robj *message)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> receivers = <span class="number">0</span>;</span><br><span class="line">    dictEntry *de;</span><br><span class="line">    listNode *ln;</span><br><span class="line">    listIter li;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Send to clients listening for that channel */</span></span><br><span class="line">    de = dictFind(server.pubsub_channels,channel);</span><br><span class="line">    <span class="keyword">if</span> (de) &#123;</span><br><span class="line">        <span class="built_in">list</span> *<span class="built_in">list</span> = dictGetVal(de);</span><br><span class="line">        listNode *ln;</span><br><span class="line">        listIter li;</span><br><span class="line"></span><br><span class="line">        listRewind(<span class="built_in">list</span>,&amp;li);</span><br><span class="line">        <span class="keyword">while</span> ((ln = listNext(&amp;li)) != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            redisClient *c = ln-&gt;value;</span><br><span class="line"></span><br><span class="line">            addReply(c,shared.mbulkhdr[<span class="number">3</span>]);</span><br><span class="line">            addReply(c,shared.messagebulk);</span><br><span class="line">            addReplyBulk(c,channel);</span><br><span class="line">            addReplyBulk(c,message);</span><br><span class="line">            receivers++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* Send to clients listening to matching channels */</span><span class="keyword">if</span> (listLength(server.pubsub_patterns)) &#123;</span><br><span class="line">        listRewind(server.pubsub_patterns,&amp;li);</span><br><span class="line">        channel = getDecodedObject(channel);</span><br><span class="line">        <span class="keyword">while</span> ((ln = listNext(&amp;li)) != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            pubsubPattern *pat = ln-&gt;value;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (stringmatchlen((<span class="keyword">char</span>*)pat-&gt;pattern-&gt;ptr,</span><br><span class="line">                                sdslen(pat-&gt;pattern-&gt;ptr),</span><br><span class="line">                                (<span class="keyword">char</span>*)channel-&gt;ptr,</span><br><span class="line">                                sdslen(channel-&gt;ptr),<span class="number">0</span>)) &#123;</span><br><span class="line">                addReply(pat-&gt;client,shared.mbulkhdr[<span class="number">4</span>]);</span><br><span class="line">                addReply(pat-&gt;client,shared.pmessagebulk);</span><br><span class="line">                addReplyBulk(pat-&gt;client,pat-&gt;pattern);</span><br><span class="line">                addReplyBulk(pat-&gt;client,channel);</span><br><span class="line">                addReplyBulk(pat-&gt;client,message);</span><br><span class="line">                receivers++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        decrRefCount(channel);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> receivers;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h1><pre><code>总的来看，redis比memcached的功能多很多，实现也更复杂。 不过memcached更专注于保存key-value数据（这已经能满足大多数使用场景了），而redis提供更丰富的数据结构及其他的一些功能。不能说redis比memcached好，不过从源码阅读的角度来看，redis的价值或许更大一点。 
-</code></pre>]]></content>
+<h1 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h1><p>总的来看，redis比memcached的功能多很多，实现也更复杂。 不过memcached更专注于保存key-value数据（这已经能满足大多数使用场景了），而redis提供更丰富的数据结构及其他的一些功能。不能说redis比memcached好，不过从源码阅读的角度来看，redis的价值或许更大一点。 </p>
+]]></content>
       <tags>
         <tag>redis</tag>
         <tag>memcached</tag>
@@ -764,6 +758,37 @@ aof格式也支持后台模式。执行aof_bgrewrite的时候，也是fork一个
       </tags>
   </entry>
   <entry>
+    <title>Hexo Hello World</title>
+    <url>/2018/05/26/hexo-hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+<h3 id="hexo-algolia"><a href="#hexo-algolia" class="headerlink" title="hexo algolia"></a>hexo algolia</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">export</span> HEXO_ALGOLIA_INDEXING_KEY=[algolia.apiKey]</span><br><span class="line">$ hexo algolia</span><br></pre></td></tr></table></figure>
+<h3 id="CI-with-jenkins"><a href="#CI-with-jenkins" class="headerlink" title="CI with jenkins"></a>CI with jenkins</h3><p><a href="http://www.niugm.me/2018/02/16/jenkins/" target="_blank" rel="noopener">使用Jenkins实现Hexo自动部署</a></p>
+<p><a href="https://juejin.im/post/5adae7ee51882567127817ea" target="_blank" rel="noopener">hexo使用jenkins自动部署到阿里云</a></p>
+<p>###Cooperation</p>
+<ol>
+<li><p>使用git <a href="mailto:clonegit@github.com" target="_blank" rel="noopener">clonegit@github.com</a>:vincentruan/vincentruan.github.io.git拷贝仓库（git checkout -b hexo）； </p>
+</li>
+<li><p>在新拷贝的vincentruan.github.io文件夹下通过Git bash依次执行下列指令：</p>
+<p>npm install hexo-cli -g(首次安装)、npm install hexo、npm install、npm install hexo-deployer-git（记得，不需要<strong><em>hexo init</em></strong>这条指令,如果不慎在此时用了hexo init，则站点的配置文件_config.yml里面内容会被清空使用默认值，所以这一步一定要慎重 ）</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Hexo使用攻略</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo使用攻略-添加分类及标签</title>
     <url>/2018/05/26/Hexo%E4%BD%BF%E7%94%A8%E6%94%BB%E7%95%A5-%E6%B7%BB%E5%8A%A0%E5%88%86%E7%B1%BB%E5%8F%8A%E6%A0%87%E7%AD%BE/</url>
     <content><![CDATA[<h3 id="1、创建“分类”选项"><a href="#1、创建“分类”选项" class="headerlink" title="1、创建“分类”选项"></a>1、创建“分类”选项</h3><h4 id="1-1-生成“分类”页并添加tpye属性"><a href="#1-1-生成“分类”页并添加tpye属性" class="headerlink" title="1.1 生成“分类”页并添加tpye属性"></a>1.1 生成“分类”页并添加tpye属性</h4><p>打开命令行，进入博客所在文件夹。执行命令</p>
@@ -792,37 +817,6 @@ aof格式也支持后台模式。执行aof_bgrewrite的时候，也是fork一个
 <p>至此，成功给文章添加分类，点击首页的“标签”可以看到该标签下的所有文章。当然，只有添加了<code>tags: xxx</code>的文章才会被收录到首页的“标签”中。</p>
 <p>细心的朋友可能已经发现，这两个的设置几乎一模一样！是的，没错，思路都是一样的。所以我们可以打开scaffolds/post.md文件，在tages:上面加入categories:,保存后，之后执行<code>hexo new 文章名</code>命令生成的文件，页面里就有<code>categories:</code>项了。</p>
 <p>scaffolds目录下，是新建页面的模板，执行新建命令时，是根据这里的模板页来完成的，所以可以在这里根据你自己的需求添加一些默认值。</p>
-]]></content>
-      <categories>
-        <category>Hexo使用攻略</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hexo Hello World</title>
-    <url>/2018/05/26/hexo-hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-<h3 id="hexo-algolia"><a href="#hexo-algolia" class="headerlink" title="hexo algolia"></a>hexo algolia</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">export</span> HEXO_ALGOLIA_INDEXING_KEY=[algolia.apiKey]</span><br><span class="line">$ hexo algolia</span><br></pre></td></tr></table></figure>
-<h3 id="CI-with-jenkins"><a href="#CI-with-jenkins" class="headerlink" title="CI with jenkins"></a>CI with jenkins</h3><p><a href="http://www.niugm.me/2018/02/16/jenkins/" target="_blank" rel="noopener">使用Jenkins实现Hexo自动部署</a></p>
-<p><a href="https://juejin.im/post/5adae7ee51882567127817ea" target="_blank" rel="noopener">hexo使用jenkins自动部署到阿里云</a></p>
-<p>###Cooperation</p>
-<ol>
-<li><p>使用git <a href="mailto:clonegit@github.com" target="_blank" rel="noopener">clonegit@github.com</a>:vincentruan/vincentruan.github.io.git拷贝仓库（git checkout -b hexo）； </p>
-</li>
-<li><p>在新拷贝的vincentruan.github.io文件夹下通过Git bash依次执行下列指令：</p>
-<p>npm install hexo-cli -g(首次安装)、npm install hexo、npm install、npm install hexo-deployer-git（记得，不需要<strong><em>hexo init</em></strong>这条指令,如果不慎在此时用了hexo init，则站点的配置文件_config.yml里面内容会被清空使用默认值，所以这一步一定要慎重 ）</p>
-</li>
-</ol>
 ]]></content>
       <categories>
         <category>Hexo使用攻略</category>
