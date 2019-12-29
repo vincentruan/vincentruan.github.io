@@ -2,8 +2,8 @@
 title: memcached与redis实现的对比
 date: 2019-12-29 15:03:32
 tags:
--redis
--memcached
+- redis
+- memcached
 ---
 
 ​    	memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。
