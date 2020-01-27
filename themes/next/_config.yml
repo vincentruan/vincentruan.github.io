@@ -435,7 +435,7 @@ font:
 
 # Math Equations Render Support
 math:
-  enable: false
+  enable: true
 
   # Default(true) will load mathjax/katex script on demand
   # That is it only render those page who has 'mathjax: true' in Front Matter.
@@ -992,6 +992,10 @@ gitalk:
   admin: vincentruan
   pagerDirection: first
 
+flowchart:
+  # raphael:   # optional, the source url of raphael.js
+  # flowchart: # optional, the source url of flowchart.js
+  options: # options used for `drawSVG`
 # mermaid chart
 mermaid: ## mermaid url https://github.com/knsv/mermaid
   enable: true  # default true

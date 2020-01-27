@@ -1,6 +1,8 @@
 ---
 title: Markdown吃了吗?
 date: 2018-05-20 19:00:56
+mathjax: true
+categories: Hexo使用攻略
 tags: 
 - markdown
 - 流程图
@@ -203,10 +205,25 @@ Note right of C: 没人陪我玩
     测试报告    :48h
 ```
 
+# 数学公式
 
+## 矩阵方程
+
+$$
+\begin{matrix}
+    1 & x & x^2 \\
+    1 & y & y^2 \\
+    1 & z & z^2 \\
+    \end{matrix}
+$$
 
 # reference 参考
 
 - [Why Markdown? A two-minute explanation](http://brettterpstra.com/2011/08/31/why-markdown-a-two-minute-explanation/)
 - [简书：献给写作者的 Markdown 新手指南](http://www.jianshu.com/p/q81RER)
 - [Markdown simple world](https://wizardforcel.gitbooks.io/markdown-simple-world/content/0.html)
+- [MathJax语法规则](https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference/5044 MathJax basic tutorial and quick reference)
+- [Mermaid语法规则](https://www.jianshu.com/p/7ddbb7dc8fec)
+- [Mermaid官方教程](https://mermaidjs.github.io/demos.html)
+- [Mermaid Github仓库](https://github.com/webappdevelp/hexo-filter-mermaid-diagrams)
+- [MathJax Github仓库](https://github.com/mathjax/MathJax)

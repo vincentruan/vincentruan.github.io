@@ -1,18 +1,19 @@
 ---
 title: memcached与redis实现的对比
 date: 2019-12-29 15:03:32
+categories: 缓存
 tags:
 - redis
 - memcached
 ---
 
-​  memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。
+  memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。
 
-​  文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。
+  文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。
 
 # 1. 综述
 
-​  读一个软件的源码，首先要弄懂软件是用作干什么的，那memcached和redis是干啥的？众所周知，数据一般会放在数据库中，但是查询数据会相对比较慢，特别是用户很多时，频繁的查询，需要耗费大量的时间。怎么办呢？数据放在哪里查询快？那肯定是内存中。memcached和redis就是将数据存储在内存中，按照key-value的方式查询，可以大幅度提高效率。所以一般它们都用做缓存服务器，缓存常用的数据，需要查询的时候，直接从它们那儿获取，减少查询数据库的次数，提高查询效率。
+  读一个软件的源码，首先要弄懂软件是用作干什么的，那memcached和redis是干啥的？众所周知，数据一般会放在数据库中，但是查询数据会相对比较慢，特别是用户很多时，频繁的查询，需要耗费大量的时间。怎么办呢？数据放在哪里查询快？那肯定是内存中。memcached和redis就是将数据存储在内存中，按照key-value的方式查询，可以大幅度提高效率。所以一般它们都用做缓存服务器，缓存常用的数据，需要查询的时候，直接从它们那儿获取，减少查询数据库的次数，提高查询效率。
 
 # 2. 服务方式
 
@@ -22,7 +23,7 @@ memcached和redis怎么提供服务呢？它们是独立的进程，需要的话
 
 下面开始讲他们具体是怎么实现的了。首先来看一下它们的事件模型。
 
-​  自从epoll出来以后，几乎所有的网络服务器全都抛弃select和poll，换成了epoll。redis也一样，只不多它还提供对select和poll的支持，可以自己配置使用哪一个，但是一般都是用epoll。另外针对BSD，还支持使用kqueue。而memcached是基于libevent的，不过libevent底层也是使用epoll的，所以可以认为它们都是使用epoll。epoll的特性这里就不介绍了，网上介绍文章很多。
+  自从epoll出来以后，几乎所有的网络服务器全都抛弃select和poll，换成了epoll。redis也一样，只不多它还提供对select和poll的支持，可以自己配置使用哪一个，但是一般都是用epoll。另外针对BSD，还支持使用kqueue。而memcached是基于libevent的，不过libevent底层也是使用epoll的，所以可以认为它们都是使用epoll。epoll的特性这里就不介绍了，网上介绍文章很多。
 
 它们都使用epoll来做事件循环，不过redis是单线程的服务器（redis也是多线程的，只不过除了主线程以外，其他线程没有event loop，只是会进行一些后台存储工作），而memcached是多线程的。 redis的事件模型很简单，只有一个event loop，是简单的reactor实现。不过redis事件模型中有一个亮点，我们知道epoll是针对fd的，它返回的就绪事件也是只有fd，redis里面的fd就是服务器与客户端连接的socket的fd，但是处理的时候，需要根据这个fd找到具体的客户端的信息，怎么找呢？通常的处理方式就是用红黑树将fd与客户端信息保存起来，通过fd查找，效率是lgn。不过redis比较特殊，redis的客户端的数量上限可以设置，即可以知道同一时刻，redis所打开的fd的上限，而我们知道，进程的fd在同一时刻是不会重复的（fd只有关闭后才能复用），所以redis使用一个数组，将fd作为数组的下标，数组的元素就是客户端的信息，这样，直接通过fd就能定位客户端信息，查找效率是O(1)，还省去了复杂的红黑树的实现（我曾经用c写一个网络服务器，就因为要保持fd和connect对应关系，不想自己写红黑树，然后用了STL里面的set，导致项目变成了c++的，最后项目使用g++编译，这事我不说谁知道？）。显然这种方式只能针对connection数量上限已确定，并且不是太大的网络服务器，像nginx这种http服务器就不适用，nginx就是自己写了红黑树。
 
@@ -33,7 +34,7 @@ memcached和redis怎么提供服务呢？它们是独立的进程，需要的话
 memcached和redis的核心任务都是在内存中操作数据，内存管理自然是核心的内容。
 首先看看他们的内存分配方式。memcached是有自己得内存池的，即预先分配一大块内存，然后接下来分配内存就从内存池中分配，这样可以减少内存分配的次数，提高效率，这也是大部分网络服务器的实现方式，只不过各个内存池的管理方式根据具体情况而不同。而redis没有自己得内存池，而是直接使用时分配，即什么时候需要什么时候分配，内存管理的事交给内核，自己只负责取和释放（redis既是单线程，又没有自己的内存池，是不是感觉实现的太简单了？那是因为它的重点都放在数据库模块了）。不过redis支持使用tcmalloc来替换glibc的malloc，前者是google的产品，比glibc的malloc快。
 
-​  由于redis没有自己的内存池，所以内存申请和释放的管理就简单很多，直接malloc和free即可，十分方便。而memcached是支持内存池的，所以内存申请是从内存池中获取，而free也是还给内存池，所以需要很多额外的管理操作，实现起来麻烦很多，具体的会在后面memcached的slab机制讲解中分析。 
+  由于redis没有自己的内存池，所以内存申请和释放的管理就简单很多，直接malloc和free即可，十分方便。而memcached是支持内存池的，所以内存申请是从内存池中获取，而free也是还给内存池，所以需要很多额外的管理操作，实现起来麻烦很多，具体的会在后面memcached的slab机制讲解中分析。 
 
 # 5. 数据库实现
 
@@ -47,7 +48,7 @@ memcached只支持key-value，即只能一个key对于一个value。它的数据
 
 ![img](memcached与redis实现的对比/0.6910520100500435.png) 
 
-​  item是保存key-value对的，当item多的时候，怎么查找特定的item是个问题。所以memcached维护了一个hash表，它用于快速查找item。hash表适用开链法（与redis一样）解决键的冲突，每一个hash表的桶里面存储了一个链表，链表节点就是item的指针，如上图中的h_next就是指桶里面的链表的下一个节点。 hash表支持扩容（item的数量是桶的数量的1.5以上时扩容），有一个primary_hashtable，还有一个old_hashtable，其中正常适用primary_hashtable，但是扩容的时候，将old_hashtable = primary_hashtable，然后primary_hashtable设置为新申请的hash表（桶的数量乘以2），然后依次将old_hashtable 里面的数据往新的hash表里面移动，并用一个变量expand_bucket记录以及移动了多少个桶，移动完成后，再free原来的old_hashtable 即可（redis也是有两个hash表，也是移动，不过不是后台线程完成，而是每次移动一个桶）。扩容的操作，专门有一个后台扩容的线程来完成，需要扩容的时候，使用条件变量通知它，完成扩容后，它又考试阻塞等待扩容的条件变量。这样在扩容的时候，查找一个item可能会在primary_hashtable和old_hashtable的任意一个中，需要根据比较它的桶的位置和expand_bucket的大小来比较确定它在哪个表里。
+  item是保存key-value对的，当item多的时候，怎么查找特定的item是个问题。所以memcached维护了一个hash表，它用于快速查找item。hash表适用开链法（与redis一样）解决键的冲突，每一个hash表的桶里面存储了一个链表，链表节点就是item的指针，如上图中的h_next就是指桶里面的链表的下一个节点。 hash表支持扩容（item的数量是桶的数量的1.5以上时扩容），有一个primary_hashtable，还有一个old_hashtable，其中正常适用primary_hashtable，但是扩容的时候，将old_hashtable = primary_hashtable，然后primary_hashtable设置为新申请的hash表（桶的数量乘以2），然后依次将old_hashtable 里面的数据往新的hash表里面移动，并用一个变量expand_bucket记录以及移动了多少个桶，移动完成后，再free原来的old_hashtable 即可（redis也是有两个hash表，也是移动，不过不是后台线程完成，而是每次移动一个桶）。扩容的操作，专门有一个后台扩容的线程来完成，需要扩容的时候，使用条件变量通知它，完成扩容后，它又考试阻塞等待扩容的条件变量。这样在扩容的时候，查找一个item可能会在primary_hashtable和old_hashtable的任意一个中，需要根据比较它的桶的位置和expand_bucket的大小来比较确定它在哪个表里。
 
  item是从哪里分配的呢？从slab中。如下图，memcached有很多slabclass，它们管理slab，每一个slab其实是trunk的集合，真正的item是在trunk中分配的，一个trunk分配一个item。一个slab中的trunk的大小一样，不同的slab，trunk的大小按比例递增，需要新申请一个item的时候，根据它的大小来选择trunk，规则是比它大的最小的那个trunk。这样，不同大小的item就分配在不同的slab中，归不同的slabclass管理。 这样的缺点是会有部分内存浪费，因为一个trunk可能比item大，如图2，分配100B的item的时候，选择112的trunk，但是会有12B的浪费，这部分内存资源没有使用。
 
@@ -75,10 +76,31 @@ memcached是多线程的，而且只维护了一个数据库，所以可能有�
 为了实现这些数据结构，redis定义了抽象的对象redis object，如下图。每一个对象有类型，一共5种：字符串，链表，集合，有序集合，哈希表。 同时，为了提高效率，redis为每种类型准备了多种实现方式，根据特定的场景来选择合适的实现方式，encoding就是表示对象的实现方式的。然后还有记录了对象的lru，即上次被访问的时间，同时在redis 服务器中会记录一个当前的时间（近似值，因为这个时间只是每隔一定时间，服务器进行自动维护的时候才更新），它们两个只差就可以计算出对象多久没有被访问了。 然后redis object中还有引用计数，这是为了共享对象，然后确定对象的删除时间用的。最后使用一个void*指针来指向对象的真正内容。正式由于使用了抽象redis object，使得数据库操作数据时方便很多，全部统一使用redis object对象即可，需要区分对象类型的时候，再根据type来判断。而且正式由于采用了这种面向对象的方法，让redis的代码看起来很像c++代码，其实全是用c写的。
 
 ```c
-//#define REDIS_STRING 0	// 字符串类型//#define REDIS_LIST 1		// 链表类型//#define REDIS_SET 2		// 集合类型(无序的)，可以求差集，并集等//#define REDIS_ZSET 3		// 有序的集合类型//#define REDIS_HASH 4		// 哈希类型//#define REDIS_ENCODING_RAW 0     /* Raw representation */ //raw  未加工//#define REDIS_ENCODING_INT 1     /* Encoded as integer *///#define REDIS_ENCODING_HT 2      /* Encoded as hash table *///#define REDIS_ENCODING_ZIPMAP 3  /* Encoded as zipmap *///#define REDIS_ENCODING_LINKEDLIST 4 /* Encoded as regular linked list *///#define REDIS_ENCODING_ZIPLIST 5 /* Encoded as ziplist *///#define REDIS_ENCODING_INTSET 6  /* Encoded as intset *///#define REDIS_ENCODING_SKIPLIST 7  /* Encoded as skiplist *///#define REDIS_ENCODING_EMBSTR 8  /* Embedded sds string encoding */
+//#define REDIS_STRING 0	
+// 字符串类型//#define REDIS_LIST 1		
+// 链表类型//#define REDIS_SET 2		
+// 集合类型(无序的)，可以求差集，并集等
+//#define REDIS_ZSET 3		
+// 有序的集合类型
+//#define REDIS_HASH 4		
+// 哈希类型
+//#define REDIS_ENCODING_RAW 0     /* Raw representation */ 
+//raw  未加工
+//#define REDIS_ENCODING_INT 1     /* Encoded as integer */
+//#define REDIS_ENCODING_HT 2      /* Encoded as hash table */
+//#define REDIS_ENCODING_ZIPMAP 3  /* Encoded as zipmap */
+//#define REDIS_ENCODING_LINKEDLIST 4 /* Encoded as regular linked list */
+//#define REDIS_ENCODING_ZIPLIST 5 /* Encoded as ziplist */
+//#define REDIS_ENCODING_INTSET 6  /* Encoded as intset */
+//#define REDIS_ENCODING_SKIPLIST 7  /* Encoded as skiplist */
+//#define REDIS_ENCODING_EMBSTR 8  /* Embedded sds string encoding */
 
 typedef struct redisObject {
-    unsigned type:4;			// 对象的类型，包括 /* Object types */unsigned encoding:4;		// 底部为了节省空间，一种type的数据，// 可   以采用不同的存储方式unsigned lru:REDIS_LRU_BITS; /* lru time (relative to server.lruclock) */int refcount;         // 引用计数void *ptr;
+    unsigned type:4;			
+    // 对象的类型，包括 /* Object types */unsigned encoding:4;		
+    // 底部为了节省空间，一种type的数据，
+    // 可以采用不同的存储方式unsigned lru:REDIS_LRU_BITS; /* lru time (relative to server.lruclock) */int refcount;         
+    // 引用计数void *ptr;
 } robj;
 ```
 
@@ -101,16 +123,26 @@ struct sdshdr {
 ```c
 typedef struct dict {
     dictType *type;	// 哈希表的相关属性void *privdata;	// 额外信息
-    dictht ht[2];	// 两张哈希表，分主和副，用于扩容int rehashidx; /* rehashing not in progress if rehashidx == -1 */ // 记录当前数据迁移的位置，在扩容的时候用的int iterators; /* number of iterators currently running */	// 目前存在的迭代器的数量
+    dictht ht[2];	// 两张哈希表，分主和副，用于扩容int rehashidx; /* rehashing not in progress if rehashidx == -1 */ 
+    // 记录当前数据迁移的位置，在扩容的时候用的int iterators; /* number of iterators currently running */	
+    // 目前存在的迭代器的数量
 } dict;
 
 typedef struct dictht {
-    dictEntry **table;  // dictEntry是item，多个item组成hash桶里面的链表，table则是多个链表头指针组成的数组的指针unsigned long size;	// 这个就是桶的数量// sizemask取size - 1, 然后一个数据来的时候，通过计算出的hashkey, 让hashkey & sizemask来确定它要放的桶的位置// 当size取2^n的时候，sizemask就是1...111，这样就和hashkey % size有一样的效果，但是使用&会快很多。这就是原因unsigned long sizemask;  
+    dictEntry **table;  // dictEntry是item，多个item组成hash桶里面的链表，table则是多个链表头指针组成的数组的指针unsigned long size;	
+    // 这个就是桶的数量
+    // sizemask取size - 1, 然后一个数据来的时候，通过计算出的hashkey, 让hashkey & sizemask来确定它要放的桶的位置
+    // 当size取2^n的时候，sizemask就是1...111，这样就和hashkey % size有一样的效果，但是使用&会快很多。这就是原因unsigned long sizemask;  
     unsigned long used;		// 已经数值的dictEntry数量
 } dictht;
 
 typedef struct dictType {
-    unsigned int (*hashFunction)(const void *key);	 // hash的方法void *(*keyDup)(void *privdata, const void *key);	// key的复制方法void *(*valDup)(void *privdata, const void *obj);	// value的复制方法int (*keyCompare)(void *privdata, const void *key1, const void *key2);	// key之间的比较void (*keyDestructor)(void *privdata, void *key);	// key的析构void (*valDestructor)(void *privdata, void *obj);	// value的析构
+    unsigned int (*hashFunction)(const void *key);	 // hash的方法void *(*keyDup)(void *privdata, const void *key);	
+    // key的复制方法void *(*valDup)(void *privdata, const void *obj);	
+    // value的复制方法int (*keyCompare)(void *privdata, const void *key1, const void *key2);	
+    // key之间的比较void (*keyDestructor)(void *privdata, void *key);	
+    // key的析构void (*valDestructor)(void *privdata, void *obj);	
+    // value的析构
 } dictType;
 
 typedef struct dictEntry {
@@ -154,7 +186,7 @@ redis和memcached的最大不同，就是redis支持数据持久化，这也是�
 
 ![img](memcached与redis实现的对比/0.9401236739940941.png)
 
-​  每一个数据库存储方式如下，首先一个1字节的常量SELECTDB，表示切换db了，然后下一个接上数据库的编号，它的长度是可变的，然后接下来就是具体的key-value对的数据了。
+  每一个数据库存储方式如下，首先一个1字节的常量SELECTDB，表示切换db了，然后下一个接上数据库的编号，它的长度是可变的，然后接下来就是具体的key-value对的数据了。
 
 ![img](memcached与redis实现的对比/0.19187591481022537.png)
 
@@ -184,7 +216,7 @@ int rdbSaveKeyValuePair(rio *rdb, robj *key, robj *val,
 
  保存RDB文件是一个很巨大的工程，所以redis还提供后台保存的机制。即执行bgsave的时候，redis fork出一个子进程，让子进程来执行保存的工作，而父进程继续提供redis正常的数据库服务。由于子进程复制了父进程的地址空间，即子进程拥有父进程fork时的数据库，子进程执行save的操作，把它从父进程那儿继承来的数据库写入一个temp文件即可。在子进程复制期间，redis会记录数据库的修改次数（dirty）。当子进程完成时，发送给父进程SIGUSR1信号，父进程捕捉到这个信号，就知道子进程完成了复制，然后父进程将子进程保存的temp文件改名为真正的rdb文件（即真正保存成功了才改成目标文件，这才是保险的做法）。然后记录下这一次save的结束时间。
 
-​  这里有一个问题，在子进程保存期间，父进程的数据库已经被修改了，而父进程只是记录了修改的次数（dirty），被没有进行修正操作。似乎使得RDB保存的不是实时的数据库，有点不太高大上的样子。 不过后面要介绍的AOF持久化，就解决了这个问题。
+  这里有一个问题，在子进程保存期间，父进程的数据库已经被修改了，而父进程只是记录了修改的次数（dirty），被没有进行修正操作。似乎使得RDB保存的不是实时的数据库，有点不太高大上的样子。 不过后面要介绍的AOF持久化，就解决了这个问题。
 
  除了客户执行sava或者bgsave命令，还可以配置RDB保存条件。即在配置文件中配置，在t时间内，数据库被修改了dirty次，则进行后台保存。redis在serve cron的时候，会根据dirty数目和上次保存的时间，来判断是否符合条件，符合条件的话，就进行bg save，注意，任意时刻只能有一个子进程来进行后台保存，因为保存是个很费io的操作，多个进程大量io效率不行，而且不好管理。
 
@@ -231,7 +263,7 @@ while(命令不为空) {
 
    ![img](memcached与redis实现的对比/0.5104974769055843.png)
 
-​  我们知道redis是单event loop的，在真正执行一个事物的时候（即redis收到exec命令后），事物的执行过程是不会被打断的，所有命令都会在一个event loop中执行完。但是在用户逐个输入事务的命令的时候，这期间，可能已经有别的客户修改了事务里面用到的数据，这就可能产生问题。所以redis还提供了watch命令，用户可以在输入multi之前，执行watch命令，指定需要观察的数据，这样如果在exec之前，有其他的客户端修改了这些被watch的数据，则exec的时候，执行到处理被修改的数据的命令的时候，会执行失败，提示数据已经dirty。 这是如何是实现的呢？ 原来在每一个redisDb中还有一个dict watched_keys，watched_kesy中dictentry的key是被watch的数据库的key，而value则是一个list，里面存储的是watch它的client。同时，每个client也有一个watched_keys，里面保存的是这个client当前watch的key。在执行watch的时候，redis在对应的数据库的watched_keys中找到这个key（如果没有，则新建一个dictentry），然后在它的客户列表中加入这个client，同时，往这个client的watched_keys中加入这个key。当有客户执行一个命令修改数据的时候，redis首先在watched_keys中找这个key，如果发现有它，证明有client在watch它，则遍历所有watch它的client，将这些client设置为REDIS_DIRTY_CAS，表面有watch的key被dirty了。当客户执行的事务的时候，首先会检查是否被设置了REDIS_DIRTY_CAS，如果是，则表明数据dirty了，事务无法执行，会立即返回错误，只有client没有被设置REDIS_DIRTY_CAS的时候才能够执行事务。 需要指出的是，执行exec后，该client的所有watch的key都会被清除，同时db中该key的client列表也会清除该client，即执行exec后，该client不再watch任何key（即使exec没有执行成功也是一样）。所以说redis的事务是简单的事务，算不上真正的事务。
+  我们知道redis是单event loop的，在真正执行一个事物的时候（即redis收到exec命令后），事物的执行过程是不会被打断的，所有命令都会在一个event loop中执行完。但是在用户逐个输入事务的命令的时候，这期间，可能已经有别的客户修改了事务里面用到的数据，这就可能产生问题。所以redis还提供了watch命令，用户可以在输入multi之前，执行watch命令，指定需要观察的数据，这样如果在exec之前，有其他的客户端修改了这些被watch的数据，则exec的时候，执行到处理被修改的数据的命令的时候，会执行失败，提示数据已经dirty。 这是如何是实现的呢？ 原来在每一个redisDb中还有一个dict watched_keys，watched_kesy中dictentry的key是被watch的数据库的key，而value则是一个list，里面存储的是watch它的client。同时，每个client也有一个watched_keys，里面保存的是这个client当前watch的key。在执行watch的时候，redis在对应的数据库的watched_keys中找到这个key（如果没有，则新建一个dictentry），然后在它的客户列表中加入这个client，同时，往这个client的watched_keys中加入这个key。当有客户执行一个命令修改数据的时候，redis首先在watched_keys中找这个key，如果发现有它，证明有client在watch它，则遍历所有watch它的client，将这些client设置为REDIS_DIRTY_CAS，表面有watch的key被dirty了。当客户执行的事务的时候，首先会检查是否被设置了REDIS_DIRTY_CAS，如果是，则表明数据dirty了，事务无法执行，会立即返回错误，只有client没有被设置REDIS_DIRTY_CAS的时候才能够执行事务。 需要指出的是，执行exec后，该client的所有watch的key都会被清除，同时db中该key的client列表也会清除该client，即执行exec后，该client不再watch任何key（即使exec没有执行成功也是一样）。所以说redis的事务是简单的事务，算不上真正的事务。
 
  以上就是redis的事务，感觉实现很简单，实际用处也不是太大。
 
