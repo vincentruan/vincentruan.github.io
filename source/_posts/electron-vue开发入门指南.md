@@ -11,14 +11,14 @@ date: 2020-01-31 12:48:08
 
 # Electron概述
 
-![Electron Logo](electron-vue%E5%BC%80%E5%8F%91%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/68747470733a2f2f656c656374726f6e6a732e6f72672f696d616765732f656c656374726f6e2d6c6f676f2e737667.svg)
+![Electron Logo](electron-vue开发入门指南/68747470733a2f2f656c656374726f6e6a732e6f72672f696d616765732f656c656374726f6e2d6c6f676f2e737667.svg)
 
 1. [GitHub](https://github.com/electron/electron) 官网不翻墙太卡，本着能偷懒就偷懒，GayHub就够了，不用翻官网了
 2. [中文文档](https://github.com/electron/i18n/tree/master/content/zh-CN)
 
 # VUE概述
 
-![Vue logo](electron-vue%E5%BC%80%E5%8F%91%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/68747470733a2f2f7675656a732e6f72672f696d616765732f6c6f676f2e706e67.png)
+![Vue logo](electron-vue开发入门指南/68747470733a2f2f7675656a732e6f72672f696d616765732f6c6f676f2e706e67.png)
 
 1. [GitHub](https://github.com/vuejs/vue)
 2. [VUE官网](https://cn.vuejs.org/) 官网资料齐全，中英文档都齐备，基本看完够搞个工程了
@@ -218,7 +218,7 @@ Recently updated (since 2020-01-23): 10 packages (detail see file D:\gitspace\al
 $ cnpm run dev
 ```
 
-![image-20200130174511175](electron-vue%E5%BC%80%E5%8F%91%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/image-20200130174511175.png)
+![image-20200130174511175](electron-vue开发入门指南/image-20200130174511175.png)
 
 ### 问题收集与处理
 
@@ -351,4 +351,4 @@ require('./index')
 
 应用自动重启，注意首次启动vue插件被>>这个隐藏了，需要手动拖动一下
 
-![image-20200130183344218](electron-vue%E5%BC%80%E5%8F%91%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/image-20200130183344218.png)
+![image-20200130183344218](electron-vue开发入门指南/image-20200130183344218.png)

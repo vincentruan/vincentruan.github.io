@@ -118,7 +118,7 @@ jmap -permstat pid
 ```
 打印进程的类加载器和类加载器加载的持久代对象信息，输出：类加载器名称、对象是否存活（不可靠）、对象地址、父类加载器、已加载的类大小等信息，如下图：
 
-![img](JVM-%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7-jps%E3%80%81jstack%E3%80%81jmap%E3%80%81jhat%E3%80%81jstat%E3%80%81hprof-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/640_2.jpg)
+![img](JVM-性能调优监控工具-jps、jstack、jmap、jhat、jstat、hprof-使用详解/640_2.jpg)
 
 使用jmap -heap pid查看进程堆内存使用情况，包括使用的GC算法、堆配置参数和各代中堆内存使用情况。比如下面的例子：
 
@@ -246,7 +246,7 @@ Started HTTP server on port 9998Server is ready.
 ```
 注意如果Dump文件太大，可能需要加上-J-Xmx512m这种参数指定最大堆内存，即jhat -J-Xmx512m -port 9998 /tmp/dump.dat。然后就可以在浏览器中输入主机地址:9998查看了：
 
-![img](JVM-%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7-jps%E3%80%81jstack%E3%80%81jmap%E3%80%81jhat%E3%80%81jstat%E3%80%81hprof-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/640_3.png)
+![img](JVM-性能调优监控工具-jps、jstack、jmap、jhat、jstat、hprof-使用详解/640_3.png)
 
 上面红线框出来的部分大家可以自己去摸索下，最后一项支持OQL（Object Query Language对象查询语言）。
 
@@ -267,7 +267,7 @@ S0C    S1C    S0U    S1U      EC       EU        OC         OU       PC     PU  
 192.0  192.0   64.0   0.0    6144.0   2109.7   32000.0     4111.6   55296.0 25472.7    702    0.431   3      0.218    0.649
 ```
 要明白上面各列的意义，先看JVM堆内存布局：
-![img](JVM-%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7-jps%E3%80%81jstack%E3%80%81jmap%E3%80%81jhat%E3%80%81jstat%E3%80%81hprof-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/640_4.jpg)
+![img](JVM-性能调优监控工具-jps、jstack、jmap、jhat、jstat、hprof-使用详解/640_4.jpg)
 
 可以看出：
 
