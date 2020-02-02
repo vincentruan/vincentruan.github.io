@@ -4,7 +4,7 @@ tags:
   - electron
   - vue
   - nodejs
-categories: electron
+categories: vue
 date: 2020-01-31 12:48:08
 ---
 
@@ -15,6 +15,7 @@ date: 2020-01-31 12:48:08
 
 1. [GitHub](https://github.com/electron/electron) 官网不翻墙太卡，本着能偷懒就偷懒，GayHub就够了，不用翻官网了
 2. [中文文档](https://github.com/electron/i18n/tree/master/content/zh-CN)
+3. [W3C教程](https://www.w3cschool.cn/electronmanual/wcx31ql6.html)
 
 # VUE概述
 
@@ -75,6 +76,88 @@ yarn 使用国内镜像
 yarn config set registry https://registry.npm.taobao.org
 yarn config list
 ```
+
+### 什么是Yarn和NPM?
+
+**Yarn:Yet Another Resource Negotiator，是一个快速、可靠、安全的依赖管理工具，一款新的JavaScript包管理工具。**
+
+Yarn工作流：
+
+ ![img](electron-vue开发入门指南/1087883-20190909202049178-776852540-1580637729972.png)
+
+Yarn使用方法：[https://yarn.bootcss.com/docs/usage](https://yarn.bootcss.com/docs/usage/)/
+
+Yarn使用方法-如图：
+
+![img](electron-vue开发入门指南/1087883-20190909202053234-421219548-1580637730004.png)
+
+ 
+
+Yarn是什么：https://yarn.bootcss.com
+
+Npm是什么 :https://www.npmjs.cn/
+
+### yarn和npm命令对比
+
+#### 一、命令对比
+
+|                yarn                 |                     npm                     | 命令功能                                |
+| :---------------------------------: | :-----------------------------------------: | :-------------------------------------- |
+|         **`yarn install`**          |              **`npm install`**              | **根据`pack.json`安装项目所需的依赖包** |
+|      **`yarn install --flat`**      |                  **`--`**                   | **注释1**                               |
+|  **`yarn install --no-lockfile`**   |     **`npm install --no-package-lock`**     | **不读取或生成`yarn.lock`锁文件**       |
+| **`yarn install --pure-lockfile`**  |                  **`--`**                   | **不要生成`yarn.lock`锁文件**           |
+|      **`yarn add [package]`**       |         **`npm install [package]`**         | **安装需要的依赖包**                    |
+|   **`yarn add [package] --dev`**    |   **`npm install [package] --save-dev`**    | **注释2**                               |
+|    **`yarn add [package] --D`**     |   **`npm install [package] --save-dev`**    | **同上**                                |
+|   **`yarn add [package] --peer`**   |                  **`--`**                   | **注释3**                               |
+|    **`yarn add [package] --P`**     |                  **`--`**                   | **同上**                                |
+| **`yarn add [package] --optional`** | **`npm install [package] --save-optional`** | **注释4**                               |
+|    **`yarn add [package] --O`**     | **`npm install [package] --save-optional`** | **同上**                                |
+|  **`yarn add [package] --exact`**   |  **`npm install [package] --save-exact`**   | **注释5**                               |
+|    **`yarn add [package] --E`**     |  **`npm install [package] --save-exact`**   | **同上**                                |
+|   **`yarn global add [package]`**   |    **`npm install [package] --global`**     | **全局安装依赖包**                      |
+|      **`yarn global upgrade`**      |          **`npm update --global`**          | **全局更新依赖包**                      |
+|       **`yarn add --force`**        |              **`npm rebuild`**              | **更改包内容后进行重建**                |
+|     **`yarn remove [package]`**     |        **`npm uninstall [package]`**        | **卸载已经安装的依赖包**                |
+|  **`yarn cache clean [package]`**   |            **`npm cache clean`**            | **注释6**                               |
+|         **`yarn upgrade`**          |  **`rm -rf node_modules && npm install`**   | **更新依赖包**                          |
+|     **`yarn version --major`**      |           **`npm version major`**           | **更新依赖包的版本**                    |
+|     **`yarn version --minor`**      |           **`npm version minor`**           | **更新依赖包的版本**                    |
+|     **`yarn version --patch`**      |           **`npm version patch`**           | **更新依赖包的版本**                    |
+
+#### 二、命令注释
+
+- **注释1** ：安装所有依赖项，但每个依赖项只允许一个版本。在第一次运行时，这将提示你为多版本的依赖包选择一个版本，进行安装。这些将添加到您package.json的 resolutions字段下。
+
+
+
+```json
+"resolutions": {
+  "package-a": "2.0.0",
+  "package-b": "5.0.0",
+  "package-c": "1.5.2"
+}
+```
+
+- **注释2** ：安装所需的依赖包，并将该包的记录写到`package.json`文件的 **devDependencies** 选项中。
+
+
+
+```json
+"devDependencies": {
+    "autoprefixer": "^7.1.2",
+    "babel-core": "^6.22.1",
+    "babel-helper-vue-jsx-merge-props": "^2.0.3",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-syntax-jsx": "^6.18.0",
+}
+```
+
+- **注释3** ：安装所需的依赖包，并将该包的记录写到`package.json`文件的 **peerDependencies** 选项中。
+- **注释4** ：安装所需的依赖包，并将该包的记录写到`package.json`文件的 **optionalDependencies** 选项中。
+- **注释5** ：安装依赖包的确切版本，默认设置是使用依赖包的最新版本。例如， `yarn add foo@1.2.3`将接受版本1.9.1，但 `yarn add foo@1.2.3 --exact` 只接受版本1.2.3。
+- **注释6** ：运行此命令将清除全局缓存依赖包。当再次yarn或yarn install运行，进行下载依赖包
 
 ## 安装Electron
 
@@ -352,3 +435,91 @@ require('./index')
 应用自动重启，注意首次启动vue插件被>>这个隐藏了，需要手动拖动一下
 
 ![image-20200130183344218](electron-vue开发入门指南/image-20200130183344218.png)
+
+#### 问题三：ERROR in  Error: .\node_modules\html-webpack-plugin\node_modules\clean-css\index.js:1 SyntaxError: Invalid or unexpected token
+
+找到这个文件发现下载的是一串ASII乱码，尝试删除重新安装，发现用yarn install下载的这个文件总有问题，改为cnpm下载就行了
+
+#### 问题四： ERROR in   TypeError: compilation.templatesPlugin is not a function
+
+webpack不是最新版
+
+解决方法：
+
+1.删除node_modules，重新安装
+
+```bash
+npm install
+```
+
+2.安装最新webpack
+
+```bash
+ npm add webpack@latest
+```
+
+# 知识库
+
+## vue项目转换为electron-vue
+
+1. 把原有项目package.json的dependencies，devDependencies中不同的配置项，添加到 my-project 的package.json中
+2. 把vue项目src的内容全部拷贝到 my-project/src/renderer 中
+3. 安装依赖 npm install
+4. 运行 npm run dev 就可以看到跑起来的客户端
+5. 打包 npm run build 项目的安装文件放进build里面，执行.exe文件就可以安装了（build文件有点大）
+
+## electron-vue使用electron-builder指定打包32位
+
+//package.json
+
+```js
+    "win": {
+      "icon": "build/icons/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "ia32"
+          ]
+        }
+      ]
+    },
+```
+
+## electron-vue开发环境跨域代理设置
+
+//.electron-vue/dev-runner.js
+
+```js
+function startRenderer(){
+...
+        proxy: {
+          '/api': {
+            target: 'http://192.168.74.222:6019',
+            // secure: false,  // 如果是https接口，需要配置这个参数
+            changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+            pathRewrite: {
+              '^/api': ''
+            }
+          }
+        }
+        ...
+}
+```
+
+## 通过[BrowserWindow](https://electronjs.org/docs/api/browser-window#browserwindow)新窗口打开项目内页面
+
+```js
+      const BrowserWindow = require('electron').remote.BrowserWindow
+      const winURL = process.env.NODE_ENV === 'development'
+        ? `http://localhost:9080/#/new`
+        : `file://${__dirname}/index.html#new`
+      let newWindow = new BrowserWindow({
+        height: 600,
+        width: 800
+      })
+      newWindow.loadURL(winURL)
+      newWindow.on('closed', () => {
+        newWindow = null
+      })
+```
