@@ -201,6 +201,8 @@ Npm是什么 :https://www.npmjs.cn/
 
 ## 搭建electron-vue项目
 
+simulatedgreg/electron-vue用的vue-cli2，***不建议再使用***，如果vue-cli用的3或者4，建议直接跳到下面的章节
+
 ### 相关文档
 
 - [electron-vue](https://simulatedgreg.gitbooks.io/electron-vue/content/cn/)文档
@@ -1031,13 +1033,7 @@ M   import { app, protocol, BrowserWindow, Menu } from 'electron'
 
 现在，Windows系统上可以看到开发环境的APP窗口图标已经生效了。
 
-macOS图标请参照4.1章节，并且需要在build后才能生效。
-
-![img](https:////upload-images.jianshu.io/upload_images/17176884-7278661d43e85fb8.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp)
-
-3.5-设置图标.jpg
-
-( ↑ windows APP窗口及任务栏图标 ↑)
+macOS图标请参照相关章节，并且需要在build后才能生效。
 
 ### 设置APP窗口标题栏名称
 
@@ -1309,8 +1305,6 @@ M       color: var(--color-text)
 ```
 
 在public/index.html引入皮肤样式，注意加上id="app-skin"：
-
-
 
 ```xml
     <head>

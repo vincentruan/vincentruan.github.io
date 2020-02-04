@@ -226,4 +226,4 @@ $$
 - [Mermaid语法规则](https://www.jianshu.com/p/7ddbb7dc8fec)
 - [Mermaid官方教程](https://mermaidjs.github.io/demos.html)
 - [Mermaid Github仓库](https://github.com/webappdevelp/hexo-filter-mermaid-diagrams)
-- [MathJax Github仓库](https://github.com/mathjax/MathJax)
+- [MathJax Github仓库](https://github.com/mathjax/MathJax

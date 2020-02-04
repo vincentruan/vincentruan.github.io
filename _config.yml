@@ -118,3 +118,6 @@ live2d:
     height: 375
   mobile:
     show: false # 手机中是否展示
+# hexo sitemap网站地图
+baidusitemap:
+  path: baidusitemap.xml
