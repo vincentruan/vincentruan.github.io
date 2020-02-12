@@ -1,7 +1,10 @@
 ---
 title: 详解分布式协调服务 ZooKeeper
 date: 2018-10-07 12:14:40
+categories: 架构设计
 tags:
+- zookeeper
+- 分布式
 ---
 
 `作者 | Draveness`
