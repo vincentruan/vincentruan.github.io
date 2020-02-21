@@ -43,20 +43,7 @@ Zookeeper提供一个多层级的节点命名空间（节点称为znode）。与
 
 客户端与zookeeper断开连接后，该节点被删除，只是Zookeeper给该节点名称进行顺序编号
 
-```mermaid
-graph TB;
-    A["/"]---B["/NameServer"]---F["/Server1"];
-    A---C["/Configuration"];
-    A---D["/GroupMembers"]---M1["/Member1"];
-    A---E["/Apps"]---A1["/App1"];
-    B---G["/Server2"];
-    D---M2["/Member2"];
-    E---A2["/App2"];
-    E---A3["/App3"]---SA1["/SubApp1"];
-    A3---SA2["/SubApp2"];
-```
-
-
+![](zookeeper入门摘要/zookeeper入门摘要-zk_dir_tree.png)
 
 ## 5.Zookeeper通知机制
 
