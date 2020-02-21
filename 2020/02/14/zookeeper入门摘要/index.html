@@ -127,7 +127,7 @@
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zookeeper_get_lock_flow.png">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zk_epoch.png">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zookeeper_elect_master.png">
-<meta property="og:updated_time" content="2020-02-20T14:12:41.884Z">
+<meta property="og:updated_time" content="2020-02-21T03:14:40.864Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="zookeeper入门摘要">
 <meta name="twitter:description" content="1.ZooKeeper是什么？ZooKeeper是一个分布式的，开放源码的分布式应用程序协调服务，是Google的Chubby一个开源的实现，它是集群的管理者，监视着集群中各个节点的状态根据节点提交的反馈进行下一步合理操作。最终，将简单易用的接口和性能高效、功能稳定的系统提供给用户。 客户端的读请求可以被集群中的任意一台机器处理，如果读请求在节点上注册了监听器，这个监听器也是由所连接的zookee">
@@ -385,7 +385,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-20 22:12:41" itemprop="dateModified" datetime="2020-02-20T22:12:41+08:00">2020-02-20</time>
+                <time title="修改时间：2020-02-21 11:14:40" itemprop="dateModified" datetime="2020-02-21T11:14:40+08:00">2020-02-21</time>
               
             
           </span>
@@ -456,8 +456,6 @@
     E---A2["/App2"];
     E---A3["/App3"]---SA1["/SubApp1"];
     A3---SA2["/SubApp2"];</pre>
-
-
 
 <h2 id="5-Zookeeper通知机制"><a href="#5-Zookeeper通知机制" class="headerlink" title="5.Zookeeper通知机制"></a>5.Zookeeper通知机制</h2><p>client端会对某个znode建立一个watcher事件，当该znode发生变化时，这些client会收到zk的通知，然后client可以根据znode变化来做出业务上的改变等。</p>
 <h2 id="6-Zookeeper做了什么？"><a href="#6-Zookeeper做了什么？" class="headerlink" title="6.Zookeeper做了什么？"></a>6.Zookeeper做了什么？</h2><p>1、命名服务</p>
