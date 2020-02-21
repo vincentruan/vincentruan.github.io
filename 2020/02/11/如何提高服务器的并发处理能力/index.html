@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-mac-osx.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="以下内容为入门级介绍，意在对老技术作较全的总结而不是较深的研究。主要参考《构建高性能Web站点》一书。 什么是服务器并发处理能力一台服务器在单位时间里能处理的请求越多，服务器的能力越高，也就是服务器并发处理能力越强 有什么方法衡量服务器并发处理能力1. 吞吐率吞吐率，单位时间里服务器处理的最大请求数，单位req/s 从服务器角度，实际并发用户数的可以理解为服务器当前维护的代表不同用户的文件描述符总">
+<meta name="keywords" content="分布式架构,资源管理,转载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何提高服务器的并发处理能力">
+<meta property="og:url" content="https://vincentruan.github.io/2020/02/11/如何提高服务器的并发处理能力/index.html">
+<meta property="og:site_name" content="星辰大海">
+<meta property="og:description" content="以下内容为入门级介绍，意在对老技术作较全的总结而不是较深的研究。主要参考《构建高性能Web站点》一书。 什么是服务器并发处理能力一台服务器在单位时间里能处理的请求越多，服务器的能力越高，也就是服务器并发处理能力越强 有什么方法衡量服务器并发处理能力1. 吞吐率吞吐率，单位时间里服务器处理的最大请求数，单位req/s 从服务器角度，实际并发用户数的可以理解为服务器当前维护的代表不同用户的文件描述符总">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/11/如何提高服务器的并发处理能力/640.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/11/如何提高服务器的并发处理能力/640.webp">
+<meta property="og:updated_time" content="2020-02-17T02:40:44.888Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何提高服务器的并发处理能力">
+<meta name="twitter:description" content="以下内容为入门级介绍，意在对老技术作较全的总结而不是较深的研究。主要参考《构建高性能Web站点》一书。 什么是服务器并发处理能力一台服务器在单位时间里能处理的请求越多，服务器的能力越高，也就是服务器并发处理能力越强 有什么方法衡量服务器并发处理能力1. 吞吐率吞吐率，单位时间里服务器处理的最大请求数，单位req/s 从服务器角度，实际并发用户数的可以理解为服务器当前维护的代表不同用户的文件描述符总">
+<meta name="twitter:image" content="https://vincentruan.github.io/2020/02/11/如何提高服务器的并发处理能力/640.webp">
+
+
+
+
+
+
+  <link rel="canonical" href="https://vincentruan.github.io/2020/02/11/如何提高服务器的并发处理能力/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>如何提高服务器的并发处理能力 | 星辰大海</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">星辰大海</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">My Conquest Is the Sea of Stars.</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/11/如何提高服务器的并发处理能力/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vincent">
+      <meta itemprop="description" content="The King is dead, long live the King!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">如何提高服务器的并发处理能力
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-11 15:22:05" itemprop="dateCreated datePublished" datetime="2020-02-11T15:22:05+08:00">2020-02-11</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/架构设计/" itemprop="url" rel="index"><span itemprop="name">架构设计</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>以下内容为入门级介绍，意在对老技术作较全的总结而不是较深的研究。主要参考《构建高性能Web站点》一书。</p>
+<h2 id="什么是服务器并发处理能力"><a href="#什么是服务器并发处理能力" class="headerlink" title="什么是服务器并发处理能力"></a>什么是服务器并发处理能力</h2><p>一台服务器在单位时间里能处理的请求越多，服务器的能力越高，也就是服务器并发处理能力越强</p>
+<h2 id="有什么方法衡量服务器并发处理能力"><a href="#有什么方法衡量服务器并发处理能力" class="headerlink" title="有什么方法衡量服务器并发处理能力"></a>有什么方法衡量服务器并发处理能力</h2><h3 id="1-吞吐率"><a href="#1-吞吐率" class="headerlink" title="1. 吞吐率"></a><strong>1. 吞吐率</strong></h3><p>吞吐率，单位时间里服务器处理的最大请求数，单位req/s</p>
+<p>从服务器角度，实际并发用户数的可以理解为服务器当前维护的代表不同用户的文件描述符总数，也就是并发连接数。</p>
+<p>服务器一般会限制同时服务的最多用户数，比如apache的MaxClents参数。</p>
+<p>这里再深入一下，对于服务器来说，服务器希望支持高吞吐率，对于用户来说，用户只希望等待最少的时间，显然，双方不能满足，所以双方利益的平衡点，就是我们希望的最大并发用户数。</p>
+<h3 id="2-压力测试"><a href="#2-压力测试" class="headerlink" title="2. 压力测试"></a><strong>2. 压力测试</strong></h3><p>有一个原理一定要先搞清楚，假如100个用户同时向服务器分别进行10个请求，与1个用户向服务器连续进行1000次请求，对服务器的压力是一样吗？</p>
+<p>实际上是不一样的，因对每一个用户，连续发送请求实际上是指发送一个请求并接收到响应数据后再发送下一个请求。</p>
+<p>这样对于1个用户向服务器连续进行1000次请求, 任何时刻服务器的网卡接收缓冲区中只有1个请求，而对于100个用户同时向服务器分别进行10个请求，服务器的网卡接收缓冲区最多有100个等待处理的请求，显然这时的服务器压力更大。</p>
+<p>压力测试前提考虑的条件</p>
+<ul>
+<li>并发用户数: 指在某一时刻同时向服务器发送请求的用户总数(HttpWatch)</li>
+<li>总请求数</li>
+<li>请求资源描述</li>
+<li>请求等待时间(用户等待时间)</li>
+<li>用户平均请求的等待时间</li>
+<li>服务器平均请求处理的时间</li>
+<li>硬件环境</li>
+</ul>
+<p>压力测试中关心的时间又细分以下2种:</p>
+<ol>
+<li>用户平均请求等待时间（这里暂不把数据在网络的传输时间，还有用户PC本地的计算时间计算入内）</li>
+<li>服务器平均请求处理时间</li>
+</ol>
+<p>用户平均请求等待时间主要用于衡量服务器在一定并发用户数下，单个用户的服务质量；而服务器平均请求处理时间就是吞吐率的倒数。</p>
+<p>一般来说，用户平均请求等待时间 = 服务器平均请求处理时间 * 并发用户数</p>
+<h2 id="怎么提高服务器的并发处理能力"><a href="#怎么提高服务器的并发处理能力" class="headerlink" title="怎么提高服务器的并发处理能力"></a>怎么提高服务器的并发处理能力</h2><h3 id="1-提高CPU并发计算能力"><a href="#1-提高CPU并发计算能力" class="headerlink" title="1. 提高CPU并发计算能力"></a><strong>1. 提高CPU并发计算能力</strong></h3><p>服务器之所以可以同时处理多个请求，在于操作系统通过多执行流体系设计使得多个任务可以轮流使用系统资源。</p>
+<p>这些资源包括CPU，内存以及I/O. 这里的I/O主要指磁盘I/O, 和网络I/O。</p>
+<h5 id="多进程-amp-多线程"><a href="#多进程-amp-多线程" class="headerlink" title="多进程 &amp; 多线程"></a><strong>多进程 &amp; 多线程</strong></h5><p>多执行流的一般便是进程，多进程的好处可以对CPU时间的轮流使用，对CPU计算和IO操作重叠利用。这里的IO主要是指磁盘IO和网络IO，相对CPU而言，它们慢的可怜。</p>
+<p>而实际上，大多数进程的时间主要消耗在I/O操作上。</p>
+<p>现代计算机的DMA技术可以让CPU不参与I/O操作的全过程，比如进程通过系统调用，使得CPU向网卡或者磁盘等I/O设备发出指令，然后进程被挂起，释放出CPU资源，等待I/O设备完成工作后通过中断来通知进程重新就绪。</p>
+<p>对于单任务而言，CPU大部分时间空闲，这时候多进程的作用尤为重要。</p>
+<p>多进程不仅能够提高CPU的并发度。其优越性还体现在独立的内存地址空间和生命周期所带来的稳定性和健壮性，其中一个进程崩溃不会影响到另一个进程。</p>
+<p>但是进程也有如下<strong>缺点</strong>：</p>
+<ol>
+<li>fork()系统调用开销很大: prefork</li>
+<li>进程间调度和上下文切换成本: 减少进程数量</li>
+<li>庞大的内存重复：共享内存</li>
+<li>IPC编程相对比较麻烦</li>
+</ol>
+<h4 id="减少进程切换"><a href="#减少进程切换" class="headerlink" title="减少进程切换"></a><strong>减少进程切换</strong></h4><p>当硬件上下文频繁装入和移出时，所消耗的时间是非常可观的。可用Nmon工具监视服务器每秒的上下文切换次数。</p>
+<p>为了尽量减少上下文切换次数，最简单的做法就是减少进程数，尽量使用线程并配合其它I/O模型来设计并发策略。</p>
+<p>还可以考虑使用进程绑定CPU技术，增加CPU缓存的命中率。若进程不断在各CPU上切换，这样旧的CPU缓存就会失效。</p>
+<h4 id="减少使用不必要的锁"><a href="#减少使用不必要的锁" class="headerlink" title="减少使用不必要的锁"></a><strong>减少使用不必要的锁</strong></h4><p>服务器处理大量并发请求时，多个请求处理任务时存在一些资源抢占竞争，这时一般采用“锁”机制来控制资源的占用。到底<code>什么是重入锁</code>附录内容推荐大家看下。</p>
+<p>当一个任务占用资源时，我们锁住资源，这时其它任务都在等待锁的释放，这个现象称为<strong>锁竞争</strong>。</p>
+<p>通过锁竞争的本质，我们要意识到尽量减少并发请求对于共享资源的竞争。</p>
+<p>比如在允许情况下关闭服务器访问日志，这可以大大减少在锁等待时的延迟时间。要最大程度减少无辜的等待时间。</p>
+<p>这里说下无锁编程，就是由内核完成这个锁机制，主要是使用原子操作替代锁来实现对共享资源的访问保护。</p>
+<p>使用原子操作时，在进行实际的写操作时，使用了lock指令，这样就可以阻止其他任务写这块内存，避免出现数据竞争现象。<strong>原子操作速度比锁快，一般要快一倍以上</strong>。</p>
+<p>例如fwrite(), fopen()，其是使用append方式写文件，其原理就是使用了无锁编程，无锁编程的复杂度高，但是效率快，而且发生死锁概率低。</p>
+<h4 id="考虑进程优先级"><a href="#考虑进程优先级" class="headerlink" title="考虑进程优先级"></a><strong>考虑进程优先级</strong></h4><p>进程调度器会动态调整运行队列中进程的优先级，通过top观察进程的PR值</p>
+<h4 id="考虑系统负载"><a href="#考虑系统负载" class="headerlink" title="考虑系统负载"></a><strong>考虑系统负载</strong></h4><p>可在任何时刻查看/proc/loadavg, top中的load average也可看出</p>
+<h4 id="考虑CPU使用率"><a href="#考虑CPU使用率" class="headerlink" title="考虑CPU使用率"></a><strong>考虑CPU使用率</strong></h4><p>除了用户空间和内核空间的CPU使用率以外，还要关注I/O wait,它是指CPU空闲并且等待I/O操作完成的时间比例（top中查看wa的值）。</p>
+<h3 id="2-考虑减少内存分配和释放"><a href="#2-考虑减少内存分配和释放" class="headerlink" title="2. 考虑减少内存分配和释放"></a><strong>2. 考虑减少内存分配和释放</strong></h3><p>服务器的工作过程中，需要大量的内存，使得内存的分配和释放工作尤为重要。</p>
+<p>可以通过改善数据结构和算法复制度来适当减少中间临时变量的内存分配及数据复制时间，而服务器本身也使用了各自的策略来提高效率。</p>
+<p>例如Apache,在运行开始时一次申请大片的内存作为内存池，若随后需要时就在内存池中直接获取，不需要再次分配，避免了频繁的内存分配和释放引起的内存整理时间。</p>
+<p>再如Nginx使用多线程来处理请求，使得多个线程之间可以共享内存资源，从而令它的内存总体使用量大大减少。</p>
+<p>另外，Nginx分阶段的内存分配策略，按需分配，及时释放，使得内存使用量保持在很小的数量范围。</p>
+<p>另外，还可以考虑<strong>共享内存</strong>。</p>
+<p>共享内存指在多处理器的计算机系统中，可以被不同中央处理器（CPU）访问的大容量内存，也可以由不同进程共享，是非常快的进程通信方式。</p>
+<p>但是使用共享内存也有不好的地方，就是对于多机器时数据不好统一。</p>
+<p>shell命令ipcs可用来显示系统下共享内存的状态，函数shmget可以创建或打开一块共享内存区，函数shmat将一个存在的共享内存段连接到本进程空间, 函数shmctl可以对共享内存段进行多种操作，函数shmdt函数分离该共享内存。</p>
+<h3 id="3-考虑使用持久连接"><a href="#3-考虑使用持久连接" class="headerlink" title="3. 考虑使用持久连接"></a><strong>3. 考虑使用持久连接</strong></h3><p>持久连接也为<strong>长连接</strong>，它本身是TCP通信的一种普通方式，即在一次TCP连接中持续发送多分数据而不断开连接。</p>
+<p>与它相反的方式称为<strong>短连接</strong>，也就是建立连接后发送一份数据就断开，然后再次建立连接发送下一份数据， 周而复始。</p>
+<p>是否采用持久连接，完全取决于应用特点。</p>
+<p>从性能角度看，建立TCP连接的操作本身是一项不小的开销，在允许的情况下，连接次数越少，越有利于性能的提升; 尤其对于密集型的图片或网页等小数据请求处理有明显的加速所用。</p>
+<p>HTTP长连接需要浏览器和web服务器的共同协作，目前浏览器普遍支持长连接，表现在其发出的HTTP请求数据头中包含关于长连接的声明，如下：Connection: Keep-Alive</p>
+<p>主流的web服务器都支持长连接，比如apache中，可以用KeepAlive off关闭长连接。</p>
+<p>对于长连接的有效使用，还有关键一点在于长连接超时时间的设置，即长连接在什么时候关闭吗？</p>
+<p>Apache的默认设置为5s, 若这个时间设置过长，则可能导致资源无效占有，维持大量空闲进程，影响服务器性能。</p>
+<h3 id="4-改进I-O-模型"><a href="#4-改进I-O-模型" class="headerlink" title="4. 改进I/O 模型"></a><strong>4. 改进I/O 模型</strong></h3><p>I/O操作根据设备的不同分为很多类型，比如内存I/O, 网络I/O, 磁盘I/O。</p>
+<p>对于网络I/O和磁盘I/O, 它们的速度要慢很多，尽管使用RAID磁盘阵列可通过并行磁盘磁盘来加快磁盘I/O速度，购买大连独享网络带宽以及使用高带宽网络适配器可以提高网络I/O的速度。</p>
+<p>但这些I/O操作需要内核系统调用来完成，这些需要CPU来调度，这使得CPU不得不浪费宝贵的时间来等待慢速I/O操作。</p>
+<p>我们希望让CPU足够少的时间在i/O操作的调度上，如何让高速的CPU和慢速的I/O设备更好地协调工作，是现代计算机一直探讨的话题。各种I/O模型的本质区别在于CPU的参与方式。</p>
+<h4 id="DMA技术"><a href="#DMA技术" class="headerlink" title="DMA技术"></a><strong>DMA技术</strong></h4><p>I/O设备和内存之间的数据传输方式由DMA控制器完成。在DMA模式下，CPU只需向DMA下达命令，让DMA控制器来处理数据的传送，这样可以大大节省系统资源。</p>
+<h4 id="异步I-O"><a href="#异步I-O" class="headerlink" title="异步I/O"></a><strong>异步I/O</strong></h4><p>异步I/O指主动请求数据后便可以继续处理其它任务，随后等待I/O操作的通知，这样进程在数据读写时不发生阻塞。</p>
+<p>异步I/O是非阻塞的，当函数返回时，真正的I/O传输已经完成，这让CPU处理和I/O操作达到很好的重叠。</p>
+<h4 id="I-O多路复用"><a href="#I-O多路复用" class="headerlink" title="I/O多路复用"></a><strong>I/O多路复用</strong></h4><p>epoll服务器同时处理大量的文件描述符是必不可少的，若采用同步非阻塞I/O模型，若同时接收TCP连接的数据，就必须轮流对每个socket调用接收数据的方法，不管这些socket有没有可接收的数据，都要询问一次。</p>
+<p>假如大部分socket并没有数据可以接收，那么进程便会浪费很多CPU时间用于检查这些socket有没有可以接收的数据。</p>
+<p>多路I/O就绪通知的出现，提供了对大量文件描述符就绪检查的高性能方案，它允许进程通过一种方法同时监视所有文件描述符，并可以快速获得所有就绪的文件描述符，然后只针对这些文件描述符进行数据访问。</p>
+<p>epoll可以同时支持水平触发和边缘触发，理论上边缘触发性能更高，但是代码实现复杂，因为任何意外的丢失事件都会造成请求处理错误。</p>
+<p>epoll主要有2大改进：</p>
+<ol>
+<li><p>epoll只告知就绪的文件描述符，而且当调用epoll_wait()获得文件描述符时，返回并不是实际的描述符，而是一个代表就绪描述符数量的值，然后只需去epoll指定的一个数组中依次取得相应数量的文件描述符即可。</p>
+<p>这里使用了内存映射(mmap)技术，这样彻底省掉了这些文件描述符在系统调用时复制的开销。</p>
+</li>
+<li><p>epoll采用基于事件的就绪通知方式。其事先通过epoll_ctrl()注册每一个文件描述符，一旦某个文件描述符就绪时，内核会采用类似callback的回调机制，当进程调用epoll_wait()时得到通知</p>
+</li>
+</ol>
+<p>关于IO模型，可以参考笔者前面写的相关文章Java NIO.2；关于epoll，可以参考笔者前面写的文章select、poll和epoll简介。</p>
+<h4 id="Sendfile"><a href="#Sendfile" class="headerlink" title="Sendfile"></a><strong>Sendfile</strong></h4><p>大多数时候，我们都向服务器请求静态文件，比如图片，样式表等。</p>
+<p>在处理这些请求时，磁盘文件的数据先经过内核缓冲区，然后到用户内存空间，不需经过任何处理，其又被送到网卡对应的内核缓冲区，接着再被送入网卡进行发送。</p>
+<p>Linux提供sendfile()系统调用，可以讲磁盘文件的特定部分直接传送到代表客户端的socket描述符，加快了静态文件的请求速度，同时减少CPU和内存的开销。</p>
+<p>适用场景：对于请求较小的静态文件，sendfile发挥的作用不那么明显，因发送数据的环节在整个过程中所占时间的比例相比于大文件请求时小很多。</p>
+<h4 id="内存映射"><a href="#内存映射" class="headerlink" title="内存映射"></a><strong>内存映射</strong></h4><p>Linux内核提供一种访问磁盘文件的特殊方式，它可以将内存中某块地址空间和我们指定的磁盘文件相关联，从而对这块内存的访问转换为对磁盘文件的访问。这种技术称为<strong>内存映射</strong>。</p>
+<p>多数情况下，内存映射可以提高磁盘I/O的性能，无须使用read()或write()等系统调用来访问文件，而是通过mmap()系统调用来建立内存和磁盘文件的关联，然后像访问内存一样自由访问文件。</p>
+<p><strong>缺点</strong>：在处理较大文件时，内存映射会导致较大的内存开销，得不偿失。</p>
+<h4 id="直接I-O"><a href="#直接I-O" class="headerlink" title="直接I/O"></a><strong>直接I/O</strong></h4><p>在linux 2.6中，内存映射和直接访问文件没有本质差异，因为数据需要经过2次复制，即在磁盘与内核缓冲区之间以及在内核缓冲区与用户态内存空间。</p>
+<p>引入内核缓冲区的目的在于<strong>提高磁盘文件的访问性能</strong>，然而对于一些复杂的应用，比如数据库服务器，它们为了进一步提高性能，希望绕过内核缓冲区，由自己在用户态空间实现并管理I/O缓冲区，比如数据库可根据更加合理的策略来提高查询缓存命中率。</p>
+<p>另一方面，绕过内核缓冲区也可以减少系统内存的开销，因内核缓冲区本身就在使用系统内存。</p>
+<p>Linux在open()系统调用中增加参数选项O_DIRECT,即可绕过内核缓冲区直接访问文件,实现直接I/O。</p>
+<p>在Mysql中，对于Innodb存储引擎，自身进行数据和索引的缓存管理，可在my.cnf配置中分配raw分区跳过内核缓冲区，实现直接I/O。</p>
+<h3 id="5-改进服务器并发策略"><a href="#5-改进服务器并发策略" class="headerlink" title="5. 改进服务器并发策略"></a><strong>5. 改进服务器并发策略</strong></h3><p>服务器并发策略的目的，是让I/O操作和CPU计算尽量重叠进行，一方面让CPU在I/O等待时不要空闲，另一方面让CPU在I/O调度上尽量花最少的时间。</p>
+<h4 id="一个进程处理一个连接，非阻塞I-O"><a href="#一个进程处理一个连接，非阻塞I-O" class="headerlink" title="一个进程处理一个连接，非阻塞I/O"></a><strong>一个进程处理一个连接，非阻塞I/O</strong></h4><p>这样会存在多个并发请求同时到达时，服务器必然要准备多个进程来处理请求。其进程的开销限制了它的并发连接数。</p>
+<p>但从稳定性和兼容性的角度，则其相对安全，任何一个子进程的崩溃不会影响服务器本身，父进程可以创建新的子进程；这种策略典型的例子就是Apache的fork和prefork模式。</p>
+<p>对于并发数不高（如150以内）的站点同时依赖Apache其它功能时的应用选择Apache还是可以的。</p>
+<h4 id="一个线程处理一个连接，非阻塞IO"><a href="#一个线程处理一个连接，非阻塞IO" class="headerlink" title="一个线程处理一个连接，非阻塞IO"></a><strong>一个线程处理一个连接，非阻塞IO</strong></h4><p>这种方式允许在一个进程中通过多个线程来处理多个连接，一个线程处理一个连接。Apache的worker模式就是这种典型例子，使其可支持更多的并发连接。不过这种模式的总体性能还不如prefork，所以一般不选用worker模式。</p>
+<h4 id="一个进程处理多个连接，异步I-O"><a href="#一个进程处理多个连接，异步I-O" class="headerlink" title="一个进程处理多个连接，异步I/O"></a><strong>一个进程处理多个连接，异步I/O</strong></h4><p>一个线程同时处理多个连接，潜在的前提条件就是使用IO多路复用就绪通知。</p>
+<p>这种情况下，将处理多个连接的进程叫做worker进程或服务进程。worker的数量可以配置，如Nginx中的worker_processes 4。</p>
+<h4 id="一个线程处理多个连接，异步IO"><a href="#一个线程处理多个连接，异步IO" class="headerlink" title="一个线程处理多个连接，异步IO"></a><strong>一个线程处理多个连接，异步IO</strong></h4><p>即使有高性能的IO多路复用就绪通知，但磁盘IO的等待还是无法避免的。更加高效的方法是对磁盘文件使用异步IO，目前很少有Web服务器真正意义上支持这种异步IO。</p>
+<h3 id="6-改进硬件环境"><a href="#6-改进硬件环境" class="headerlink" title="6. 改进硬件环境"></a><strong>6. 改进硬件环境</strong></h3><p>还有一点要提及的是硬件环境，服务器的硬件配置对应用程序的性能提升往往是最直接，也是最简单的方式，这就是所谓的scale up。这里不做论述。</p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="什么是重入锁"><a href="#什么是重入锁" class="headerlink" title="什么是重入锁"></a>什么是重入锁</h3><blockquote>
+<p>java.util.concurrent.locks.ReentrantLock</p>
+</blockquote>
+<p>这个是 JDK @since 1.5 添加的一种颗粒度更小的锁，它完全可以替代 synchronized 关键字来实现它的所有功能，而且 ReentrantLock 锁的灵活度要远远大于 synchronized 关键字。</p>
+<p><img src="/2020/02/11/如何提高服务器的并发处理能力/640.webp" alt="img"></p>
+<p>从类结构图看出，ReentrantLock 实现了 Lock 接口，ReentrantLock 只是 Lock 接口的一个实现而已。</p>
+<blockquote>
+<p>java.util.concurrent.locks.Lock</p>
+</blockquote>
+<p>它们都是 java.util.concurrent 包里面的内容（俗称 JUC、并发包），也都是 JDK 1.5 开始加入的。</p>
+<h3 id="为什么叫重入锁呢？"><a href="#为什么叫重入锁呢？" class="headerlink" title="为什么叫重入锁呢？"></a>为什么叫重入锁呢？</h3><p><code>ReentrantLock</code>，我们把它拆开来看就明了了。</p>
+<p>Re-Entrant-Lock：即表示可重新反复进入的锁，但仅限于当前线程；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    lock.lock();</span><br><span class="line">    lock.lock();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// ... method body</span></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      lock.unlock()</span><br><span class="line">      lock.unlock()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如示例代码所示，当前线程可以反复加锁，但也需要释放同样加锁次数的锁，即重入了多少次，就要释放多少次，不然也会导入锁不被释放。</p>
+<p>试想一下，如果不设计成可重入锁，那自己如果反复给自己加锁，不是会把自己加死锁了吗？所以，到现在，重入锁的概念大概应该清楚了吧？</p>
+<h3 id="重入锁最重要的几个方法"><a href="#重入锁最重要的几个方法" class="headerlink" title="重入锁最重要的几个方法"></a>重入锁最重要的几个方法</h3><p>这几个方法都是 Lock 接口中定义的：</p>
+<p><img src="/2020/02/11/如何提高服务器的并发处理能力/640.webp" alt="img"></p>
+<p><strong>1）lock()</strong></p>
+<p>获取锁，有以下三种情况：</p>
+<ul>
+<li>锁空闲：直接获取锁并返回，同时设置锁持有者数量为：1；</li>
+<li>当前线程持有锁：直接获取锁并返回，同时锁持有者数量递增1；</li>
+<li>其他线程持有锁：当前线程会休眠等待，直至获取锁为止；</li>
+</ul>
+<p><strong>2）lockInterruptibly()</strong></p>
+<p>获取锁，逻辑和 lock() 方法一样，但这个方法在获取锁过程中能响应中断。</p>
+<p><strong>3）tryLock()</strong></p>
+<p>从关键字字面理解，这是在尝试获取锁，获取成功返回：true，获取失败返回：false, 这个方法不会等待，有以下三种情况：</p>
+<ul>
+<li>锁空闲：直接获取锁并返回：true，同时设置锁持有者数量为：1；</li>
+<li>当前线程持有锁：直接获取锁并返回：true，同时锁持有者数量递增1；</li>
+<li>其他线程持有锁：获取锁失败，返回：false；</li>
+</ul>
+<p><strong>4）tryLock(long timeout, TimeUnit unit)</strong></p>
+<p>逻辑和 tryLock() 差不多，只是这个方法是带时间的。</p>
+<p><strong>5）unlock()</strong></p>
+<p>释放锁，每次锁持有者数量递减 1，直到 0 为止。所以，现在知道为什么 lock 多少次，就要对应 unlock 多少次了吧。</p>
+<p><strong>6）newCondition</strong></p>
+<p>返回一个这个锁的 Condition 实例，可以实现 synchronized 关键字类似 wait/ notify 实现多线程通信的功能，不过这个比 wait/ notify 要更灵活，更强大！</p>
+<h3 id="重入锁大概的用法"><a href="#重入锁大概的用法" class="headerlink" title="重入锁大概的用法"></a>重入锁大概的用法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> ReentrantLock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    lock.lock();  <span class="comment">// block until condition holds</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// ... method body</span></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      lock.unlock()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>看见没有，加锁和释放锁都在方法里面进行，可以自由控制，比 synchronized 更灵活，更方便。但要注意的是，释放锁操作必须在 finally 里面，不然如果出现异常导致锁不能被正常释放，进而会卡死后续所有访问该锁的线程。</p>
+<h3 id="synchronized-是重入锁吗？"><a href="#synchronized-是重入锁吗？" class="headerlink" title="synchronized 是重入锁吗？"></a>synchronized 是重入锁吗？</h3><p>那么问题来了，synchronized 是重入锁吗？</p>
+<p>你可能会说不是，因为 ReentrantLock 既然是重入锁，根据推理，相反，那 synchronized 肯定就不是重入锁，那你就错了。</p>
+<p>答案是：yes，为什么？看下面的例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">operation</span><span class="params">()</span></span>&#123;</span><br><span class="line">    add();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>operation 方法调用了 add 方法，两个方法都是用 synchronized 修饰的，add()  方法可以成功获取当前线程 operation() 方法已经获取到的锁，说明 synchronized 就是可重入锁。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/分布式架构/" rel="tag"># 分布式架构</a>
+          
+            <a href="/tags/资源管理/" rel="tag"># 资源管理</a>
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/06/分布式基础要点/" rel="next" title="分布式基础要点">
+                <i class="fa fa-chevron-left"></i> 分布式基础要点
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/11/Java8开发的4个小技巧/" rel="prev" title="Java8开发的4个小技巧">
+                Java8开发的4个小技巧 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">vincent</p>
+              <p class="site-description motion-element" itemprop="description">The King is dead, long live the King!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">47</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/vincentruan" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是服务器并发处理能力"><span class="nav-number">1.</span> <span class="nav-text">什么是服务器并发处理能力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#有什么方法衡量服务器并发处理能力"><span class="nav-number">2.</span> <span class="nav-text">有什么方法衡量服务器并发处理能力</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-吞吐率"><span class="nav-number">2.1.</span> <span class="nav-text">1. 吞吐率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-压力测试"><span class="nav-number">2.2.</span> <span class="nav-text">2. 压力测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#怎么提高服务器的并发处理能力"><span class="nav-number">3.</span> <span class="nav-text">怎么提高服务器的并发处理能力</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-提高CPU并发计算能力"><span class="nav-number">3.1.</span> <span class="nav-text">1. 提高CPU并发计算能力</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#多进程-amp-多线程"><span class="nav-number">3.1.0.1.</span> <span class="nav-text">多进程 &amp; 多线程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#减少进程切换"><span class="nav-number">3.1.1.</span> <span class="nav-text">减少进程切换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#减少使用不必要的锁"><span class="nav-number">3.1.2.</span> <span class="nav-text">减少使用不必要的锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#考虑进程优先级"><span class="nav-number">3.1.3.</span> <span class="nav-text">考虑进程优先级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#考虑系统负载"><span class="nav-number">3.1.4.</span> <span class="nav-text">考虑系统负载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#考虑CPU使用率"><span class="nav-number">3.1.5.</span> <span class="nav-text">考虑CPU使用率</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-考虑减少内存分配和释放"><span class="nav-number">3.2.</span> <span class="nav-text">2. 考虑减少内存分配和释放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-考虑使用持久连接"><span class="nav-number">3.3.</span> <span class="nav-text">3. 考虑使用持久连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-改进I-O-模型"><span class="nav-number">3.4.</span> <span class="nav-text">4. 改进I/O 模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DMA技术"><span class="nav-number">3.4.1.</span> <span class="nav-text">DMA技术</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#异步I-O"><span class="nav-number">3.4.2.</span> <span class="nav-text">异步I/O</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#I-O多路复用"><span class="nav-number">3.4.3.</span> <span class="nav-text">I/O多路复用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sendfile"><span class="nav-number">3.4.4.</span> <span class="nav-text">Sendfile</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内存映射"><span class="nav-number">3.4.5.</span> <span class="nav-text">内存映射</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#直接I-O"><span class="nav-number">3.4.6.</span> <span class="nav-text">直接I/O</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-改进服务器并发策略"><span class="nav-number">3.5.</span> <span class="nav-text">5. 改进服务器并发策略</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一个进程处理一个连接，非阻塞I-O"><span class="nav-number">3.5.1.</span> <span class="nav-text">一个进程处理一个连接，非阻塞I/O</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一个线程处理一个连接，非阻塞IO"><span class="nav-number">3.5.2.</span> <span class="nav-text">一个线程处理一个连接，非阻塞IO</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一个进程处理多个连接，异步I-O"><span class="nav-number">3.5.3.</span> <span class="nav-text">一个进程处理多个连接，异步I/O</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一个线程处理多个连接，异步IO"><span class="nav-number">3.5.4.</span> <span class="nav-text">一个线程处理多个连接，异步IO</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-改进硬件环境"><span class="nav-number">3.6.</span> <span class="nav-text">6. 改进硬件环境</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#附录"><span class="nav-number">4.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是重入锁"><span class="nav-number">4.1.</span> <span class="nav-text">什么是重入锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么叫重入锁呢？"><span class="nav-number">4.2.</span> <span class="nav-text">为什么叫重入锁呢？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重入锁最重要的几个方法"><span class="nav-number">4.3.</span> <span class="nav-text">重入锁最重要的几个方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重入锁大概的用法"><span class="nav-number">4.4.</span> <span class="nav-text">重入锁大概的用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized-是重入锁吗？"><span class="nav-number">4.5.</span> <span class="nav-text">synchronized 是重入锁吗？</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vincent</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.3.0</div>
+
+
+
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+    
+      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+	  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+	  <script>
+        //去除尾部匹配正则数组的字符串  
+        String.prototype.trimEnd = function(regStr)  
+        {  
+            var result = this;
+            if(regStr==undefined||regStr==null||regStr=="")  
+            {    
+                return result;
+            }
+            var array = regStr.split(',');
+
+            if(array.length > 0){
+                 
+                var c = array.shift();
+                var str= this;
+                var i = str.length;  
+                var rg = new RegExp(c);
+                var matchArr = str.match(rg);
+
+                if(matchArr != undefined && matchArr != null && matchArr.length > 0)
+                {
+                  var matchStr = matchArr[0].replace(/\\/g, "\\\\").replace(/\*/g, "\\*")
+                                            .replace(/\+/g, "\\+").replace(/\|/g, "\\|")
+                                            .replace(/\{/g, "\\{").replace(/\}/g, "\\}")
+                                            .replace(/\(/g, "\\(").replace(/\)/g, "\\)")
+                                            .replace(/\^/g, "\\^").replace(/\$/g, "\\$")
+                                            .replace(/\[/g, "\\[").replace(/\]/g, "\\]")
+                                            .replace(/\?/g, "\\?").replace(/\,/g, "\\,")
+                                            .replace(/\./g, "\\.").replace(/\&/g, "\\&");
+                  matchStr = matchStr + '$';
+                  result = str.replace(new RegExp(matchStr), "");
+                }
+                
+                if(array.length > 0){
+                    return result.trimEnd(array.join())
+                }
+                else{
+                    return result; 
+                } 
+            } 
+        };
+      </script>
+      <script type="text/javascript">
+        const gitalk = new Gitalk({
+          clientID: '77de951f4b5c331b23b4',
+          clientSecret: '41f88d6edb14f19e3ac0f49acc84c100debcdf7d',
+          repo: 'vincentruan.github.io',
+          owner: 'vincentruan',
+          admin: 'vincentruan'.split(','),
+          pagerDirection: 'first',
+		  id: md5(location.href.trimEnd('')),
+          // facebook-like distraction free mode
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')
+      </script>
+    
+  
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/xiaomai.model.json"},"display":{"position":"left","width":280,"height":375},"mobile":{"show":false},"log":false});</script></body>
+</html>

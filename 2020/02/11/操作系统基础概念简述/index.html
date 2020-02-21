@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-mac-osx.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="操作系统概念大部分操作系统提供了特定的基础概念和抽象，例如进程、地址空间、文件等，它们是需要理解的核心内容。下面我们会简要介绍一些基本概念，为了说明这些概念，我们会不时的从 UNIX 中提出示例，相同的示例也会存在于其他系统中，我们后面会进行介绍。 进程操作系统一个很关键的概念就是 进程(Process)。进程的本质就是操作系统执行的一个程序。与每个进程相关的是地址空间(address space">
+<meta name="keywords" content="操作系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统基础概念简述">
+<meta property="og:url" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/index.html">
+<meta property="og:site_name" content="星辰大海">
+<meta property="og:description" content="操作系统概念大部分操作系统提供了特定的基础概念和抽象，例如进程、地址空间、文件等，它们是需要理解的核心内容。下面我们会简要介绍一些基本概念，为了说明这些概念，我们会不时的从 UNIX 中提出示例，相同的示例也会存在于其他系统中，我们后面会进行介绍。 进程操作系统一个很关键的概念就是 进程(Process)。进程的本质就是操作系统执行的一个程序。与每个进程相关的是地址空间(address space">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDExNDgwNDc2MS05Mjg5OTEzMTUucG5n.jpg">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDExNTY0MjkzNS0zMTEyNDY1NDQucG5n.jpg">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDExNTY1MjEwMy0zNzQ4Nzc5NzYucG5n.jpg">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDExNTcwNzc2OC01ODY3NTgxNzUucG5n.jpg">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDExNTczNzMyOC0xNzYzNDE4MzAxLnBuZw.jpg">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDEyMzMyNjk3My0xNDEyMzM0ODM5LnBuZw.jpg">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDEyMzMzNzc1My04NzYyOTI4OTgucG5n.jpg">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/image-20200211213916896.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDEyMzM1NjcxNy0yMTA5NjEwMTMyLnBuZw.jpg">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDEyMzQxNDIwMi0xNDMxMTgzMzcyLnBuZw.jpg">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDEyMzQyMjgzNC0xNTk3MjAxOTcucG5n.jpg">
+<meta property="og:updated_time" content="2020-02-21T03:03:52.519Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="操作系统基础概念简述">
+<meta name="twitter:description" content="操作系统概念大部分操作系统提供了特定的基础概念和抽象，例如进程、地址空间、文件等，它们是需要理解的核心内容。下面我们会简要介绍一些基本概念，为了说明这些概念，我们会不时的从 UNIX 中提出示例，相同的示例也会存在于其他系统中，我们后面会进行介绍。 进程操作系统一个很关键的概念就是 进程(Process)。进程的本质就是操作系统执行的一个程序。与每个进程相关的是地址空间(address space">
+<meta name="twitter:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDExNDgwNDc2MS05Mjg5OTEzMTUucG5n.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>操作系统基础概念简述 | 星辰大海</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">星辰大海</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">My Conquest Is the Sea of Stars.</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vincent">
+      <meta itemprop="description" content="The King is dead, long live the King!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">操作系统基础概念简述
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-11 21:35:14" itemprop="dateCreated datePublished" datetime="2020-02-11T21:35:14+08:00">2020-02-11</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-21 11:03:52" itemprop="dateModified" datetime="2020-02-21T11:03:52+08:00">2020-02-21</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/架构/" itemprop="url" rel="index"><span itemprop="name">架构</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="操作系统概念"><a href="#操作系统概念" class="headerlink" title="操作系统概念"></a>操作系统概念</h2><p>大部分操作系统提供了特定的基础概念和抽象，例如进程、地址空间、文件等，它们是需要理解的核心内容。下面我们会简要介绍一些基本概念，为了说明这些概念，我们会不时的从 <code>UNIX</code> 中提出示例，相同的示例也会存在于其他系统中，我们后面会进行介绍。</p>
+<h3 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h3><p>操作系统一个很关键的概念就是 <code>进程(Process)</code>。进程的本质就是操作系统执行的一个程序。与每个进程相关的是<code>地址空间(address space)</code>，这是从某个最小值的存储位置(通常是零)到某个最大值的存储位置的列表。在这个地址空间中，进程可以进行读写操作。地址空间中存放有可执行程序，程序所需要的数据和它的栈。与每个进程相关的还有资源集，通常包括<code>寄存器(registers)</code>（寄存器一般包括<code>程序计数器(program counter)</code>和<code>堆栈指针(stack pointer)</code>）、打开文件的清单、突发的报警、有关的进程清单和其他需要执行程序的信息。你可以把进程看作是容纳运行一个程序所有信息的一个容器。</p>
+<p>对进程建立一种直观感觉的方式是考虑建立一种多程序的系统。考虑下面这种情况：用户启动一个视频编辑程序，指示它按照某种格式转换视频，然后再去浏览网页。同时，一个检查电子邮件的后台进程被唤醒并开始运行，这样，我们目前就会有三个活动进程：视频编辑器、Web 浏览器和电子邮件接收程序。操作系统周期性的挂起一个进程然后启动运行另一个进程，这可能是由于过去一两秒钟程序用完了 CPU 分配的时间片，而 CPU 转而运行另外的程序。</p>
+<p>像这样暂时中断进程后，下次应用程序在此启动时，必须要恢复到与中断时刻相同的状态，这在我们用户看起来是习以为常的事情，但是操作系统内部却做了巨大的事情。<strong>这就像和足球比赛一样，一场完美精彩的比赛是可以忽略裁判的存在的</strong>。这也意味着在挂起时该进程的所有信息都要被保存下来。例如，进程可能打开了多个文件进行读取。与每个文件相关联的是提供当前位置的指针（即下一个需要读取的字节或记录的编号）。当进程被挂起时，必须要保存这些指针，以便在重新启动进程后执行的 <code>read</code>调用将能够正确的读取数据。在许多操作系统中，与一个进程有关的所有信息，除了该进程自身地址空间的内容以外，均存放在操作系统的一张表中，称为 <code>进程表(process table)</code>，进程表是数组或者链表结构，当前存在每个进程都要占据其中的一项。</p>
+<p>所以，一个挂起的进程包括：进程的地址空间（往往称作<code>磁芯映像</code>， core image，纪念过去的磁芯存储器），以及对应的进程表项（其中包括寄存器以及稍后启动该进程所需要的许多其他信息）。</p>
+<p>与进程管理有关的最关键的系统调用往往是决定着进程的创建和终止的系统调用。考虑一个典型的例子，有一个称为 <code>命令解释器(command interpreter)</code> 或 <code>shell</code> 的进程从终端上读取命令。此时，用户刚键入一条命令要求编译一个程序。shell 必须先创建一个新进程来执行编译程序，当编译程序结束时，它执行一个系统调用来终止自己的进程。</p>
+<p>如果一个进程能够创建一个或多个进程（称为<code>子进程</code>），而且这些进程又可以创建子进程，则很容易找到进程数，如下所示</p>
+<p><img src="/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDExNDgwNDc2MS05Mjg5OTEzMTUucG5n.jpg" alt="img"></p>
+<p>上图表示一个进程树的示意图，进程 A 创建了两个子进程 B 和进程 C，子进程 B 又创建了三个子进程 D、E、F。</p>
+<p>合作完成某些作业的相关进程经常需要彼此通信来完成作业，这种通信称为<code>进程间通信(interprocess communication)</code>。我们在后面会探讨进程间通信。</p>
+<p>其他可用的进程系统调用包括：申请更多的内存（或释放不再需要的内存），等待一个子进程结束，用另一个程序覆盖该程序。</p>
+<p>有时，需要向一个正在运行的进程传递信息，而该进程并没有等待接收信息。例如，一个进程通过网络向另一台机器上的进程发送消息进行通信。为了保证一条消息或消息的应答不丢失。发送者要求它所在的操作系统在指定的若干秒后发送一个通知，这样如果对方尚未收到确认消息就可以进行重新发送。在设定该定时器后，程序可以继续做其他工作。</p>
+<p>在限定的时间到达后，操作系统会向进程发送一个 <code>警告信号(alarm signal)</code>。这个信号引起该进程暂时挂起，无论该进程正在做什么，系统将其寄存器的值保存到堆栈中，并开始重新启动一个特殊的信号处理程，比如重新发送可能丢失的消息。这些信号是软件模拟的硬件中断，除了定时器到期之外，该信号可以通过各种原因产生。许多由硬件检测出来的陷阱，如执行了非法指令或使用了无效地址等，也被转换成该信号并交给这个进程。</p>
+<p>系统管理器授权每个进程使用一个给定的 <code>UID(User IDentification)</code>。每个启动的进程都会有一个操作系统赋予的 UID，子进程拥有与父进程一样的 UID。用户可以是某个组的成员，每个组也有一个 <code>GID(Group IDentification)</code>。</p>
+<p>在 UNIX 操作系统中，有一个 UID 是 <code>超级用户(superuser)</code>，或者 Windows 中的<code>管理员(administrator)</code>，它具有特殊的权利，可以违背一些保护规则。在大型系统中，只有系统管理员掌握着那些用户可以称为超级用户。</p>
+<h3 id="地址空间"><a href="#地址空间" class="headerlink" title="地址空间"></a>地址空间</h3><p>每台计算机都有一些主存用来保存正在执行的程序。在一个非常简单的操作系统中，仅仅有一个应用程序运行在内存中。为了运行第二个应用程序，需要把第一个应用程序移除才能把第二个程序装入内存。</p>
+<p>复杂一些的操作系统会允许多个应用程序同时装入内存中运行。为了防止应用程序之间相互干扰（包括操作系统），需要有某种保护机制。虽然此机制是在硬件中实现，但却是由操作系统控制的。</p>
+<p>上述观点涉及对计算机主存的管理和保护。另一种同等重要并与存储器有关的内容是管理进程的地址空间。通常，每个进程有一些可以使用的地址集合，典型值从 0 开始直到某个最大值。一个进程可拥有的最大地址空间小于主存。在这种情况下，即使进程用完其地址空间，内存也会有足够的内存运行该进程。</p>
+<p>但是，在许多 32 位或 64 位地址的计算机中，分别有 2^32 或 2^64 字节的地址空间。如果一个进程有比计算机拥有的主存还大的地址空间，而且该进程希望使用全部的内存，那该怎么处理？在早期的计算机中是无法处理的。但是现在有了一种<code>虚拟内存</code>的技术，正如前面讲到过的，操作系统可以把部分地址空间装入主存，部分留在磁盘上，并且在需要时来回交换它们。</p>
+<h3 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h3><p>几乎所有操作系统都支持的另一个关键概念就是文件系统。如前所述，操作系统的一项主要功能是屏蔽磁盘和其他 I/O 设备的细节特性，给程序员提供一个良好、清晰的独立于设备的抽象文件模型。<strong>创建文件、删除文件、读文件和写文件</strong> 都需要系统调用。在文件可以读取之前，必须先在磁盘上定位和打开文件，在文件读过之后应该关闭该文件，有关的系统调用则用于完成这类操作。</p>
+<p>为了提供保存文件的地方，大多数个人计算机操作系统都有<code>目录(directory)</code> 的概念，从而可以把文件分组。比如，学生可以给每个课程都创建一个目录，用于保存该学科的资源，另一个目录可以存放电子邮件，再有一个目录可以存放万维网主页。这就需要系统调用创建和删除目录、将已有文件放入目录中，从目录中删除文件等。目录项可以是文件或者目录，目录和目录之间也可以嵌套，这样就产生了文件系统</p>
+<p><img src="/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDExNTY0MjkzNS0zMTEyNDY1NDQucG5n.jpg" alt="img"></p>
+<p>进程和文件层次都是以树状的结构组织，但这两种树状结构有不少不同之处。一般进程的树状结构层次不深（很少超过三层），而文件系统的树状结构要深一些，通常会到四层甚至五层。进程树层次结构是暂时的，通常最多存在几分钟，而目录层次则可能存在很长时间。进程和文件在权限保护方面也是有区别的。一般来说，父进程能控制和访问子进程，而在文件和目录中通常存在一种机制，使文件所有者之外的其他用户也能访问该文件。</p>
+<p>目录层结构中的每一个文件都可以通过从目录的顶部即 <code>根目录(Root directory)</code> 开始的<code>路径名(path name)</code> 来确定。绝对路径名包含了从根目录到该文件的所有目录清单，它们之间用斜杠分隔符分开，在上面的大学院系文件系统中，文件 CS101 的路径名是 <code>/Faculty/Prof.Brown/Courses/CS101</code>。最开始的斜杠分隔符代表的是<code>根目录 /</code>，也就是文件系统的绝对路径。</p>
+<blockquote>
+<p>出于历史原因，Windows 下面的文件系统以 <code>\</code> 来作为分隔符，但是 Linux 会以 <code>/</code> 作为分隔符。</p>
+</blockquote>
+<p>在上面的系统中，每个进程会有一个 <code>工作目录(working directory)</code>，对于没有以斜线开头给出绝对地址的路径，将在这个工作目录下寻找。如果 <code>/Faculty/Prof.Brown</code> 是工作目录，那么 <code>/Courses/CS101</code> 与上面给定的绝对路径名表示的是同一个文件。进程可以通过使用系统调用指定新的工作目录，从而变更其工作目录。</p>
+<p>在读写文件之前，首先需要打开文件，检查其访问权限。若权限许可，系统将返回一个小整数，称作<code>文件描述符(file descriptor)</code>，供后续操作使用。若禁止访问，系统则返回一个错误码。</p>
+<p>在 UNIX 中，另一个重要的概念是 <code>特殊文件(special file)</code>。提供特殊文件是为了使 I/O 设备看起来像文件一般。这样，就像使用系统调用读写文件一样，I/O 设备也可以通过同样的系统调用进行读写。特殊文件有两种，一种是<code>块儿特殊文件(block special file)</code> 和 <code>字符特殊文件(character special file)</code>。块特殊文件指那些由可随机存取的块组成的设备，如磁盘等。比如打开一个块特殊文件，然后读取第4块，程序可以直接访问设备的第4块而不必考虑存放在该文件的文件系统结构。类似的，字符特殊文件用于打印机、调制解调器和其他接受或输出字符流的设备。按照惯例，特殊文件保存在 <code>/dev</code> 目录中。例如，/devv/lp 是打印机。</p>
+<p>还有一种与进程和文件相关的特性是管道，<code>管道(pipe)</code> 是一种虚文件，他可以连接两个进程</p>
+<p><img src="/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDExNTY1MjEwMy0zNzQ4Nzc5NzYucG5n.jpg" alt="img"></p>
+<p>如果 A 和 B 希望通过管道对话，他们必须提前设置管道。当进程 A 相对进程 B 发送数据时，它把数据写到管道上，相当于管道就是输出文件。这样，在 UNIX 中两个进程之间的通信就非常类似于普通文件的读写了。</p>
+<h3 id="保护"><a href="#保护" class="headerlink" title="保护"></a>保护</h3><p>计算机中含有大量的信息，用户希望能够对这些信息中有用而且重要的信息加以保护，这些信息包括电子邮件、商业计划等，管理这些信息的安全性完全依靠操作系统来保证。例如，文件提供授权用户访问。</p>
+<p>比如 UNIX 操作系统，UNIX 操作系统通过对每个文件赋予一个 9 位二进制保护代码，对 UNIX 中的文件实现保护。该保护代码有三个位子段，一个用于所有者，一个用于与所有者同组（用户被系统管理员划分成组）的其他成员，一个用于其他人。每个字段中有一位用于读访问，一位用于写访问，一位用于执行访问。这些位就是著名的 <code>rwx位</code>。例如，保护代码<code>rwxr-x--x</code> 的含义是所有者可以读、写或执行该文件，其他的组成员可以读或执行（但不能写）此文件、而其他人可以执行（但不能读和写）该文件。</p>
+<h3 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h3><p>操作系统是执行系统调用的代码。编辑器、编译器、汇编程序、链接程序、使用程序以及命令解释符等，尽管非常重要，非常有用，但是它们确实不是操作系统的组成部分。下面我们着重介绍一下 UNIX 下的命令提示符，也就是 <code>shell</code>，shell 虽然有用，但它也不是操作系统的一部分，然而它却能很好的说明操作系统很多特性，下面我们就来探讨一下。</p>
+<p>shell 有许多种，例如 <strong>sh、csh、ksh 以及 bash</strong>等，它们都支持下面这些功能，最早起的 shell 可以追溯到 sh</p>
+<p>用户登录时，会同时启动一个 shell，它以终端作为标准输入和标准输出。首先显示<code>提示符(prompt)</code>，它可能是一个<code>美元符号($)</code>，提示用户 shell 正在等待接收命令，假如用户输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">date</span><br></pre></td></tr></table></figure>
+<p>shell 会创建一个子进程，并运行 date 做为子进程。在该子进程运行期间，shell 将等待它结束。在子进程完成时，shell 会显示提示符并等待下一行输入。</p>
+<p>用户可以将标准输出重定向到一个文件中，例如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">date &gt; file</span><br></pre></td></tr></table></figure>
+<p>同样的，也可以将标准输入作为重定向</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sort &lt;file1&gt; file2</span><br></pre></td></tr></table></figure>
+<p>这会调用 sort 程序来接收 file1 的内容并把结果输出到 file2。</p>
+<p>可以将一个应用程序的输出通过管道作为另一个程序的输入，因此有</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat file1 file2 file3 | sort &gt; /dev/lp</span><br></pre></td></tr></table></figure>
+<p>这会调用 cat 应用程序来合并三个文件，将其结果输送到 sort 程序中并按照字典进行排序。sort 应用程序又被重定向到 /dev/lp ，显然这是一个打印操作。</p>
+<h2 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h2><p>我们已经可以看到操作系统提供了两种功能：为用户提供应用程序抽象和管理计算机资源。对于大部分在应用程序和操作系统之间的交互主要是应用程序的抽象，例如创建、写入、读取和删除文件。计算机的资源管理对用户来说基本上是透明的。因此，用户程序和操作系统之间的接口主要是处理抽象。为了真正理解操作系统的行为，我们必须仔细的分析这个接口。</p>
+<p>多数现代操作系统都有功能相同但是细节不同的系统调用，引发操作系统的调用依赖于计算机自身的机制，而且必须用汇编代码表达。<strong>任何单 CPU 计算机一次执行执行一条指令</strong>。如果一个进程在用户态下运行用户程序，例如从文件中读取数据。那么如果想要把控制权交给操作系统控制，那么必须执行一个异常指令或者系统调用指令。操作系统紧接着需要参数检查找出所需要的调用进程。操作系统紧接着进行参数检查找出所需要的调用进程。然后执行系统调用，把控制权移交给系统调用下面的指令。大致来说，系统调用就像是执行了一个特殊的过程调用，但是只有<strong>系统调用能够进入内核态而过程调用则不能进入内核态</strong>。</p>
+<p>为了能够了解具体的调用过程，下面我们以 <code>read</code> 方法为例来看一下调用过程。像上面提到的那样，会有三个参数，第一个参数是指定文件、第二个是指向缓冲区、第三个参数是给定需要读取的字节数。就像几乎所有系统调用一样，它通过使用与系统调用相同的名称来调用一个函数库，从而从C程序中调用：read。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">count = <span class="built_in">read</span>(fd,buffer,nbytes);</span><br></pre></td></tr></table></figure>
+<p>系统调用在 count 中返回实际读出的字节数。这个值通常与 nbytes 相同，但也可能更小。比如在读过程中遇到了文件尾的情况。</p>
+<p>如果系统调用不能执行，不管是因为无效的参数还是磁盘错误，count 的值都会被置成 -1，然后在全局变量 <code>errno</code> 中放入错误信号。程序应该进场检查系统调用的结果以了解是否出错。</p>
+<p>系统调用是通过一系列的步骤实现的，为了更清楚的说明这个概念，我们还以 read 调用为例，在准备系统调用前，首先会把参数压入堆栈，如下所示</p>
+<p><img src="/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDExNTcwNzc2OC01ODY3NTgxNzUucG5n.jpg" alt="img"></p>
+<p>C 和 C++ 编译器使用逆序（必须把第一个参数赋值给 printf(格式字符串)，放在堆栈的顶部）。第一个参数和第三个参数都是值调用，但是第二个参数通过引用传递，即传递的是缓冲区的地址（由 &amp; 指示），而不是缓冲的内容。然后是 C 调用系统库的 read 函数，这也是第四步。</p>
+<p>在由汇编语言写成的库过程中，一般把系统调用的编号放在操作系统所期望的地方，如寄存器（第五步）。然后执行一个 <code>TRAP</code> 指令，将用户态切换到内核态，并在内核中的一个固定地址开始执行第六步。TRAP 指令实际上与过程调用指令非常相似，它们后面都跟随一个来自远处位置的指令，以及供以后使用的一个保存在栈中的返回地址。</p>
+<p>TRAP 指令与过程调用指令存在两个方面的不同</p>
+<ul>
+<li>TRAP 指令会改变操作系统的状态，由用户态切换到内核态，而过程调用不改变模式</li>
+<li>其次，TRAP 指令不能跳转到任意地址上。根据机器的体系结构，要么跳转到一个单固定地址上，或者指令中有一 8 位长的字段，它给定了内存中一张表格的索引，这张表格中含有跳转地址，然后跳转到指定地址上。</li>
+</ul>
+<p>跟随在 TRAP 指令后的内核代码开始检查系统调用编号，然后<code>dispatch</code>给正确的系统调用处理器，这通常是通过一张由系统调用编号所引用的、指向系统调用处理器的指针表来完成第七步。此时，系统调用处理器运行第八步，一旦系统调用处理器完成工作，控制权会根据 TRAP 指令后面的指令中返回给函数调用库第九步。这个过程接着以通常的过程调用返回的方式，返回到客户应用程序，这是第十步。然后调用完成后，操作系统还必须清除用户堆栈，然后增加<code>堆栈指针(increment stackpointer)</code>，用来清除调用 read 之前压入的参数。从而完成整个 read 调用过程。</p>
+<p>在上面的第九步中我们说道，控制可能返回 TRAP 指令后面的指令，把控制权再移交给调用者这个过程中，系统调用会发生阻塞，从而避免应用程序继续执行。这么做是有原因的。例如，如果试图读键盘，此时并没有任何输入，那么调用者就必须被阻塞。在这种情形下，操作系统会检查是否有其他可以运行的进程。这样，当有用户输入 时候，进程会提醒操作系统，然后返回第 9 步继续运行。</p>
+<p>下面，我们会列出一些常用的 <code>POSIX</code> 系统调用，POSIX 系统调用大概有 100 多个，它们之中最重要的一些调用见下表</p>
+<p><strong>进程管理</strong></p>
+<table>
+<thead>
+<tr>
+<th>调用</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pid = fork()</td>
+<td>创建与父进程相同的子进程</td>
+</tr>
+<tr>
+<td>pid = waitpid(pid, &amp;statloc,options)</td>
+<td>等待一个子进程终止</td>
+</tr>
+<tr>
+<td>s = execve(name,argv,environp)</td>
+<td>替换一个进程的核心映像</td>
+</tr>
+<tr>
+<td>exit(status)</td>
+<td>终止进程执行并返回状态</td>
+</tr>
+</tbody>
+</table>
+<p><strong>文件管理</strong></p>
+<table>
+<thead>
+<tr>
+<th>调用</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fd = open(file, how,…)</td>
+<td>打开一个文件使用读、写</td>
+</tr>
+<tr>
+<td>s = close(fd)</td>
+<td>关闭一个打开的文件</td>
+</tr>
+<tr>
+<td>n = read(fd,buffer,nbytes)</td>
+<td>把数据从一个文件读到缓冲区中</td>
+</tr>
+<tr>
+<td>n = write(fd,buffer,nbytes)</td>
+<td>把数据从缓冲区写到一个文件中</td>
+</tr>
+<tr>
+<td>position = iseek(fd,offset,whence)</td>
+<td>移动文件指针</td>
+</tr>
+<tr>
+<td>s = stat(name,&amp;buf)</td>
+<td>取得文件状态信息</td>
+</tr>
+</tbody>
+</table>
+<p><strong>目录和文件系统管理</strong></p>
+<table>
+<thead>
+<tr>
+<th>调用</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>s = mkdir(nname,mode)</td>
+<td>创建一个新目录</td>
+</tr>
+<tr>
+<td>s = rmdir(name)</td>
+<td>删去一个空目录</td>
+</tr>
+<tr>
+<td>s = link(name1,name2)</td>
+<td>创建一个新目录项 name2,并指向 name1</td>
+</tr>
+<tr>
+<td>s = unlink(name)</td>
+<td>删去一个目录项</td>
+</tr>
+<tr>
+<td>s = mount(special,name,flag)</td>
+<td>安装一个文件系统</td>
+</tr>
+<tr>
+<td>s = umount(special)</td>
+<td>卸载一个文件系统</td>
+</tr>
+</tbody>
+</table>
+<p><strong>其他</strong></p>
+<table>
+<thead>
+<tr>
+<th>调用</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>s = chdir(dirname)</td>
+<td>改变工作目录</td>
+</tr>
+<tr>
+<td>s = chmod(name,mode)</td>
+<td>修改一个文件的保护位</td>
+</tr>
+<tr>
+<td>s = kill(pid, signal)</td>
+<td>发送信号给进程</td>
+</tr>
+<tr>
+<td>seconds = time(&amp;seconds)</td>
+<td>获取从 1970 年1月1日至今的时间</td>
+</tr>
+</tbody>
+</table>
+<p>上面的系统调用参数中有一些公共部分，例如 pid 系统进程 id，fd 是文件描述符，n 是字节数，position 是在文件中的偏移量、seconds 是流逝时间。</p>
+<p>从宏观角度上看，这些系统调所提供的服务确定了多数操作系统应该具有的功能，下面分别来对不同的系统调用进行解释</p>
+<h3 id="用于进程管理的系统调用"><a href="#用于进程管理的系统调用" class="headerlink" title="用于进程管理的系统调用"></a>用于进程管理的系统调用</h3><p>在 UNIX 中，<code>fork</code> 是唯一可以在 POSIX 中创建进程的途径，它创建一个原有进程的副本，包括所有的文件描述符、寄存器等内容。在 fork 之后，原有进程以及副本（父与子）就分开了。在 fork 过程中，所有的变量都有相同的值，虽然父进程的数据通过复制给子进程，但是后续对其中任何一个进程的修改不会影响到另外一个。fork 调用会返回一个值，在子进程中该值为 0 ，并且在父进程中等于子进程的 <code>进程标识符(Process IDentified,PID)</code>。使用返回的 PID，就可以看出来哪个是父进程和子进程。</p>
+<p>在多数情况下， 在 fork 之后，子进程需要执行和父进程不一样的代码。从终端读取命令，创建一个子进程，等待子进程执行命令，当子进程结束后再读取下一个输入的指令。为了等待子进程完成，父进程需要执行 <code>waitpid</code> 系统调用，父进程会等待直至子进程终止（若有多个子进程的话，则直至任何一个子进程终止）。waitpid 可以等待一个特定的子进程，或者通过将第一个参数设为 -1 的方式，等待任何一个比较老的子进程。当 waitpid 完成后，会将第二个参数 <code>statloc</code> 所指向的地址设置为子进程的退出状态（正常或异常终止以及退出值）。有各种可使用的选项，它们由第三个参数确定。例如，如果没有已经退出的子进程则立刻返回。</p>
+<p>那么 shell 该如何使用 fork 呢？在键入一条命令后，shell 会调用 fork 命令创建一个新的进程。这个子进程会执行用户的指令。通过使用 <code>execve</code>系统调用可以实现系统执行，这个系统调用会引起整个核心映像被一个文件所替代，该文件由第一个参数给定。下面是一个简化版的例子说明 fork、waitpid 和 execve 的使用</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TRUE 1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(TRUE)&#123;											<span class="comment">/* 一直循环下去 */</span></span><br><span class="line">	type_prompt(); 									<span class="comment">/* 在屏幕上显示提示符 */</span></span><br><span class="line">	read_command(command,parameters) 					<span class="comment">/* 从终端读取输入 */</span></span><br><span class="line">	<span class="keyword">if</span>(fork() != <span class="number">0</span>)&#123; 										<span class="comment">/* fork 子进程 */</span></span><br><span class="line">		<span class="comment">/* 父代码 */</span></span><br><span class="line">		waitpid(<span class="number">-1</span>, &amp;status, <span class="number">0</span>);							<span class="comment">/* 等待子进程执行完毕 */</span></span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="comment">/* 子代码 */</span></span><br><span class="line">		execve(command,parameters,<span class="number">0</span>)					<span class="comment">/* 执行命令 */</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一般情况下，execve 有三个参数：将要执行的文件名称，一个指向变量数组的指针，以及一个指向环境数组的指针。这里对这些参数做一个简要的说明。</p>
+<p>先看一个 shell 指令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp file1 file2</span><br></pre></td></tr></table></figure>
+<p>此命令把 file1 复制到 file2 文件中，在 shell 执行 fork 之后，子进程定位并执行文件拷贝，并将源文件和目标文件的名称传递给它。</p>
+<p>cp 的主程序（以及包含其他大多数 C 程序的主程序）包含声明</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">main(argc,argv,envp)</span><br></pre></td></tr></table></figure>
+<p>其中 argc 是命令行中参数数目的计数，包括程序名称。对于上面的例子，<code>argc</code> 是3。第二个参数<code>argv</code> 是数组的指针。该数组的元素 i 是指向该命令行第 i 个字符串的指针。在上面的例子中，argv[0] 指向字符串 cp，argv[1] 指向字符串 file1，argv[2] 指向字符串 file2。main 的第三个参数是指向环境的指针，该环境是一个数组，含有 <code>name = value</code> 的赋值形式，用以将诸如终端类型以及根目录等信息传送给程序。这些变量通常用来确定用户希望如何完成特定的任务（例如，使用默认打印机）。在上面的例子中，没有环境参数传递给 execve ，所以环境变量是 0 ，所以 execve 的第三个参数为 0 。</p>
+<p>可能你觉得 execve 过于复杂，这时候我要鼓励一下你，execve 可能是 POSIX 的全部系统调用中最复杂的一个了，其他都比较简单。作为一个简单的例子，我们再来看一下 <code>exit</code> ，这是进程在执行完成后应执行的系统调用。这个系统调用有一个参数，它的退出状态是 0 - 255 之间，它通过 waitpid 系统调用中的 statloc 返回给父级。</p>
+<p>UNIX 中的进程将内存划分成三个部分：<code>text segment,文本区</code>，例如程序代码，<code>data segment，数据区</code>，例如变量，<code>stack segment</code>，栈区域。数据向上增长而堆栈向下增长，如下图所示</p>
+<p><img src="/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDExNTczNzMyOC0xNzYzNDE4MzAxLnBuZw.jpg" alt="img"></p>
+<p>上图能说明三个部分的内存分配情况，夹在中间的是空闲区，也就是未分配的区域，堆栈在需要时自动的挤压空闲区域，不过数据段的扩展是显示地通过系统调用 <code>brk</code> 进行的，在数据段扩充后，该系统调用指向一个新地址。但是，这个调用不是 POSIX 标准中定义的，对于存储器的动态分配，鼓励程序员使用 <code>malloc</code> 函数，而 malloc 的内部实现则不是一个适合标准化的主题，因为几乎没有程序员直接使用它。</p>
+<h3 id="用于文件管理的系统调用"><a href="#用于文件管理的系统调用" class="headerlink" title="用于文件管理的系统调用"></a>用于文件管理的系统调用</h3><p>许多系统调用都与文件系统有关，要读写一个文件，必须先将其打开。这个系统调用通过绝对路径名或指向工作目录的相对路径名指定要打开文件的名称，而代码 <code>O_RDONLY</code>、 <code>O_WRONLY</code> 或 <code>O_RDWR</code> 的含义分别是只读、只写或者两者都可以，为了创建一个新文件，使用 <code>O_CREATE</code>参数。然后可使用返回的文件描述符进行读写操作。接着，可以使用 close 关闭文件，这个调用使得文件描述符在后续的 open 中被再次使用。</p>
+<p>最常用的调用还是 <code>read</code> 和 <code>write</code>，我们再前面探讨过 read 调用，write 具有与 read 相同的参数。</p>
+<p>尽管多数程序频繁的读写文件，但是仍有一些应用程序需要能够随机访问一个文件的任意部分。与每个文件相关的是一个指向文件当前位置的指针。在顺序读写时，该指针通常指向要读出（写入）的下一个字节。<code>Iseek</code> 调用可以改变该位置指针的值，这样后续的 read 或 write 调用就可以在文件的任何地方开始。</p>
+<p>Iseek 有三个参数，<code>position = iseek(fd,offset,whence)</code>，第一个是文件描述符，第二个是文件位置，第三个是说明该文件位置是相对于文件起始位置，当前位置还是文件的结尾。在修改了指针之后，Iseek 所返回的值是文件中的绝对位置。</p>
+<p>UNIX 为每个文件保存了该文件的类型（普通文件、特殊文件、目录等）、大小，最后修改时间以及其他信息，程序可以通过 <code>stat</code> 系统调用查看这些信息。<code>s = stat(name,&amp;buf)</code>，第一个参数指定了被检查的文件；第二个参数是一个指针，该指针指向存放这些信息的结构。对于一个打开的文件而言，fstat 调用完成同样的工作。</p>
+<h3 id="用于目录管理的系统调用"><a href="#用于目录管理的系统调用" class="headerlink" title="用于目录管理的系统调用"></a>用于目录管理的系统调用</h3><p>下面我们探讨目录和整个文件系统的系统调用，上面探讨的是和某个文件有关的系统调用。<code>mkdir</code> 和 <code>rmdir</code> 分别用于创建<code>s = mkdir(nname,mode)</code>和删除 <code>s = rmdir(name)</code> 空目录，下一个调用是 <code>s = link(name1,name2)</code> 它的作用是允许同一个文件以两个或者多个名称出现，多数情况下是在不同的目录中使用 link ，下面我们探讨一下 link 是如何工作的</p>
+<p><img src="/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDEyMzMyNjk3My0xNDEyMzM0ODM5LnBuZw.jpg" alt="img"></p>
+<p>图中有两个用户 <code>ast</code> 和 <code>jim</code>，每个用户都有他自己的一个目录和一些文件，如果 ast 要执行一个包含下面系统调用的应用程序</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">link(<span class="string">"/usr/jim/memo"</span>, <span class="string">"/usr/ast/note"</span>);</span><br></pre></td></tr></table></figure>
+<p>jim 中的 memo 文件现在会进入到 ast 的目录中，在 note 名称下。此后，<code>/usr/jim/memo</code>和 <code>/usr/ast/note</code> 会有相同的名称。</p>
+<blockquote>
+<p>用户目录是保存在 /usr，/user，/home 还是其他位置，都是由本地系统管理员决定的。</p>
+</blockquote>
+<p>要理解 link 是如何工作的需要清楚 link 做了什么操作。UNIX 中的每个文件都有一个独一无二的版本，也称作 <code>i - number，i-编号</code>，它标示着不同文件的版本。这个 i - 编号是 <code>i-nodes,i-节点</code> 表的索引。每个文件都会表明谁拥有这个文件，这个磁盘块的位置在哪，等等。目录只是一个包含一组（i编号，ASCII名称）对应的文件。UNIX 中的第一个版本中，每个目录项都会有 16 个字节，2 个字节对应 i - 编号和 14 个字节对应其名称。现在需要一个更复杂的结构需要支持长文件名，但是从概念上讲一个目录仍是一系列（i-编号，ASCII 名称）的集合。在上图中，<code>mail</code> 的 i-编号为 16，依此类推。link 只是利用某个已有文件的 i-编号，创建一个新目录项（也许用一个新名称）。在上图 b 中，你会发现有两个相同的 70 i-编号的文件，因此它们需要有相同的文件。如果其中一个使用了 <code>unlink</code> 系统调用的话，其中一个会被移除，另一个将保留。如果两个文件都移除了，则 UNIX 会发现该文件不存在任何没有目录项（i-节点中的一个域记录着指向该文件的目录项），就会把该文件从磁盘中移除。</p>
+<p>就像我们上面提到过的那样，<code>mount</code> 系统 <code>s = mount(special,name,flag)</code>调用会将两个文件系统合并为一个。通常的情况是将根文件系统分布在硬盘（子）分区上，并将用户文件分布在另一个（子）分区上，该根文件系统包含常用命令的二进制（可执行）版本和其他使用频繁的文件。然后，用户就会插入可读取的 USB 硬盘。</p>
+<p>通过执行 mount 系统调用，USB 文件系统可以被添加到根文件系统中，</p>
+<p><img src="/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDEyMzMzNzc1My04NzYyOTI4OTgucG5n.jpg" alt="img"></p>
+<p>图 a 是安装前的系统文件，图 b 是安装后的系统文件。</p>
+<p>如果用 C 语言来执行那就是</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount(<span class="string">"/dev/sdb0"</span>,<span class="string">"/mnt"</span>,<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p>这里，第一个参数是 USB 驱动器 0 的块特殊文件名称，第二个参数是被安装在树中的位置，第三个参数说明将要安装的文件系统是可读写的还是只读的。</p>
+<p>当不再需要一个文件系统时，可以使用 umount 移除之。</p>
+<h3 id="其他系统调用"><a href="#其他系统调用" class="headerlink" title="其他系统调用"></a>其他系统调用</h3><p>除了进程、文件、目录系统调用，也存在其他系统调用的情况，下面我们来探讨一下。我们可以看到上面其他系统调用只有四种，首先来看第一个 chdir，chdir 调用更改当前工作目录，在调用</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chdir(<span class="string">"/usr/ast/test"</span>);</span><br></pre></td></tr></table></figure>
+<p>后，打开 xyz 文件，会打开 <code>/usr/ast/test/xyz</code> 文件，工作目录的概念消除了总是需要输入长文件名的需要。</p>
+<p>在 UNIX 系统中，每个文件都会有保护模式，这个模式会有一个<code>读-写-执行</code>位，它用来区分所有者、组和其他成员。<code>chmod</code> 系统调用提供改变文件模式的操作。例如，要使一个文件除了对所有者之外的用户可读，你可以执行</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod(<span class="string">"file"</span>,<span class="number">0644</span>);</span><br></pre></td></tr></table></figure>
+<p><code>kill</code> 系统调用是用户和用户进程发送信号的方式，如果一个进程准备好捕捉一个特定的信号，那么在信号捕捉之前，会运行一个信号处理程序。如果进程没有准备好捕捉特定的信号，那么信号的到来会杀掉该进程（此名字的由来）。</p>
+<p>POSIX 定义了若干时间处理的进程。例如，<code>time</code> 以秒为单位返回当前时间，0 对应着 1970 年 1月 1日。在一台 32 位字的计算机中，time 的最大值是 (2^32) - 1秒，这个数字对应 136 年多一点。所以在 2106 年，32 位的 UNIX 系统会发飙。如果读者现在有 32 位 UNIX 系统，建议在 2106 年更换位 64 位操作系统（偷笑～）。</p>
+<h3 id="Win-32-API"><a href="#Win-32-API" class="headerlink" title="Win 32 API"></a>Win 32 API</h3><p>上面我们提到的都是 UNIX 系统调用，现在我们来聊聊 Win 32 中的系统调用。Windows 和 UNIX 在各自的编程方式上有着根本的不同。UNIX 程序由执行某些操作或执行其他操作的代码组成，进行系统调用以执行某些服务。Windows 系统则不同，Windows 应用程序通常是由事件驱动的。主程序会等待一些事件发生，然后调用程序去处理。最简单的事件处理是键盘敲击和鼠标滑过，或者是鼠标点击，或者是插入 USB 驱动，然后操作系统调用处理器去处理事件，更新屏幕和更新程序内部状态。这是与 UNIX 不同的设计风格。</p>
+<p>当然，Windows 也有系统调用。在 UNIX 中，系统调用（比如 read）和系统调用所使用的调用库（例如 read）几乎是一对一的关系。而在 Windows 中，情况则大不相同。首先，函数库的调用和实际的系统调用几乎是不对应的。微软定义了一系列过程，称为 <code>Win32应用编程接口(Application Programming Interface)</code>，程序员通过这套标准的接口来实现系统调用。这个接口支持从 Windows 95 版本以来所有的 Windows 版本。</p>
+<p>Win32 API 调用的数量是非常巨大的，有数千个多。但这些调用并不都是在内核态的模式下运行时，有一些是在用户态的模型下运行。Win32 API 有大量的调用，用来管理视窗、几何图形、文本、字体、滚动条、对话框、菜单以及 GUI 的其他功能。为了使图形子系统在内核态下运行，需要系统调用，否则就只有函数库调用。</p>
+<p>我们把关注点放在和 Win32 系统调用中来，我们可以简单看一下 Win32 API 中的系统调用和 UNIX 中有什么不同（并不是所有的系统调用）</p>
+<table>
+<thead>
+<tr>
+<th>UNIX</th>
+<th>Win32</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fork</td>
+<td>CreateProcess</td>
+<td>创建一个新进程</td>
+</tr>
+<tr>
+<td>waitpid</td>
+<td>WaitForSingleObject</td>
+<td>等待一个进程退出</td>
+</tr>
+<tr>
+<td>execve</td>
+<td>none</td>
+<td>CraeteProcess = fork + servvice</td>
+</tr>
+<tr>
+<td>exit</td>
+<td>ExitProcess</td>
+<td>终止执行</td>
+</tr>
+<tr>
+<td>open</td>
+<td>CreateFile</td>
+<td>创建一个文件或打开一个已有的文件</td>
+</tr>
+<tr>
+<td>close</td>
+<td>CloseHandle</td>
+<td>关闭文件</td>
+</tr>
+<tr>
+<td>read</td>
+<td>ReadFile</td>
+<td>从单个文件中读取数据</td>
+</tr>
+<tr>
+<td>write</td>
+<td>WriteFile</td>
+<td>向单个文件写数据</td>
+</tr>
+<tr>
+<td>lseek</td>
+<td>SetFilePointer</td>
+<td>移动文件指针</td>
+</tr>
+<tr>
+<td>stat</td>
+<td>GetFileAttributesEx</td>
+<td>获得不同的文件属性</td>
+</tr>
+<tr>
+<td>mkdir</td>
+<td>CreateDirectory</td>
+<td>创建一个新的目录</td>
+</tr>
+<tr>
+<td>rmdir</td>
+<td>RemoveDirectory</td>
+<td>移除一个空的目录</td>
+</tr>
+<tr>
+<td>link</td>
+<td>none</td>
+<td>Win32 不支持 link</td>
+</tr>
+<tr>
+<td>unlink</td>
+<td>DeleteFile</td>
+<td>销毁一个已有的文件</td>
+</tr>
+<tr>
+<td>mount</td>
+<td>none</td>
+<td>Win32 不支持 mount</td>
+</tr>
+<tr>
+<td>umount</td>
+<td>none</td>
+<td>Win32 不支持 mount，所以也不支持mount</td>
+</tr>
+<tr>
+<td>chdir</td>
+<td>SetCurrentDirectory</td>
+<td>切换当前工作目录</td>
+</tr>
+<tr>
+<td>chmod</td>
+<td>none</td>
+<td>Win32 不支持安全</td>
+</tr>
+<tr>
+<td>kill</td>
+<td>none</td>
+<td>Win32 不支持信号</td>
+</tr>
+<tr>
+<td>time</td>
+<td>GetLocalTime</td>
+<td>获取当前时间</td>
+</tr>
+</tbody>
+</table>
+<p>上表中是 UNIX 调用大致对应的 Win32 API 系统调用，简述一下上表。<code>CreateProcess</code> 用于创建一个新进程，它把 UNIX 中的 fork 和 execve 两个指令合成一个，一起执行。它有许多参数用来指定新创建进程的性质。Windows 中没有类似 UNIX 中的进程层次，所以不存在父进程和子进程的概念。在进程创建之后，创建者和被创建者是平等的。<code>WaitForSingleObject</code> 用于等待一个事件，等待的事件可以是多种可能的事件。如果有参数指定了某个进程，那么调用者将等待指定的进程退出，这通过 <code>ExitProcess</code> 来完成。</p>
+<p>然后是6个文件操作，在功能上和 UNIX 的调用类似，然而在参数和细节上是不同的。和 UNIX 中一样，文件可以打开，读取，写入，关闭。<code>SetFilePointer</code> 和 <code>GetFileAttributesEx</code> 设置文件的位置并取得文件的属性。</p>
+<p>Windows 中有目录，目录分别用 <code>CreateDirectory</code> 以及 <code>RemoveDirectory</code>API 调用创建和删除。也有对当前的目录的标记，这可以通过 <code>SetCurrentDirectory</code> 来设置。使用<code>GetLocalTime</code> 可获得当前时间。</p>
+<p>Win32 接口中没有文件的链接、文件系统的 mount、umount 和 stat ，当然， Win32 中也有大量 UNIX 中没有的系统调用，特别是对 GUI 的管理和调用。</p>
+<h2 id="操作系统结构"><a href="#操作系统结构" class="headerlink" title="操作系统结构"></a>操作系统结构</h2><p>下面我们会探讨操作系统的几种结构，主要包括<strong>单体结构、分层系统、微内核、客户-服务端系统、虚拟机和外核</strong>等。下面以此来探讨一下</p>
+<h3 id="单体系统"><a href="#单体系统" class="headerlink" title="单体系统"></a>单体系统</h3><p>到目前为止，在大多数系统中，整个系统在内核态以单一程序的方式运行。整个操作系统是以程序集合来编写的，链接在一块形成一个大的二进制可执行程序。使用此技术时，如果系统中的每个过程都提供了前者所需的一些有用的计算，则它可以自由调用任何其他过程。在单体系统中，调用任何一个所需要的程序都非常高效，但是上千个不受限制的彼此调用往往非常臃肿和笨拙，而且单体系统必然存在单体问题，那就是只要系统发生故障，那么任何系统和应用程序将不可用，这往往是灾难性的。</p>
+<p>在单体系统中构造实际目标程序时，会首先编译所有单个过程（或包含这些过程的文件），然后使用系统链接器将它们全部绑定到一个可执行文件中</p>
+<p>对于单体系统，往往有下面几种建议</p>
+<ul>
+<li>需要有一个主程序，用来调用请求服务程序</li>
+<li>需要一套服务过程，用来执行系统调用</li>
+<li>需要一套服务程序，用来辅助服务过程调用</li>
+</ul>
+<p>在单体系统中，对于每个系统调用都会有一个服务程序来保障和运行。需要一组实用程序来弥补服务程序需要的功能，例如从用户程序中获取数据。可将各种过程划分为一个三层模型</p>
+<p><img src="/2020/02/11/操作系统基础概念简述/image-20200211213916896.png" alt="image-20200211213916896"></p>
+<p>除了在计算机初启动时所装载的核心操作系统外，许多操作系统还支持额外的扩展。比如 I/O 设备驱动和文件系统。这些部件可以按需装载。在 UNIX 中把它们叫做 <code>共享库(shared library)</code>，在 Windows 中则被称为 <code>动态链接库(Dynamic Link Library,DLL)</code>。他们的扩展名为 <code>.dll</code>，在 <code>C:\Windows\system32</code> 目录下存在 1000 多个 DLL 文件，所以不要轻易删除 C 盘文件，否则可能就炸了哦。</p>
+<h3 id="分层系统"><a href="#分层系统" class="headerlink" title="分层系统"></a>分层系统</h3><p>分层系统使用层来分隔不同的功能单元。每一层只与该层的上层和下层通信。每一层都使用下面的层来执行其功能。层之间的通信通过预定义的固定接口通信。</p>
+<p><img src="/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDEyMzM1NjcxNy0yMTA5NjEwMTMyLnBuZw.jpg" alt="img"></p>
+<p>分层系统是由 <code>E.W.Dijkstar</code> 和他的学生在荷兰技术学院所开发的 THE 系统。</p>
+<p>把上面单体系统进一步通用化，就变为了一个层次式结构的操作系统，它的上层软件都是在下层软件的基础之上构建的。该系统分为六层，如下所示</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">层号</th>
+<th style="text-align:left">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">5</td>
+<td style="text-align:left">操作员</td>
+</tr>
+<tr>
+<td style="text-align:left">4</td>
+<td style="text-align:left">用户程序</td>
+</tr>
+<tr>
+<td style="text-align:left">3</td>
+<td style="text-align:left">输入/输出管理</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">操作员-进程通信</td>
+</tr>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">存储器和磁鼓管理</td>
+</tr>
+<tr>
+<td style="text-align:left">0</td>
+<td style="text-align:left">处理器分配和多道程序编程</td>
+</tr>
+</tbody>
+</table>
+<p>处理器在 0 层运行，当中断发生或定时器到期时，由该层完成进程切换；在第 0 层之上，系统由一些连续的进程组成，编写这些进程时不用再考虑在单处理器上多进程运行的细节。内存管理在第 1 层，它分配进程的主存空间。第 1 层软件保证一旦需要访问某一页面，该页面必定已经在内存中，并且在页面不需要的时候将其移出。</p>
+<p>第 2 层处理进程与操作员控制台（即用户）之间的通信。第 3 层管理 I/O 设备和相关的信息流缓冲区。第 4 层是用户程序层，用户程序不用考虑进程、内存、控制台或 I/O 设备管理等细节。系统操作员在第 5 层。</p>
+<h3 id="微内核"><a href="#微内核" class="headerlink" title="微内核"></a>微内核</h3><p>在分层方式中，设计者要确定在哪里划分 <code>内核-用户</code> 的边界。传统上，所有的层都在内核中，但是这样做没有必要。事实上，尽可能减少内核态中功能可能是更好的做法。因为内核中的错误很难处理，一旦内核态中出错误会拖累整个系统。</p>
+<p>所以，为了实现高可靠性，将操作系统划分成小的、层级之间能够更好定义的模块是很有必要的，只有一个模块 — 微内核 — 运行在内核态，其余模块可以作为普通用户进程运行。由于把每个设备驱动和文件系统分别作为普通用户进程，这些模块中的错误虽然会使这些模块崩溃，但是不会使整个系统死机。</p>
+<p><code>MINIX 3</code> 是微内核的代表作，它的具体结构如下</p>
+<p><img src="/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDEyMzQxNDIwMi0xNDMxMTgzMzcyLnBuZw.jpg" alt="img"></p>
+<p>在内核的外部，系统的构造有三层，它们都在用户态下运行，最底层是设备驱动器。由于它们都在用户态下运行，所以不能物理的访问 I/O 端口空间，也不能直接发出 I/O 命令。相反，为了能够对 I/O 设备编程，驱动器构建一个结构，指明哪个参数值写到哪个 I/O 端口，并声称一个内核调用，这样就完成了一次调用过程。</p>
+<p>位于用户态的驱动程序上面是<code>服务器</code>层，包含有服务器，它们完成操作系统的多数工作。由一个或多个文件服务器管理着文件系统，进程管理器创建、销毁和管理进程。服务器中有一个特殊的服务器称为 <code>再生服务器(reincarnation server)</code>，它的任务就是检查服务器和驱动程序的功能是否正确，一旦检查出来错误，它就会补上去，无需用户干预。这种方式使得系统具有可恢复性，并具有较高的可靠性。</p>
+<p>微内核中的内核还具有一种 <code>机制</code> 与 <code>策略</code> 分离的思想。比如系统调度，一个比较简单的调度算法是，对每个进程赋予一个优先级，并让内核执行具有最高优先级的进程。这里，内核机制就是寻找最高的优先级进程并运行。而策略（赋予进程优先级）可以在用户态中的进程完成。在这种模式中，策略和机制是分离的，从而使内核变得更小。</p>
+<h3 id="客户-服务器模式"><a href="#客户-服务器模式" class="headerlink" title="客户-服务器模式"></a>客户-服务器模式</h3><p>微内核思想的策略是把进程划分为两类：<code>服务器</code>，每个服务器用来提供服务；<code>客户端</code>，使用这些服务。这个模式就是所谓的 <code>客户-服务器</code>模式。</p>
+<p>客户-服务器模式会有两种载体，一种情况是一台计算机既是客户又是服务器，在这种方式下，操作系统会有某种优化；但是普遍情况下是客户端和服务器在不同的机器上，它们通过局域网或广域网连接。</p>
+<p><img src="/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDEyMzQyMjgzNC0xNTk3MjAxOTcucG5n.jpg" alt="img"></p>
+<p>客户通过发送消息与服务器通信，客户端并不需要知道这些消息是在本地机器上处理，还是通过网络被送到远程机器上处理。对于客户端而言，这两种情形是一样的：都是发送请求并得到回应。</p>
+<p>越来越多的系统，包括家里的 PC，都成为客户端，而在某地运行的大型机器则成为服务器。许多 web 就是以这种方式运行的。一台 PC 向某个服务器请求一个 Web 页面，服务器把 Web 页面返回给客户端，这就是典型的客服-服务器模式</p>
+<h2 id="文章参考"><a href="#文章参考" class="headerlink" title="文章参考"></a>文章参考</h2><ol>
+<li><a href="第四版https://baike.baidu.com/item/操作系统/192?fr=aladdin">《现代操作系统》</a></li>
+<li>《Modern Operating System》forth edition</li>
+<li><a href="http://faculty.cs.niu.edu/~hutchins/csci360/hchnotes/psw.htm" target="_blank" rel="noopener">http://faculty.cs.niu.edu/~hutchins/csci360/hchnotes/psw.htm</a></li>
+<li><a href="https://www.computerhope.com/jargon/c/clockcyc.htm" target="_blank" rel="noopener">https://www.computerhope.com/jargon/c/clockcyc.htm</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/操作系统/" rel="tag"># 操作系统</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/11/14个Java并发容器/" rel="next" title="14个Java并发容器">
+                <i class="fa fa-chevron-left"></i> 14个Java并发容器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/12/JAVA实用的服务异常处理指南/" rel="prev" title="JAVA实用的服务异常处理指南">
+                JAVA实用的服务异常处理指南 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">vincent</p>
+              <p class="site-description motion-element" itemprop="description">The King is dead, long live the King!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">47</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/vincentruan" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统概念"><span class="nav-number">1.</span> <span class="nav-text">操作系统概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程"><span class="nav-number">1.1.</span> <span class="nav-text">进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#地址空间"><span class="nav-number">1.2.</span> <span class="nav-text">地址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件"><span class="nav-number">1.3.</span> <span class="nav-text">文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保护"><span class="nav-number">1.4.</span> <span class="nav-text">保护</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shell"><span class="nav-number">1.5.</span> <span class="nav-text">shell</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统调用"><span class="nav-number">2.</span> <span class="nav-text">系统调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用于进程管理的系统调用"><span class="nav-number">2.1.</span> <span class="nav-text">用于进程管理的系统调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用于文件管理的系统调用"><span class="nav-number">2.2.</span> <span class="nav-text">用于文件管理的系统调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用于目录管理的系统调用"><span class="nav-number">2.3.</span> <span class="nav-text">用于目录管理的系统调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他系统调用"><span class="nav-number">2.4.</span> <span class="nav-text">其他系统调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Win-32-API"><span class="nav-number">2.5.</span> <span class="nav-text">Win 32 API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统结构"><span class="nav-number">3.</span> <span class="nav-text">操作系统结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#单体系统"><span class="nav-number">3.1.</span> <span class="nav-text">单体系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分层系统"><span class="nav-number">3.2.</span> <span class="nav-text">分层系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微内核"><span class="nav-number">3.3.</span> <span class="nav-text">微内核</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户-服务器模式"><span class="nav-number">3.4.</span> <span class="nav-text">客户-服务器模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文章参考"><span class="nav-number">4.</span> <span class="nav-text">文章参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vincent</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.3.0</div>
+
+
+
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+    
+      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+	  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+	  <script>
+        //去除尾部匹配正则数组的字符串  
+        String.prototype.trimEnd = function(regStr)  
+        {  
+            var result = this;
+            if(regStr==undefined||regStr==null||regStr=="")  
+            {    
+                return result;
+            }
+            var array = regStr.split(',');
+
+            if(array.length > 0){
+                 
+                var c = array.shift();
+                var str= this;
+                var i = str.length;  
+                var rg = new RegExp(c);
+                var matchArr = str.match(rg);
+
+                if(matchArr != undefined && matchArr != null && matchArr.length > 0)
+                {
+                  var matchStr = matchArr[0].replace(/\\/g, "\\\\").replace(/\*/g, "\\*")
+                                            .replace(/\+/g, "\\+").replace(/\|/g, "\\|")
+                                            .replace(/\{/g, "\\{").replace(/\}/g, "\\}")
+                                            .replace(/\(/g, "\\(").replace(/\)/g, "\\)")
+                                            .replace(/\^/g, "\\^").replace(/\$/g, "\\$")
+                                            .replace(/\[/g, "\\[").replace(/\]/g, "\\]")
+                                            .replace(/\?/g, "\\?").replace(/\,/g, "\\,")
+                                            .replace(/\./g, "\\.").replace(/\&/g, "\\&");
+                  matchStr = matchStr + '$';
+                  result = str.replace(new RegExp(matchStr), "");
+                }
+                
+                if(array.length > 0){
+                    return result.trimEnd(array.join())
+                }
+                else{
+                    return result; 
+                } 
+            } 
+        };
+      </script>
+      <script type="text/javascript">
+        const gitalk = new Gitalk({
+          clientID: '77de951f4b5c331b23b4',
+          clientSecret: '41f88d6edb14f19e3ac0f49acc84c100debcdf7d',
+          repo: 'vincentruan.github.io',
+          owner: 'vincentruan',
+          admin: 'vincentruan'.split(','),
+          pagerDirection: 'first',
+		  id: md5(location.href.trimEnd('')),
+          // facebook-like distraction free mode
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')
+      </script>
+    
+  
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/xiaomai.model.json"},"display":{"position":"left","width":280,"height":375},"mobile":{"show":false},"log":false});</script></body>
+</html>

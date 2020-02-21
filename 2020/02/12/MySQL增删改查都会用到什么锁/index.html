@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-mac-osx.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="日常的操作中，增删改查都会使用什么类型的锁？其实这个问题，可以分为两个方面，一方面是读，一方面是写。 01 读（select）  我们先来看读的部分。读的操作，其实分为两种，分别是一致性读和锁定读，   这里我们温习一下，一致性读其实就是利用事务的MVCC机制，来读取一份数据的快照，所以有的书上也称之为快照读，一致性读是不加锁的，其他的事务是可以对表中的数据记录进行改动的。一般情况下，常见的读，例">
+<meta name="keywords" content="MySQL,锁">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL增删改查都会用到什么锁?">
+<meta property="og:url" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/index.html">
+<meta property="og:site_name" content="星辰大海">
+<meta property="og:description" content="日常的操作中，增删改查都会使用什么类型的锁？其实这个问题，可以分为两个方面，一方面是读，一方面是写。 01 读（select）  我们先来看读的部分。读的操作，其实分为两种，分别是一致性读和锁定读，   这里我们温习一下，一致性读其实就是利用事务的MVCC机制，来读取一份数据的快照，所以有的书上也称之为快照读，一致性读是不加锁的，其他的事务是可以对表中的数据记录进行改动的。一般情况下，常见的读，例">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212152912203.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212162043235.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216093.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/640.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/640.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216124.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216095.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216096.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216136.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478029.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212160055676.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493477955.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478033.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478031.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155919536.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155859778.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478032.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478014.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155822655.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155748878.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155718409.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155728846.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493477920.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155627181.png">
+<meta property="og:updated_time" content="2020-02-17T02:40:44.708Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL增删改查都会用到什么锁?">
+<meta name="twitter:description" content="日常的操作中，增删改查都会使用什么类型的锁？其实这个问题，可以分为两个方面，一方面是读，一方面是写。 01 读（select）  我们先来看读的部分。读的操作，其实分为两种，分别是一致性读和锁定读，   这里我们温习一下，一致性读其实就是利用事务的MVCC机制，来读取一份数据的快照，所以有的书上也称之为快照读，一致性读是不加锁的，其他的事务是可以对表中的数据记录进行改动的。一般情况下，常见的读，例">
+<meta name="twitter:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212152912203.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>MySQL增删改查都会用到什么锁? | 星辰大海</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">星辰大海</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">My Conquest Is the Sea of Stars.</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vincent">
+      <meta itemprop="description" content="The King is dead, long live the King!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL增删改查都会用到什么锁?
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-12 15:11:11" itemprop="dateCreated datePublished" datetime="2020-02-12T15:11:11+08:00">2020-02-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>日常的操作中，增删改查都会使用什么类型的锁？其实这个问题，可以分为两个方面，一方面是读，一方面是写。</p>
+<h1 id="01-读（select）"><a href="#01-读（select）" class="headerlink" title="01 读（select）"></a>01 读（select）</h1><p>  我们先来看读的部分。读的操作，其实分为两种，分别是<strong>一致性读</strong>和<strong>锁定读</strong>，</p>
+<p>  这里我们温习一下，一致性读其实就是利用事务的MVCC机制，来读取一份数据的快照，所以有的书上也称之为快照读，一致性读是不加锁的，其他的事务是可以对表中的数据记录进行改动的。一般情况下，常见的读，例如：</p>
+<p>select * from table；</p>
+<p>select * from table left join table2;</p>
+<p>  这种操作，在RU，RC，RR隔离级别下都是采用一直性读，不加锁的操作。这种情况下，<strong>读的并发可以非常高。</strong></p>
+<p>  再来看看锁定读，如果我们的表当中有索引，我们想在读取记录的时候，获取某一条记录的锁，禁止别的事务对这条记录进行修改，那么我们可以使用下面的语句来对读取的记录加锁：</p>
+<p><strong>select … lock in share mode;</strong>加共享锁。(其他事务可读，不可写)</p>
+<p><strong>select … for update;</strong>加排它锁。(其他事务不可读，不可写)，这样，其他事务就不能对这条记录进行读取和更改了。</p>
+<p>关于读操作的是否加锁，还有以下几点需要注意： </p>
+<p>1、在Serializable这种事务的隔离级别下，普通的select操作会升级为select…in share mode；的模式。</p>
+<p>2、在唯一索引上使用唯一的查询条件，会使用记录锁，而不会封锁记录之间的间隔，即不会使用间隙锁。</p>
+<p>3、其他类型的索引使用范围的查询条件或者唯一的查询条件，innodb会自动锁定被扫描的范围，避免索引范围区间内插入新的记录。这块儿可能比较模糊，文章最后面给出各种类型下的加锁测试结果。</p>
+<h1 id="02-写（update、delete、insert）"><a href="#02-写（update、delete、insert）" class="headerlink" title="02 写（update、delete、insert）"></a>02 写（update、delete、insert）</h1><h2 id="关于delete"><a href="#关于delete" class="headerlink" title="关于delete"></a>关于delete</h2><p>  对一条数据做delete的过程实际上是要先在索引的B+树上获取该记录的位置，然后再这个记录所在的位置加X锁，也就是排它锁。</p>
+<p>  如果对某个范围内的数据做delete操作，则会在索引B+树上对范围内符合查询条件的记录以及记录之前的区间加next-key锁(本质是记录锁和间隙锁的组合，后面的文章会讲到)。  </p>
+<p>   加完锁之后，再进行delete操作。这个delete操作的本质，其实是先将delete的标识为标识为1，而不是真正进行删除，如果下次这块空间可以复用，则innodb会直接进行复用。</p>
+<p>   更多详情请见：Innodb数据页简介</p>
+<h2 id="关于update"><a href="#关于update" class="headerlink" title="关于update"></a>关于update</h2><p>  对一条记录做update的时候，我们知道，如果该要更新的列在更新前后的存储空间没有发生变化，则会直接在该记录上进行更新操作。而如果发生了存储空间的变化，则会现将这条记录彻底删除掉，然后再插入一条新的记录。</p>
+<p>  基本上分为一下三种情况：</p>
+<p>1、如果update操作没有更新索引键值并且没有导致存储空间变化，则会直接在索引B+树上使用X锁来锁定update的记录。</p>
+<p>2、如果update操作没有更新索引键值但却导致了数据的存储空间发生变化，则会现将这表数据记录删除掉，然后再插入一条新的记录，在这个过程中，先会获取索引B+树的X锁，然后insert过程会使用隐式锁来进行保护。</p>
+<p>3、如果update修改了某条记录的索引键值，则需要先进行delete，然后再进行一次insert，加锁的规则就和delete以及insert一样了。</p>
+<p>  这里有几点需要注意：</p>
+<p>1、如果在唯一索引上使用唯一的查询条件来进行update和delete操作，那么这个过程中只会对记录加锁。</p>
+<p>2、除了第一种情况之外，都会加排他的next-key锁，来锁定记录和记录之前的范围。</p>
+<p>3、如果update的是主键的记录，则对应的普通索引的记录也会被隐式加锁，这是因为innodb中的普通索引会存储主键的值，检索普通索引本质上要进行回表操作，二次扫描聚集索引。</p>
+<h2 id="关于insert"><a href="#关于insert" class="headerlink" title="关于insert"></a>关于insert</h2><p>  insert操作会用排它锁封锁被插入的索引记录，而不会封锁记录之前的范围。除此之外，会在插入区间加入插入意向锁</p>
+<p>  最后，今天我做了一点测试，测试的数据太多了，不方便整理，这里把测试结果放在这里，大家可以看看，和自己设想的情况一样不一样：</p>
+<p>（注意：所有测试均在RR隔离级别下，RC隔离级别下只有记录锁，没有间隙锁，相对比较简单，大家可以自行研究）</p>
+<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个空的记录，例如id=6的记录，表中只有id=5和id=9的值，那么会话2中<strong>不能</strong>插入id=6、7、8的值，因为这个间隙已经被锁定。其中，<strong>id可以是主键或者唯一索引。</strong></p>
+<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个存在记录，例如id=5的记录，表中有id=5的值，那么会话2中<strong>可以</strong>插入id=4、6、7、8的值，间隙没有锁定。其中，<strong>id可以是主键或者唯一索引。</strong></p>
+<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个范围记录，例如id&lt;6的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入id=6、7、8的值，间隙被锁定。其中，<strong>id可以是主键或者唯一索引。</strong></p>
+<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个范围记录，例如id&gt;6 and id &lt;11的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入id=6、7、8的值以及id大于9的所有值，间隙被锁定。其中，<strong>id可以是主键或者唯一索引</strong>。</p>
+<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个空的记录，例如id=6的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入id=5、6、7、8的值，间隙被锁定。但是可以插入9的值，其中，<strong>id是普通索引。</strong></p>
+<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个存在记录，例如id=5的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入id=4、6、7、8的值，但是可以插入9的值。间隙被锁定。其中，<strong>id是普通索引。</strong></p>
+<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个范围记录，例如id&lt;6的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入id=4、6、7、8的值，但是可以插入9的值，间隙被锁定。其中，<strong>id是普通索引**</strong>。**</p>
+<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个范围记录，例如id&gt;6 and id&lt;11的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入<strong>所有值的记录，所有**</strong>间隙被锁定，类似全表锁<strong>。其中，</strong>id是普通索引<strong>**。</strong></p>
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><h2 id="关于MySQL锁的两个知识点"><a href="#关于MySQL锁的两个知识点" class="headerlink" title="关于MySQL锁的两个知识点"></a>关于MySQL锁的两个知识点</h2><h3 id="MySQL快照读和当前读"><a href="#MySQL快照读和当前读" class="headerlink" title="MySQL快照读和当前读"></a>MySQL快照读和当前读</h3><p>  当我们对数据库中的表进行select、update、delete以及insert的时候，innodb存储引擎会根据操作类型的不同来给这些操作添加具体的锁。</p>
+<p>  在MySQL中，读操作可以分成两类：<strong>快照读</strong> (snapshot read)与<strong>当前读</strong> (current read)。快照读，读取的是记录的可见版本 (有可能是历史版本)，不用加锁。当前读，读取的是记录的最新版本，并且，当前读返回的记录，都会加上锁，保证其他事务不会再并发修改这条记录。</p>
+<p>这里我们首先给出快照读和当前读的例子：</p>
+<p>快照读：简单的select操作，属于快照读，不加锁。(当然，也有例外，下面会分析)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> <span class="keyword">id</span>&gt;<span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+<p>当前读：特殊的读操作，插入/更新/删除操作，属于当前读，需要加锁。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select * from table where id&gt;10 lock in share mode;</span><br><span class="line">select * from table where id&gt;10 for update;</span><br><span class="line">insert into table values (…);</span><br><span class="line">update table set id=11 where id=10;</span><br><span class="line">delete from table where id&gt;10;</span><br></pre></td></tr></table></figure>
+<p>读取之后，需要保证其他并发事务不能修改当前记录，对读取记录加锁。其中，除了第一条语句明确指出了lock in share mode之外，也就是对读取记录加S锁 (共享锁)外，其他的操作，都加的是X锁 (排它锁)。</p>
+<p>这里我们给出一个update操作过程中，mysql server和innodb存储引擎进行交互的过程如下：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212152912203.png" alt="image-20200212152912203"></p>
+<p>从上图中，我们可以看出一个update操作的具体流程。当update SQL被发给MySQL后，MySQL Server会根据where条件，读取第一条满足条件的记录，然后InnoDB引擎会将第一条记录返回，并加锁 (current read)。待MySQL Server收到这条加锁的记录之后，会再发起一个update请求，更新这条记录。一条记录操作完成，再读取下一条记录，直至没有满足条件的记录为止。因此，update操作内部，就包含了一个当前读。同理，delete操作也一样。insert操作会稍微有些不同，简单来说，就是insert操作可能会触发Unique Key的冲突检查，也会进行一个当前读。</p>
+<h3 id="关于死锁"><a href="#关于死锁" class="headerlink" title="关于死锁"></a>关于死锁</h3><blockquote>
+<p> 死锁是指两个或者两个以上的事务在执行的过程中，因争夺资源而造成的一种互相等待的现象。若无外力作用，这两个事务将保持等待状态，无法推进下去。很明显，这是我们不想看到的。</p>
+</blockquote>
+<p>  从上面的概念可以看出，死锁的关键点在于互相等待，如果我们要解决死锁的问题，就要从“等待”这个关键词上面入手，如果我们将等待都转化为回滚操作，并且事务都重新开始，这种方法无疑可以避免死锁问题的产生。但是会导致数据库并发性能的降低，这样的问题也是我们无法接受的。</p>
+<p>  为了解决这一问题，我们采用一种超时的方法进行折中进行处理，超时是指当两个事务互相等待时，当某一方的等待时间超过一个阈值，我们将它进行回滚，这样，另一个事务就能够继续进行，在innodb存储引擎中，我们使用参数innodb_lock_wait_timeout来设置超时时间，这个参数如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show variables like "innodb_lock_wait_timeout";</span><br><span class="line">+<span class="comment">--------------------------+-------+</span></span><br><span class="line">| Variable_name            | Value |</span><br><span class="line">+<span class="comment">--------------------------+-------+</span></span><br><span class="line">| innodb_lock_wait_timeout | 50    |</span><br><span class="line">+<span class="comment">--------------------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span>, <span class="number">1</span> <span class="keyword">warning</span> (<span class="number">0.11</span> sec)</span><br></pre></td></tr></table></figure>
+<p>  为了加深印象，我们模拟一个死锁的现象，让大家感受一下。</p>
+<p>  首先，要模拟死锁，程序必须并发运行，串行的方法是无法模拟死锁的，这里我们采用两个连接会话进行模拟：</p>
+<p><strong>会话A</strong></p>
+<p><strong>我们先开启事务，然后锁定id=3的行；</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from t;</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">| id | age |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">|  1 |   5 |</span><br><span class="line">|  2 |   4 |</span><br><span class="line">|  3 |   3 |</span><br><span class="line">|  4 |   2 |</span><br><span class="line">|  5 |   1 |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">5 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">begin</span>;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t where id=3 for update;</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">| id | age |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">|  3 |   3 |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.02</span> sec)</span><br></pre></td></tr></table></figure>
+<p><strong>会话B</strong></p>
+<p><strong>在会话B上锁定id=2的行</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; begin</span><br><span class="line">    -&gt; ;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line">mysql&gt; select * from t where id=2 for update;</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">| id | age |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">|  2 |   4 |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<p><strong>会话A</strong></p>
+<p><strong>我们在会话A上获取id=2的记录的锁，发现无法获取，产生了等待：</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from t where id=2 for update;</span><br><span class="line">##产生等待</span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>会话B</strong></p>
+<p>在会话A进行等待的过程中，我们在会话B上面获取id=3的记录的锁，我们发现了两个变化：</p>
+<p>第一、会话B上输出了死锁的提示信息，如下；</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from t where id=3 for update;</span><br><span class="line">ERROR 1213 (40001): Deadlock found when trying to get <span class="keyword">lock</span>; try restarting traction</span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
+<p>第二、会话A上输出了id=2的记录，也就是A会话得到了特定的资源，但是产生了9s的延迟，如下；</p>
+<p><strong>会话A</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from t where id=2 for update;</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">| id | age |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">|  2 |   4 |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">9.04</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
+<p>  在上述操作中，会话B抛出了1213这个错误状态码，它代表事务发生了死锁，死锁的原因是会话A和B的资源进行了相互等待，但是此时我们发现会话B中抛出死锁提示信息之后会话A中立即得到了记录为2的这个资源，这其实是因为会话B中的事务发生了回滚，否则的话，会话A中的事务是不可能得到相应的资源的。</p>
+<p>  这里又不得不提innodb的一个特性，那就是它会回滚死锁情况下的一个事务，因此当我们在程序中捕获了一个1213的错误，其实不需要我们手动进行回滚。</p>
+<h2 id="Innodb数据页简介"><a href="#Innodb数据页简介" class="headerlink" title="Innodb数据页简介"></a>Innodb数据页简介</h2><p>  页是内存和磁盘交互的基本单位，它的大小一般是16KB，可以被分为如下几个部分：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212162043235.png" alt="image-20200212162043235"></p>
+<p>  上次的文章里面，我们对这几个部分大概做了介绍，今天我们说说上面数据页的蓝色部分。</p>
+<p>  该部分保存的是数据页中真正的数据记录，也就是用户存储的记录。当我们一开始生成页的时候，其实并没有蓝色的Record部分，而是随着我们不断给数据库中插入记录，才逐渐从Free Space中划分出来的空间。用示意图来描述就是：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216093.webp" alt="img"></p>
+<p> 如果Free Space中的数据页被分配完了，则去申请新的数据页。</p>
+<p>为了方便理解，我们现在创建一个表进行演示：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">test</span>(</span><br><span class="line">    -&gt;     c1 <span class="built_in">INT</span>,</span><br><span class="line">    -&gt;     c2 <span class="built_in">INT</span>,</span><br><span class="line">    -&gt;     c3 <span class="built_in">VARCHAR</span>(<span class="number">1000</span>),</span><br><span class="line">    -&gt;     PRIMARY <span class="keyword">KEY</span> (c1)</span><br><span class="line">    -&gt; ) <span class="keyword">engine</span>=<span class="keyword">innodb</span> <span class="keyword">charset</span>=utf8;</span><br><span class="line">Query OK, 0 rows affected (0.03 sec)</span><br></pre></td></tr></table></figure>
+<p>现在我们给这个表里面插入几条数据：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">test</span> <span class="keyword">values</span></span><br><span class="line">(<span class="number">1</span>,<span class="number">2</span>,<span class="string">'a'</span>),</span><br><span class="line">(<span class="number">2</span>,<span class="number">3</span>,<span class="string">'bb'</span>),</span><br><span class="line">(<span class="number">3</span>,<span class="number">4</span>,<span class="string">'ccc'</span>),</span><br><span class="line">(<span class="number">4</span>,<span class="number">5</span>,<span class="string">'dddd'</span>);</span><br></pre></td></tr></table></figure>
+<p>我们可以把上面的数据页结构简单表示如下：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640.webp" alt="img"></p>
+<p>  我们可以看到，每条记录由三个部分构成，分别是记录头、记录数据以及其他信息，其中记录头里面包含很多字段来表示该条记录的信息，这些字段我们会逐渐进行讲解。目前4条记录都已经插入到record部分了，在实际过程中这四条记录是通过链表的方式进行连接的，如下：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640.png" alt="img"></p>
+<p>  在第一张图的数据页中，蓝色部分还有一部分是infimum和supermun，它们是两条伪记录，它们分别是这个数据页中”指定的”最大的记录和最小的记录。它们的作用是作为当前数据页内数据链表的首末两端。这样，数据页中的数据就可以被我们排列成下面的样子：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216124.webp" alt="img"></p>
+<p>  我们已经可以看到，我们的主键按照从大到小的顺序形成了一个链表，链表的首末位置分别是两条伪记录。</p>
+<p>  当我们对数据记录中id=2的一条记录进行删除时，实际上，在数据记录链表里面发生的变化如下：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216095.webp" alt="img"></p>
+<p>  可以看出，实际上并没有删除那条记录，而是通过将头信息中的delete标识位改为1、偏移量改为0来实现的，也就是说，这条记录所占用的空间并没有还给Free Space，当下一次插入id=2的记录的时候，这块空间还可以接着使用。</p>
+<p>  在这个过程中，我们加入了record_type字段，这两条伪记录和正常记录的区别之处在于数据记录的头信息里面的record_type字段，最小记录的record_type为2，最大记录的record为3，正常记录的record_type为0，record_type为1的记录，稍后我们会进行解释。</p>
+<p>  到现在为止，我们已经知道了头信息中的3个字段，分别是next_record和record_type以及delete字段，next_record保存的是下一条数据记录的真是数据的偏移量，record_type代表的是数据记录的类型，delete标示的是该字段是否被删除。除此之外，我们还需要知道记录头信息里面的另外一个字段n_owned，这个字段保存的是改组内一共有多少个数据记录，在上述删除的操作中，最大记录中该字段的变化过程如下：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216096.webp" alt="img"></p>
+<p>  关于这个初始值为何是5，后续的文章中我们会说明。至此，我们已经了解到，一个数据页，大概可以描述成如下形式：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216136.webp" alt="img"></p>
+<h2 id="MySQL锁优化"><a href="#MySQL锁优化" class="headerlink" title="MySQL锁优化"></a>MySQL锁优化</h2><h3 id="MySQL-锁分类"><a href="#MySQL-锁分类" class="headerlink" title="MySQL 锁分类"></a>MySQL 锁分类</h3><p>当多个事务或者进程访问同一个资源的时候，为了保证数据的一致性，就需要用到锁机制。</p>
+<p>从锁定资源的角度来看，MySQL 中的锁分为：</p>
+<ul>
+<li><strong>表级锁</strong></li>
+<li><strong>行级锁</strong></li>
+<li><strong>页面锁</strong></li>
+</ul>
+<p><strong>表级锁：</strong>对整张表加锁。开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高，并发度最低。 </p>
+<p><strong>行级锁：</strong>对某行记录加锁。开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低，并发度也最高。</p>
+<p><strong>页面锁：</strong>开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。</p>
+<p>在实际开发过程中，主要会使用到表级锁和行级锁两种。既然锁是针对资源的，那么这些资源就是数据，在 MySQL 提供插件式存储引擎对数据进行存储。</p>
+<p>插件式存储引擎的好处是，开发人员可以根据需要选择适合的存储引擎。</p>
+<p>在众多的存储引擎中，有两种引擎被比较多的使用，他们分别是：</p>
+<ul>
+<li><p><strong>MyISAM 存储引擎，</strong>它不支持事务、表锁设计，支持全文索引，主要面向一些在线分析处理（OLAP）数据库应用。说白了主要就是查询数据，对数据的插入，更新操作比较少。</p>
+</li>
+<li><p><strong>InnoDB 存储引擎，</strong>它支持事务，其设计目标主要面向在线事务处理（OLTP）的应用。</p>
+<p>其特点是行锁设计、支持外键，并支持类似于 Oracle 的非锁定读，即默认读取操作不会产生锁。</p>
+<p>简单来说，就是对数据的插入，更新操作比较多。从 MySQL 数据库 5.5.8 版本开始，InnoDB 存储引擎是默认的存储引擎。</p>
+</li>
+</ul>
+<p>上面两种存储引擎在处理多进程数据操作的时候是如何表现的，就是我们接下来要讨论的问题。</p>
+<p>为了让整个描述更加清晰，我们将表级锁和行级锁以及 MyISAM，InnoDB 存储引擎，就形成了一个 2*2 的象限。</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478029.webp" alt="img"></p>
+<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图*</center>
+
+<p>由于 MyISAM 存储引擎不支持行级锁，实际上后面讨论的问题会围绕三个象限的讨论展开。</p>
+<p>从内容上来看，InnoDB 作为使用最多的存储引擎遇到的问题和值得注意的地方较多，也是本文的重点。</p>
+<p>MyISAM 存储引擎和表级锁</p>
+<p>首先，来看第一象限的内容：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212160055676.png" alt="image-20200212160055676"></p>
+<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图-第一象限*</center>
+
+<p>MyISAM 存储引擎支持表级锁，并且支持两种锁模式：</p>
+<ul>
+<li><strong>对 MyISAM 表的读操作（共享锁），</strong>不会阻塞其他进程对同一表的读请求，但会阻塞对其的写请求。当读锁释放后，才会执行其他进程的写操作。</li>
+<li><strong>对 MyISAM 表的写操作（排他锁），</strong>会阻塞其他进程对同一表的读写操作，当该锁释放后，才会执行其他进程的读写操作。</li>
+</ul>
+<h3 id="MyISAM-优化建议"><a href="#MyISAM-优化建议" class="headerlink" title="MyISAM 优化建议"></a>MyISAM 优化建议</h3><p>在使用 MyISAM 存储引擎时。执行 SQL 语句，会自动为 SELECT 语句加上共享锁，为 UDI（更新，删除，插入）操作加上排他锁。</p>
+<p>由于这个特性在多进程并发插入同一张表的时候，就会因为排他锁而进行等待。</p>
+<p>因此可以通过配置 concurrent_insert 系统变量，来控制其并发的插入行为。</p>
+<p><strong>①concurrent_insert=0 时，</strong>不允许并发插入。</p>
+<p><strong>②concurrent_insert=1 时，</strong>如果 MyISAM 表中没有空洞（即表中没有被删除的行），允许一个进程读表时，另一个进程向表的尾部插入记录（MySQL 默认设置）。</p>
+<blockquote>
+<p>注：空洞是行记录被删除以后，只是被标记为“已删除”其存储空间没有被回收，也就是说没有被物理删除。由另外一个进程，异步对这个数据进行删除。</p>
+<p>因为空间长度问题，删除以后的物理空间不能被新的记录所使用，从而形成了空洞。</p>
+</blockquote>
+<p><strong>③concurrent_insert=2 时，</strong>无论 MyISAM 表中有没有空洞，都允许在表尾并发插入记录。</p>
+<p>如果在数据插入的时候，没有并发删除操作的话，可以尝试把 concurrent_insert 设置为 1。</p>
+<p>反之，在数据插入的时候有删除操作且量较大时，也就是会产生“空洞”的时候，就需要把 concurrent_insert 设置为 2。</p>
+<p>另外，当一个进程请求某个 MyISAM 表的读锁，另一个进程也请求同一表的写锁。</p>
+<p>即使读请求先到达，写请求后到达，写请求也会插到读请求之前。因为 MySQL 的默认设置认为，写请求比读请求重要。</p>
+<p>我们可以通过 low_priority_updates 来调节读写行为的优先级：</p>
+<ul>
+<li>数据库以读为主时，要优先保证查询性能时，可通过 low_priority_updates=1 设置读优先级高于写优先级。</li>
+<li>数据库以写为主时，则不用设置 low_priority_updates 参数。</li>
+</ul>
+<h3 id="InnoDB-存储引擎和表级锁"><a href="#InnoDB-存储引擎和表级锁" class="headerlink" title="InnoDB 存储引擎和表级锁"></a>InnoDB 存储引擎和表级锁</h3><p>再来看看第二象限的内容：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493477955.webp" alt="img"></p>
+<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图-第二象限*</center>
+
+
+
+<p>InnoDB 存储引擎表锁。当没有对数据表中的索引数据进行查询时，会执行表锁操作。</p>
+<p>上面是 InnoDB 实现行锁，同时它也可以实现表锁。其方式就是意向锁（Intention Locks）。</p>
+<p>这里介绍两种意向锁：</p>
+<ul>
+<li><strong>意向共享锁（IS）：</strong>事务打算给数据行加行共享锁，事务在给一个数据行加共享锁前，必须先取得该表的 IS 锁。</li>
+<li><strong>意向排他锁（IX）：</strong>事务打算给数据行加行排他锁，事务在给一个数据行加排他锁前，必须先取得该表的 IX 锁。</li>
+</ul>
+<blockquote>
+<p>注：意向共享锁和意向排他锁是数据库主动加的，不需要我们手动处理。对于 UPDATE、DELETE 和 INSERT 语句，InnoDB 会自动给数据集加排他锁。</p>
+</blockquote>
+<p><strong>InnoDB表锁的实现方式：</strong>假设有一个表 test2，有两个字段分别是 id 和 name。</p>
+<p>没有设置主键同时也没有设置任何索引（index）如下：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478033.webp" alt="img"></p>
+<center><em>InnoDB 表锁实现方式图</em></center>
+
+<h3 id="InnoDB-存储引擎和行级锁"><a href="#InnoDB-存储引擎和行级锁" class="headerlink" title="InnoDB 存储引擎和行级锁"></a>InnoDB 存储引擎和行级锁</h3><p>第四象限我们使用的比较多，讨论的内容也相对多些：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478031.webp" alt="img"></p>
+<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图-第四象限*</center>
+
+
+
+<p>InnoDB 存储引擎行锁，当数据查询时针对索引数据进行时，会使用行级锁。</p>
+<p><strong>共享锁（S）：</strong>当一个事务读取一条记录的时候，不会阻塞其他事务对同一记录的读请求，但会阻塞对其的写请求。当读锁释放后，才会执行其他事务的写操作。</p>
+<p>例如：select … lock in share mode</p>
+<p><strong>排他锁（X）：</strong>当一个事务对一条记录进行写操作时，会阻塞其他事务对同一表的读写操作，当该锁释放后，才会执行其他事务的读写操作。</p>
+<p>例如：select … for update</p>
+<p><strong>行锁的实现方式：</strong>假设有一个表 test1，有两个字段分别是 id 和 name。</p>
+<p>id 作为主键同时也是 table 的索引（index）如下：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155919536.png" alt="image-20200212155919536"></p>
+<center><em>InnoDB 行锁实现方式图</em></center>
+
+
+
+<p>在高并发的情况下，多个事务同时请求更新数据，由于资源被占用等待事务增多。</p>
+<p>如此，会造成性能问题，可以通过 innodb_lock_wait_timeout 来解决。innodb_lock_wait_timeout 是事务等待获取资源的最长时间，单位为秒。如果超过时间还未分配到资源，则会返回应用失败。</p>
+<h3 id="四种锁的兼容情况"><a href="#四种锁的兼容情况" class="headerlink" title="四种锁的兼容情况"></a>四种锁的兼容情况</h3><p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155859778.png" alt="image-20200212155859778"></p>
+<center><em>共享锁，排他锁，意向共享锁，意向排他锁兼容图例</em></center>
+
+
+
+<p>如果一个事务请求的锁模式与当前的锁兼容， InnoDB 就将请求的锁授予该事务；反之， 如果两者不兼容，该事务就要等待锁释放。</p>
+<h4 id="间隙锁"><a href="#间隙锁" class="headerlink" title="间隙锁"></a><strong>间隙锁</strong></h4><p>前面谈到行锁是针对一条记录进行加锁。当对一个范围内的记录加锁的时候，我们称之为间隙锁。</p>
+<p>当使用范围条件索引数据时，InnoDB 会对符合条件的数据索引项加锁。对于键值在条件范围内但并不存在的记录，叫做“间隙（GAP)”，InnoDB 也会对这个“间隙”加锁，这就是间隙锁。间隙锁和行锁合称（Next-Key锁）。</p>
+<p>如果表中只有 11 条记录，其 id 的值分别是 1,2,…,10，11 下面的 SQL：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Select</span> * <span class="keyword">from</span> table_gapwhere <span class="keyword">id</span> &gt; <span class="number">10</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure>
+<p>这是一个范围条件的检索，InnoDB 不仅会对符合条件的 id 值为 10 的记录加锁，会对 id 大于 10 的“间隙”加锁，即使大于 10 的记录不存在，例如 12，13。</p>
+<p><strong>InnoDB 使用间隙锁的目的：</strong></p>
+<ul>
+<li>一方面是为了防止幻读。对于上例，如果不使用间隙锁，其他事务插入了 id 大于 10 的任何记录，本事务再次执行 select 语句，就会发生幻读。</li>
+<li>另一方面，也是为了满足恢复和复制的需要。</li>
+</ul>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478032.webp" alt="img"></p>
+<center><em>间隙锁图</em></center>
+
+
+
+<h4 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a><strong>死锁</strong></h4><p>两个事务都需要获得对方持有的排他锁才能继续完成任务，这种互相等待对方释放资源的情况就是死锁。</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478014.webp" alt="img"></p>
+<center><em>死锁图</em></center>
+
+
+
+<p><strong>检测死锁：</strong>InnoDB 存储引擎能检测到死锁的循环依赖并立即返回一个错误。</p>
+<p><strong>死锁恢复：</strong>死锁发生以后，只有部分或完全回滚其中一个事务，才能打破死锁。</p>
+<p>InnoDB 方法是，将持有最少行级排他锁的事务回滚。在应用程序设计时必须考虑处理死锁，多数情况下重新执行因死锁回滚的事务即可。</p>
+<p><strong>避免死锁：</strong></p>
+<ul>
+<li><p>在事务开始时，如果有记录要修改，先使用 SELECT… FOR UPDATE 语句获取锁，即使这些修改语句是在后面执行。 </p>
+</li>
+<li><p>在事务中，如果要更新记录，直接申请排他锁。而不是查询时申请共享锁、更新时再申请排他锁。</p>
+<p>这样做会导致，当申请排他锁时，其他事务可能已经获得了相同记录的共享锁，从而造成锁冲突，甚至死锁。</p>
+<p>简单来说，如果你要更新记录要做两步操作，第一步查询，第二步更新。就不要第一步上共享锁，第二部上排他锁了，直接在第一步就上排他锁，抢占先机。</p>
+</li>
+<li><p>如果事务需要锁定多个表，那么尽量按照相同的顺序使用加锁语句，可以降低产生死锁的机会。</p>
+</li>
+<li><p>通过 SELECT … LOCK INSHARE MODE（共享锁）获取行的读锁后，如果当前事务再需要对该记录进行更新操作，则很有可能造成死锁。所以，如果要对行记录进行修改，直接上排他锁。</p>
+</li>
+<li><p>改变事务隔离级别（事务隔离级别在后面详细说明）。</p>
+</li>
+</ul>
+<h4 id="MySQL-锁定情况的查询"><a href="#MySQL-锁定情况的查询" class="headerlink" title="MySQL 锁定情况的查询"></a><strong>MySQL 锁定情况的查询</strong></h4><p>在实际开发中无法避免数据被锁的问题，那么我们可以通过哪些手段来查询锁呢？</p>
+<p>表级锁可以通过两个变量的查询：</p>
+<ul>
+<li>Table_locks_immediate，产生表级锁的次数。</li>
+<li>Table_locks_waited，数显表级锁而等待的次数。</li>
+</ul>
+<p>行级锁可以通过下面几个变量查询：</p>
+<ul>
+<li>Innodb_row_lock_current_waits，当前正在等待锁定的数量。</li>
+<li>Innodb_row_lock_time（重要），从系统启动到现在锁定总时长。</li>
+<li>Innodb_row_lock_time_avg（重要），每次等待所花平均时间。</li>
+<li>Innodb_row_lock_time_max，从系统启动到现在等待最长的一次花费时间。</li>
+<li>Innodb_row_lock_waits（重要），从系统启动到现在总共等待的次数。</li>
+</ul>
+<p><strong>MySQL 事务隔离级别</strong></p>
+<p>前面讲的死锁是因为并发访问数据库造成。当多个事务同时访问数据库，做并发操作的时候会发生以下问题。</p>
+<p><strong>脏读（dirty read），</strong>一个事务在处理过程中，读取了另外一个事务未提交的数据。未提交的数据称之为脏数据。</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155822655.png" alt="image-20200212155822655"></p>
+<center><em>脏读例子</em></center>
+
+
+
+<p><strong>不可重复读（non-repeatable read），</strong>在事务范围内，多次查询某条记录，每次得到不同的结果。</p>
+<p>第一个事务中的两次读取数据之间，由于第二个事务的修改，第一个事务两次读到的数据可能不一样。</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155748878.png" alt="image-20200212155748878"></p>
+<center><em>不可重复读例子</em></center>
+
+<p><strong>幻读（phantom read），</strong>是事务非独立执行时发生的一种现象。</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155718409.png" alt="image-20200212155718409"></p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155728846.png" alt="image-20200212155728846"></p>
+<center><em>幻读的例子</em></center>
+
+<p>在同一时间点，数据库允许多个并发事务，同时对数据进行读写操作，会造成数据不一致性。</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493477920.webp" alt="img"></p>
+<center><em>四种隔离级别，解决事务并发问题对照图</em></center>
+
+<p>隔离性就是用来防止这种数据不一致的。事务隔离根据级别不同，从低到高包括：</p>
+<ul>
+<li><p><strong>读未提交（read uncommitted）：</strong>它是最低的事务隔离级别，一个事务还没提交时，它做的变更就能被别的事务看到。有脏读的可能性。</p>
+</li>
+<li><p><strong>读提交（read committed）：</strong>保证一个事物提交后才能被另外一个事务读取。另外一个事务不能读取该事物未提交的数据。可避免脏读的发生，但是可能会造成不可重复读。</p>
+</li>
+<li><p><strong>可重复读（repeatable read MySQL 默认方式）：</strong>多次读取同一范围的数据会返回第一次查询的快照，即使其他事务对该数据做了更新修改。事务在执行期间看到的数据前后必须是一致的。</p>
+</li>
+<li><p><strong>串行化（serializable）：</strong>是最可靠的事务隔离级别。“写”会加“排他锁”，“读”会加“共享锁”。</p>
+<p>当出现读写锁冲突的时候，后访问的事务必须等前一个事务执行完成，所以事务执行是串行的。可避免脏读、不可重复读、幻读。</p>
+</li>
+</ul>
+<h3 id="InnoDB-优化建议"><a href="#InnoDB-优化建议" class="headerlink" title="InnoDB 优化建议"></a>InnoDB 优化建议</h3><p>从锁机制的实现方面来说，InnoDB 的行级锁带来的性能损耗可能比表级锁要高一点，但在并发方面的处理能力远远优于 MyISAM 的表级锁。这也是大多数公司的 MySQL 都是使用 InnoDB 模式的原因。</p>
+<p>但是，InnoDB 也有脆弱的一面，下面提出几个优化建议供大家参考：</p>
+<ul>
+<li>尽可能让数据检索通过索引完成，避免 InnoDB 因为无法通过索引加行锁，而导致升级为表锁的情况。换句话说就是，多用行锁，少用表锁。</li>
+<li>加索引的时候尽量准确，避免造成不必要的锁定影响其他查询。</li>
+<li>尽量减少给予范围的数据检索（间隙锁），避免因为间隙锁带来的影响，锁定了不该锁定的记录。</li>
+<li>尽量控制事务的大小，减少锁定的资源量和锁定时间。</li>
+<li>尽量使用较低级别的事务隔离，减少 MySQL 因为事务隔离带来的成本。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155627181.png" alt="image-20200212155627181"></p>
+<center><em>MySQL 数据库锁的思维导图</em></center>
+
+
+
+<p>MySQL 的锁主要分为表级锁和行级锁。MyISAM 引擎使用的是表级锁，针对表级的共享锁和排他锁，可以通过 concurrent_insert 和 low_priority_updates 参数来优化。</p>
+<p>InnoDB 支持表锁和行锁，根据索引来判断如何选择。行锁有，行共享锁和行排他锁；表锁有，意向共享锁，意向排他锁，表锁是系统自己加上的；锁范围的是间隙锁。遇到死锁，我们如何检测，恢复以及如何避免。</p>
+<p>MySQL 有四个事务级别分别是，<strong><em>读未提交，读提交，可重复读，串行化</em></strong>。他们的隔离级别依次升高。</p>
+<p>通过隔离级别的设置，可以避免，脏读，不可重复读和幻读的情况。最后，对于使用比较多的 InnoDB 引擎，提出了一些优化建议。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+            <a href="/tags/锁/" rel="tag"># 锁</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/12/JAVA实用的服务异常处理指南/" rel="next" title="JAVA实用的服务异常处理指南">
+                <i class="fa fa-chevron-left"></i> JAVA实用的服务异常处理指南
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/12/从ReentrantLock的实现看AQS的原理及应用/" rel="prev" title="从ReentrantLock的实现看AQS的原理及应用">
+                从ReentrantLock的实现看AQS的原理及应用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">vincent</p>
+              <p class="site-description motion-element" itemprop="description">The King is dead, long live the King!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">47</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/vincentruan" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#01-读（select）"><span class="nav-number">1.</span> <span class="nav-text">01 读（select）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#02-写（update、delete、insert）"><span class="nav-number">2.</span> <span class="nav-text">02 写（update、delete、insert）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于delete"><span class="nav-number">2.1.</span> <span class="nav-text">关于delete</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于update"><span class="nav-number">2.2.</span> <span class="nav-text">关于update</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于insert"><span class="nav-number">2.3.</span> <span class="nav-text">关于insert</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附录"><span class="nav-number">3.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于MySQL锁的两个知识点"><span class="nav-number">3.1.</span> <span class="nav-text">关于MySQL锁的两个知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL快照读和当前读"><span class="nav-number">3.1.1.</span> <span class="nav-text">MySQL快照读和当前读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于死锁"><span class="nav-number">3.1.2.</span> <span class="nav-text">关于死锁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Innodb数据页简介"><span class="nav-number">3.2.</span> <span class="nav-text">Innodb数据页简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL锁优化"><span class="nav-number">3.3.</span> <span class="nav-text">MySQL锁优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL-锁分类"><span class="nav-number">3.3.1.</span> <span class="nav-text">MySQL 锁分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM-优化建议"><span class="nav-number">3.3.2.</span> <span class="nav-text">MyISAM 优化建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InnoDB-存储引擎和表级锁"><span class="nav-number">3.3.3.</span> <span class="nav-text">InnoDB 存储引擎和表级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InnoDB-存储引擎和行级锁"><span class="nav-number">3.3.4.</span> <span class="nav-text">InnoDB 存储引擎和行级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四种锁的兼容情况"><span class="nav-number">3.3.5.</span> <span class="nav-text">四种锁的兼容情况</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#间隙锁"><span class="nav-number">3.3.5.1.</span> <span class="nav-text">间隙锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#死锁"><span class="nav-number">3.3.5.2.</span> <span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MySQL-锁定情况的查询"><span class="nav-number">3.3.5.3.</span> <span class="nav-text">MySQL 锁定情况的查询</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InnoDB-优化建议"><span class="nav-number">3.3.6.</span> <span class="nav-text">InnoDB 优化建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.3.7.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vincent</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.3.0</div>
+
+
+
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+    
+      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+	  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+	  <script>
+        //去除尾部匹配正则数组的字符串  
+        String.prototype.trimEnd = function(regStr)  
+        {  
+            var result = this;
+            if(regStr==undefined||regStr==null||regStr=="")  
+            {    
+                return result;
+            }
+            var array = regStr.split(',');
+
+            if(array.length > 0){
+                 
+                var c = array.shift();
+                var str= this;
+                var i = str.length;  
+                var rg = new RegExp(c);
+                var matchArr = str.match(rg);
+
+                if(matchArr != undefined && matchArr != null && matchArr.length > 0)
+                {
+                  var matchStr = matchArr[0].replace(/\\/g, "\\\\").replace(/\*/g, "\\*")
+                                            .replace(/\+/g, "\\+").replace(/\|/g, "\\|")
+                                            .replace(/\{/g, "\\{").replace(/\}/g, "\\}")
+                                            .replace(/\(/g, "\\(").replace(/\)/g, "\\)")
+                                            .replace(/\^/g, "\\^").replace(/\$/g, "\\$")
+                                            .replace(/\[/g, "\\[").replace(/\]/g, "\\]")
+                                            .replace(/\?/g, "\\?").replace(/\,/g, "\\,")
+                                            .replace(/\./g, "\\.").replace(/\&/g, "\\&");
+                  matchStr = matchStr + '$';
+                  result = str.replace(new RegExp(matchStr), "");
+                }
+                
+                if(array.length > 0){
+                    return result.trimEnd(array.join())
+                }
+                else{
+                    return result; 
+                } 
+            } 
+        };
+      </script>
+      <script type="text/javascript">
+        const gitalk = new Gitalk({
+          clientID: '77de951f4b5c331b23b4',
+          clientSecret: '41f88d6edb14f19e3ac0f49acc84c100debcdf7d',
+          repo: 'vincentruan.github.io',
+          owner: 'vincentruan',
+          admin: 'vincentruan'.split(','),
+          pagerDirection: 'first',
+		  id: md5(location.href.trimEnd('')),
+          // facebook-like distraction free mode
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')
+      </script>
+    
+  
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/xiaomai.model.json"},"display":{"position":"left","width":280,"height":375},"mobile":{"show":false},"log":false});</script></body>
+</html>

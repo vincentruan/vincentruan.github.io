@@ -115,13 +115,13 @@
 
 
 
-  <meta name="description" content="​  memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。 ​  文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。 1. 综述​  读一个软件的源码，首先要弄懂软件是用作干什么的，那memcached">
+  <meta name="description" content="memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。   文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。 1. 综述  读一个软件的源码，首先要弄懂软件是用作干什么的，那memcached和re">
 <meta name="keywords" content="redis,memcached">
 <meta property="og:type" content="article">
 <meta property="og:title" content="memcached与redis实现的对比">
 <meta property="og:url" content="https://vincentruan.github.io/2019/12/29/memcached与redis实现的对比/index.html">
 <meta property="og:site_name" content="星辰大海">
-<meta property="og:description" content="​  memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。 ​  文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。 1. 综述​  读一个软件的源码，首先要弄懂软件是用作干什么的，那memcached">
+<meta property="og:description" content="memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。   文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。 1. 综述  读一个软件的源码，首先要弄懂软件是用作干什么的，那memcached和re">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://vincentruan.github.io/2019/12/29/memcached与redis实现的对比/0.6910520100500435.png">
 <meta property="og:image" content="https://vincentruan.github.io/2019/12/29/memcached与redis实现的对比/0.6555308480747044.png">
@@ -132,10 +132,10 @@
 <meta property="og:image" content="https://vincentruan.github.io/2019/12/29/memcached与redis实现的对比/0.19187591481022537.png">
 <meta property="og:image" content="https://vincentruan.github.io/2019/12/29/memcached与redis实现的对比/0.5668123732320964.png">
 <meta property="og:image" content="https://vincentruan.github.io/2019/12/29/memcached与redis实现的对比/0.5104974769055843.png">
-<meta property="og:updated_time" content="2019-12-29T07:22:03.344Z">
+<meta property="og:updated_time" content="2020-02-17T02:40:44.790Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="memcached与redis实现的对比">
-<meta name="twitter:description" content="​  memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。 ​  文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。 1. 综述​  读一个软件的源码，首先要弄懂软件是用作干什么的，那memcached">
+<meta name="twitter:description" content="memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。   文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。 1. 综述  读一个软件的源码，首先要弄懂软件是用作干什么的，那memcached和re">
 <meta name="twitter:image" content="https://vincentruan.github.io/2019/12/29/memcached与redis实现的对比/0.6910520100500435.png">
 
 
@@ -373,16 +373,46 @@
                 
               
 
-              <time title="创建时间：2019-12-29 15:03:32 / 修改时间：15:22:03" itemprop="dateCreated datePublished" datetime="2019-12-29T15:03:32+08:00">2019-12-29</time>
+              <time title="创建时间：2019-12-29 15:03:32" itemprop="dateCreated datePublished" datetime="2019-12-29T15:03:32+08:00">2019-12-29</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/缓存/" itemprop="url" rel="index"><span itemprop="name">缓存</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -411,21 +441,21 @@
       
 
       
-        <p>​  memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。</p>
-<p>​  文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。</p>
-<h1 id="1-综述"><a href="#1-综述" class="headerlink" title="1. 综述"></a>1. 综述</h1><p>​  读一个软件的源码，首先要弄懂软件是用作干什么的，那memcached和redis是干啥的？众所周知，数据一般会放在数据库中，但是查询数据会相对比较慢，特别是用户很多时，频繁的查询，需要耗费大量的时间。怎么办呢？数据放在哪里查询快？那肯定是内存中。memcached和redis就是将数据存储在内存中，按照key-value的方式查询，可以大幅度提高效率。所以一般它们都用做缓存服务器，缓存常用的数据，需要查询的时候，直接从它们那儿获取，减少查询数据库的次数，提高查询效率。</p>
+        <p>  memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。</p>
+<p>  文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。</p>
+<h1 id="1-综述"><a href="#1-综述" class="headerlink" title="1. 综述"></a>1. 综述</h1><p>  读一个软件的源码，首先要弄懂软件是用作干什么的，那memcached和redis是干啥的？众所周知，数据一般会放在数据库中，但是查询数据会相对比较慢，特别是用户很多时，频繁的查询，需要耗费大量的时间。怎么办呢？数据放在哪里查询快？那肯定是内存中。memcached和redis就是将数据存储在内存中，按照key-value的方式查询，可以大幅度提高效率。所以一般它们都用做缓存服务器，缓存常用的数据，需要查询的时候，直接从它们那儿获取，减少查询数据库的次数，提高查询效率。</p>
 <h1 id="2-服务方式"><a href="#2-服务方式" class="headerlink" title="2. 服务方式"></a>2. 服务方式</h1><p>memcached和redis怎么提供服务呢？它们是独立的进程，需要的话，还可以让他们变成daemon进程，所以我们的用户进程要使用memcached和redis的服务的话，就需要进程间通信了。考虑到用户进程和memcached和redis不一定在同一台机器上，所以还需要支持网络间通信。因此，memcached和redis自己本身就是网络服务器，用户进程通过与他们通过网络来传输数据，显然最简单和最常用的就是使用tcp连接了。另外，memcached和redis都支持udp协议。而且当用户进程和memcached和redis在同一机器时，还可以使用unix域套接字通信。</p>
 <h1 id="3-事件模型"><a href="#3-事件模型" class="headerlink" title="3. 事件模型"></a>3. 事件模型</h1><p>下面开始讲他们具体是怎么实现的了。首先来看一下它们的事件模型。</p>
-<p>​  自从epoll出来以后，几乎所有的网络服务器全都抛弃select和poll，换成了epoll。redis也一样，只不多它还提供对select和poll的支持，可以自己配置使用哪一个，但是一般都是用epoll。另外针对BSD，还支持使用kqueue。而memcached是基于libevent的，不过libevent底层也是使用epoll的，所以可以认为它们都是使用epoll。epoll的特性这里就不介绍了，网上介绍文章很多。</p>
+<p>  自从epoll出来以后，几乎所有的网络服务器全都抛弃select和poll，换成了epoll。redis也一样，只不多它还提供对select和poll的支持，可以自己配置使用哪一个，但是一般都是用epoll。另外针对BSD，还支持使用kqueue。而memcached是基于libevent的，不过libevent底层也是使用epoll的，所以可以认为它们都是使用epoll。epoll的特性这里就不介绍了，网上介绍文章很多。</p>
 <p>它们都使用epoll来做事件循环，不过redis是单线程的服务器（redis也是多线程的，只不过除了主线程以外，其他线程没有event loop，只是会进行一些后台存储工作），而memcached是多线程的。 redis的事件模型很简单，只有一个event loop，是简单的reactor实现。不过redis事件模型中有一个亮点，我们知道epoll是针对fd的，它返回的就绪事件也是只有fd，redis里面的fd就是服务器与客户端连接的socket的fd，但是处理的时候，需要根据这个fd找到具体的客户端的信息，怎么找呢？通常的处理方式就是用红黑树将fd与客户端信息保存起来，通过fd查找，效率是lgn。不过redis比较特殊，redis的客户端的数量上限可以设置，即可以知道同一时刻，redis所打开的fd的上限，而我们知道，进程的fd在同一时刻是不会重复的（fd只有关闭后才能复用），所以redis使用一个数组，将fd作为数组的下标，数组的元素就是客户端的信息，这样，直接通过fd就能定位客户端信息，查找效率是O(1)，还省去了复杂的红黑树的实现（我曾经用c写一个网络服务器，就因为要保持fd和connect对应关系，不想自己写红黑树，然后用了STL里面的set，导致项目变成了c++的，最后项目使用g++编译，这事我不说谁知道？）。显然这种方式只能针对connection数量上限已确定，并且不是太大的网络服务器，像nginx这种http服务器就不适用，nginx就是自己写了红黑树。</p>
 <p>而memcached是多线程的，使用master-worker的方式，主线程监听端口，建立连接，然后顺序分配给各个工作线程。每一个从线程都有一个event loop，它们服务不同的客户端。master线程和worker线程之间使用管道通信，每一个工作线程都会创建一个管道，然后保存写端和读端，并且将读端加入event loop，监听可读事件。同时，每个从线程都有一个就绪连接队列，主线程连接连接后，将连接的item放入这个队列，然后往该线程的管道的写端写入一个connect命令，这样event loop中加入的管道读端就会就绪，从线程读取命令，解析命令发现是有连接，然后就会去自己的就绪队列中获取连接，并进行处理。多线程的优势就是可以充分发挥多核的优势，不过编写程序麻烦一点，memcached里面就有各种锁和条件变量来进行线程同步。</p>
 <h1 id="4-内存分配"><a href="#4-内存分配" class="headerlink" title="4. 内存分配"></a>4. 内存分配</h1><p>memcached和redis的核心任务都是在内存中操作数据，内存管理自然是核心的内容。<br>首先看看他们的内存分配方式。memcached是有自己得内存池的，即预先分配一大块内存，然后接下来分配内存就从内存池中分配，这样可以减少内存分配的次数，提高效率，这也是大部分网络服务器的实现方式，只不过各个内存池的管理方式根据具体情况而不同。而redis没有自己得内存池，而是直接使用时分配，即什么时候需要什么时候分配，内存管理的事交给内核，自己只负责取和释放（redis既是单线程，又没有自己的内存池，是不是感觉实现的太简单了？那是因为它的重点都放在数据库模块了）。不过redis支持使用tcmalloc来替换glibc的malloc，前者是google的产品，比glibc的malloc快。</p>
-<p>​  由于redis没有自己的内存池，所以内存申请和释放的管理就简单很多，直接malloc和free即可，十分方便。而memcached是支持内存池的，所以内存申请是从内存池中获取，而free也是还给内存池，所以需要很多额外的管理操作，实现起来麻烦很多，具体的会在后面memcached的slab机制讲解中分析。 </p>
+<p>  由于redis没有自己的内存池，所以内存申请和释放的管理就简单很多，直接malloc和free即可，十分方便。而memcached是支持内存池的，所以内存申请是从内存池中获取，而free也是还给内存池，所以需要很多额外的管理操作，实现起来麻烦很多，具体的会在后面memcached的slab机制讲解中分析。 </p>
 <h1 id="5-数据库实现"><a href="#5-数据库实现" class="headerlink" title="5. 数据库实现"></a>5. 数据库实现</h1><p>接下来看看他们的最核心内容，各自数据库的实现。</p>
 <h2 id="5-1-memcached数据库实现"><a href="#5-1-memcached数据库实现" class="headerlink" title="5.1 memcached数据库实现"></a>5.1 memcached数据库实现</h2><p>memcached只支持key-value，即只能一个key对于一个value。它的数据在内存中也是这样以key-value对的方式存储，它使用slab机制。</p>
 <p> 首先看memcached是如何存储数据的，即存储key-value对。如下图，每一个key-value对都存储在一个item结构中，包含了相关的属性和key和value的值。</p>
 <p><img src="/2019/12/29/memcached与redis实现的对比/0.6910520100500435.png" alt="img"> </p>
-<p>​  item是保存key-value对的，当item多的时候，怎么查找特定的item是个问题。所以memcached维护了一个hash表，它用于快速查找item。hash表适用开链法（与redis一样）解决键的冲突，每一个hash表的桶里面存储了一个链表，链表节点就是item的指针，如上图中的h_next就是指桶里面的链表的下一个节点。 hash表支持扩容（item的数量是桶的数量的1.5以上时扩容），有一个primary_hashtable，还有一个old_hashtable，其中正常适用primary_hashtable，但是扩容的时候，将old_hashtable = primary_hashtable，然后primary_hashtable设置为新申请的hash表（桶的数量乘以2），然后依次将old_hashtable 里面的数据往新的hash表里面移动，并用一个变量expand_bucket记录以及移动了多少个桶，移动完成后，再free原来的old_hashtable 即可（redis也是有两个hash表，也是移动，不过不是后台线程完成，而是每次移动一个桶）。扩容的操作，专门有一个后台扩容的线程来完成，需要扩容的时候，使用条件变量通知它，完成扩容后，它又考试阻塞等待扩容的条件变量。这样在扩容的时候，查找一个item可能会在primary_hashtable和old_hashtable的任意一个中，需要根据比较它的桶的位置和expand_bucket的大小来比较确定它在哪个表里。</p>
+<p>  item是保存key-value对的，当item多的时候，怎么查找特定的item是个问题。所以memcached维护了一个hash表，它用于快速查找item。hash表适用开链法（与redis一样）解决键的冲突，每一个hash表的桶里面存储了一个链表，链表节点就是item的指针，如上图中的h_next就是指桶里面的链表的下一个节点。 hash表支持扩容（item的数量是桶的数量的1.5以上时扩容），有一个primary_hashtable，还有一个old_hashtable，其中正常适用primary_hashtable，但是扩容的时候，将old_hashtable = primary_hashtable，然后primary_hashtable设置为新申请的hash表（桶的数量乘以2），然后依次将old_hashtable 里面的数据往新的hash表里面移动，并用一个变量expand_bucket记录以及移动了多少个桶，移动完成后，再free原来的old_hashtable 即可（redis也是有两个hash表，也是移动，不过不是后台线程完成，而是每次移动一个桶）。扩容的操作，专门有一个后台扩容的线程来完成，需要扩容的时候，使用条件变量通知它，完成扩容后，它又考试阻塞等待扩容的条件变量。这样在扩容的时候，查找一个item可能会在primary_hashtable和old_hashtable的任意一个中，需要根据比较它的桶的位置和expand_bucket的大小来比较确定它在哪个表里。</p>
 <p> item是从哪里分配的呢？从slab中。如下图，memcached有很多slabclass，它们管理slab，每一个slab其实是trunk的集合，真正的item是在trunk中分配的，一个trunk分配一个item。一个slab中的trunk的大小一样，不同的slab，trunk的大小按比例递增，需要新申请一个item的时候，根据它的大小来选择trunk，规则是比它大的最小的那个trunk。这样，不同大小的item就分配在不同的slab中，归不同的slabclass管理。 这样的缺点是会有部分内存浪费，因为一个trunk可能比item大，如图2，分配100B的item的时候，选择112的trunk，但是会有12B的浪费，这部分内存资源没有使用。</p>
 <p><img src="/2019/12/29/memcached与redis实现的对比/0.6555308480747044.png" alt="img"></p>
 <p><img src="/2019/12/29/memcached与redis实现的对比/0.1720563017297536.png" alt="img"></p>
@@ -437,13 +467,13 @@
 <p>   以上就是memcached如何实现一个key-value的数据库的介绍。</p>
 <h2 id="5-2-redis数据库实现"><a href="#5-2-redis数据库实现" class="headerlink" title="5.2 redis数据库实现"></a>5.2 redis数据库实现</h2><p>首先redis数据库的功能强大一些，因为不像memcached只支持保存字符串，redis支持string， list， set，sorted set，hash table 5种数据结构。例如存储一个人的信息就可以使用hash table，用人的名字做key，然后name super， age 24， 通过key 和 name，就可以取到名字super，或者通过key和age，就可以取到年龄24。这样，当只需要取得age的时候，不需要把人的整个信息取回来，然后从里面找age，直接获取age即可，高效方便。</p>
 <p>为了实现这些数据结构，redis定义了抽象的对象redis object，如下图。每一个对象有类型，一共5种：字符串，链表，集合，有序集合，哈希表。 同时，为了提高效率，redis为每种类型准备了多种实现方式，根据特定的场景来选择合适的实现方式，encoding就是表示对象的实现方式的。然后还有记录了对象的lru，即上次被访问的时间，同时在redis 服务器中会记录一个当前的时间（近似值，因为这个时间只是每隔一定时间，服务器进行自动维护的时候才更新），它们两个只差就可以计算出对象多久没有被访问了。 然后redis object中还有引用计数，这是为了共享对象，然后确定对象的删除时间用的。最后使用一个void*指针来指向对象的真正内容。正式由于使用了抽象redis object，使得数据库操作数据时方便很多，全部统一使用redis object对象即可，需要区分对象类型的时候，再根据type来判断。而且正式由于采用了这种面向对象的方法，让redis的代码看起来很像c++代码，其实全是用c写的。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//#define REDIS_STRING 0	// 字符串类型//#define REDIS_LIST 1		// 链表类型//#define REDIS_SET 2		// 集合类型(无序的)，可以求差集，并集等//#define REDIS_ZSET 3		// 有序的集合类型//#define REDIS_HASH 4		// 哈希类型//#define REDIS_ENCODING_RAW 0     /* Raw representation */ //raw  未加工//#define REDIS_ENCODING_INT 1     /* Encoded as integer *///#define REDIS_ENCODING_HT 2      /* Encoded as hash table *///#define REDIS_ENCODING_ZIPMAP 3  /* Encoded as zipmap *///#define REDIS_ENCODING_LINKEDLIST 4 /* Encoded as regular linked list *///#define REDIS_ENCODING_ZIPLIST 5 /* Encoded as ziplist *///#define REDIS_ENCODING_INTSET 6  /* Encoded as intset *///#define REDIS_ENCODING_SKIPLIST 7  /* Encoded as skiplist *///#define REDIS_ENCODING_EMBSTR 8  /* Embedded sds string encoding */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span> &#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> type:<span class="number">4</span>;			<span class="comment">// 对象的类型，包括 /* Object types */unsigned encoding:4;		// 底部为了节省空间，一种type的数据，// 可   以采用不同的存储方式unsigned lru:REDIS_LRU_BITS; /* lru time (relative to server.lruclock) */int refcount;         // 引用计数void *ptr;</span></span><br><span class="line">&#125; robj;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//#define REDIS_STRING 0	</span></span><br><span class="line"><span class="comment">// 字符串类型//#define REDIS_LIST 1		</span></span><br><span class="line"><span class="comment">// 链表类型//#define REDIS_SET 2		</span></span><br><span class="line"><span class="comment">// 集合类型(无序的)，可以求差集，并集等</span></span><br><span class="line"><span class="comment">//#define REDIS_ZSET 3		</span></span><br><span class="line"><span class="comment">// 有序的集合类型</span></span><br><span class="line"><span class="comment">//#define REDIS_HASH 4		</span></span><br><span class="line"><span class="comment">// 哈希类型</span></span><br><span class="line"><span class="comment">//#define REDIS_ENCODING_RAW 0     /* Raw representation */ </span></span><br><span class="line"><span class="comment">//raw  未加工</span></span><br><span class="line"><span class="comment">//#define REDIS_ENCODING_INT 1     /* Encoded as integer */</span></span><br><span class="line"><span class="comment">//#define REDIS_ENCODING_HT 2      /* Encoded as hash table */</span></span><br><span class="line"><span class="comment">//#define REDIS_ENCODING_ZIPMAP 3  /* Encoded as zipmap */</span></span><br><span class="line"><span class="comment">//#define REDIS_ENCODING_LINKEDLIST 4 /* Encoded as regular linked list */</span></span><br><span class="line"><span class="comment">//#define REDIS_ENCODING_ZIPLIST 5 /* Encoded as ziplist */</span></span><br><span class="line"><span class="comment">//#define REDIS_ENCODING_INTSET 6  /* Encoded as intset */</span></span><br><span class="line"><span class="comment">//#define REDIS_ENCODING_SKIPLIST 7  /* Encoded as skiplist */</span></span><br><span class="line"><span class="comment">//#define REDIS_ENCODING_EMBSTR 8  /* Embedded sds string encoding */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span> &#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> type:<span class="number">4</span>;			</span><br><span class="line">    <span class="comment">// 对象的类型，包括 /* Object types */unsigned encoding:4;		</span></span><br><span class="line">    <span class="comment">// 底部为了节省空间，一种type的数据，</span></span><br><span class="line">    <span class="comment">// 可以采用不同的存储方式unsigned lru:REDIS_LRU_BITS; /* lru time (relative to server.lruclock) */int refcount;         </span></span><br><span class="line">    <span class="comment">// 引用计数void *ptr;</span></span><br><span class="line">&#125; robj;</span><br></pre></td></tr></table></figure>
 <p>说到底redis还是一个key-value的数据库，不管它支持多少种数据结构，最终存储的还是以key-value的方式，只不过value可以是链表，set，sorted set，hash table等。和memcached一样，所有的key都是string，而set，sorted set，hash table等具体存储的时候也用到了string。 而c没有现成的string，所以redis的首要任务就是实现一个string，取名叫sds（simple dynamic string），如下的代码， 非常简单的一个结构体，len存储改string的内存总长度，free表示还有多少字节没有使用，而buf存储具体的数据，显然len-free就是目前字符串的长度。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> len;</span><br><span class="line">    <span class="keyword">int</span> <span class="built_in">free</span>;</span><br><span class="line">    <span class="keyword">char</span> buf[];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p> 字符串解决了，所有的key都存成sds就行了，那么key和value怎么关联呢？key-value的格式在脚本语言中很好处理，直接使用字典即可，C没有字典，怎么办呢？自己写一个呗（redis十分热衷于造轮子）。看下面的代码，privdata存额外信息，用的很少，至少我们发现。 dictht是具体的哈希表，一个dict对应两张哈希表，这是为了扩容（包括rehashidx也是为了扩容）。dictType存储了哈希表的属性。redis还为dict实现了迭代器（所以说看起来像c++代码）。</p>
 <p> 哈希表的具体实现是和mc类似的做法，也是使用开链法来解决冲突，不过里面用到了一些小技巧。比如使用dictType存储函数指针，可以动态配置桶里面元素的操作方法。又比如dictht中保存的sizemask取size（桶的数量）-1，用它与key做&amp;操作来代替取余运算，加快速度等等。总的来看，dict里面有两个哈希表，每个哈希表的桶里面存储dictEntry链表，dictEntry存储具体的key和value。</p>
 <p> 前面说过，一个dict对于两个dictht，是为了扩容（其实还有缩容）。正常的时候，dict只使用dictht[0]，当dict[0]中已有entry的数量与桶的数量达到一定的比例后，就会触发扩容和缩容操作，我们统称为rehash，这时，为dictht[1]申请rehash后的大小的内存，然后把dictht[0]里的数据往dictht[1]里面移动，并用rehashidx记录当前已经移动万的桶的数量，当所有桶都移完后，rehash完成，这时将dictht[1]变成dictht[0], 将原来的dictht[0]变成dictht[1]，并变为null即可。不同于memcached，这里不用开一个后台线程来做，而是就在event loop中完成，并且rehash不是一次性完成，而是分成多次，每次用户操作dict之前，redis移动一个桶的数据，直到rehash完成。这样就把移动分成多个小移动完成，把rehash的时间开销均分到用户每个操作上，这样避免了用户一个请求导致rehash的时候，需要等待很长时间，直到rehash完成才有返回的情况。不过在rehash期间，每个操作都变慢了点，而且用户还不知道redis在他的请求中间添加了移动数据的操作，感觉redis太贱了 :-D</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span> &#123;</span></span><br><span class="line">    dictType *type;	<span class="comment">// 哈希表的相关属性void *privdata;	// 额外信息</span></span><br><span class="line">    dictht ht[<span class="number">2</span>];	<span class="comment">// 两张哈希表，分主和副，用于扩容int rehashidx; /* rehashing not in progress if rehashidx == -1 */ // 记录当前数据迁移的位置，在扩容的时候用的int iterators; /* number of iterators currently running */	// 目前存在的迭代器的数量</span></span><br><span class="line">&#125; dict;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictht</span> &#123;</span></span><br><span class="line">    dictEntry **table;  <span class="comment">// dictEntry是item，多个item组成hash桶里面的链表，table则是多个链表头指针组成的数组的指针unsigned long size;	// 这个就是桶的数量// sizemask取size - 1, 然后一个数据来的时候，通过计算出的hashkey, 让hashkey &amp; sizemask来确定它要放的桶的位置// 当size取2^n的时候，sizemask就是1...111，这样就和hashkey % size有一样的效果，但是使用&amp;会快很多。这就是原因unsigned long sizemask;  </span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> used;		<span class="comment">// 已经数值的dictEntry数量</span></span><br><span class="line">&#125; dictht;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictType</span> &#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">unsigned</span> <span class="title">int</span> <span class="params">(*hashFunction)</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span> *key)</span></span>;	 <span class="comment">// hash的方法void *(*keyDup)(void *privdata, const void *key);	// key的复制方法void *(*valDup)(void *privdata, const void *obj);	// value的复制方法int (*keyCompare)(void *privdata, const void *key1, const void *key2);	// key之间的比较void (*keyDestructor)(void *privdata, void *key);	// key的析构void (*valDestructor)(void *privdata, void *obj);	// value的析构</span></span><br><span class="line">&#125; dictType;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> &#123;</span></span><br><span class="line">    <span class="keyword">void</span> *key;</span><br><span class="line">    <span class="keyword">union</span> &#123;</span><br><span class="line">        <span class="keyword">void</span> *val;</span><br><span class="line">        <span class="keyword">uint64_t</span> u64;</span><br><span class="line">        <span class="keyword">int64_t</span> s64;</span><br><span class="line">    &#125; v;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125; dictEntry;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span> &#123;</span></span><br><span class="line">    dictType *type;	<span class="comment">// 哈希表的相关属性void *privdata;	// 额外信息</span></span><br><span class="line">    dictht ht[<span class="number">2</span>];	<span class="comment">// 两张哈希表，分主和副，用于扩容int rehashidx; /* rehashing not in progress if rehashidx == -1 */ </span></span><br><span class="line">    <span class="comment">// 记录当前数据迁移的位置，在扩容的时候用的int iterators; /* number of iterators currently running */	</span></span><br><span class="line">    <span class="comment">// 目前存在的迭代器的数量</span></span><br><span class="line">&#125; dict;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictht</span> &#123;</span></span><br><span class="line">    dictEntry **table;  <span class="comment">// dictEntry是item，多个item组成hash桶里面的链表，table则是多个链表头指针组成的数组的指针unsigned long size;	</span></span><br><span class="line">    <span class="comment">// 这个就是桶的数量</span></span><br><span class="line">    <span class="comment">// sizemask取size - 1, 然后一个数据来的时候，通过计算出的hashkey, 让hashkey &amp; sizemask来确定它要放的桶的位置</span></span><br><span class="line">    <span class="comment">// 当size取2^n的时候，sizemask就是1...111，这样就和hashkey % size有一样的效果，但是使用&amp;会快很多。这就是原因unsigned long sizemask;  </span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> used;		<span class="comment">// 已经数值的dictEntry数量</span></span><br><span class="line">&#125; dictht;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictType</span> &#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">unsigned</span> <span class="title">int</span> <span class="params">(*hashFunction)</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span> *key)</span></span>;	 <span class="comment">// hash的方法void *(*keyDup)(void *privdata, const void *key);	</span></span><br><span class="line">    <span class="comment">// key的复制方法void *(*valDup)(void *privdata, const void *obj);	</span></span><br><span class="line">    <span class="comment">// value的复制方法int (*keyCompare)(void *privdata, const void *key1, const void *key2);	</span></span><br><span class="line">    <span class="comment">// key之间的比较void (*keyDestructor)(void *privdata, void *key);	</span></span><br><span class="line">    <span class="comment">// key的析构void (*valDestructor)(void *privdata, void *obj);	</span></span><br><span class="line">    <span class="comment">// value的析构</span></span><br><span class="line">&#125; dictType;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> &#123;</span></span><br><span class="line">    <span class="keyword">void</span> *key;</span><br><span class="line">    <span class="keyword">union</span> &#123;</span><br><span class="line">        <span class="keyword">void</span> *val;</span><br><span class="line">        <span class="keyword">uint64_t</span> u64;</span><br><span class="line">        <span class="keyword">int64_t</span> s64;</span><br><span class="line">    &#125; v;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125; dictEntry;</span><br></pre></td></tr></table></figure>
 <p>   有了dict，数据库就好实现了。所有数据读存储在dict中，key存储成dictEntry中的key（string），用void* 指向一个redis object，它可以是5种类型中的任何一种。如下图，结构构造是这样，不过这个图已经过时了，有一些与redis3.0不符合的地方。</p>
 <p><img src="/2019/12/29/memcached与redis实现的对比/0.08015050971880555.png" alt="img"></p>
 <p> 五种type的对象，每一个都至少有两种底层实现方式。string有3种：REDIS_ENCODING_RAW, REDIS_ENCIDING_INT, REDIS_ENCODING_EMBSTR， list有：普通双向链表和压缩链表，压缩链表简单的说，就是讲数组改造成链表，连续的空间，然后通过存储字符串的大小信息来模拟链表，相对普通链表来说可以节省空间，不过有副作用，由于是连续的空间，所以改变内存大小的时候，需要重新分配，并且由于保存了字符串的字节大小，所有有可能引起连续更新（具体实现请详细看代码）。set有dict和intset（全是整数的时候使用它来存储）， sorted set有：skiplist和ziplist， hashtable实现有压缩列表和dict和ziplist。skiplist就是跳表，它有接近于红黑树的效率，但是实现起来比红黑树简单很多，所以被采用（奇怪，这里又不造轮子了，难道因为这个轮子有点难？）。 hash table可以使用dict实现，则改dict中，每个dictentry中key保存了key（这是哈希表中的键值对的key），而value则保存了value，它们都是string。 而set中的dict，每个dictentry中key保存了set中具体的一个元素的值，value则为null。图中的zset（有序集合）有误，zset使用skiplist和ziplist实现，首先skiplist很好理解，就把它当做红黑树的替代品就行，和红黑树一样，它也可以排序。怎么用ziplist存储zset呢？首先在zset中，每个set中的元素都有一个分值score，用它来排序。所以在ziplist中，按照分值大小，先存元素，再存它的score，再存下一个元素，然后score。这样连续存储，所以插入或者删除的时候，都需要重新分配内存。所以当元素超过一定数量，或者某个元素的字符数超过一定数量，redis就会选择使用skiplist来实现zset（如果当前使用的是ziplist，会将这个ziplist中的数据取出，存入一个新的skiplist，然后删除改ziplist，这就是底层实现转换，其余类型的redis object也是可以转换的）。 另外，ziplist如何实现hashtable呢？其实也很简单，就是存储一个key，存储一个value，再存储一个key，再存储一个value。还是顺序存储，与zset实现类似，所以当元素超过一定数量，或者某个元素的字符数超过一定数量时，就会转换成hashtable来实现。各种底层实现方式是可以转换的，redis可以根据情况选择最合适的实现方式，这也是这样使用类似面向对象的实现方式的好处。</p>
@@ -457,7 +487,7 @@
 <h3 id="5-4-1-RDB持久化"><a href="#5-4-1-RDB持久化" class="headerlink" title="5.4.1 RDB持久化"></a>5.4.1 RDB持久化</h3><p>用户执行save或者bgsave的时候，就会触发RDB持久化操作。RDB持久化操作的核心思想就是把数据库原封不动的保存在文件里。</p>
 <p> 那如何存储呢？如下图， 首先存储一个REDIS字符串，起到验证的作用，表示是RDB文件，然后保存redis的版本信息，然后是具体的数据库，然后存储结束符EOF，最后用检验和。关键就是databases，看它的名字也知道，它存储了多个数据库，数据库按照编号顺序存储，0号数据库存储完了，才轮到1，然后是2, 一直到最后一个数据库。</p>
 <p><img src="/2019/12/29/memcached与redis实现的对比/0.9401236739940941.png" alt="img"></p>
-<p>​  每一个数据库存储方式如下，首先一个1字节的常量SELECTDB，表示切换db了，然后下一个接上数据库的编号，它的长度是可变的，然后接下来就是具体的key-value对的数据了。</p>
+<p>  每一个数据库存储方式如下，首先一个1字节的常量SELECTDB，表示切换db了，然后下一个接上数据库的编号，它的长度是可变的，然后接下来就是具体的key-value对的数据了。</p>
 <p><img src="/2019/12/29/memcached与redis实现的对比/0.19187591481022537.png" alt="img"></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">rdbSaveKeyValuePair</span><span class="params">(rio *rdb, robj *key, robj *val,</span></span></span><br><span class="line"><span class="function"><span class="params">                        <span class="keyword">long</span> <span class="keyword">long</span> expiretime, <span class="keyword">long</span> <span class="keyword">long</span> now)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/* Save the expire time */</span><span class="keyword">if</span> (expiretime != <span class="number">-1</span>) &#123;</span><br><span class="line">        <span class="comment">/* If this key is already expired skip it */</span><span class="keyword">if</span> (expiretime &lt; now) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (rdbSaveType(rdb,REDIS_RDB_OPCODE_EXPIRETIME_MS) == <span class="number">-1</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">if</span> (rdbSaveMillisecondTime(rdb,expiretime) == <span class="number">-1</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Save type, key, value */</span><span class="keyword">if</span> (rdbSaveObjectType(rdb,val) == <span class="number">-1</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">if</span> (rdbSaveStringObject(rdb,key) == <span class="number">-1</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">if</span> (rdbSaveObject(rdb,val) == <span class="number">-1</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>由上面的代码也可以看出，存储的时候，先检查expire time，如果已经过期，不存就行了，否则，则将expire time存下来，注意，及时是存储expire time，也是先存储它的类型为REDIS_RDB_OPCODE_EXPIRETIME_MS，然后再存储具体过期时间。接下来存储真正的key-value对，首先存储value的类型，然后存储key（它按照字符串存储），然后存储value，如下图。</p>
@@ -465,7 +495,7 @@
 <p>在rdbsaveobject中，会根据val的不同类型，按照不同的方式存储，不过从根本上来看，最终都是转换成字符串存储，比如val是一个linklist，那么先存储整个list的字节数，然后遍历这个list，把数据取出来，依次按照string写入文件。对于hash table，也是先计算字节数，然后依次取出hash table中的dictEntry，按照string的方式存储它的key和value，然后存储下一个dictEntry。 总之，RDB的存储方式，对一个key-value对，会先存储expire time（如果有的话），然后是value的类型，然后存储key（字符串方式），然后根据value的类型和底层实现方式，将value转换成字符串存储。这里面为了实现数据压缩，以及能够根据文件恢复数据，redis使用了很多编码的技巧，有些我也没太看懂，不过关键还是要理解思想，不要在意这些细节。</p>
 <p> 保存了RDB文件，当redis再启动的时候，就根据RDB文件来恢复数据库。由于以及在RDB文件中保存了数据库的号码，以及它包含的key-value对，以及每个key-value对中value的具体类型，实现方式，和数据，redis只要顺序读取文件，然后恢复object即可。由于保存了expire time，发现当前的时间已经比expire time大了，即数据已经超时了，则不恢复这个key-value对即可。</p>
 <p> 保存RDB文件是一个很巨大的工程，所以redis还提供后台保存的机制。即执行bgsave的时候，redis fork出一个子进程，让子进程来执行保存的工作，而父进程继续提供redis正常的数据库服务。由于子进程复制了父进程的地址空间，即子进程拥有父进程fork时的数据库，子进程执行save的操作，把它从父进程那儿继承来的数据库写入一个temp文件即可。在子进程复制期间，redis会记录数据库的修改次数（dirty）。当子进程完成时，发送给父进程SIGUSR1信号，父进程捕捉到这个信号，就知道子进程完成了复制，然后父进程将子进程保存的temp文件改名为真正的rdb文件（即真正保存成功了才改成目标文件，这才是保险的做法）。然后记录下这一次save的结束时间。</p>
-<p>​  这里有一个问题，在子进程保存期间，父进程的数据库已经被修改了，而父进程只是记录了修改的次数（dirty），被没有进行修正操作。似乎使得RDB保存的不是实时的数据库，有点不太高大上的样子。 不过后面要介绍的AOF持久化，就解决了这个问题。</p>
+<p>  这里有一个问题，在子进程保存期间，父进程的数据库已经被修改了，而父进程只是记录了修改的次数（dirty），被没有进行修正操作。似乎使得RDB保存的不是实时的数据库，有点不太高大上的样子。 不过后面要介绍的AOF持久化，就解决了这个问题。</p>
 <p> 除了客户执行sava或者bgsave命令，还可以配置RDB保存条件。即在配置文件中配置，在t时间内，数据库被修改了dirty次，则进行后台保存。redis在serve cron的时候，会根据dirty数目和上次保存的时间，来判断是否符合条件，符合条件的话，就进行bg save，注意，任意时刻只能有一个子进程来进行后台保存，因为保存是个很费io的操作，多个进程大量io效率不行，而且不好管理。</p>
 <h3 id="5-4-2-AOF持久化"><a href="#5-4-2-AOF持久化" class="headerlink" title="5.4.2 AOF持久化"></a>5.4.2 AOF持久化</h3><p>  首先想一个问题，保存数据库一定需要像RDB那样把数据库里面的所有数据保存下来么？有没有别的方法？</p>
 <p>  RDB保存的只是最终的数据库，它是一个结果。结果是怎么来的？是通过用户的各个命令建立起来的，所以可以不保存结果，而只保存建立这个结果的命令。 redis的AOF就是这个思想，它不同RDB保存db的数据，它保存的是一条一条建立数据库的命令。</p>
@@ -480,7 +510,7 @@
 <h2 id="5-5-redis的事务"><a href="#5-5-redis的事务" class="headerlink" title="5.5 redis的事务"></a>5.5 redis的事务</h2><p> redis另一个比memcached强大的地方，是它支持简单的事务。事务简单说就是把几个命令合并，一次性执行全部命令。对于关系型数据库来说，事务还有回滚机制，即事务命令要么全部执行成功，只要有一条失败就回滚，回到事务执行前的状态。redis不支持回滚，它的事务只保证命令依次被执行，即使中间一条命令出错也会继续往下执行，所以说它只支持简单的事务。</p>
 <p> 首先看redis事务的执行过程。首先执行multi命令，表示开始事务，然后输入需要执行的命令，最后输入exec执行事务。 redis服务器收到multi命令后，会将对应的client的状态设置为REDIS_MULTI，表示client处于事务阶段，并在client的multiState结构体里面保持事务的命令具体信息（当然首先也会检查命令是否能否识别，错误的命令不会保存），即命令的个数和具体的各个命令，当收到exec命令后，redis会顺序执行multiState里面保存的命令，然后保存每个命令的返回值，当有命令发生错误的时候，redis不会停止事务，而是保存错误信息，然后继续往下执行，当所有的命令都执行完后，将所有命令的返回值一起返回给客户。redis为什么不支持回滚呢？网上看到的解释出现问题是由于客户程序的问题，所以没必要服务器回滚，同时，不支持回滚，redis服务器的运行高效很多。在我看来，redis的事务不是传统关系型数据库的事务，要求CIAD那么非常严格，或者说redis的事务都不是事务，只是提供了一种方式，使得客户端可以一次性执行多条命令而已，就把事务当做普通命令就行了，支持回滚也就没必要了。</p>
 <p>   <img src="/2019/12/29/memcached与redis实现的对比/0.5104974769055843.png" alt="img"></p>
-<p>​  我们知道redis是单event loop的，在真正执行一个事物的时候（即redis收到exec命令后），事物的执行过程是不会被打断的，所有命令都会在一个event loop中执行完。但是在用户逐个输入事务的命令的时候，这期间，可能已经有别的客户修改了事务里面用到的数据，这就可能产生问题。所以redis还提供了watch命令，用户可以在输入multi之前，执行watch命令，指定需要观察的数据，这样如果在exec之前，有其他的客户端修改了这些被watch的数据，则exec的时候，执行到处理被修改的数据的命令的时候，会执行失败，提示数据已经dirty。 这是如何是实现的呢？ 原来在每一个redisDb中还有一个dict watched_keys，watched_kesy中dictentry的key是被watch的数据库的key，而value则是一个list，里面存储的是watch它的client。同时，每个client也有一个watched_keys，里面保存的是这个client当前watch的key。在执行watch的时候，redis在对应的数据库的watched_keys中找到这个key（如果没有，则新建一个dictentry），然后在它的客户列表中加入这个client，同时，往这个client的watched_keys中加入这个key。当有客户执行一个命令修改数据的时候，redis首先在watched_keys中找这个key，如果发现有它，证明有client在watch它，则遍历所有watch它的client，将这些client设置为REDIS_DIRTY_CAS，表面有watch的key被dirty了。当客户执行的事务的时候，首先会检查是否被设置了REDIS_DIRTY_CAS，如果是，则表明数据dirty了，事务无法执行，会立即返回错误，只有client没有被设置REDIS_DIRTY_CAS的时候才能够执行事务。 需要指出的是，执行exec后，该client的所有watch的key都会被清除，同时db中该key的client列表也会清除该client，即执行exec后，该client不再watch任何key（即使exec没有执行成功也是一样）。所以说redis的事务是简单的事务，算不上真正的事务。</p>
+<p>  我们知道redis是单event loop的，在真正执行一个事物的时候（即redis收到exec命令后），事物的执行过程是不会被打断的，所有命令都会在一个event loop中执行完。但是在用户逐个输入事务的命令的时候，这期间，可能已经有别的客户修改了事务里面用到的数据，这就可能产生问题。所以redis还提供了watch命令，用户可以在输入multi之前，执行watch命令，指定需要观察的数据，这样如果在exec之前，有其他的客户端修改了这些被watch的数据，则exec的时候，执行到处理被修改的数据的命令的时候，会执行失败，提示数据已经dirty。 这是如何是实现的呢？ 原来在每一个redisDb中还有一个dict watched_keys，watched_kesy中dictentry的key是被watch的数据库的key，而value则是一个list，里面存储的是watch它的client。同时，每个client也有一个watched_keys，里面保存的是这个client当前watch的key。在执行watch的时候，redis在对应的数据库的watched_keys中找到这个key（如果没有，则新建一个dictentry），然后在它的客户列表中加入这个client，同时，往这个client的watched_keys中加入这个key。当有客户执行一个命令修改数据的时候，redis首先在watched_keys中找这个key，如果发现有它，证明有client在watch它，则遍历所有watch它的client，将这些client设置为REDIS_DIRTY_CAS，表面有watch的key被dirty了。当客户执行的事务的时候，首先会检查是否被设置了REDIS_DIRTY_CAS，如果是，则表明数据dirty了，事务无法执行，会立即返回错误，只有client没有被设置REDIS_DIRTY_CAS的时候才能够执行事务。 需要指出的是，执行exec后，该client的所有watch的key都会被清除，同时db中该key的client列表也会清除该client，即执行exec后，该client不再watch任何key（即使exec没有执行成功也是一样）。所以说redis的事务是简单的事务，算不上真正的事务。</p>
 <p> 以上就是redis的事务，感觉实现很简单，实际用处也不是太大。</p>
 <h2 id="5-6-redis的发布订阅频道"><a href="#5-6-redis的发布订阅频道" class="headerlink" title="5.6 redis的发布订阅频道"></a>5.6 redis的发布订阅频道</h2><p> redis支持频道，即加入一个频道的用户相当于加入了一个群，客户往频道里面发的信息，频道里的所有client都能收到。</p>
 <p> 实现也很简单，也watch_keys实现差不多，redis server中保存了一个pubsub_channels的dict，里面的key是频道的名称（显然要唯一了），value则是一个链表，保存加入了该频道的client。同时，每个client都有一个pubsub_channels，保存了自己关注的频道。当用用户往频道发消息的时候，首先在server中的pubsub_channels找到改频道，然后遍历client，给他们发消息。而订阅，取消订阅频道不够都是操作pubsub_channels而已，很好理解。</p>
@@ -533,6 +563,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/27/Linux命令-netstat/" rel="prev" title="Linux命令 - netstat">
+                Linux命令 - netstat <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -610,7 +644,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">35</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -635,7 +669,29 @@
                     
                       
                     
-                    <span class="site-state-item-count">6</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -678,7 +734,71 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">47</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1307,6 +1427,13 @@
   
 
   
+  
+
+  
+  
+
+  
+
 
   
   

@@ -116,7 +116,7 @@
 
 
   <meta name="description" content="作者 | Draveness 本文作者 Draveness，文章转载自 https://draveness.me/zookeeper-chubby， 对其内容进行过编辑。 这篇文章主要会介绍 Zookeeper 的实现原理以及常见的应用 在 2006 年，Google 发表了一篇名为 The Chubby lock service for loosely-coupled distributed s">
-<meta name="keywords" content="tech">
+<meta name="keywords" content="zookeeper,分布式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="详解分布式协调服务 ZooKeeper">
 <meta property="og:url" content="https://vincentruan.github.io/2018/10/07/详解分布式协调服务-ZooKeeper/index.html">
@@ -141,7 +141,7 @@
 <meta property="og:image" content="https://vincentruan.github.io/2018/10/07/详解分布式协调服务-ZooKeeper/FE4VibF0SjfNC55Nwr7XreFBdYW0Q4icTgf97vCKocKsSdxkFHv6dSkVVBib7FBptgKSk3iaZw2GnPB9JILiarMttsg.png">
 <meta property="og:image" content="https://vincentruan.github.io/2018/10/07/详解分布式协调服务-ZooKeeper/FE4VibF0SjfNC55Nwr7XreFBdYW0Q4icTgZTwRH2NybwfgpMTD8gOUAT2k6NAG2MAE3UEpJTLic29Zu6HO1iac7dsA.png">
 <meta property="og:image" content="https://vincentruan.github.io/2018/10/07/详解分布式协调服务-ZooKeeper/FE4VibF0SjfNC55Nwr7XreFBdYW0Q4icTgicZX3XWkhCibYLhs7bo1XoibRfNoS05Rrhk76Yowaw8RMlv3X0MXA5BfA.png">
-<meta property="og:updated_time" content="2018-10-07T05:24:39.622Z">
+<meta property="og:updated_time" content="2020-02-17T02:40:44.899Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="详解分布式协调服务 ZooKeeper">
 <meta name="twitter:description" content="作者 | Draveness 本文作者 Draveness，文章转载自 https://draveness.me/zookeeper-chubby， 对其内容进行过编辑。 这篇文章主要会介绍 Zookeeper 的实现原理以及常见的应用 在 2006 年，Google 发表了一篇名为 The Chubby lock service for loosely-coupled distributed s">
@@ -382,16 +382,46 @@
                 
               
 
-              <time title="创建时间：2018-10-07 12:14:40 / 修改时间：13:24:39" itemprop="dateCreated datePublished" datetime="2018-10-07T12:14:40+08:00">2018-10-07</time>
+              <time title="创建时间：2018-10-07 12:14:40" itemprop="dateCreated datePublished" datetime="2018-10-07T12:14:40+08:00">2018-10-07</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/架构设计/" itemprop="url" rel="index"><span itemprop="name">架构设计</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -548,6 +578,14 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/zookeeper/" rel="tag"># zookeeper</a>
+          
+            <a href="/tags/分布式/" rel="tag"># 分布式</a>
+          
+        </div>
+      
 
       
       
@@ -647,7 +685,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">35</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -672,7 +710,29 @@
                     
                       
                     
-                    <span class="site-state-item-count">6</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -715,7 +775,71 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">47</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1344,6 +1468,13 @@
   
 
   
+  
+
+  
+  
+
+  
+
 
   
   
