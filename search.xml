@@ -13,17 +13,7 @@
 <h3 id="2、PERSISTENT-SEQUENTIAL-持久化顺序编号目录节点"><a href="#2、PERSISTENT-SEQUENTIAL-持久化顺序编号目录节点" class="headerlink" title="2、PERSISTENT_SEQUENTIAL-持久化顺序编号目录节点"></a>2、PERSISTENT_SEQUENTIAL-持久化顺序编号目录节点</h3><p>客户端与zookeeper断开连接后，该节点依旧存在，只是Zookeeper给该节点名称进行顺序编号</p>
 <h3 id="3、EPHEMERAL-临时目录节点"><a href="#3、EPHEMERAL-临时目录节点" class="headerlink" title="3、EPHEMERAL-临时目录节点"></a>3、EPHEMERAL-临时目录节点</h3><p>客户端与zookeeper断开连接后，该节点被删除</p>
 <h3 id="4、EPHEMERAL-SEQUENTIAL-临时顺序编号目录节点"><a href="#4、EPHEMERAL-SEQUENTIAL-临时顺序编号目录节点" class="headerlink" title="4、EPHEMERAL_SEQUENTIAL-临时顺序编号目录节点"></a>4、EPHEMERAL_SEQUENTIAL-临时顺序编号目录节点</h3><p>客户端与zookeeper断开连接后，该节点被删除，只是Zookeeper给该节点名称进行顺序编号</p>
-<pre class="mermaid">graph TB;
-    A["/"]---B["/NameServer"]---F["/Server1"];
-    A---C["/Configuration"];
-    A---D["/GroupMembers"]---M1["/Member1"];
-    A---E["/Apps"]---A1["/App1"];
-    B---G["/Server2"];
-    D---M2["/Member2"];
-    E---A2["/App2"];
-    E---A3["/App3"]---SA1["/SubApp1"];
-    A3---SA2["/SubApp2"];</pre>
-
+<p><img src="/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zk_dir_tree.png" alt=""></p>
 <h2 id="5-Zookeeper通知机制"><a href="#5-Zookeeper通知机制" class="headerlink" title="5.Zookeeper通知机制"></a>5.Zookeeper通知机制</h2><p>client端会对某个znode建立一个watcher事件，当该znode发生变化时，这些client会收到zk的通知，然后client可以根据znode变化来做出业务上的改变等。</p>
 <h2 id="6-Zookeeper做了什么？"><a href="#6-Zookeeper做了什么？" class="headerlink" title="6.Zookeeper做了什么？"></a>6.Zookeeper做了什么？</h2><p>1、命名服务</p>
 <p>2、配置管理</p>
