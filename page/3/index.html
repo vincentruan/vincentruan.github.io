@@ -355,6 +355,916 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/04/大规模网站架构的缓存机制和几何分形学/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vincent">
+      <meta itemprop="description" content="The King is dead, long live the King!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/04/大规模网站架构的缓存机制和几何分形学/" itemprop="url">
+                  大规模网站架构的缓存机制和几何分形学
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-04 17:42:42" itemprop="dateCreated datePublished" datetime="2020-02-04T17:42:42+08:00">2020-02-04</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/缓存/" itemprop="url" rel="index"><span itemprop="name">缓存</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>缓存机制在我们的实际研发工作中，被极其广泛地应用，通过这些缓存机制来提升系统交互的效率。简单的总结来说，就是在两个环节或者系统之间，会引入一个cache/buffer做为提升整体效率的角色。</p>
+<p>而 有趣的是，这种缓存机制令人惊奇并且优美的遵循着“几何分形”的规律，也就是几何分形学中的“自相似性”：从整体上看遵循某种组成规律或者特性，同时从每 一个局部看，仍然遵循某种组成的规律或者特性。我们的这些系统，从整体上看遵循了缓存机制，每一个组成的局部也遵循缓存机制。</p>
+<p>等同类比的一个概念，我们常常说的“空间换时间”，牺牲一部分空间代价，来换取整体效率的提升。</p>
+<pre class="mermaid">graph LR
+A[A] ==> B(Cache) ==> C[B]
+C[B] ==> B(Cache) ==> A[A]</pre>
+
+<p>例如A和B两者之间的数据交换，为了提升整体的效率，引入角色C，而C被用于当做热点数据的存储，或者是某种中间处理的机制。</p>
+<p>我们先从web前端层面开始，看看有哪些比较关键的缓存机制？它们又是怎样协调工作的呢？</p>
+<h1 id="一、前端Cache机制"><a href="#一、前端Cache机制" class="headerlink" title="一、前端Cache机制"></a><strong>一、前端Cache机制</strong></h1><h2 id="1-域名转为IP地址（域名服务器DNS缓存）"><a href="#1-域名转为IP地址（域名服务器DNS缓存）" class="headerlink" title="1. 域名转为IP地址（域名服务器DNS缓存）"></a><strong>1. 域名转为IP地址（域名服务器DNS缓存）</strong></h2><p>我们知道域名其实只是一个别名，真实的服务器请求地址，实际上是一个IP地址。获得IP地址的方式，就是查询DNS映射表。虽然这是一个非常简单的查询， 但如果每次用户访问一个url都去查询DNS一次，未免显得太频繁，会产生一个可怕的访问量级。DNS服务器会告诉你，你别老是经常过来，万一我挂了，我们就无法愉快地玩耍了。</p>
+<p>各个浏览器的缓存时间，会有一定的差别。例如，在chrome浏览器中查看dns的缓存时间的方式是：chrome://net-internals/#dns。</p>
+<p>浏览器一般会在本地会建立一个DNS缓存，在一段比较长的时间里，都是使用本地的缓存映射。例如，在Win7系统的cmd里，可以通过“ipconfig /flushdns ”的方式来立刻刷新本地DNS。</p>
+<pre class="mermaid">graph LR
+A[浏览器] ==> B(Cache) ==> C[DNS]
+C[DNS] ==> B(Cache) ==> A[浏览器]</pre>
+
+<p>优点：域名映射为IP非常快。</p>
+<p>成本：消耗一定的浏览器空间来存储映射关系</p>
+<h2 id="2-访问服务器，获取静态内容（地理位置分布式服务CDN）"><a href="#2-访问服务器，获取静态内容（地理位置分布式服务CDN）" class="headerlink" title="2. 访问服务器，获取静态内容（地理位置分布式服务CDN）"></a><strong>2. 访问服务器，获取静态内容（地理位置分布式服务CDN）</strong></h2><p>可能有人会觉得，这个CDN不是缓存。其实，CDN的原理就是将离你很远的东西，放在离你很近的地方，通过这种方式提高用户的访问速度。从这个角 度，它也可以理解为牺牲空间成本换取了时间，本质上也是一种特殊的中间cache。腾讯、阿里等这些大的一线互联网公司一般倾向于自己建立CDN系统，中 小型企业也经常使用第三方的CDN服务。</p>
+<pre class="mermaid">graph LR
+A[浏览器] ==> B(CDN) ==> C[很远的服务器]
+C[很远的服务器] ==> B(Cache) ==> A[浏览器]</pre>
+
+<p>优点：解决用户离服务器太远的时候，网络路由中跳来跳去的严重耗时。</p>
+<p>成本：全国各地部署多套静态存储服务，管理成本比较高，发布新文件的时候，需要等待全国节点的更新等。</p>
+<h2 id="3-浏览器本地缓存（无网络交互类型）"><a href="#3-浏览器本地缓存（无网络交互类型）" class="headerlink" title="3. 浏览器本地缓存（无网络交互类型）"></a><strong>3. 浏览器本地缓存（无网络交互类型）</strong></h2><p>在前端优化原则中，其中一条就是尽量消灭请求，以达到降低服务器压力和提升用户体验的效果。静态文件，例如Js、html、css、图片等内容，很多内容可以1次请求，然后未来就直接访问本地，不再请求web服务器。</p>
+<p>常用的实现方法是通过Http协议头中的expire和max-age来控制，这两者的使用方法和区别，我这里就不赘叙了。还有一种HTML5中很热的方式，则是localStorage，尤其在移动端也被做为一个强大的缓存，甚至当做一种本地存储来广泛使用。</p>
+<pre class="mermaid">graph LR
+A[浏览器] ==> B(本地缓存localStore) ==> C[web服务器]
+C[web服务器] ==> B(本地缓存localStore) ==> A[浏览器]</pre>
+
+<p>优点：减少网络传输，加快页面内容展示速度，提升用户体验。</p>
+<p>成本：占用客户端的部分内存和磁盘，影响实时性。</p>
+<h2 id="4-浏览器和web服务协议缓存（有网络交互类型）"><a href="#4-浏览器和web服务协议缓存（有网络交互类型）" class="headerlink" title="4. 浏览器和web服务协议缓存（有网络交互类型）"></a><strong>4. 浏览器和web服务协议缓存（有网络交互类型）</strong></h2><p>浏览器的本地缓存是存在过期时间的，一旦过期，就必须重新向服务器请求。这个时候，会有两种情形：</p>
+<p>服务器的文件或者内容没有更新，可以继续使用浏览器本地缓存。</p>
+<p>服务器的文件或者内容已经更新，需要重新请求，通过网络传输新的文件或者内容。</p>
+<p>这里的协商方式也可以通过Http协议来控制，Last-Modified和Etag，这个时候请求服务器，如果是内容没有发生变更的情况，服务器会返回 304 Not Modified。这样的话，就不需要每次访问服务器都通过网络传输一个比较大的文件或者数据包，只要简单的http应答就可以达到相同的请求文件效果。</p>
+<pre class="mermaid">graph LR
+A[浏览器] ==> B(Last-MofifiedEtag机制) ==> C[web服务器]
+C[web服务器] ==> B(Last-MofifiedEtag机制) ==> A[浏览器]</pre>
+下图中的例子，是腾讯的自建CDN（imgcache.gtime.cn）：
+![image-20200204180300749](大规模网站架构的缓存机制和几何分形学/image-20200204180300749.png)
+
+优点：减少频繁的网络大数据包传输，节约带宽，提升用户体验。
+
+成本：增加了服务器处理的步骤，消耗更多的CPU资源。
+
+## **5. 浏览器中间代理**
+
+上面的几种cache机制，实际上都是非常常见。但是，在移动互联网时代，流量昂贵是很多用户心中深深的痛。于是，又出现了一种新型的中间cache， 也就是在浏览器和web服务器再架设一个中间代理。这个代理服务器会帮助手机浏览器去请求web页面，然后将web页面进行处理和压缩（例如压缩文件和图片），使页面变小，然后再传输给手机端的浏览器。
+
+<pre class="mermaid">graph LR
+A[手机浏览器] ==> B(浏览器商的中间代理服务器) ==> C[压缩后的Html和图片] ==> A[手机浏览器]
+B(浏览器商的中间代理服务器) ==> D[www.qq.com的web服务器]
+D[www.qq.com的web服务器] ==> B(浏览器商的中间代理服务器)</pre>
+部分手机浏览器（例如Chrome）号称可以节省流量，提升访问速度，实际上就是上述做法。但是，也分为两种情况：
+
+- 用户的网络和手机配置都比较差，因为页面被压缩变小，加载和传输速度变快，并且节约了流量。
+- 用户的网络和手机配置都比较好，本身直连速度已经很快了，反而因为设置了中间代理，加载速度变慢，也可节约流量。
+
+下图是chrome手机浏览器中，开启和不开启中间代理的对比图：
+
+![image-20200204180713768](大规模网站架构的缓存机制和几何分形学/image-20200204180713768.png)
+
+优点：节约用户流量，大部分情况下提升了加载速度。
+
+成本：需要架设中间代理服务器，对各种文件进行压缩，有比较高的服务器维护成本。
+
+## **6. 预加载缓存机制**
+
+这种加载方式主要流行在移动端，为了解决手机网速慢和浏览器加载性能问题，浏览器会判断页面的关联内容，进行“预加载”。 也就是说，在用户浏览A页面的时候，就提前下载并且加载B页面的内容。给用户的体验就是，B页面一瞬间就出现了，中间没有任何延迟的感觉，从而带来更好的 极佳的用户体验。
+
+这种实现机制，往往由浏览器来实现，当然，手机页面本身，也可以通过JS来自身实现。而这种机制也存在一些问题，浏览器需要预判用户的浏览行为，在一些场景下，这个预判算法本身不一定准确，如果不准确则带来一定的流量、内存和系统资源的浪费。
+
+<pre class="mermaid">graph LR
+A[浏览器] ==> C[页面内容A]
+A[浏览器] -.- B(预加载) -.-> D[页面内容B]
+A[浏览器] -.- E(预加载) -.-> F[页面内容C/D/E/...]</pre>
+
+<p>优点：给用户带来极佳的页面展示体验。</p>
+<p>缺点：预判实现比较复杂，占据一定的内存和手机系统资源，可能产生流量和资源浪费。</p>
+<p>前端的cache当然不仅仅如此简单，如果细致到每一个小环节和组成部分，我们会发现实际上是无处不在的，例如浏览器的渲染行为、网络网卡的传输环节，小环节和小环节之间也有无数这种类型的cache角色。</p>
+<p>这个就如同几何分形学中的自相似性：从整体上看符合某种组成规律或者特性，同时，从局部看，仍然符合某种组成的规律或者特性。</p>
+<p>几何分形的现象在我们生活中，也是非常常见的，例如：</p>
+<p>人体中的几何分形例子，例如：人体有1个头部+4肢，局部上看人的手指也是1个手指头+4个手指；人体无论整体或者局部，都大致遵循黄金分割点0.618的比例来生长（五官按照这个比例越多，越好看）。</p>
+<p>例如下图中的叶子，每个局部都和主干组成结构相似。</p>
+<p><img src="/2020/02/04/大规模网站架构的缓存机制和几何分形学/image-20200204181000405.png" alt="image-20200204181000405"></p>
+<h1 id="二、Web系统和几何分形学"><a href="#二、Web系统和几何分形学" class="headerlink" title="二、Web系统和几何分形学"></a><strong>二、Web系统和几何分形学</strong></h1><h2 id="1-Web系统中的缓存机制"><a href="#1-Web系统中的缓存机制" class="headerlink" title="1. Web系统中的缓存机制"></a><strong>1. Web系统中的缓存机制</strong></h2><p>看完上面的前端cache，我们会感觉到缓存机制在前端中的确无处不在，那么它在其他地方和环节，是否也无处不在？</p>
+<p>可以看看这张图：</p>
+<pre class="mermaid">graph TB
+A[浏览器] ==> C[前端cache机制] ==> D[web服务器]
+D[web服务器] ==> C[前端cache机制] ==> A[浏览器]
+D[web服务器] ==放大web服务器==> B(memcache缓存) ==> E[MySQL]
+B(memcache缓存) ==> F[Apache]
+E[MySQL] ==> B(memcache缓存)
+F[Apache] ==> B(memcache缓存)
+E[MySQL] ==放大MySQL==> G(innodb_buffer_pool存放热点数据) ==> H[MySQL内部数据]
+G(innodb_buffer_pool存放热点数据) ==> I[外界请求]
+H[MySQL内部数据] ==> G(innodb_buffer_pool存放热点数据)
+I[外界请求] ==> G(innodb_buffer_pool存放热点数据)</pre>
+
+<p>实际上，每一个环节本身是可以又再次被放大的，放大以后，我们又看见了更多缓存机制的“特性”存在。从一个整体来看，符合该规律，从组成部分来看，仍然符合该规律。</p>
+<p>每一个组成缓存机制的“成员”的内部，又存在着更多的缓存机制。</p>
+<p>Apache内部的一些“缓存机制”：</p>
+<ul>
+<li>url映射缓存mod_cache（有mode_disk_cache和mod_mem_cache，后者官方已不推荐）</li>
+<li>缓存热点文件打开描述符mod_file_cache（对于静态文件的情况，减少打开文件中open行为的耗时）</li>
+<li>启动的时候，通过prefork模式设置的StartServers服务进程池，牺牲内存空间。</li>
+</ul>
+<p>MySQL内的一些“缓存机制”：</p>
+<ul>
+<li>数据库的索引，牺牲磁盘空间（组合索引等会占据很大的磁盘空间）</li>
+<li>innodb_buffer_pool_size，热点数据的缓存，牺牲内存空间</li>
+<li>innodb_flush_method写入磁盘的机制，可以配置成缓冲写入的方式</li>
+<li>query_cache_size查询缓存，牺牲内存空间</li>
+<li>thread_cache_size数据库连接池的缓存个数，牺牲内存空间</li>
+</ul>
+<h2 id="2-接近硬件层面的“空间换时间”"><a href="#2-接近硬件层面的“空间换时间”" class="headerlink" title="2. 接近硬件层面的“空间换时间”"></a><strong>2. 接近硬件层面的“空间换时间”</strong></h2><p>那我们再来看更细小的一个环节，计算机写的操作。我们会发现，在内存和物理磁盘之间，还有一个磁盘缓冲区（页高速缓存）的存在，这个是内存和磁盘之间的“缓存”。当然，读取的操作也是同理。</p>
+<p>下图是“放大”MySQL中的写入磁盘：</p>
+<pre class="mermaid">graph LR
+A[外界请求] ==> C[innodb_buffer_pool存放热点数据] ==> B[MySQL内部数据]
+B[MySQL内部数据] ==> C[innodb_buffer_pool存放热点数据] ==> A[外界请求]
+B[MySQL内部数据] ==放大写入数据==> D[磁盘写入缓冲区在内存中] ==> E[MySQL] ==队列满或超时==> F[物理磁盘]
+G[内存] ==> D[磁盘写入缓冲区在内存中]</pre>
+
+<p>实际上，更进一步看，CPU和内存之间也存在缓存机制（常用指令会存在放在寄存器中，因为CPU访问寄存器会远快于访问内存，中间为了缓冲它们之间差距，设置了多级高速缓存）。</p>
+<pre class="mermaid">graph LR
+A[Mem] ==Bus总线==> B[L3 Cache] ==> C[L2 Cache] ==> D[L1 Cache] ==> E[CPU core]
+E[CPU core] ==> D[L1 Cache] ==> C[L2 Cache] ==> B[L3 Cache] ==Bus总线==> A[Mem]</pre>
+
+<p>例如下图是Intel i7 920的各级缓存大小：</p>
+<p><img src="/2020/02/04/大规模网站架构的缓存机制和几何分形学/image-20200204195827800.png" alt="image-20200204195827800"></p>
+<p>这个时候，我们可以看出来，计算机系统从大的系统层面看，是遵循“缓存机制”的规律的，同时，在每个局部成员的层面，同样遵循该规律。</p>
+<h2 id="3-现实世界中的“缓存机制”"><a href="#3-现实世界中的“缓存机制”" class="headerlink" title="3. 现实世界中的“缓存机制”"></a><strong>3. 现实世界中的“缓存机制”</strong></h2><p>我们现在喝水通常使用的是杯子，杯子实际上也扮演着一个特殊的Cache角色。举个例子：一个人离饮水机比较远，他渴了，他有如下两种“喝水”的方式：</p>
+<ul>
+<li>不用杯子，每次渴了直接去饮水机喝（这个比较霸气侧漏，不要在意细节）。结果：频繁跑动，耗费体力。</li>
+<li>使用杯子，渴了先喝杯子（Cache）上的水，如果杯子没有，带上杯子去装水，再喝。结果：比较少跑动，节省体力。</li>
+</ul>
+<p>这样看不直观，简化为一个流程图如下：</p>
+<pre class="mermaid">graph LR
+A((人)) -.口渴则过去喝.-> B[比较远的饮水机]
+A((人)) ==> D[杯子 Cache] --杯子空则过去--> B[比较远的饮水机]</pre>
+
+<p>这虽然是个人尽皆知的道理，但是，这个方法本身是“进化”出来的。百万年前的原始人类和其他大自然的动物一样的，喝水遵循了第一种方式，只是随着人类的发展，“进化”出第二种喝水的方式。</p>
+<p>这里也存在一个缓存机制，就是用杯子的空间获取喝水效率的时间。</p>
+<p>还有一个更为典型的例子，就是坐车/运输，假设我们从深圳去广州，我们会去坐客运车。而客运车（假设上面有40个 座位）实际上相当于一个40个座位的“队列”。遵循着网络传输的相同的规律“队列满或者超时则发送”。客车本身的40个位置，就像一个“发送缓冲区”。使 用和不使用这个大的缓冲区，客车也可以有两者运作方式：</p>
+<ol>
+<li>车站发现来一个人，用只能容纳一个人的小车，不等待直接送一个人去广州。</li>
+<li>车站发现来一个人，先放进客车buffer中，等待人满或者达到班车约定时间（队列超时）再出发。</li>
+</ol>
+<pre class="mermaid">graph LR
+A(深圳车站) -.1.来一个立刻用车运走.-> B(广州车站)
+A(深圳车站) ==2==> D[40座客车buffer] --> B(广州车站)</pre>
+
+<p>显而易见，第一种是太浪费资源了。</p>
+<p>除此之外，还有很多各种各样的例子，如江河上的大坝、我们桌面上的一些东西（它们占据宝贵的桌面空间）、我们公司附近小店里的商品、离我们近的东西等等。</p>
+<p>看到这里，很多人会渐渐发觉，计算机的一些原理，竟然在现实世界里有无处不在的“映射和影子”。</p>
+<p>几何分形学是个非常有趣的东西，某些规律，实际上还贯穿在整个宏观和微观世界中。</p>
+<p>例如“绕转”的现象：</p>
+<pre class="mermaid">graph LR
+A[电子围绕原子核转] ==> B[月球自转] ==> C[月球围绕地球转] ==> D[地月系围绕太阳转] ==> E[太阳系围绕银河系中心转]</pre>
+
+<h2 id="4-现实世界和计算机“缓存机制”原理的关系，为什么遵循“几何分形”？"><a href="#4-现实世界和计算机“缓存机制”原理的关系，为什么遵循“几何分形”？" class="headerlink" title="4. 现实世界和计算机“缓存机制”原理的关系，为什么遵循“几何分形”？"></a><strong>4. 现实世界和计算机“缓存机制”原理的关系，为什么遵循“几何分形”？</strong></h2><p>实际上，计算机的原理来源于数学，而数学是日常生活现象和规律的高度抽象，源于生活，高于生活。</p>
+<pre class="mermaid">graph LR
+A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]</pre>
+
+<p>同时，不仅仅“缓存机制”，还有很多其他技术的原理，也能找到这种遵循“几何分形学”的样子。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/01/31/electron-vue开发入门指南/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vincent">
+      <meta itemprop="description" content="The King is dead, long live the King!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/31/electron-vue开发入门指南/" itemprop="url">
+                  electron-vue开发入门指南
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-01-31 12:48:08" itemprop="dateCreated datePublished" datetime="2020-01-31T12:48:08+08:00">2020-01-31</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/vue/" itemprop="url" rel="index"><span itemprop="name">vue</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Electron概述"><a href="#Electron概述" class="headerlink" title="Electron概述"></a>Electron概述</h1><p><img src="/2020/01/31/electron-vue开发入门指南/68747470733a2f2f656c656374726f6e6a732e6f72672f696d616765732f656c656374726f6e2d6c6f676f2e737667.svg" alt="Electron Logo"></p>
+<ol>
+<li><a href="https://github.com/electron/electron" target="_blank" rel="noopener">GitHub</a> 官网不翻墙太卡，本着能偷懒就偷懒，GayHub就够了，不用翻官网了</li>
+<li><a href="https://github.com/electron/i18n/tree/master/content/zh-CN" target="_blank" rel="noopener">中文文档</a></li>
+<li><a href="https://www.w3cschool.cn/electronmanual/wcx31ql6.html" target="_blank" rel="noopener">W3C教程</a></li>
+</ol>
+<h1 id="VUE概述"><a href="#VUE概述" class="headerlink" title="VUE概述"></a>VUE概述</h1><p><img src="/2020/01/31/electron-vue开发入门指南/68747470733a2f2f7675656a732e6f72672f696d616765732f6c6f676f2e706e67.png" alt="Vue logo"></p>
+<ol>
+<li><a href="https://github.com/vuejs/vue" target="_blank" rel="noopener">GitHub</a></li>
+<li><a href="https://cn.vuejs.org/" target="_blank" rel="noopener">VUE官网</a> 官网资料齐全，中英文档都齐备，基本看完够搞个工程了</li>
+</ol>
+<h1 id="Electron-Vue-联合使用"><a href="#Electron-Vue-联合使用" class="headerlink" title="Electron + Vue 联合使用"></a>Electron + Vue 联合使用</h1><h2 id="安装Nodejs"><a href="#安装Nodejs" class="headerlink" title="安装Nodejs"></a>安装Nodejs</h2><p>安装成功之后<code>node -v</code>，会显示版本，版本可以不用这么新，看心情安装。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ node -v</span><br><span class="line"><span class="selector-tag">v12</span><span class="selector-class">.14</span><span class="selector-class">.0</span></span><br></pre></td></tr></table></figure>
+<h2 id="搭建Vue开发环境"><a href="#搭建Vue开发环境" class="headerlink" title="搭建Vue开发环境"></a>搭建Vue开发环境</h2><p>直接使用脚手架工具vue-cli，因为在国内的npm非常慢，所以需要重新设置npm镜像，设置为淘宝的镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> registry https://registry.npm.taobao.org/</span><br></pre></td></tr></table></figure>
+<p>我们可以看一下镜像地址是：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vue npm config get registry  </span><br><span class="line">https://registry.npm.taobao.org/</span><br></pre></td></tr></table></figure>
+<p>如果不想修改默认npm地址，也可以<a href="https://npm.taobao.org/" target="_blank" rel="noopener">设置cnpm</a>(因为自带翻墙光环，考虑到后面可能不方便翻墙，后面全程优先使用墙内网络操作。)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install -g cnpm --registry=https://registry.npm.taobao.org</span><br><span class="line">//输入命令,查看是否安装成功</span><br><span class="line">cnpm</span><br></pre></td></tr></table></figure>
+<p>安装脚手架工具：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --global vue-cli</span><br></pre></td></tr></table></figure>
+<p>安装web-pack：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g webpack</span><br></pre></td></tr></table></figure>
+<p>yarn 使用国内镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yarn config <span class="built_in">set</span> registry https://registry.npm.taobao.org</span><br><span class="line">yarn config list</span><br></pre></td></tr></table></figure>
+<h3 id="npm更新package-json"><a href="#npm更新package-json" class="headerlink" title="npm更新package.json"></a>npm更新package.json</h3><p>将package.json中的依赖更新为最新版</p>
+<p>安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g npm-check-updates</span><br></pre></td></tr></table></figure>
+<p>显示当前目录下项目中所有新的依赖包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ncu</span><br></pre></td></tr></table></figure>
+<p>更新项目package文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ncu -u</span><br></pre></td></tr></table></figure>
+<p><a href="https://www.npmjs.com/package/npm-check-updates" target="_blank" rel="noopener">npm-check-updates更多参数</a></p>
+<h3 id="什么是Yarn和NPM"><a href="#什么是Yarn和NPM" class="headerlink" title="什么是Yarn和NPM?"></a>什么是Yarn和NPM?</h3><p><strong>Yarn:Yet Another Resource Negotiator，是一个快速、可靠、安全的依赖管理工具，一款新的JavaScript包管理工具。</strong></p>
+<p>Yarn工作流：</p>
+<p> <img src="/2020/01/31/electron-vue开发入门指南/1087883-20190909202049178-776852540-1580637729972.png" alt="img"></p>
+<p>Yarn使用方法：<a href="https://yarn.bootcss.com/docs/usage/" target="_blank" rel="noopener">https://yarn.bootcss.com/docs/usage</a>/</p>
+<p>Yarn使用方法-如图：</p>
+<p><img src="/2020/01/31/electron-vue开发入门指南/1087883-20190909202053234-421219548-1580637730004.png" alt="img"></p>
+<p>Yarn是什么：<a href="https://yarn.bootcss.com" target="_blank" rel="noopener">https://yarn.bootcss.com</a></p>
+<p>Npm是什么 :<a href="https://www.npmjs.cn/" target="_blank" rel="noopener">https://www.npmjs.cn/</a></p>
+<h3 id="yarn和npm命令对比"><a href="#yarn和npm命令对比" class="headerlink" title="yarn和npm命令对比"></a>yarn和npm命令对比</h3><h4 id="一、命令对比"><a href="#一、命令对比" class="headerlink" title="一、命令对比"></a>一、命令对比</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">yarn</th>
+<th style="text-align:center">npm</th>
+<th style="text-align:left">命令功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong><code>yarn install</code></strong></td>
+<td style="text-align:center"><strong><code>npm install</code></strong></td>
+<td style="text-align:left"><strong>根据<code>pack.json</code>安装项目所需的依赖包</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn install --flat</code></strong></td>
+<td style="text-align:center"><strong><code>--</code></strong></td>
+<td style="text-align:left"><strong>注释1</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn install --no-lockfile</code></strong></td>
+<td style="text-align:center"><strong><code>npm install --no-package-lock</code></strong></td>
+<td style="text-align:left"><strong>不读取或生成<code>yarn.lock</code>锁文件</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn install --pure-lockfile</code></strong></td>
+<td style="text-align:center"><strong><code>--</code></strong></td>
+<td style="text-align:left"><strong>不要生成<code>yarn.lock</code>锁文件</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn add [package]</code></strong></td>
+<td style="text-align:center"><strong><code>npm install [package]</code></strong></td>
+<td style="text-align:left"><strong>安装需要的依赖包</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn add [package] --dev</code></strong></td>
+<td style="text-align:center"><strong><code>npm install [package] --save-dev</code></strong></td>
+<td style="text-align:left"><strong>注释2</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn add [package] --D</code></strong></td>
+<td style="text-align:center"><strong><code>npm install [package] --save-dev</code></strong></td>
+<td style="text-align:left"><strong>同上</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn add [package] --peer</code></strong></td>
+<td style="text-align:center"><strong><code>--</code></strong></td>
+<td style="text-align:left"><strong>注释3</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn add [package] --P</code></strong></td>
+<td style="text-align:center"><strong><code>--</code></strong></td>
+<td style="text-align:left"><strong>同上</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn add [package] --optional</code></strong></td>
+<td style="text-align:center"><strong><code>npm install [package] --save-optional</code></strong></td>
+<td style="text-align:left"><strong>注释4</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn add [package] --O</code></strong></td>
+<td style="text-align:center"><strong><code>npm install [package] --save-optional</code></strong></td>
+<td style="text-align:left"><strong>同上</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn add [package] --exact</code></strong></td>
+<td style="text-align:center"><strong><code>npm install [package] --save-exact</code></strong></td>
+<td style="text-align:left"><strong>注释5</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn add [package] --E</code></strong></td>
+<td style="text-align:center"><strong><code>npm install [package] --save-exact</code></strong></td>
+<td style="text-align:left"><strong>同上</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn global add [package]</code></strong></td>
+<td style="text-align:center"><strong><code>npm install [package] --global</code></strong></td>
+<td style="text-align:left"><strong>全局安装依赖包</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn global upgrade</code></strong></td>
+<td style="text-align:center"><strong><code>npm update --global</code></strong></td>
+<td style="text-align:left"><strong>全局更新依赖包</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn add --force</code></strong></td>
+<td style="text-align:center"><strong><code>npm rebuild</code></strong></td>
+<td style="text-align:left"><strong>更改包内容后进行重建</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn remove [package]</code></strong></td>
+<td style="text-align:center"><strong><code>npm uninstall [package]</code></strong></td>
+<td style="text-align:left"><strong>卸载已经安装的依赖包</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn cache clean [package]</code></strong></td>
+<td style="text-align:center"><strong><code>npm cache clean</code></strong></td>
+<td style="text-align:left"><strong>注释6</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn upgrade</code></strong></td>
+<td style="text-align:center"><strong><code>rm -rf node_modules &amp;&amp; npm install</code></strong></td>
+<td style="text-align:left"><strong>更新依赖包</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn version --major</code></strong></td>
+<td style="text-align:center"><strong><code>npm version major</code></strong></td>
+<td style="text-align:left"><strong>更新依赖包的版本</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn version --minor</code></strong></td>
+<td style="text-align:center"><strong><code>npm version minor</code></strong></td>
+<td style="text-align:left"><strong>更新依赖包的版本</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>yarn version --patch</code></strong></td>
+<td style="text-align:center"><strong><code>npm version patch</code></strong></td>
+<td style="text-align:left"><strong>更新依赖包的版本</strong></td>
+</tr>
+</tbody>
+</table>
+<h4 id="二、命令注释"><a href="#二、命令注释" class="headerlink" title="二、命令注释"></a>二、命令注释</h4><ul>
+<li><strong>注释1</strong> ：安装所有依赖项，但每个依赖项只允许一个版本。在第一次运行时，这将提示你为多版本的依赖包选择一个版本，进行安装。这些将添加到您package.json的 resolutions字段下。</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">"resolutions": &#123;</span><br><span class="line">  "package-a": "2.0.0",</span><br><span class="line">  "package-b": "5.0.0",</span><br><span class="line">  "package-c": "1.5.2"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>注释2</strong> ：安装所需的依赖包，并将该包的记录写到<code>package.json</code>文件的 <strong>devDependencies</strong> 选项中。</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">"devDependencies": &#123;</span><br><span class="line">    "autoprefixer": "^7.1.2",</span><br><span class="line">    "babel-core": "^6.22.1",</span><br><span class="line">    "babel-helper-vue-jsx-merge-props": "^2.0.3",</span><br><span class="line">    "babel-loader": "^7.1.1",</span><br><span class="line">    "babel-plugin-syntax-jsx": "^6.18.0",</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>注释3</strong> ：安装所需的依赖包，并将该包的记录写到<code>package.json</code>文件的 <strong>peerDependencies</strong> 选项中。</li>
+<li><strong>注释4</strong> ：安装所需的依赖包，并将该包的记录写到<code>package.json</code>文件的 <strong>optionalDependencies</strong> 选项中。</li>
+<li><strong>注释5</strong> ：安装依赖包的确切版本，默认设置是使用依赖包的最新版本。例如， <code>yarn add foo@1.2.3</code>将接受版本1.9.1，但 <code>yarn add foo@1.2.3 --exact</code> 只接受版本1.2.3。</li>
+<li><strong>注释6</strong> ：运行此命令将清除全局缓存依赖包。当再次yarn或yarn install运行，进行下载依赖包</li>
+</ul>
+<h2 id="安装Electron"><a href="#安装Electron" class="headerlink" title="安装Electron"></a>安装Electron</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm install -g electron</span><br></pre></td></tr></table></figure>
+<p>验证</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;electron -v</span><br><span class="line"></span><br><span class="line"> v7.1.10</span><br></pre></td></tr></table></figure>
+<h2 id="搭建electron-vue项目"><a href="#搭建electron-vue项目" class="headerlink" title="搭建electron-vue项目"></a>搭建electron-vue项目</h2><p>simulatedgreg/electron-vue用的vue-cli2，<strong><em>不建议再使用</em></strong>，如果vue-cli用的3或者4，建议直接跳到下面的章节</p>
+<h3 id="相关文档"><a href="#相关文档" class="headerlink" title="相关文档"></a>相关文档</h3><ul>
+<li><a href="https://simulatedgreg.gitbooks.io/electron-vue/content/cn/" target="_blank" rel="noopener">electron-vue</a>文档</li>
+</ul>
+<h3 id="使用electron-vue脚手架工具初始化项目"><a href="#使用electron-vue脚手架工具初始化项目" class="headerlink" title="使用electron-vue脚手架工具初始化项目"></a>使用electron-vue脚手架工具初始化项目</h3><p>可能会比较慢，可以通过webpack方式初始化vue项目，然后在引入electron方式，这个会快很多</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">$ vue init simulatedgreg/electron-vue alistar</span><br><span class="line"></span><br><span class="line">? Application Name alistar</span><br><span class="line">? Application Id org.evue.alistar</span><br><span class="line">? Application Version 0.0.1</span><br><span class="line">? Project description 哞利斯塔, 快乐辅助</span><br><span class="line">? Use Sass / Scss? Yes</span><br><span class="line">? Select <span class="built_in">which</span> Vue plugins to install axios, vue-electron, vue-router, vuex, vuex-electron</span><br><span class="line">? Use linting with ESLint? Yes</span><br><span class="line">? Which ESLint config would you like to use? Standard</span><br><span class="line">? Set up unit testing with Karma + Mocha? Yes</span><br><span class="line">? Set up end-to-end testing with Spectron + Mocha? Yes</span><br><span class="line">? What build tool would you like to use? builder</span><br><span class="line">? author vincentruan &lt;rzw0813@gmail.com&gt;</span><br><span class="line"></span><br><span class="line">   vue-cli · Generated <span class="string">"alistar"</span>.</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">All <span class="built_in">set</span>. Welcome to your new electron-vue project!</span><br><span class="line"></span><br><span class="line">Make sure to check out the documentation <span class="keyword">for</span> this boilerplate at</span><br><span class="line">https://simulatedgreg.gitbooks.io/electron-vue/content/.</span><br><span class="line"></span><br><span class="line">Next Steps:</span><br><span class="line"></span><br><span class="line">  $ <span class="built_in">cd</span> alistar</span><br><span class="line">  $ yarn (or `npm install`)</span><br><span class="line">  $ yarn run dev (or `npm run dev`)</span><br></pre></td></tr></table></figure>
+<p>上面已经有提示下一步做什么了，<code>cd alistar</code>目录下，之后对照执行，如果用yarn记得设置代理或者用国内镜像。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">$ cnpm install</span><br><span class="line">| [22/67] Installing get-stdin@^4.0.1platform unsupported babel-loader@7.1.5 › webpack@4.41.5 › watchpack@1.6.0 › chokidar@2.1.8 › fsevents@^1.2.7 Package require os(darwin) not compatible with your platform(win32)</span><br><span class="line">[fsevents@^1.2.7] optional install error: Package require os(darwin) not compatible with your platform(win32)</span><br><span class="line">√ Installed 67 packages</span><br><span class="line">√ Linked 1218 latest versions</span><br><span class="line">[1/7] scripts.postinstall babel-core@6.26.3 › babel-register@6.26.0 › core-js@^2.5.0 run <span class="string">"node -e \"try&#123;require('./postinstall')&#125;catch(e)&#123;&#125;\""</span>, root: <span class="string">"D:\\gitspace\\alistar\\node_modules\\_core-js@2.6.11@core-js"</span></span><br><span class="line">Thank you <span class="keyword">for</span> using core-js ( https://github.com/zloirock/core-js ) <span class="keyword">for</span> polyfilling JavaScript standard library!</span><br><span class="line"></span><br><span class="line">The project needs your <span class="built_in">help</span>! Please consider supporting of core-js on Open Collective or Patreon:</span><br><span class="line">&gt; https://opencollective.com/core-js</span><br><span class="line">&gt; https://www.patreon.com/zloirock</span><br><span class="line"></span><br><span class="line">Also, the author of core-js ( https://github.com/zloirock ) is looking <span class="keyword">for</span> a good job -)</span><br><span class="line"></span><br><span class="line">[1/7] scripts.postinstall babel-core@6.26.3 › babel-register@6.26.0 › core-js@^2.5.0 finished <span class="keyword">in</span> 2s</span><br><span class="line">[2/7] scripts.postinstall electron-builder@20.44.4 › app-builder-lib@20.44.4 › ejs@^2.6.2 run <span class="string">"node ./postinstall.js"</span>, root: <span class="string">"D:\\gitspace\\alistar\\node_modules\\_ejs@2.7.4@ejs"</span></span><br><span class="line">Thank you <span class="keyword">for</span> installing EJS: built with the Jake JavaScript build tool (https://jakejs.com/)</span><br><span class="line"></span><br><span class="line">[2/7] scripts.postinstall electron-builder@20.44.4 › app-builder-lib@20.44.4 › ejs@^2.6.2 finished <span class="keyword">in</span> 2s</span><br><span class="line">[3/7] scripts.postinstall electron@^2.0.4 run <span class="string">"node install.js"</span>, root: <span class="string">"D:\\gitspace\\alistar\\node_modules\\_electron@2.0.18@electron"</span></span><br><span class="line">Downloading SHASUMS256.txt</span><br><span class="line">[============================================&gt;] 100.0% of 5.39 kB (5.39 kB/s)</span><br><span class="line">[3/7] scripts.postinstall electron@^2.0.4 finished <span class="keyword">in</span> 17s</span><br><span class="line">[4/7] scripts.install spectron@3.8.0 › electron-chromedriver@~1.8.0 run <span class="string">"node ./download-chromedriver.js"</span>, root: <span class="string">"D:\\gitspace\\alistar\\node_modules\\_electron-chromedriver@1.8.0@electron-chromedriver"</span></span><br><span class="line">Downloading tmp-2644-1-SHASUMS256.txt-1.8.0</span><br><span class="line">[============================================&gt;] 100.0% of 8.02 kB (8.02 kB/s)</span><br><span class="line">successfully dowloaded and extracted!</span><br><span class="line">[4/7] scripts.install spectron@3.8.0 › electron-chromedriver@~1.8.0 finished <span class="keyword">in</span> 5s</span><br><span class="line">[5/7] scripts.install karma@2.0.5 › socket.io@2.0.4 › engine.io@3.1.5 › uws@~9.14.0 run <span class="string">"node-gyp rebuild &gt; build_log.txt 2&gt;&amp;1 || exit 0"</span>, root: <span class="string">"D:\\gitspace\\alistar\\node_modules\\_uws@9.14.0@uws"</span></span><br><span class="line">[5/7] scripts.install karma@2.0.5 › socket.io@2.0.4 › engine.io@3.1.5 › uws@~9.14.0 finished <span class="keyword">in</span> 3s</span><br><span class="line">[6/7] scripts.install node-sass@^4.9.2 run <span class="string">"node scripts/install.js"</span>, root: <span class="string">"D:\\gitspace\\alistar\\node_modules\\_node-sass@4.13.1@node-sass"</span></span><br><span class="line">Downloading binary from https://cdn.npm.taobao.org/dist/node-sass/v4.13.1/win32-x64-72_binding.node</span><br><span class="line">Download complete</span><br><span class="line">Binary saved to D:\gitspace\alistar\node_modules\_node-sass@4.13.1@node-sass\vendor\win32-x64-72\binding.node</span><br><span class="line">Caching binary to C:\Users\vincentruan\.npminstall_tarball\node-sass\4.13.1\win32-x64-72_binding.node</span><br><span class="line">[6/7] scripts.install node-sass@^4.9.2 finished <span class="keyword">in</span> 4s</span><br><span class="line">[6/7] scripts.postinstall node-sass@^4.9.2 run <span class="string">"node scripts/build.js"</span>, root: <span class="string">"D:\\gitspace\\alistar\\node_modules\\_node-sass@4.13.1@node-sass"</span></span><br><span class="line">Binary found at D:\gitspace\alistar\node_modules\_node-sass@4.13.1@node-sass\vendor\win32-x64-72\binding.node</span><br><span class="line">Testing binary</span><br><span class="line">Binary is fine</span><br><span class="line">[6/7] scripts.postinstall node-sass@^4.9.2 finished <span class="keyword">in</span> 2s</span><br><span class="line">[7/7] scripts.postinstall alistar@0.0.1 run <span class="string">"npm run lint:fix"</span>, root: <span class="string">"D:\\gitspace\\alistar"</span></span><br><span class="line"></span><br><span class="line">&gt; alistar@0.0.1 lint:fix D:\gitspace\alistar</span><br><span class="line">&gt; eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --fix src <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line">[7/7] scripts.postinstall alistar@0.0.1 finished <span class="keyword">in</span> 11s</span><br><span class="line">√ Run 7 scripts</span><br><span class="line">peerDependencies link ajv@5.5.2 <span class="keyword">in</span> D:\gitspace\alistar\node_modules\_ajv-keywords@2.1.1@ajv-keywords unmet with D:\gitspace\alistar\node_modules\ajv(6.11.0)</span><br><span class="line">peerDependencies WARNING karma-webpack@^3.0.0 requires a peer of webpack@^2.0.0 || ^3.0.0 but webpack@4.41.5 was installed</span><br><span class="line">deprecate css-loader@0.28.11 › cssnano@3.10.0 › autoprefixer@6.7.7 › browserslist@^1.7.6 Browserslist 2 could fail on reading Browserslist &gt;3.0 config used <span class="keyword">in</span> other tools.</span><br><span class="line">deprecate babel-core@6.26.3 › babel-register@6.26.0 › core-js@^2.5.0 core-js@&lt;3 is no longer maintained and not recommended <span class="keyword">for</span> usage due to the number of issues. Please, upgrade your dependencies to the actual version of core-js@3.</span><br><span class="line">deprecate eslint@4.19.1 › file-entry-cache@2.0.0 › flat-cache@1.3.4 › circular-json@^0.3.1 CircularJSON is <span class="keyword">in</span> maintenance only, flatted is its successor.</span><br><span class="line">deprecate karma-coverage@1.1.2 › istanbul@^0.4.0 This module is no longer maintained, try this instead:</span><br><span class="line">  npm i nyc</span><br><span class="line">Visit https://istanbul.js.org/integrations <span class="keyword">for</span> other alternatives.</span><br><span class="line">deprecate karma@2.0.5 › log4js@2.11.0 › circular-json@^0.5.4 CircularJSON is <span class="keyword">in</span> maintenance only, flatted is its successor.</span><br><span class="line">deprecate karma@2.0.5 › log4js@2.11.0 › nodemailer@^2.5.0 All versions below 4.0.1 of Nodemailer are deprecated. See https://nodemailer.com/status/</span><br><span class="line">deprecate karma@2.0.5 › log4js@2.11.0 › nodemailer@2.7.2 › socks@1.1.9 If using 2.x branch, please upgrade to at least 2.1.6 to avoid a serious bug with socket data flow and an import issue introduced <span class="keyword">in</span> 2.1.0</span><br><span class="line">deprecate karma@2.0.5 › log4js@2.11.0 › nodemailer@2.7.2 › mailcomposer@4.0.1 This project is unmaintained</span><br><span class="line">deprecate karma@2.0.5 › log4js@2.11.0 › loggly@1.1.1 › request@2.75.0 › node-uuid@~1.4.7 Use uuid module instead</span><br><span class="line">deprecate karma@2.0.5 › log4js@2.11.0 › loggly@1.1.1 › request@2.75.0 › hawk@~3.1.3 This module moved to @hapi/hawk. Please make sure to switch over as this distribution is no longer supported and may contain bugs and critical security issues.</span><br><span class="line">deprecate karma@2.0.5 › log4js@2.11.0 › nodemailer@2.7.2 › mailcomposer@4.0.1 › buildmail@4.0.1 This project is unmaintained</span><br><span class="line">deprecate karma@2.0.5 › log4js@2.11.0 › loggly@1.1.1 › request@2.75.0 › hawk@3.1.3 › cryptiles@2.x.x This version has been deprecated <span class="keyword">in</span> accordance with the hapi support policy (hapi.im/support). Please upgrade to the latest version to get the best features, bug fixes, and security patches. If you are unable to upgrade at this time, paid support is available <span class="keyword">for</span> older versions (hapi.im/commercial).</span><br><span class="line">deprecate karma@2.0.5 › log4js@2.11.0 › loggly@1.1.1 › request@2.75.0 › hawk@3.1.3 › sntp@1.x.x This module moved to @hapi/sntp. Please make sure to switch over as this distribution is no longer supported and may contain bugs and critical security issues.</span><br><span class="line">deprecate karma@2.0.5 › log4js@2.11.0 › loggly@1.1.1 › request@2.75.0 › hawk@3.1.3 › hoek@2.x.x This version has been deprecated <span class="keyword">in</span> accordance with the hapi support policy (hapi.im/support). Please upgrade to the latest version to get the best features, bug fixes, and security patches. If you are unable to upgrade at this time, paid support is available <span class="keyword">for</span> older versions (hapi.im/commercial).</span><br><span class="line">deprecate karma@2.0.5 › log4js@2.11.0 › loggly@1.1.1 › request@2.75.0 › hawk@3.1.3 › boom@2.x.x This version has been deprecated <span class="keyword">in</span> accordance with the hapi support policy (hapi.im/support). Please upgrade to the latest version to get the best features, bug fixes, and security patches. If you are unable to upgrade at this time, paid support is available <span class="keyword">for</span> older versions (hapi.im/commercial).</span><br><span class="line">deprecate spectron@3.8.0 › webdriverio@^4.8.0 outdated version, please use @next</span><br><span class="line">deprecate karma@2.0.5 › socket.io@2.0.4 › engine.io@3.1.5 › uws@~9.14.0 New code is available at github.com/uNetworking/uWebSockets.js</span><br><span class="line">Recently updated (since 2020-01-23): 10 packages (detail see file D:\gitspace\alistar\node_modules\.recently_updates.txt)</span><br><span class="line">  Today:</span><br><span class="line">    → babel-preset-env@1.7.0 › browserslist@3.2.8 › electron-to-chromium@^1.3.47(1.3.342) (09:02:31)</span><br><span class="line">    → webpack-dev-server@3.10.1 › del@4.1.1 › @types/glob@7.1.1 › @types/node@*(13.5.2) (05:51:42)</span><br><span class="line">√ All packages installed (1560 packages installed from npm registry, used 1m(network 27s), speed 2.23MB/s, json 1285(3.12MB), tarball 58.05MB)</span><br></pre></td></tr></table></figure>
+<p>编译完成后<code>run dev</code>，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cnpm run dev</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/01/31/electron-vue开发入门指南/image-20200130174511175.png" alt="image-20200130174511175"></p>
+<h3 id="问题收集与处理"><a href="#问题收集与处理" class="headerlink" title="问题收集与处理"></a>问题收集与处理</h3><p><strong>修复问题前先将项目初始化提交github</strong></p>
+<h4 id="问题一：ERROR-in-Template-execution-failed-ReferenceError-process-is-not-defined"><a href="#问题一：ERROR-in-Template-execution-failed-ReferenceError-process-is-not-defined" class="headerlink" title="问题一：ERROR in Template execution failed: ReferenceError: process is not defined"></a>问题一：ERROR in Template execution failed: ReferenceError: process is not defined</h4><p>高版本的node，大于12的版本时候。使用electron-vue项目时候会报错！Webpack ReferenceError: process is not defined!</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ReferenceError: process is not defined</span><br><span class="line">  </span><br><span class="line">  - index.ejs:11 <span class="built_in">eval</span></span><br><span class="line">    [.]/[_html-webpack-plugin@3.2.0@html-webpack-plugin]/lib/loader.js!./src/index.ejs:11:2</span><br><span class="line">  </span><br><span class="line">  - index.ejs:16 module.exports</span><br><span class="line">    [.]/[_html-webpack-plugin@3.2.0@html-webpack-plugin]/lib/loader.js!./src/index.ejs:16:3</span><br><span class="line">  </span><br><span class="line">  - index.js:284 </span><br><span class="line">    [alistar]/[_html-webpack-plugin@3.2.0@html-webpack-plugin]/index.js:284:18</span><br><span class="line">  </span><br><span class="line">  - runMicrotasks</span><br><span class="line">  </span><br><span class="line">  - task_queues.js:93 processTicksAndRejections</span><br><span class="line">    internal/process/task_queues.js:93:5</span><br></pre></td></tr></table></figure>
+<p>修改 .electron-vue/webpack.renderer.config.js 和  .electron-vue/webpack.web.config.js如下</p>
+<p>webpack.renderer.config.js：L125</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">  filename: <span class="string">'index.html'</span>,</span><br><span class="line">  template: path.resolve(__dirname, <span class="string">'../src/index.ejs'</span>),</span><br><span class="line">  minify: &#123;</span><br><span class="line">    collapseWhitespace: <span class="literal">true</span>,</span><br><span class="line">    removeAttributeQuotes: <span class="literal">true</span>,</span><br><span class="line">    removeComments: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  templateParameters(compilation, assets, options) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      compilation: compilation,</span><br><span class="line">      webpack: compilation.getStats().toJson(),</span><br><span class="line">      webpackConfig: compilation.options,</span><br><span class="line">      htmlWebpackPlugin: &#123;</span><br><span class="line">        files: assets,</span><br><span class="line">        options: options</span><br><span class="line">      &#125;,</span><br><span class="line">      process,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  nodeModules: process.env.NODE_ENV !== <span class="string">'production'</span></span><br><span class="line">    ? path.resolve(__dirname, <span class="string">'../node_modules'</span>)</span><br><span class="line">    : <span class="literal">false</span></span><br><span class="line">&#125;),</span><br></pre></td></tr></table></figure>
+<p>webpack.web.config.js: L97</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">  filename: <span class="string">'index.html'</span>,</span><br><span class="line">  template: path.resolve(__dirname, <span class="string">'../src/index.ejs'</span>),</span><br><span class="line">  templateParameters(compilation, assets, options) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      compilation: compilation,</span><br><span class="line">      webpack: compilation.getStats().toJson(),</span><br><span class="line">      webpackConfig: compilation.options,</span><br><span class="line">      htmlWebpackPlugin: &#123;</span><br><span class="line">        files: assets,</span><br><span class="line">        options: options</span><br><span class="line">      &#125;,</span><br><span class="line">      process,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  minify: &#123;</span><br><span class="line">    collapseWhitespace: <span class="literal">true</span>,</span><br><span class="line">    removeAttributeQuotes: <span class="literal">true</span>,</span><br><span class="line">    removeComments: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  nodeModules: <span class="literal">false</span></span><br><span class="line">&#125;),</span><br></pre></td></tr></table></figure>
+<p>重新执行<code>run dev</code></p>
+<h4 id="问题二：-Unable-to-install-vue-devtools"><a href="#问题二：-Unable-to-install-vue-devtools" class="headerlink" title="问题二： Unable to install vue-devtools"></a>问题二： Unable to install <code>vue-devtools</code></h4><p>electron-devtools-installer无法安装远程的vue-devtool，采用手动安装方式。</p>
+<p>从本地浏览器已安装的插件中拷贝到项目路径，在项目目录下创建文件夹<code>devTools\vue-devtools</code>，拷贝</p>
+<p>C:\Users\${userName}\AppData\Local\Google\Chrome\User Data\Default\Extensions\nhdogjmejiglipccpnnnanhbledajbpd\5.1.1_0文件夹内容<code>devTools\vue-devtools</code>下，</p>
+<p>修改src/main/index.dev.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * This file is used specifically and only for development. It installs</span></span><br><span class="line"><span class="comment"> * `electron-debug` &amp; `vue-devtools`. There shouldn't be any need to</span></span><br><span class="line"><span class="comment"> *  modify this file, but it can be used to extend your development</span></span><br><span class="line"><span class="comment"> *  environment.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* eslint-disable */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Install `electron-debug` with `devtron`</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">'electron-debug'</span>)(&#123; <span class="attr">showDevTools</span>: <span class="literal">true</span> &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 新增变量定义</span></span><br><span class="line"><span class="keyword">import</span> &#123; BrowserWindow &#125; <span class="keyword">from</span> <span class="string">'electron'</span>;</span><br><span class="line"><span class="keyword">import</span> path <span class="keyword">from</span> <span class="string">'path'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Install `vue-devtools`</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">'electron'</span>).app.on(<span class="string">'ready'</span>, () =&gt; &#123;</span><br><span class="line">  <span class="comment">// 注释掉的这部分是 Electron-Vue 中预装devtool的代码，没有用</span></span><br><span class="line">  <span class="comment">// let installExtension = require('electron-devtools-installer')</span></span><br><span class="line">  <span class="comment">// installExtension.default(installExtension.VUEJS_DEVTOOLS)</span></span><br><span class="line">  <span class="comment">//   .then(() =&gt; &#123;&#125;)</span></span><br><span class="line">  <span class="comment">//   .catch(err =&gt; &#123;</span></span><br><span class="line">  <span class="comment">//     console.log('Unable to install `vue-devtools`: \n', err)</span></span><br><span class="line">  <span class="comment">//   &#125;)</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 安装vue-devtools</span></span><br><span class="line">  BrowserWindow.addDevToolsExtension(path.resolve(__dirname, <span class="string">'../../devTools/vue-devtools'</span>));</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Require `main` process to boot app</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">'./index'</span>)</span><br></pre></td></tr></table></figure>
+<p>应用自动重启，注意首次启动vue插件被&gt;&gt;这个隐藏了，需要手动拖动一下</p>
+<p><img src="/2020/01/31/electron-vue开发入门指南/image-20200130183344218.png" alt="image-20200130183344218"></p>
+<h4 id="问题三：ERROR-in-Error-node-modules-html-webpack-plugin-node-modules-clean-css-index-js-1-SyntaxError-Invalid-or-unexpected-token"><a href="#问题三：ERROR-in-Error-node-modules-html-webpack-plugin-node-modules-clean-css-index-js-1-SyntaxError-Invalid-or-unexpected-token" class="headerlink" title="问题三：ERROR in  Error: .\node_modules\html-webpack-plugin\node_modules\clean-css\index.js:1 SyntaxError: Invalid or unexpected token"></a>问题三：ERROR in  Error: .\node_modules\html-webpack-plugin\node_modules\clean-css\index.js:1 SyntaxError: Invalid or unexpected token</h4><p>找到这个文件发现下载的是一串ASII乱码，尝试删除重新安装，发现用yarn install下载的这个文件总有问题，改为cnpm下载就行了</p>
+<h4 id="问题四：-ERROR-in-TypeError-compilation-templatesPlugin-is-not-a-function"><a href="#问题四：-ERROR-in-TypeError-compilation-templatesPlugin-is-not-a-function" class="headerlink" title="问题四： ERROR in   TypeError: compilation.templatesPlugin is not a function"></a>问题四： ERROR in   TypeError: compilation.templatesPlugin is not a function</h4><p>webpack不是最新版</p>
+<p>解决方法：</p>
+<p>1.删除node_modules，重新安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure>
+<p>2.安装最新webpack</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm add webpack@latest</span><br></pre></td></tr></table></figure>
+<h1 id="知识库"><a href="#知识库" class="headerlink" title="知识库"></a>知识库</h1><h2 id="vue项目转换为electron-vue"><a href="#vue项目转换为electron-vue" class="headerlink" title="vue项目转换为electron-vue"></a>vue项目转换为electron-vue</h2><ol>
+<li>把原有项目package.json的dependencies，devDependencies中不同的配置项，添加到 my-project 的package.json中</li>
+<li>把vue项目src的内容全部拷贝到 my-project/src/renderer 中</li>
+<li>安装依赖 npm install</li>
+<li>运行 npm run dev 就可以看到跑起来的客户端</li>
+<li>打包 npm run build 项目的安装文件放进build里面，执行.exe文件就可以安装了（build文件有点大）</li>
+</ol>
+<h2 id="electron-vue使用electron-builder指定打包32位"><a href="#electron-vue使用electron-builder指定打包32位" class="headerlink" title="electron-vue使用electron-builder指定打包32位"></a>electron-vue使用electron-builder指定打包32位</h2><p>//package.json</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"win"</span>: &#123;</span><br><span class="line">  <span class="string">"icon"</span>: <span class="string">"build/icons/icon.ico"</span>,</span><br><span class="line">  <span class="string">"target"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">"target"</span>: <span class="string">"nsis"</span>,</span><br><span class="line">      <span class="string">"arch"</span>: [</span><br><span class="line">        <span class="string">"ia32"</span></span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<h2 id="electron-vue开发环境跨域代理设置"><a href="#electron-vue开发环境跨域代理设置" class="headerlink" title="electron-vue开发环境跨域代理设置"></a>electron-vue开发环境跨域代理设置</h2><p>//.electron-vue/dev-runner.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">startRenderer</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">...</span><br><span class="line">        proxy: &#123;</span><br><span class="line">          <span class="string">'/api'</span>: &#123;</span><br><span class="line">            target: <span class="string">'http://192.168.74.222:6019'</span>,</span><br><span class="line">            <span class="comment">// secure: false,  // 如果是https接口，需要配置这个参数</span></span><br><span class="line">            changeOrigin: <span class="literal">true</span>, <span class="comment">// 如果接口跨域，需要进行这个参数配置</span></span><br><span class="line">            pathRewrite: &#123;</span><br><span class="line">              <span class="string">'^/api'</span>: <span class="string">''</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="通过BrowserWindow新窗口打开项目内页面"><a href="#通过BrowserWindow新窗口打开项目内页面" class="headerlink" title="通过BrowserWindow新窗口打开项目内页面"></a>通过<a href="https://electronjs.org/docs/api/browser-window#browserwindow" target="_blank" rel="noopener">BrowserWindow</a>新窗口打开项目内页面</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> BrowserWindow = <span class="built_in">require</span>(<span class="string">'electron'</span>).remote.BrowserWindow</span><br><span class="line"><span class="keyword">const</span> winURL = process.env.NODE_ENV === <span class="string">'development'</span></span><br><span class="line">  ? <span class="string">`http://localhost:9080/#/new`</span></span><br><span class="line">  : <span class="string">`file://<span class="subst">$&#123;__dirname&#125;</span>/index.html#new`</span></span><br><span class="line"><span class="keyword">let</span> newWindow = <span class="keyword">new</span> BrowserWindow(&#123;</span><br><span class="line">  height: <span class="number">600</span>,</span><br><span class="line">  width: <span class="number">800</span></span><br><span class="line">&#125;)</span><br><span class="line">newWindow.loadURL(winURL)</span><br><span class="line">newWindow.on(<span class="string">'closed'</span>, () =&gt; &#123;</span><br><span class="line">  newWindow = <span class="literal">null</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h1 id="放弃SimulatedGREG-electron-vue"><a href="#放弃SimulatedGREG-electron-vue" class="headerlink" title="放弃SimulatedGREG/electron-vue"></a>放弃SimulatedGREG/electron-vue</h1><p>SimulatedGREG/electron-vue已经很久没有更新了，而且其生成的工程结构并不是vue-cli3，在尝试升级vue-cli3过程中，发现简直是无底洞，直接放弃治疗，重头升级！！！</p>
+<h1 id="electron-vue3-4从0单排"><a href="#electron-vue3-4从0单排" class="headerlink" title="electron-vue3/4从0单排"></a>electron-vue3/4从0单排</h1><h2 id="安装-升级vue-cli3-4"><a href="#安装-升级vue-cli3-4" class="headerlink" title="安装/升级vue-cli3/4"></a>安装/升级vue-cli3/4</h2><p>先执行以下命令，确认下本地安装的vue-cli版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vue -V</span><br></pre></td></tr></table></figure>
+<p>如果本地使用的是vue-cli2.x或者更早版本，可先卸载：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm uninstall vue-cli -g</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>※注：vue-cli3和vue-cli4使用了新的npm包名，与旧版本不一样。</p>
+</blockquote>
+<p>如果还没有安装vue-cli3/4，先执行以下命令安装：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">cnpm</span> <span class="selector-tag">install</span> @<span class="keyword">vue</span>/<span class="keyword">cli</span> -g</span><br></pre></td></tr></table></figure>
+<p>如果你已安装vue-cli3/4，但不是最新版本，可执行以下命令升级：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">cnpm</span> <span class="selector-tag">update</span> @<span class="keyword">vue</span>/<span class="keyword">cli</span> -g</span><br></pre></td></tr></table></figure>
+<p>直接安装vue-cli4</p>
+<h2 id="创建vue项目"><a href="#创建vue项目" class="headerlink" title="创建vue项目"></a>创建vue项目</h2><p>找个喜欢的目录，执行以下命令，创建vue项目：</p>
+<p>（这里把项目名称定为alistar）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vue create alistar</span><br></pre></td></tr></table></figure>
+<p>会出现以下选项（如果熟悉此步骤可跳过本节内容）：<strong>这里建议直接选择default一步搞定，后续有需要插件自己在package.json选配，刚创建项目没必要折腾</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Vue CLI v3<span class="number">.8</span><span class="number">.4</span></span><br><span class="line">? Please pick a preset: (Use arrow keys)</span><br><span class="line">  <span class="keyword">default</span> (babel, eslint) </span><br><span class="line">&gt; Manually <span class="keyword">select</span> features</span><br></pre></td></tr></table></figure>
+<p>选择“Manually select features” (自定义安装)。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">? Check the features needed for your project: (Press <span class="tag">&lt;<span class="name">space</span>&gt;</span> to select, <span class="tag">&lt;<span class="name">a</span>&gt;</span> to t</span><br><span class="line">oggle all, <span class="tag">&lt;<span class="name">i</span>&gt;</span> to invert selection)</span><br><span class="line">❯◉ Babel</span><br><span class="line"> ◯ TypeScript</span><br><span class="line"> ◯ Progressive Web App (PWA) Support</span><br><span class="line"> ◉ Router</span><br><span class="line"> ◉ Vuex</span><br><span class="line"> ◉ CSS Pre-processors</span><br><span class="line"> ◉ Linter / Formatter</span><br><span class="line"> ◯ Unit Testing</span><br><span class="line"> ◯ E2E Testing</span><br></pre></td></tr></table></figure>
+<p>这里选择了常用的模块，请根据实际需求进行选择。</p>
+<hr>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">? Use <span class="built_in">history</span> mode <span class="keyword">for</span> router? (Requires proper server setup <span class="keyword">for</span> index fallback </span><br><span class="line"><span class="keyword">in</span> production) (Y/n)  n</span><br></pre></td></tr></table></figure>
+<p>如果选择了router，这里会询问是否使用history模式。</p>
+<p>vue-router 默认使用hash模式（即通过url#hash来跳转页面），使用URL的hash来模拟一个完整的 URL，当URL改变时，页面不会重新加载。<br> 如果使用history，URL就像正常的url，比较好看。但是还需要后台配置支持。</p>
+<p>这里我们选择“n”。</p>
+<hr>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">? Pick a CSS pre-processor (PostCSS, Autoprefixer and CSS Modules are supported </span><br><span class="line">by <span class="keyword">default</span>): (Use arrow keys)</span><br><span class="line">  Sass/SCSS (<span class="keyword">with</span> dart-sass) </span><br><span class="line">  Sass/SCSS (<span class="keyword">with</span> node-sass) </span><br><span class="line">  Less </span><br><span class="line">❯ Stylus</span><br></pre></td></tr></table></figure>
+<p>选择CSS预处理模块，这里我们使用“Stylus”。</p>
+<hr>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">? Pick a linter / formatter config: (Use arrow keys)</span><br><span class="line">  ESLint <span class="keyword">with</span> error prevention only </span><br><span class="line">  ESLint + Airbnb config </span><br><span class="line">❯ ESLint + Standard config </span><br><span class="line">  ESLint + Prettier</span><br></pre></td></tr></table></figure>
+<p>选择ESLint代码格式检查工具的配置，选择“ESLint + Standard config”，标准配置。</p>
+<hr>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">? Pick additional lint features: (Press &lt;space&gt; to <span class="keyword">select</span>, &lt;a&gt; to toggle all, &lt;i</span><br><span class="line">&gt; to invert selection)</span><br><span class="line">❯◉ Lint <span class="keyword">on</span> save</span><br><span class="line"> ◯ Lint and fix <span class="keyword">on</span> commit</span><br></pre></td></tr></table></figure>
+<p>Line on save表示在保存代码的时候，进行格式检查。</p>
+<p>Lint and fix on commit表示在git commit的时候自动纠正格式。</p>
+<p>这里只选择“Lint on save”。</p>
+<hr>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">? Where <span class="keyword">do</span> you prefer placing config <span class="keyword">for</span> Babel, PostCSS, ESLint, etc.? </span><br><span class="line">  In dedicated config files </span><br><span class="line">❯ In <span class="keyword">package</span>.json</span><br></pre></td></tr></table></figure>
+<p>这里问把 babel, postcss, eslint 这些配置文件放哪？</p>
+<p>In dedicated config files 表示独立文件</p>
+<p>In package.json 表示放在package.json里</p>
+<p>这里选择“In package.json”。</p>
+<hr>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">? Save <span class="keyword">this</span> <span class="keyword">as</span> a preset <span class="keyword">for</span> future projects? (y/N) N</span><br></pre></td></tr></table></figure>
+<p>是否为以后的项目保留这些设置？选择“N”。</p>
+<p>然后耐心等待项目安装完成。</p>
+<h2 id="自动安装electron"><a href="#自动安装electron" class="headerlink" title="自动安装electron"></a>自动安装electron</h2><p>使用<a href="https://github.com/nklayman/vue-cli-plugin-electron-builder" target="_blank" rel="noopener">electron-builder</a>安装</p>
+<p>进入到项目根目录，执行：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vue <span class="keyword">add</span> electron-builder</span><br></pre></td></tr></table></figure>
+<p>在安装过程中，很可能会卡在这一步不动了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node ./download-chromedriver.js</span><br></pre></td></tr></table></figure>
+<p>没关系，我们先强制结束掉。再执行一次vue add electron-builder，然后就可以顺利通过了。</p>
+<p>接下来出现配置选项：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">? <span class="selector-tag">Choose</span> <span class="selector-tag">Electron</span> <span class="selector-tag">Version</span></span><br><span class="line">  ^4<span class="selector-class">.0</span><span class="selector-class">.0</span></span><br><span class="line">&gt; ^5<span class="selector-class">.0</span><span class="selector-class">.0</span></span><br><span class="line">  ^6<span class="selector-class">.0</span><span class="selector-class">.0</span></span><br></pre></td></tr></table></figure>
+<p>选择Electron版本为<code>5.0.0</code></p>
+<blockquote>
+<p>Electron<code>5.0</code>和<code>6.0</code>的语法变化不大 选用<code>5.0</code>是因为<code>node-ffi</code>第三方修改版也只能支持到<code>5.0</code></p>
+</blockquote>
+<p>然后耐心等待安装完成。出现报错，跟上面安装的一样VueDevtools不翻墙安装不了，不理他，直接用本地方案开搞</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">-  Running completion hooks...error: Unexpected console statement (no-console) at src\background.js:64:3:</span><br><span class="line">  62 |   await installVueDevtools()</span><br><span class="line">  63 | &#125; catch (e) &#123;</span><br><span class="line">&gt; 64 |   console.error(<span class="string">'Vue Devtools failed to install:'</span>, e.toString())</span><br><span class="line">     |   ^</span><br><span class="line">  65 | &#125;</span><br><span class="line">  66 |</span><br><span class="line">  67 |   &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">1 error found.</span><br></pre></td></tr></table></figure>
+<p>安装完成后会自动在src目录下生成background.js并修改了package.json。</p>
+<h2 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h2><p>在项目根目录执行，安装全部依赖包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn</span><br></pre></td></tr></table></figure>
+<p>如果安装过程中报错：Error: post install error, please remove node_modules before retry!可以忽略，不影响后续使用。</p>
+<h2 id="编译并启动APP"><a href="#编译并启动APP" class="headerlink" title="编译并启动APP"></a>编译并启动APP</h2><p>执行以下命令，开始编译APP，并启动开发环境APP：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">yarn</span> <span class="selector-tag">electron</span><span class="selector-pseudo">:serve</span></span><br></pre></td></tr></table></figure>
+<p>首次启动可能会等待很久，出现以下信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">INFO  Launching Electron...</span><br><span class="line">Failed to fetch extension, trying 4 more <span class="built_in">times</span></span><br><span class="line">Failed to fetch extension, trying 3 more <span class="built_in">times</span></span><br><span class="line">Failed to fetch extension, trying 2 more <span class="built_in">times</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>这是因为在请求安装vuejs devtools插件。需要科学上网才能安装成功。如果不能科学上网也没关系，耐心等待5次请求失败后会自动跳过(可以本地安装）。编译成功后，就会出现开发环境的APP了。</p>
+<h2 id="配置ESLint代码格式检查工具"><a href="#配置ESLint代码格式检查工具" class="headerlink" title="配置ESLint代码格式检查工具"></a>配置ESLint代码格式检查工具</h2><p>ESlint可以高效的检查代码格式，让参与项目的所有工程师都能保持统一的代码风格。其检测精度甚至可以精确到是否多一个空格或者少一个空格。代码格式的统一对提高团队的协同开发效率有很大的帮助，特别是对有代码洁癖的工程师。</p>
+<p>在项目根目录下创建.eslintrc.js （注意文件名前面有个“.”）</p>
+<p>请粘贴以下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span>.<span class="keyword">exports</span> = &#123;</span><br><span class="line">  root: <span class="keyword">true</span>,</span><br><span class="line">  env: &#123;</span><br><span class="line">    node: <span class="keyword">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">'extends'</span>: [</span><br><span class="line">    <span class="string">'plugin:vue/essential'</span>,</span><br><span class="line">    <span class="string">'@vue/standard'</span></span><br><span class="line">  ],</span><br><span class="line">  rules: &#123;</span><br><span class="line">    <span class="string">'no-debugger'</span>: process.env.NODE_ENV === <span class="string">'production'</span> ? <span class="string">'error'</span> : <span class="string">'off'</span>,</span><br><span class="line">    <span class="comment">// 不检测语句末尾的分号</span></span><br><span class="line">    <span class="string">'semi'</span>: [<span class="string">'off'</span>, <span class="string">'always'</span>],</span><br><span class="line">    <span class="comment">// 强制缩进为2个空格</span></span><br><span class="line">    <span class="string">'indent'</span>: [<span class="string">'error'</span>, <span class="number">2</span>],</span><br><span class="line">    <span class="comment">// 关闭函数名称跟括号之间的空格检测</span></span><br><span class="line">    <span class="string">'space-before-function-paren'</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="comment">// 忽略大括号内的空格</span></span><br><span class="line">    <span class="string">'object-curly-spacing'</span>: <span class="number">0</span></span><br><span class="line">  &#125;,</span><br><span class="line">  parserOptions: &#123;</span><br><span class="line">    parser: <span class="string">'babel-eslint'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里说明下关于indent缩进的配置，要配合项目根目录下的.editorconfig</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">*.&#123;js,jsx,ts,tsx,vue&#125;</span>]</span><br><span class="line">indent_style = space   &lt;--这里定义缩进类型是空格还是tab</span><br><span class="line">indent_size = <span class="number">2</span>        &lt;--这里需要与.eslintrc.js的indent对应</span><br><span class="line">trim_trailing_whitespace = <span class="literal">true</span></span><br><span class="line">insert_final_newline = <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>.editorconfig 用于IDE自动格式化代码<br> .eslintrc.js 用于ESlint检测</p>
+</blockquote>
+<p>以上是常用的配置。如果你有更多的配置需求，可参阅： <a href="https://cloud.tencent.com/developer/doc/1078" target="_blank" rel="noopener">https://cloud.tencent.com/developer/doc/1078</a></p>
+<h2 id="配置vue"><a href="#配置vue" class="headerlink" title="配置vue"></a>配置vue</h2><p>在项目根目录下创建vue.config.js，粘贴以下代码：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = require(<span class="string">'path'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function">function <span class="title">resolve</span> (<span class="params">dir</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> path.<span class="keyword">join</span>(__dirname, dir);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module.exports = &#123;</span><br><span class="line">  publicPath: <span class="string">'./'</span>,</span><br><span class="line">  devServer: &#123;</span><br><span class="line">    <span class="comment">// can be overwritten by process.env.HOST</span></span><br><span class="line">    host: <span class="string">'0.0.0.0'</span>,  </span><br><span class="line">    port: <span class="number">8080</span></span><br><span class="line">  &#125;,</span><br><span class="line">  chainWebpack: config =&gt; &#123;</span><br><span class="line">    config.resolve.<span class="keyword">alias</span></span><br><span class="line">      .<span class="keyword">set</span>(<span class="string">'@'</span>, resolve(<span class="string">'src'</span>))</span><br><span class="line">      .<span class="keyword">set</span>(<span class="string">'src'</span>, resolve(<span class="string">'src'</span>))</span><br><span class="line">      .<span class="keyword">set</span>(<span class="string">'common'</span>, resolve(<span class="string">'src/common'</span>))</span><br><span class="line">      .<span class="keyword">set</span>(<span class="string">'components'</span>, resolve(<span class="string">'src/components'</span>));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>devServer 用于设置开发环境的服务，这里表示在本地8080端口启动web服务。</p>
+<p>chainWebpack 我们给项目目录起了“别名(alias)”，在代码中，我们可以直接用“别名”访问资源，省去了每次输入完整相对路径的麻烦。</p>
+<blockquote>
+<p>※注：<br> ◉ 在js代码中可直接使用别名，例如：<br> @/common/js/xxx.js 等价于 src/common/js/xxx.js<br> common/js/xxx.js 等价于 src/common/js/xxx.js<br> ◉ 在css或者html中使用别名，需要在别名前加“~”，例如：<br> @import “~common/stylus/font.styl”;</p>
+</blockquote>
+<h2 id="项目基本设定"><a href="#项目基本设定" class="headerlink" title="项目基本设定"></a>项目基本设定</h2><h3 id="主进程和渲染进程简介"><a href="#主进程和渲染进程简介" class="headerlink" title="主进程和渲染进程简介"></a>主进程和渲染进程简介</h3><p>在开始下面的步骤之前，很有必要简单了解下Electron的应用架构。</p>
+<h4 id="主进程"><a href="#主进程" class="headerlink" title="主进程"></a>主进程</h4><p>Electron 运行 package.json 的 main 脚本（background.js）的进程被称为主进程。 在主进程中运行的脚本通过创建web页面来展示用户界面。 一个 Electron 应用总是有且只有一个主进程。</p>
+<h4 id="渲染进程"><a href="#渲染进程" class="headerlink" title="渲染进程"></a>渲染进程</h4><p>由于 Electron 使用了 Chromium 来展示 web 页面，所以 Chromium 的多进程架构也被使用到。 每个 Electron 中的 web 页面运行在它自己的渲染进程中。</p>
+<p>在普通的浏览器中，web页面通常在一个沙盒环境中运行，不被允许去接触原生的资源。 然而 Electron 的用户在 Node.js 的 API 支持下可以在页面中和操作系统进行一些底层交互。</p>
+<h4 id="主进程与渲染进程的关系"><a href="#主进程与渲染进程的关系" class="headerlink" title="主进程与渲染进程的关系"></a>主进程与渲染进程的关系</h4><p>主进程使用 BrowserWindow 实例创建页面。 每个 BrowserWindow 实例都在自己的渲染进程里运行页面。 当一个 BrowserWindow 实例被销毁后，相应的渲染进程也会被终止。</p>
+<p>主进程管理所有的web页面和它们对应的渲染进程。 每个渲染进程都是独立的，它只关心它所运行的 web 页面。</p>
+<p>具体可参阅官方文档： <a href="https://electronjs.org/docs/tutorial/application-architecture#main-and-renderer-processes" target="_blank" rel="noopener">https://electronjs.org/docs/tutorial/application-architecture#main-and-renderer-processes</a></p>
+<h3 id="APP窗口大小"><a href="#APP窗口大小" class="headerlink" title="APP窗口大小"></a>APP窗口大小</h3><p>修改background.js：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">createWindow</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="comment">// Create the browser window.</span></span><br><span class="line">      win = <span class="keyword">new</span> BrowserWindow(&#123;</span><br><span class="line">M       width: <span class="number">1200</span>,</span><br><span class="line">M       height: <span class="number">620</span>,</span><br><span class="line">        webPreferences: &#123;</span><br><span class="line">          nodeIntegration: <span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="取消跨域限制"><a href="#取消跨域限制" class="headerlink" title="取消跨域限制"></a>取消跨域限制</h3><p>修改background.js：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">createWindow</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="comment">// Create the browser window.</span></span><br><span class="line">      win = <span class="keyword">new</span> BrowserWindow(&#123;</span><br><span class="line">        width: <span class="number">1200</span>,</span><br><span class="line">        height: <span class="number">620</span>,</span><br><span class="line">        webPreferences: &#123;</span><br><span class="line">+         webSecurity: <span class="literal">false</span>,</span><br><span class="line">          nodeIntegration: <span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="取消菜单栏"><a href="#取消菜单栏" class="headerlink" title="取消菜单栏"></a>取消菜单栏</h3><p>在我们生成的桌面APP中，我们可以看到默认的菜单栏。</p>
+<p>在windows中，菜单栏在APP窗口内的顶部；在macOS中，菜单栏位于电脑屏幕顶部。</p>
+<p>为了方便项目将来也能直接生成纯web应用，尽量把APP的全部功能都做到渲染进程里，这里我们取消菜单栏。</p>
+<p>由于macOS的特殊性，顶部菜单栏无法删除，所以我们针对macOS特殊处理，把菜单栏只保留“关于”和“退出”。</p>
+<p>修改background.js：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">M   import &#123; app, protocol, BrowserWindow, Menu &#125; from &apos;electron&apos;</span><br><span class="line">    ...</span><br><span class="line">    function createWindow () &#123;</span><br><span class="line">        ...</span><br><span class="line">        win.on(&apos;closed&apos;, () =&gt; &#123;</span><br><span class="line">            win = null</span><br><span class="line">        &#125;)</span><br><span class="line">        </span><br><span class="line">+       createMenu()</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">+   // 设置菜单栏</span><br><span class="line">+   function createMenu() &#123;</span><br><span class="line">+       // darwin表示macOS，针对macOS的设置</span><br><span class="line">+       if (process.platform === &apos;darwin&apos;) &#123;</span><br><span class="line">+           const template = [</span><br><span class="line">+           &#123;</span><br><span class="line">+               label: &apos;App Demo&apos;,</span><br><span class="line">+               submenu: [</span><br><span class="line">+                   &#123;</span><br><span class="line">+                       role: &apos;about&apos;</span><br><span class="line">+                   &#125;,</span><br><span class="line">+                   &#123;</span><br><span class="line">+                       role: &apos;quit&apos;</span><br><span class="line">+                   &#125;]</span><br><span class="line">+           &#125;]</span><br><span class="line">+           let menu = Menu.buildFromTemplate(template)</span><br><span class="line">+           Menu.setApplicationMenu(menu)</span><br><span class="line">+       &#125; else &#123;</span><br><span class="line">+           // windows及linux系统</span><br><span class="line">+           Menu.setApplicationMenu(null)</span><br><span class="line">+       &#125;</span><br><span class="line">+   &#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>macOS菜单栏名称label的“App Demo”会在build版本生效，dev版本会显示“Electron”</p>
+</blockquote>
+<p>更多关于菜单栏设置，请参阅：<a href="https://links.jianshu.com/go?to=https%3A%2F%2Felectronjs.org%2Fdocs%2Fapi%2Fmenu" target="_blank" rel="noopener">https://electronjs.org/docs/api/menu</a></p>
+<h3 id="设置APP窗口图标"><a href="#设置APP窗口图标" class="headerlink" title="设置APP窗口图标"></a>设置APP窗口图标</h3><p>准备windows和macOS两版图标。</p>
+<blockquote>
+<p>windows:  app.ico  最小尺寸：256x256<br> macOS:  app.png或app.icns  最小尺寸：512x512</p>
+</blockquote>
+<p>把图标文件放到public/目录下，项目结构如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">|- /dist_electron</span><br><span class="line">  （略）</span><br><span class="line">|- /<span class="keyword">public</span></span><br><span class="line">   |- app.icns  &lt;-- 本教程暂时未使用icns</span><br><span class="line">   |- app.ico</span><br><span class="line">   |- app.png</span><br><span class="line">   |- favicon.ico</span><br><span class="line">   |- index.html</span><br><span class="line">|- /src</span><br><span class="line">  （略）</span><br><span class="line">|- .editorconfig    </span><br><span class="line">|- .eslintrc.js</span><br><span class="line">|- .gitignore</span><br><span class="line">|- babel.config.js</span><br><span class="line">|- <span class="keyword">package</span>.json</span><br><span class="line">|- <span class="keyword">package</span>-lock.json</span><br><span class="line">|- README.md</span><br></pre></td></tr></table></figure>
+<p>可以顺便把favicon.ico也修改一下，但是在桌面版APP上是用不到的。如果以后生成纯web项目才会用到。</p>
+<p>修改background.js，让APP窗口应用图标：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">createWindow</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="comment">// Create the browser window.</span></span><br><span class="line">      win = <span class="keyword">new</span> BrowserWindow(&#123;</span><br><span class="line">        width: <span class="number">1200</span>,</span><br><span class="line">        height: <span class="number">620</span>,</span><br><span class="line">        webPreferences: &#123;</span><br><span class="line">          nodeIntegration: <span class="literal">true</span></span><br><span class="line">        &#125;,</span><br><span class="line">+       <span class="comment">// eslint-disable-next-line no-undef</span></span><br><span class="line">+       icon: <span class="string">`<span class="subst">$&#123;__static&#125;</span>/app.ico`</span></span><br><span class="line">      &#125;)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这里的${__static}对应的是public目录</p>
+</blockquote>
+<p>现在，Windows系统上可以看到开发环境的APP窗口图标已经生效了。</p>
+<p>macOS图标请参照相关章节，并且需要在build后才能生效。</p>
+<h3 id="设置APP窗口标题栏名称"><a href="#设置APP窗口标题栏名称" class="headerlink" title="设置APP窗口标题栏名称"></a>设置APP窗口标题栏名称</h3><p>修改public/index.html:</p>
+<p>我们把electron-vue-demo改为App Demo。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"IE=edge"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width,initial-scale=1.0"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"icon"</span> <span class="attr">href</span>=<span class="string">"&lt;%= BASE_URL %&gt;favicon.ico"</span>&gt;</span></span><br><span class="line">M       <span class="tag">&lt;<span class="name">title</span>&gt;</span>App Demo<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="build最终产品"><a href="#build最终产品" class="headerlink" title="build最终产品"></a>build最终产品</h2><p>这里我们已经集成了electron-builder工具，官方文档可以参阅：<a href="https://www.electron.build/" target="_blank" rel="noopener">https://www.electron.build/</a></p>
+<h3 id="设置APP及安装包图标"><a href="#设置APP及安装包图标" class="headerlink" title="设置APP及安装包图标"></a>设置APP及安装包图标</h3><p>在窗口图标章节，我们的图标生效于运行APP的窗口。本小节将生效于最终生成的可执行文件和安装包图标。需要准备的图标文件请回看对应章节。</p>
+<p>修改vue.config.js</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    chainWebpack: <span class="function"><span class="params">config</span> =&gt;</span> &#123;...&#125;,</span><br><span class="line">+   pluginOptions: &#123;</span><br><span class="line">+       electronBuilder: &#123;</span><br><span class="line">+           builderOptions: &#123;</span><br><span class="line">+               win: &#123;</span><br><span class="line">+                   icon: <span class="string">'./public/app.ico'</span></span><br><span class="line">+               &#125;,</span><br><span class="line">+               mac: &#123;</span><br><span class="line">+                   icon: <span class="string">'./public/app.png'</span></span><br><span class="line">+               &#125;</span><br><span class="line">+           &#125;</span><br><span class="line">+       &#125;</span><br><span class="line">+   &#125;</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>运行build后的mac版本，可以看到图标都已生效了。</p>
+<p>安装包和可执行文件的截图就不再放出了。</p>
+<p>更多详细介绍，可参阅： <a href="https://www.electron.build/icons.html" target="_blank" rel="noopener">https://www.electron.build/icons.html</a></p>
+<h3 id="设置APP名称"><a href="#设置APP名称" class="headerlink" title="设置APP名称"></a>设置APP名称</h3><p>APP名称包括安装包中APP的名称、可执行文件的文件名。</p>
+<p>修改vue.config.js:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">    pluginOptions: &#123;</span><br><span class="line">        electronBuilder: &#123;</span><br><span class="line">            builderOptions: &#123;</span><br><span class="line">                win: &#123;</span><br><span class="line">                    icon: <span class="string">'./public/app.ico'</span></span><br><span class="line">                &#125;,</span><br><span class="line">                mac: &#123;</span><br><span class="line">                    icon: <span class="string">'./public/app.png'</span></span><br><span class="line">                &#125;,</span><br><span class="line">+               productName: <span class="string">'AppDemo'</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="打包APP"><a href="#打包APP" class="headerlink" title="打包APP"></a>打包APP</h3><p>执行以下命令，可以build工程：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">npm</span> <span class="selector-tag">run</span> <span class="selector-tag">electron</span><span class="selector-pseudo">:build</span></span><br></pre></td></tr></table></figure>
+<p>最终在dist_electron目录下生成build后的产品。</p>
+<h4 id="windows版本"><a href="#windows版本" class="headerlink" title="windows版本"></a>windows版本</h4><p>目录如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/dist_electron</span><br><span class="line">|- /bundled</span><br><span class="line">  （略）</span><br><span class="line">|- /win-unpacked  &lt;-- 绿色版</span><br><span class="line">  （略）</span><br><span class="line">|- AppDemo Setup 0.1.0.exe  &lt;-- 安装文件</span><br><span class="line">|- AppDemo Setup 0.1.0.exe.blockmap</span><br><span class="line">|- builder-effective-config.yaml</span><br><span class="line">|- index.js</span><br></pre></td></tr></table></figure>
+<p>这里其实就win-unpacked和AppDemo Setup 0.1.0.exe有用。</p>
+<blockquote>
+<p>※注：在32位环境下打包生成的是32位APP，在64位环境下打包生成的是64位APP。</p>
+</blockquote>
+<h4 id="mac版本"><a href="#mac版本" class="headerlink" title="mac版本"></a>mac版本</h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/dist_electron</span><br><span class="line">|- /bundled</span><br><span class="line">  （略）</span><br><span class="line">|- /mac</span><br><span class="line">   |- <span class="type">AppDemo</span>   &lt;-- 绿色版</span><br><span class="line">|- <span class="type">AppDemo</span>-<span class="number">0.1</span>.<span class="number">0</span>-mac.<span class="built_in">zip</span>  &lt;-- 绿色版压缩包</span><br><span class="line">|- <span class="type">AppDemo</span>-<span class="number">0.1</span>.<span class="number">0</span>-mac.dmg  &lt;-- 安装包</span><br><span class="line">|- <span class="type">AppDemo</span>-<span class="number">0.1</span>.<span class="number">0</span>.dmg.blockmap</span><br><span class="line">|- builder-effective-config.yaml</span><br><span class="line">|- index.js</span><br></pre></td></tr></table></figure>
+<h3 id="可能出现的错误"><a href="#可能出现的错误" class="headerlink" title="可能出现的错误"></a>可能出现的错误</h3><p>我曾经在Win10 64bit 1809版本上build失败，保存信息中提示：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Error output:</span><br><span class="line">Can<span class="symbol">'t</span> open output file</span><br><span class="line">Error - aborting creation process</span><br></pre></td></tr></table></figure>
+<p>与此同时，在win7和win10 1803版本build正常。经研究，无果。后来把windows升级到1903版本，问题解决了。应该是vue-cli-plugin-electron-builder插件与系统之间的问题导致。</p>
+<h2 id="关于项目开发的一些经验"><a href="#关于项目开发的一些经验" class="headerlink" title="关于项目开发的一些经验"></a>关于项目开发的一些经验</h2><p>在完成以上章节后，后面基本可以完全按照web方式开发了。这里简单分享下一些小经验。</p>
+<h3 id="src目录结构参考"><a href="#src目录结构参考" class="headerlink" title="src目录结构参考"></a>src目录结构参考</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">/src</span><br><span class="line">|- /common</span><br><span class="line">   |- /fonts</span><br><span class="line">   |- /images</span><br><span class="line">   |- /js</span><br><span class="line">      |- api</span><br><span class="line">      |- libs</span><br><span class="line">   |- /stylus</span><br><span class="line">   |- /components</span><br><span class="line">   |- /<span class="keyword">base</span></span><br><span class="line">   |- /modules</span><br><span class="line">      |- /moduleA</span><br><span class="line">      |- /moduleB</span><br><span class="line">      ...</span><br><span class="line">   |- /views</span><br><span class="line">   |- App.vue</span><br><span class="line">   |- background.js</span><br><span class="line">   |- main.js</span><br><span class="line">   |- router.js</span><br><span class="line">   |- store.js</span><br></pre></td></tr></table></figure>
+<p>下面对部分重要目录简要说明：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">common/ - 项目公用库</span><br><span class="line">common/fonts/ - 字体文件</span><br><span class="line">common/images/ - 公用图片</span><br><span class="line">common/js/ - 公用js目录</span><br><span class="line">common/js/api/ - 把api按类别封装成函数，并<span class="built_in">export</span>出去，减少业务逻辑中的重复代码</span><br><span class="line">common/js/lib/ - 存放一些公用函数库、定义的常量库等</span><br><span class="line">common/stylus/ - Stylus样式文件</span><br><span class="line">components/ - vue组件目录</span><br><span class="line">component/base/ - vue基础组件，例如自定义的CheckBox、日期选择器、Dialog、Toaster、分页组件等</span><br><span class="line">component/modules/ - vue模块</span><br><span class="line">views/ - vue页面</span><br></pre></td></tr></table></figure>
+<h3 id="换肤功能的实现"><a href="#换肤功能的实现" class="headerlink" title="换肤功能的实现"></a>换肤功能的实现</h3><p>很多项目都有实时换肤的需求，在实际开发中，虽然我们使用了Sass、Less、Stylus等高端样式工具，但最终经过编译还是要回归到最原始的CSS。换肤的本质还是实时替换皮肤样式文件。</p>
+<h4 id="失败案例"><a href="#失败案例" class="headerlink" title="失败案例"></a>失败案例</h4><p>以Stylus为例，抽象出皮肤文件skin.styl:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$color</span>-<span class="built_in">bg</span> = <span class="comment">#fff</span></span><br><span class="line"><span class="variable">$color</span>-text = <span class="comment">#333</span></span><br></pre></td></tr></table></figure>
+<p>在业务样式中引用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@import <span class="string">'skin.styl'</span></span><br><span class="line"></span><br><span class="line">body</span><br><span class="line"> background: <span class="variable">$color</span>-<span class="built_in">bg</span></span><br><span class="line"> color: <span class="variable">$color</span>-text</span><br></pre></td></tr></table></figure>
+<p>当经过编译后，生成的css为：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;<span class="attribute">background</span>: <span class="number">#fff</span>; <span class="attribute">color</span>: <span class="number">#333</span>;&#125;</span><br></pre></td></tr></table></figure>
+<p>样式已经写死了，无法换肤。</p>
+<p>那么应该怎么做呢？</p>
+<h4 id="成功案例"><a href="#成功案例" class="headerlink" title="成功案例"></a>成功案例</h4><p>项目根目录下的public目录是静态目录，也就是说在build最终产品的时候，它里面的文件将原封不动保留。所以，可以将皮肤文件放在这里。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">|- /<span class="keyword">public</span></span><br><span class="line">+  |- /skin</span><br><span class="line">+     |- /skin01</span><br><span class="line">+        |- skin.css</span><br><span class="line">+     |- /skin02</span><br><span class="line">+        |- skin.css     </span><br><span class="line">   |- app.icns</span><br><span class="line">   |- app.ico</span><br><span class="line">   |- app.png</span><br><span class="line">   |- favicon.ico</span><br><span class="line">   |- index.html</span><br></pre></td></tr></table></figure>
+<p>由于Electron的是基于chromium内核，所以不用担心代码的浏览器兼容问题。接下来就是发挥CSS3变量var(–*)的时候了。</p>
+<p>public/skin/skin01/skin.css：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-pseudo">:root</span> &#123;</span><br><span class="line">    <span class="attribute">--color-bg</span>: <span class="number">#fff</span>;</span><br><span class="line">    <span class="attribute">--color-text</span>: <span class="number">#333</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>public/skin/skin02/skin.css：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-pseudo">:root</span> &#123;</span><br><span class="line">    <span class="attribute">--color-bg</span>: <span class="number">#263238</span>;</span><br><span class="line">    <span class="attribute">--color-text</span>: <span class="number">#b2ccd6</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>修改src/App.vue：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">    ...</span><br><span class="line">    &lt;style lang=<span class="string">"stylus"</span>&gt;</span><br><span class="line">+   body</span><br><span class="line">+     background: <span class="keyword">var</span>(--color-bg)</span><br><span class="line">+     color: <span class="keyword">var</span>(--color-text)</span><br><span class="line">    <span class="meta">#app</span></span><br><span class="line">      font-family <span class="string">'Avenir'</span>, Helvetica, Arial, sans-serif</span><br><span class="line">      -webkit-font-smoothing antialiased</span><br><span class="line">      -moz-osx-font-smoothing grayscale</span><br><span class="line">      text-align center</span><br><span class="line">M     color: <span class="keyword">var</span>(--color-text)</span><br><span class="line">    </span><br><span class="line">    <span class="meta">#nav</span></span><br><span class="line">      padding <span class="number">30</span>px</span><br><span class="line">      a</span><br><span class="line">        font-weight bold</span><br><span class="line">M       color: <span class="keyword">var</span>(--color-text)</span><br><span class="line">        &amp;.router-link-exact-active</span><br><span class="line">          color <span class="meta">#42b983</span></span><br><span class="line">    &lt;/style&gt;</span><br></pre></td></tr></table></figure>
+<p>在public/index.html引入皮肤样式，注意加上id=”app-skin”：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"IE=edge"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width,initial-scale=1.0"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"icon"</span> <span class="attr">href</span>=<span class="string">"&lt;%= BASE_URL %&gt;favicon.ico"</span>&gt;</span></span><br><span class="line">+       <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"&lt;%= BASE_URL %&gt;skin/skin01/skin.css"</span> <span class="attr">id</span>=<span class="string">"app-skin"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>App Demo<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>篇幅有限，这里就不写通过js修改皮肤的代码了。通过调试工具手动修改skin的css路径，可看到换肤效果</p>
+<h3 id="从Electron4-x升级到5-x"><a href="#从Electron4-x升级到5-x" class="headerlink" title="从Electron4.x升级到5.x"></a>从Electron4.x升级到5.x</h3><p>如果你之前用的是Electron4.x，升级到5.x很简单。</p>
+<p>修改package.json中electron的版本(写作本文时是5.0.6)：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">    ...</span><br><span class="line">M   <span class="string">"electron"</span>: <span class="string">"^5.0.6"</span>,</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>修改background.js中的这部分：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Scheme must be registered before the app is ready</span></span><br><span class="line"><span class="comment">// Electron 4.x代码</span></span><br><span class="line"><span class="comment">// protocol.registerStandardSchemes(['app'], &#123;secure: true&#125;)</span></span><br><span class="line"><span class="comment">// Electron 5.x代码</span></span><br><span class="line"><span class="class"><span class="keyword">protocol</span>.<span class="title">registerSchemesAsPrivileged</span>([</span>&#123;</span><br><span class="line">  scheme: 'app',</span><br><span class="line">  privileges: &#123;</span><br><span class="line">    secure: <span class="literal">true</span>,</span><br><span class="line">    standard: <span class="literal">true</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;])</span><br></pre></td></tr></table></figure>
+<p>然后执行，等待升级安装完成：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/01/27/JVM-性能调优监控工具-jps、jstack、jmap、jhat、jstat、hprof-使用详解/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2094,396 +3004,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/06/01/Hexo添加Gitalk评论插件/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="vincent">
-      <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="星辰大海">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/01/Hexo添加Gitalk评论插件/" itemprop="url">
-                  Hexo添加Gitalk评论插件
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-06-01 23:55:56" itemprop="dateCreated datePublished" datetime="2018-06-01T23:55:56+08:00">2018-06-01</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-06-02 00:18:58" itemprop="dateModified" datetime="2018-06-02T00:18:58+08:00">2018-06-02</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Hexo使用攻略/" itemprop="url" rel="index"><span itemprop="name">Hexo使用攻略</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p><a href="https://github.com/gitalk/gitalk" target="_blank" rel="noopener">Gitalk</a>提供了两种方式：</p>
-<ul>
-<li>直接引入</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"</span>&gt;</span><br><span class="line">&lt;script src=<span class="string">"https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"</span>&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- or --&gt;</span><br><span class="line"></span><br><span class="line">&lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"https://unpkg.com/gitalk/dist/gitalk.css"</span>&gt;</span><br><span class="line">&lt;script src=<span class="string">"https://unpkg.com/gitalk/dist/gitalk.min.js"</span>&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>npm安装</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm i --save gitalk</span><br><span class="line">import &apos;gitalk/dist/gitalk.css&apos;</span><br><span class="line">import Gitalk from &apos;gitalk&apos;</span><br></pre></td></tr></table></figure>
-<p>相对来说第一种会更简单。</p>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>A <strong>GitHub Application</strong> is needed for authorization, if you don’t have one, <a href="https://github.com/settings/applications/new" target="_blank" rel="noopener">Click here to register</a> a new one.</p>
-<p><strong>Note:</strong> You must specify the website domain url in the <code>Authorization callback URL</code> field.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">const gitalk = new Gitalk(&#123;</span><br><span class="line">  clientID: &apos;GitHub Application Client ID&apos;,</span><br><span class="line">  clientSecret: &apos;GitHub Application Client Secret&apos;,</span><br><span class="line">  repo: &apos;GitHub repo&apos;,</span><br><span class="line">  owner: &apos;GitHub repo owner&apos;,</span><br><span class="line">  admin: [&apos;GitHub repo owner and collaborators, only these guys can initialize github issues&apos;],</span><br><span class="line">  id: location.pathname,      // Ensure uniqueness and length less than 50</span><br><span class="line">  distractionFreeMode: false  // Facebook-like distraction free mode</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">gitalk.render(&apos;gitalk-container&apos;)</span><br></pre></td></tr></table></figure>
-<h3 id="修改主题文件"><a href="#修改主题文件" class="headerlink" title="修改主题文件"></a>修改主题文件</h3><ul>
-<li>这里以next主题为例，参考<a href="https://github.com/iissnan/hexo-theme-next/pull/1814/files#diff-9f7e5af0c701ee066fc50dcf184a48ec" target="_blank" rel="noopener">Feature: Add Gitalk Support</a></li>
-</ul>
-<p>不同的主题目录和模板引擎不同，可以自己修改, 修改next主题配置文件<code>_config.yml</code>，添加字段：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># Gitalk</span><br><span class="line"># more info please open https://github.com/gitalk/gitalk</span><br><span class="line">gitalk:</span><br><span class="line">  enable: false</span><br><span class="line">  clientID:</span><br><span class="line">  clientSecret:</span><br><span class="line">  repo:</span><br><span class="line">  owner:</span><br><span class="line">  admin: # support multiple admins split with comma, e.g. foo,bar</span><br><span class="line">  pagerDirection: first</span><br></pre></td></tr></table></figure>
-<ul>
-<li>找到<code>next/layout/_third-party/comments</code>文件夹，新建<code>gitalk.swig</code>文件，代码如下：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;% if not (theme.duoshuo and theme.duoshuo.shortname) and not theme.duoshuo_shortname %&#125;</span><br><span class="line">  &#123;% if theme.gitalk.enable %&#125;</span><br><span class="line">    &#123;% if page.comments %&#125;</span><br><span class="line">      &lt;script src=&quot;https://unpkg.com/gitalk/dist/gitalk.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">      &lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">        const gitalk = new Gitalk(&#123;</span><br><span class="line">          clientID: &apos;&#123;&#123;theme.gitalk.clientID&#125;&#125;&apos;,</span><br><span class="line">          clientSecret: &apos;&#123;&#123;theme.gitalk.clientSecret&#125;&#125;&apos;,</span><br><span class="line">          repo: &apos;&#123;&#123;theme.gitalk.repo&#125;&#125;&apos;,</span><br><span class="line">          owner: &apos;&#123;&#123;theme.gitalk.owner&#125;&#125;&apos;,</span><br><span class="line">          admin: &apos;&#123;&#123;theme.gitalk.admin&#125;&#125;&apos;.split(&apos;,&apos;),</span><br><span class="line">          pagerDirection: &apos;&#123;&#123;theme.gitalk.pagerDirection&#125;&#125;&apos;,</span><br><span class="line">          // facebook-like distraction free mode</span><br><span class="line">          distractionFreeMode: false</span><br><span class="line">        &#125;)</span><br><span class="line">        gitalk.render(&apos;gitalk-container&apos;)</span><br><span class="line">      &lt;/script&gt;</span><br><span class="line">    &#123;% endif %&#125;</span><br><span class="line">  &#123;% endif %&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>同目录下在<code>index.swig</code>文件末尾添加：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% include &apos;gitalk.swig&apos; %&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>下步搞起，<code>next/layout/_partials</code>文件夹下，找到<code>comments.swig</code>文件，添加代码：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% elseif theme.gitalk.enable %&#125;</span><br><span class="line">      &lt;div id=&quot;gitalk-container&quot;&gt;&lt;/div&gt;</span><br><span class="line">      &lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/gitalk/dist/gitalk.css&quot;&gt;</span><br></pre></td></tr></table></figure>
-<p> 因为github限制了issue的提交title长度不能超过50，可能会遇到<a href="https://github.com/gitalk/gitalk/issues/102" target="_blank" rel="noopener">Error: Validation Failed</a> 按照这里的方案，使用MD5的方式降低长度即可</p>
-<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ol>
-<li><a href="https://www.jianshu.com/p/9be29ed2f4b7" target="_blank" rel="noopener">Hexo添加Gitalk评论插件</a></li>
-<li><a href="http://theme-next.iissnan.com/third-party-services.html" target="_blank" rel="noopener">Next 第三方服务集成</a></li>
-<li><a href="https://github.com/gitalk/gitalk/wiki/%E5%9C%A8hexo-next%E4%B8%BB%E9%A2%98%E4%B8%8A%E4%BD%BF%E7%94%A8gitalk" target="_blank" rel="noopener">在hexo next主题上使用gitalk</a></li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="vincent">
-      <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="星辰大海">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/01/Hexo集成Algolia搜索插件/" itemprop="url">
-                  Hexo集成Algolia搜索插件
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-06-01 23:14:36 / 修改时间：23:17:31" itemprop="dateCreated datePublished" datetime="2018-06-01T23:14:36+08:00">2018-06-01</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Hexo使用攻略/" itemprop="url" rel="index"><span itemprop="name">Hexo使用攻略</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong><em>本文转载自</em></strong><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/" target="_blank" rel="noopener">Hexo集成Algolia搜索插件</a></p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>个人博客自从2016年10月21日搭建以来，迄今为止已经有49 篇日志了。虽然不是很多篇文章，但是搜索站内的内容已经力不从心了。</p>
-<p>搜索了网上很多关于“Hexo 站内搜索”的内容，发现大部分都是使用<a href="https://swiftype.com/" target="_blank" rel="noopener">Swiftype</a>，但是发现Swiftype 搜索只有15 天的免费，之后就需要开始收费了。</p>
-<p>因为只是为自己的<a href="https://jobbym.github.io/" target="_blank" rel="noopener">个人博客 </a>使用站内搜索，所以希望找一个类似与Swiftype 的，但是<strong>免费的</strong>站内搜索。最后找了Algolia 这个免费版本替代。</p>
-<p>下面简单说下搭建过程：</p>
-<h2 id="搭建过程"><a href="#搭建过程" class="headerlink" title="搭建过程"></a>搭建过程</h2><h3 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h3><p>如果你的Next 版本为5.1.0 之后，可以使用Algolia。如果不是，请先升级到5.1.0 版本之后</p>
-<h3 id="一个Algolia-帐号"><a href="#一个Algolia-帐号" class="headerlink" title="一个Algolia 帐号"></a>一个Algolia 帐号</h3><p><a href="https://www.algolia.com/users/sign_in" target="_blank" rel="noopener">官网地址</a> 使用GitHub 或Google 帐号登录。<br><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_login.jpg" target="_blank" rel="noopener"><img src="/2018/06/01/Hexo集成Algolia搜索插件/algolia_login.jpg" alt="img"></a></p>
-<h3 id="创建Index"><a href="#创建Index" class="headerlink" title="创建Index"></a>创建Index</h3><p>进入<a href="https://www.algolia.com/dashboard" target="_blank" rel="noopener">Dashboard</a>，<br>选择<a href="https://www.algolia.com/explorer#?index=getstarted_actors" target="_blank" rel="noopener">Indices</a> 新建一个Index。<br><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_explorer.jpg" target="_blank" rel="noopener"><img src="/2018/06/01/Hexo集成Algolia搜索插件/algolia_explorer.jpg" alt="img"></a><br><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_newindex.jpg" target="_blank" rel="noopener"><img src="/2018/06/01/Hexo集成Algolia搜索插件/algolia_newindex.jpg" alt="img"></a></p>
-<h3 id="安装Hexo-Algolia"><a href="#安装Hexo-Algolia" class="headerlink" title="安装Hexo Algolia"></a>安装Hexo Algolia</h3><p>Index 创建完成后，此时Index 为包含任何数据。需要安装Hexo Aloglia 扩展，这个扩展的功能是搜集站点的内容并通过API 发送给Aloglia。前往站点根目录，执行命令安装：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save hexo-algolia</span><br></pre></td></tr></table></figure>
-<h3 id="获取Key，更新站点信配置"><a href="#获取Key，更新站点信配置" class="headerlink" title="获取Key，更新站点信配置"></a>获取Key，更新站点信配置</h3><p>点击Dashborad 左侧的<a href="https://www.algolia.com/api-keys" target="_blank" rel="noopener">API Keys</a>，其中的信息接下来将会被用到。<br><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_apikeys.jpg" target="_blank" rel="noopener"><img src="/2018/06/01/Hexo集成Algolia搜索插件/algolia_apikeys.jpg" alt="img"></a><br>包括<code>Application ID</code> 、<code>Search-Only API Key</code> 和 <code>Admin API Key</code>，其中<code>Admin API Key</code>需要保密保存</p>
-<p>编辑站点配置文件，新增以下配置：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">algolia:</span><br><span class="line">  applicationID: &apos;SV57WJ53OS&apos;</span><br><span class="line">  apiKey: &apos;c7d219504e44d09ab55f5f7a195fce98&apos;</span><br><span class="line">  adminApiKey: &apos;adminApiKey&apos;</span><br><span class="line">  indexName: &apos;dev_jobbymsblog&apos;</span><br><span class="line">  chunkSize: 5000</span><br></pre></td></tr></table></figure>
-<h3 id="更新Index"><a href="#更新Index" class="headerlink" title="更新Index"></a>更新Index</h3><p>当配置完成，在站点根目录下执行<code>hexo algolia</code> 来更新Index。请注意观察命令的输出。<br><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_hexo_algolia.jpg" target="_blank" rel="noopener"><img src="/2018/06/01/Hexo集成Algolia搜索插件/algolia_hexo_algolia.jpg" alt="img"></a></p>
-<h3 id="主题集成"><a href="#主题集成" class="headerlink" title="主题集成"></a>主题集成</h3><p>更改主题配置文件，找到Algolia Search 配置部分：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Algolia Search</span><br><span class="line">algolia_search:</span><br><span class="line">  enable: false</span><br><span class="line">  hits:</span><br><span class="line">    per_page: 10</span><br><span class="line">  labels:</span><br><span class="line">    input_placeholder: Search for Posts</span><br><span class="line">    hits_empty: &quot;We didn&apos;t find any results for the search: $&#123;query&#125;&quot;</span><br><span class="line">    hits_stats: &quot;$&#123;hits&#125; results found in $&#123;time&#125; ms&quot;</span><br></pre></td></tr></table></figure>
-<p>将<code>enable</code> 改为<code>true</code> 即可，根据需要你可以调整<code>labels</code> 中的文本。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1. 点击搜索结果，结果跳转地址为：</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cannot GET /undefined/</span><br></pre></td></tr></table></figure>
-<p>按照<a href="https://github.com/iissnan/hexo-theme-next/issues/1084" target="_blank" rel="noopener">5.1.0使用algolia搜索问题</a>这里进行的处理，在这里总结一下：</p>
-<ul>
-<li>因为hexo-aloglia 的作者没有把<code>post.path</code> 加入index，所以<code>data.path</code> 是<code>undefined</code>。</li>
-<li>遇到这个问题，首先运行<code>npm uninstll hexo-algolia</code> 卸载之前的版本，再运行<code>npm install hexo-algolia@0.2.0 --save</code>,最后运行<code>hexo algolia</code> 命令重新index 就可以了。</li>
-</ul>
-<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ol>
-<li><a href="https://github.com/iissnan/hexo-theme-next/wiki/Swiftype%E7%AB%99%E5%86%85%E6%90%9C%E7%B4%A2" target="_blank" rel="noopener">Swiftype站内搜索</a></li>
-<li><a href="http://theme-next.iissnan.com/third-party-services.html" target="_blank" rel="noopener">Next 第三方服务集成</a></li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2531,7 +3051,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">39</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2578,7 +3098,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -2687,7 +3209,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">48</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">52</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
