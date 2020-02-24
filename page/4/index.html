@@ -323,6 +323,198 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/05/27/Linux-xmr-stak挖矿教程/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vincent">
+      <meta itemprop="description" content="The King is dead, long live the King!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/27/Linux-xmr-stak挖矿教程/" itemprop="url">
+                  Linux xmr-stak挖矿教程
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-27 21:51:10" itemprop="dateCreated datePublished" datetime="2018-05-27T21:51:10+08:00">2018-05-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-09 01:29:23" itemprop="dateModified" datetime="2018-06-09T01:29:23+08:00">2018-06-09</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/block-chain/" itemprop="url" rel="index"><span itemprop="name">block-chain</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="在Linux上编译-xmr-stak"><a href="#在Linux上编译-xmr-stak" class="headerlink" title="在Linux上编译 xmr-stak"></a>在Linux上编译 <strong>xmr-stak</strong></h1><h2 id="Install-Dependencies"><a href="#Install-Dependencies" class="headerlink" title="Install Dependencies"></a>Install Dependencies</h2><h3 id="AMD-APP-SDK-3-0-only-needed-to-use-AMD-GPUs"><a href="#AMD-APP-SDK-3-0-only-needed-to-use-AMD-GPUs" class="headerlink" title="AMD APP SDK 3.0 (only needed to use AMD GPUs)"></a>AMD APP SDK 3.0 (only needed to use AMD GPUs)</h3><ul>
+<li>download and install the latest version from <a href="https://www.dropbox.com/sh/mpg882ekirnsfa7/AADWz5X-TgVdsmWt0QwMgTWLa/AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2?dl=0" target="_blank" rel="noopener">https://www.dropbox.com/sh/mpg882ekirnsfa7/AADWz5X-TgVdsmWt0QwMgTWLa/AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2?dl=0</a><br>(do not wonder why it is a link to a dropbox but AMD has removed the SDK downloads, see <a href="https://community.amd.com/thread/228059" target="_blank" rel="noopener">https://community.amd.com/thread/228059</a>)</li>
+</ul>
+<h3 id="Cuda-8-0-only-needed-to-use-NVIDIA-GPUs"><a href="#Cuda-8-0-only-needed-to-use-NVIDIA-GPUs" class="headerlink" title="Cuda 8.0+ (only needed to use NVIDIA GPUs)"></a>Cuda 8.0+ (only needed to use NVIDIA GPUs)</h3><ul>
+<li>download and install <a href="https://developer.nvidia.com/cuda-downloads" target="_blank" rel="noopener">https://developer.nvidia.com/cuda-downloads</a></li>
+<li>for minimal install choose <code>Custom installation options</code> during the install and select<ul>
+<li>CUDA/Develpment</li>
+<li>CUDA/Runtime</li>
+<li>Driver components</li>
+</ul>
+</li>
+</ul>
+<h2 id="GNU-Compiler"><a href="#GNU-Compiler" class="headerlink" title="GNU Compiler"></a>GNU Compiler</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"># Ubuntu / Debian</span><br><span class="line">sudo apt install libmicrohttpd-dev libssl-dev cmake build-essential libhwloc-dev</span><br><span class="line">git clone https://github.com/fireice-uk/xmr-stak.git</span><br><span class="line">mkdir xmr-stak/build</span><br><span class="line">cd xmr-stak/build</span><br><span class="line">cmake ..</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"># Arch</span><br><span class="line">sudo pacman -S --needed base-devel hwloc openssl cmake libmicrohttpd</span><br><span class="line">git clone https://github.com/fireice-uk/xmr-stak.git</span><br><span class="line">mkdir xmr-stak/build</span><br><span class="line">cd xmr-stak/build</span><br><span class="line">cmake ..</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"># Fedora</span><br><span class="line">sudo dnf install gcc gcc-c++ hwloc-devel libmicrohttpd-devel libstdc++-static make openssl-devel cmake</span><br><span class="line">git clone https://github.com/fireice-uk/xmr-stak.git</span><br><span class="line">mkdir xmr-stak/build</span><br><span class="line">cd xmr-stak/build</span><br><span class="line">cmake ..</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"># CentOS</span><br><span class="line">sudo yum install centos-release-scl epel-release</span><br><span class="line">sudo yum install cmake3 devtoolset-4-gcc* hwloc-devel libmicrohttpd-devel openssl-devel make</span><br><span class="line">scl enable devtoolset-4 bash</span><br><span class="line">git clone https://github.com/fireice-uk/xmr-stak.git</span><br><span class="line">mkdir xmr-stak/build</span><br><span class="line">cd xmr-stak/build</span><br><span class="line">cmake3 ..</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"># Ubuntu 14.04</span><br><span class="line">sudo add-apt-repository ppa:ubuntu-toolchain-r/test</span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt install gcc-5 g++-5 make</span><br><span class="line">sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 1 --slave /usr/bin/g++ g++ /usr/bin/g++-5</span><br><span class="line">curl -L http://www.cmake.org/files/v3.4/cmake-3.4.1.tar.gz | tar -xvzf - -C /tmp/</span><br><span class="line">cd /tmp/cmake-3.4.1/ &amp;&amp; ./configure &amp;&amp; make &amp;&amp; sudo make install &amp;&amp; cd -</span><br><span class="line">sudo update-alternatives --install /usr/bin/cmake cmake /usr/local/bin/cmake 1 --force</span><br><span class="line">sudo apt install libmicrohttpd-dev libssl-dev libhwloc-dev</span><br><span class="line">git clone https://github.com/fireice-uk/xmr-stak.git</span><br><span class="line">mkdir xmr-stak/build</span><br><span class="line">cd xmr-stak/build</span><br><span class="line">cmake ..</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"># TinyCore Linux 8.x</span><br><span class="line"># TinyCore is 32-bit only, but there is an x86-64 port, known as &quot;Pure 64,&quot;</span><br><span class="line"># hosted on the TinyCore home page, and it works well.</span><br><span class="line"># Beware that huge page support is not enabled in the kernel distributed</span><br><span class="line"># with Pure 64.  Consider http://wiki.tinycorelinux.net/wiki:custom_kernel</span><br><span class="line"># Note that as of yet there are no distro packages for microhttpd or hwloc.</span><br><span class="line"># hwloc is easy enough to install manually though, shown below.</span><br><span class="line"># Also note that only CPU mining has been tested on this platform, thus the</span><br><span class="line"># disabling of CUDA and OpenCL shown below.</span><br><span class="line">tce-load -iw openssl-dev.tcz cmake.tcz make.tcz gcc.tcz git.tcz \</span><br><span class="line">             glibc_base-dev.tcz linux-4.8.1_api_headers.tcz \</span><br><span class="line">             glibc_add_lib.tcz</span><br><span class="line">wget https://www.open-mpi.org/software/hwloc/v1.11/downloads/hwloc-1.11.8.tar.gz</span><br><span class="line">tar xzvf hwloc-1.11.8.tar.gz</span><br><span class="line">cd hwloc-1.11.8</span><br><span class="line">./configure --prefix=/usr/local</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br><span class="line">cd ..</span><br><span class="line">git clone http://github.com/fireice-uk/xmr-stak</span><br><span class="line">cd xmr-stak</span><br><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line">CC=gcc cmake .. -DCUDA_ENABLE=OFF \</span><br><span class="line">                -DOpenCL_ENABLE=OFF \</span><br><span class="line">                -DMICROHTTPD_ENABLE=OFF</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>g++ version 5.1 or higher is required for full C++11 support.<br>If you want to compile the binary without installing libraries / compiler or just compile binary for some other distribution, please check the <a href="scripts/build_xmr-stak_docker/build_xmr-stak_docker.sh">build_xmr-stak_docker.sh script</a>.</p>
+</li>
+<li><p>Some newer gcc versions are not supported by CUDA (e.g. Ubuntu 17.10). It will require installing gcc 5 but you can avoid changing defaults.</p>
+</li>
+</ul>
+<p>In that case you can force CUDA to use an older compiler in the following way:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -DCUDA_HOST_COMPILER=/usr/bin/gcc-5 ..</span><br></pre></td></tr></table></figure></p>
+<h3 id="To-do-a-generic-and-static-build-for-a-system-without-gcc-5-1"><a href="#To-do-a-generic-and-static-build-for-a-system-without-gcc-5-1" class="headerlink" title="To do a generic and static build for a system without gcc 5.1+"></a>To do a generic and static build for a system without gcc 5.1+</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cmake -DCMAKE_LINK_STATIC=ON -DXMR-STAK_COMPILE=generic .</span><br><span class="line">make install</span><br><span class="line">cd bin\Release</span><br><span class="line">copy C:\xmr-stak-dep\openssl\bin\* .</span><br></pre></td></tr></table></figure>
+<p>Note - cmake caches variables, so if you want to do a dynamic build later you need to specify ‘-DCMAKE_LINK_STATIC=OFF’</p>
+<p>Reference <a href="https://github.com/fireice-uk/xmr-stak" target="_blank" rel="noopener">xmr-stak</a></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/05/26/Day-1-Bower-——-管理你的客户端依赖关系/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1678,7 +1870,7 @@ A[方形] --> B(圆角)
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-count">37</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1832,7 +2024,9 @@ A[方形] --> B(圆角)
                     
                       
                     
-                    <span class="site-state-item-count">47</span>
+                      
+                    
+                    <span class="site-state-item-count">48</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -2386,6 +2580,8 @@ A[方形] --> B(圆角)
 
   
   
+    
+      
     
       
     
