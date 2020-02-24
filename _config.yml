@@ -121,3 +121,6 @@ live2d:
 # hexo sitemap网站地图
 baidusitemap:
   path: baidusitemap.xml
+sitemap:
+  path: sitemap.xml
+  rel: false
