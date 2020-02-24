@@ -44,6 +44,8 @@
 
 
 
+  <meta name="google-site-verification" content="HzD3jseSmctf--z1mHXLAwERIBzdqIvVavEv6fq47pI">
+
 
 
 
@@ -305,6 +307,207 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/01/27/Linux命令-netstat/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vincent">
+      <meta itemprop="description" content="The King is dead, long live the King!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/27/Linux命令-netstat/" itemprop="url">
+                  Linux命令 - netstat
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-01-27 12:44:15" itemprop="dateCreated datePublished" datetime="2020-01-27T12:44:15+08:00">2020-01-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>netstat 是一个告诉我们系统中所有 tcp/udp/unix socket 连接状态的命令行工具。它会列出所有已经连接或者等待连接状态的连接。 该工具在识别某个应用监听哪个端口时特别有用，我们也能用它来判断某个应用是否正常的在监听某个端口。</p>
+<p>netstat 命令还能显示其它各种各样的网络相关信息，例如路由表， 网卡统计信息， 虚假连接以及多播成员等。</p>
+<h1 id="1-检查所有的连接"><a href="#1-检查所有的连接" class="headerlink" title="1 - 检查所有的连接"></a>1 - 检查所有的连接</h1><p>使用 <code>a</code> 选项可以列出系统中的所有连接，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ netstat -a</span><br></pre></td></tr></table></figure>
+<p>这会显示系统所有的 tcp、udp 以及 unix 连接。</p>
+<h1 id="2-检查所有的-tcp-udp-unix-socket-连接"><a href="#2-检查所有的-tcp-udp-unix-socket-连接" class="headerlink" title="2 - 检查所有的 tcp/udp/unix socket 连接"></a>2 - 检查所有的 tcp/udp/unix socket 连接</h1><p>使用 <code>t</code> 选项只列出 tcp 连接，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> netstat -at</span></span><br></pre></td></tr></table></figure>
+<p>类似的，使用 <code>u</code> 选项只列出 udp 连接，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> netstat -au</span></span><br></pre></td></tr></table></figure>
+<p>使用 <code>x</code> 选项只列出 Unix socket 连接，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> netstat -ax</span></span><br></pre></td></tr></table></figure>
+<h1 id="3-同时列出进程-ID-进程名称"><a href="#3-同时列出进程-ID-进程名称" class="headerlink" title="3 - 同时列出进程 ID/进程名称"></a>3 - 同时列出进程 ID/进程名称</h1><p>使用 <code>p</code> 选项可以在列出连接的同时也显示 PID 或者进程名称，而且它还能与其他选项连用，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> netstat -ap</span></span><br></pre></td></tr></table></figure>
+<h1 id="4-列出端口号而不是服务名"><a href="#4-列出端口号而不是服务名" class="headerlink" title="4 - 列出端口号而不是服务名"></a>4 - 列出端口号而不是服务名</h1><p>使用 <code>n</code> 选项可以加快输出，它不会执行任何反向查询（LCTT 译注：这里原文有误），而是直接输出数字。 由于无需查询，因此结果输出会快很多。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> netstat -an</span></span><br></pre></td></tr></table></figure>
+<h1 id="5-只输出监听端口"><a href="#5-只输出监听端口" class="headerlink" title="5 - 只输出监听端口"></a>5 - 只输出监听端口</h1><p>使用 <code>l</code> 选项只输出监听端口。它不能与 <code>a</code> 选项连用，因为 <code>a</code> 会输出所有端口，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> netstat -l</span></span><br></pre></td></tr></table></figure>
+<h1 id="6-输出网络状态"><a href="#6-输出网络状态" class="headerlink" title="6 - 输出网络状态"></a>6 - 输出网络状态</h1><p>使用 <code>s</code> 选项输出每个协议的统计信息，包括接收/发送的包数量，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> netstat -s</span></span><br></pre></td></tr></table></figure>
+<h1 id="7-输出网卡状态"><a href="#7-输出网卡状态" class="headerlink" title="7 - 输出网卡状态"></a>7 - 输出网卡状态</h1><p>使用 <code>I</code> 选项只显示网卡的统计信息，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> netstat -i</span></span><br></pre></td></tr></table></figure>
+<h1 id="8-显示多播组multicast-group信息"><a href="#8-显示多播组multicast-group信息" class="headerlink" title="8 - 显示多播组multicast group信息"></a>8 - 显示多播组multicast group信息</h1><p>使用 <code>g</code> 选项输出 IPV4 以及 IPV6 的多播组信息，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> netstat -g</span></span><br></pre></td></tr></table></figure>
+<h1 id="9-显示网络路由信息"><a href="#9-显示网络路由信息" class="headerlink" title="9 - 显示网络路由信息"></a>9 - 显示网络路由信息</h1><p>使用 <code>r</code> 输出网络路由信息，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> netstat -r</span></span><br></pre></td></tr></table></figure>
+<h1 id="10-持续输出"><a href="#10-持续输出" class="headerlink" title="10 - 持续输出"></a>10 - 持续输出</h1><p>使用 <code>c</code> 选项持续输出结果</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> netstat -c</span></span><br></pre></td></tr></table></figure>
+<h1 id="11-过滤出某个端口"><a href="#11-过滤出某个端口" class="headerlink" title="11 - 过滤出某个端口"></a>11 - 过滤出某个端口</h1><p>与 <code>grep</code> 连用来过滤出某个端口的连接，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> netstat -anp | grep 3306</span></span><br></pre></td></tr></table></figure>
+<h1 id="12-统计连接个数"><a href="#12-统计连接个数" class="headerlink" title="12 - 统计连接个数"></a>12 - 统计连接个数</h1><p>通过与 <code>wc</code> 和 <code>grep</code> 命令连用，可以统计指定端口的连接数量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> netstat -anp | grep 3306 | wc -l</span></span><br></pre></td></tr></table></figure>
+<p>这会输出 mysql 服务端口（即 3306端口）的连接数。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -2214,222 +2417,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/05/26/Day-1-Bower-——-管理你的客户端依赖关系/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="vincent">
-      <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="星辰大海">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/26/Day-1-Bower-——-管理你的客户端依赖关系/" itemprop="url">
-                  Day 1: Bower —— 管理你的客户端依赖关系
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-05-26 22:27:38 / 修改时间：22:40:10" itemprop="dateCreated datePublished" datetime="2018-05-26T22:27:38+08:00">2018-05-26</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/30天学习30种新技术系列/" itemprop="url" rel="index"><span itemprop="name">30天学习30种新技术系列</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><em>编者注：我们发现了比较有趣的系列文章<a href="http://segmentfault.com/a/1190000000349384" target="_blank" rel="noopener">《30天学习30种新技术》</a>，准备翻译，一天一篇更新，年终礼包。以下是第一天技术的译文。</em></p>
-<hr>
-<p>我决定将第一天的学习主题选为<a href="http://bower.io/" target="_blank" rel="noopener">Bower</a>。</p>
-<p><img src="/2018/05/26/Day-1-Bower-——-管理你的客户端依赖关系/bVbC4e.jpg" alt="img-1"></p>
-<hr>
-<h2 id="什么是Bower？"><a href="#什么是Bower？" class="headerlink" title="什么是Bower？"></a>什么是Bower？</h2><p>Bower是一个客户端技术的软件包管理器，它可用于搜索、安装和卸载如JavaScript、HTML、CSS之类的网络资源。其他一些建立在Bower基础之上的开发工具，如YeoMan和Grunt，这个会在以后的文章中介绍。</p>
-<hr>
-<h2 id="为什么我会在意Bower？"><a href="#为什么我会在意Bower？" class="headerlink" title="为什么我会在意Bower？"></a>为什么我会在意Bower？</h2><ol>
-<li>节省时间。为什么要学习Bower的第一个原因，就是它会为你节省寻找客户端的依赖关系的时间。每次我需要安装jQuery的时候，我都需要去jQuery网站下载包或使用CDN版本。但是有了Bower，你只需要输入一个命令，jquery就会安装在本地计算机上，你不需要去记版本号之类的东西，你也可以通过Bower的info命令去查看任意库的信息。</li>
-<li>脱机工作。Bower会在用户主目录下创建一个.bower的文件夹，这个文件夹会下载所有的资源、并安装一个软件包使它们可以离线使用。如果你熟悉Java，Bower即是一个类似于现在流行的Maven构建系统的<em>.m2</em>仓库。每次你下载任何资源库都将被安装在两个文件夹中 —— 一个在的应用程序文件夹，另一个在用户主目录下的.bower文件夹。因此，下一次你需要这个仓库时，就会用那个用户主目录下.bower中的版本。</li>
-<li>可以很容易地展现客户端的依赖关系。你可以创建一个名为bower.json的文件，在这个文件里你可以指定所有客户端的依赖关系，任何时候你需要弄清楚你正在使用哪些库，你可以参考这个文件。</li>
-<li>让升级变得简单。假设某个库的新版本发布了一个重要的安全修补程序，为了安装新版本，你只需要运行一个命令，bower会自动更新所有有关新版本的依赖关系。</li>
-</ol>
-<hr>
-<h2 id="前提准备"><a href="#前提准备" class="headerlink" title="前提准备"></a>前提准备</h2><p>为了安装bower，你首先需要安装如下文件：</p>
-<blockquote>
-<ol>
-<li>Node：下载最新版本的<a href="http://nodejs.org/" target="_blank" rel="noopener">node.js</a></li>
-<li>NPM：<a href="http://npmjs.org/" target="_blank" rel="noopener">NPM</a>是node程序包管理器。它是捆绑在nodejs的安装程序上的，所以一旦你已经安装了node，NPM也就安装好了。</li>
-<li>Git：你需要从git仓库获取一些代码包。</li>
-</ol>
-</blockquote>
-<hr>
-<h2 id="安装Bower"><a href="#安装Bower" class="headerlink" title="安装Bower"></a>安装Bower</h2><p>一旦你已经安装了上面所说的所有必要文件，键入以下命令安装Bower：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g bower</span><br></pre></td></tr></table></figure>
-<p>这行命令是Bower的全局安装，<code>-g</code> 操作表示全局。</p>
-<hr>
-<h2 id="开始使用Bower"><a href="#开始使用Bower" class="headerlink" title="开始使用Bower"></a>开始使用Bower</h2><p>安装完bower之后就可以使用所有的bower命令了。可以键入<code>help</code> 命令来查看bower可以完成那些操作，如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">$ bower help</span><br><span class="line">Usage:</span><br><span class="line"></span><br><span class="line">    bower &lt;command&gt; [&lt;args&gt;] [&lt;options&gt;]</span><br><span class="line"></span><br><span class="line">Commands:</span><br><span class="line"></span><br><span class="line">    cache                   Manage bower cache</span><br><span class="line">    help                    Display help information about Bower</span><br><span class="line">    home                    Opens a package homepage into your favorite browser</span><br><span class="line">    info                    Info of a particular package</span><br><span class="line">    init                    Interactively create a bower.json file</span><br><span class="line">    install                 Install a package locally</span><br><span class="line">    link                    Symlink a package folder</span><br><span class="line">    list                    List local packages</span><br><span class="line">    lookup                  Look up a package URL by name</span><br><span class="line">    prune                   Removes local extraneous packages</span><br><span class="line">    register                Register a package</span><br><span class="line">    search                  Search for a package by name</span><br><span class="line">    update                  Update a local package</span><br><span class="line">    uninstall               Remove a local package</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line"></span><br><span class="line">    -f, --force             Makes various commands more forceful</span><br><span class="line">    -j, --json              Output consumable JSON</span><br><span class="line">    -l, --log-level         What level of logs to report</span><br><span class="line">    -o, --offline           Do not hit the network</span><br><span class="line">    -q, --quiet             Only output important information</span><br><span class="line">    -s, --silent            Do not output anything, besides errors</span><br><span class="line">    -V, --verbose           Makes output more verbose</span><br><span class="line">    --allow-root            Allows running commands as root</span><br></pre></td></tr></table></figure>
-<h3 id="包的安装"><a href="#包的安装" class="headerlink" title="包的安装"></a>包的安装</h3><p>Bower是一个软件包管理器，所以你可以在应用程序中用它来安装新的软件包。举例来看一下来如何使用Bower安装JQuery，在你想要安装该包的地方创建一个新的文件夹，键入如下命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bower install jquery</span><br></pre></td></tr></table></figure>
-<p>上述命令完成以后，你会在你刚才创建的目录下看到一个<code>bower_components</code>的文件夹，其中目录如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ tree bower_components/</span><br><span class="line">bower_components/</span><br><span class="line">└── jquery</span><br><span class="line">    ├── README.md</span><br><span class="line">    ├── bower.json</span><br><span class="line">    ├── component.json</span><br><span class="line">    ├── composer.json</span><br><span class="line">    ├── jquery-migrate.js</span><br><span class="line">    ├── jquery-migrate.min.js</span><br><span class="line">    ├── jquery.js</span><br><span class="line">    ├── jquery.min.js</span><br><span class="line">    ├── jquery.min.map</span><br><span class="line">    └── package.json</span><br><span class="line"></span><br><span class="line">1 directory, 10 files</span><br></pre></td></tr></table></figure>
-<h3 id="包的使用"><a href="#包的使用" class="headerlink" title="包的使用"></a>包的使用</h3><p>现在就可以在应用程序中使用jQuery包了，在jQuery里创建一个简单的html5文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;Learning Bower&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;button&gt;Animate Me!!&lt;/button&gt;</span><br><span class="line">&lt;div style=&quot;background:red;height:100px;width:100px;position:absolute;&quot;&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;bower_components/jquery/jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line"></span><br><span class="line">    $(document).ready(function()&#123;</span><br><span class="line">        $(&quot;button&quot;).click(function()&#123;</span><br><span class="line">            $(&quot;div&quot;).animate(&#123;left:&apos;250px&apos;&#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-<p>正如你所看到的，你刚刚引用jquery.min.js文件，现阶段完成。</p>
-<h3 id="所有包的列表"><a href="#所有包的列表" class="headerlink" title="所有包的列表"></a>所有包的列表</h3><p>如果你想找出所有安装在应用程序中的包，可以使用list命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ bower list</span><br><span class="line">bower check-new     Checking for new versions of the project dependencies..</span><br><span class="line">blog /Users/shekhargulati/day1/blog</span><br><span class="line">└── jquery#2.0.3 extraneous</span><br></pre></td></tr></table></figure>
-<h3 id="包的搜索"><a href="#包的搜索" class="headerlink" title="包的搜索"></a>包的搜索</h3><p>假如你想在你的应用程序中使用twitter的bootstrap框架，但你不确定包的名字，这时你可以使用<code>search</code> 命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ bower search bootstrap</span><br><span class="line">Search results:</span><br><span class="line"></span><br><span class="line">    bootstrap git://github.com/twbs/bootstrap.git</span><br><span class="line">    angular-bootstrap git://github.com/angular-ui/bootstrap-bower.git</span><br><span class="line">    sass-bootstrap git://github.com/jlong/sass-twitter-bootstrap.git</span><br></pre></td></tr></table></figure>
-<h3 id="包的信息"><a href="#包的信息" class="headerlink" title="包的信息"></a>包的信息</h3><p>如果你想看到关于特定的包的信息，可以使用<code>info</code> 命令来查看该包的所有信息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">$ bower info bootstrap</span><br><span class="line">bower bootstrap#*           not-cached git://github.com/twbs/bootstrap.git#*</span><br><span class="line">bower bootstrap#*              resolve git://github.com/twbs/bootstrap.git#*</span><br><span class="line">bower bootstrap#*             download https://github.com/twbs/bootstrap/archive/v3.0.0.tar.gz</span><br><span class="line">bower bootstrap#*              extract archive.tar.gz</span><br><span class="line">bower bootstrap#*             resolved git://github.com/twbs/bootstrap.git#3.0.0</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  name: &apos;bootstrap&apos;,</span><br><span class="line">  version: &apos;3.0.0&apos;,</span><br><span class="line">  main: [</span><br><span class="line">    &apos;./dist/js/bootstrap.js&apos;,</span><br><span class="line">    &apos;./dist/css/bootstrap.css&apos;</span><br><span class="line">  ],</span><br><span class="line">  ignore: [</span><br><span class="line">    &apos;**/.*&apos;</span><br><span class="line">  ],</span><br><span class="line">  dependencies: &#123;</span><br><span class="line">    jquery: &apos;&gt;= 1.9.0&apos;</span><br><span class="line">  &#125;,</span><br><span class="line">  homepage: &apos;https://github.com/twbs/bootstrap&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Available versions:</span><br><span class="line">  - 3.0.0</span><br><span class="line">  - 3.0.0-rc1</span><br><span class="line">  - 3.0.0-rc.2</span><br><span class="line">  - 2.3.2</span><br><span class="line"> .....</span><br></pre></td></tr></table></figure>
-<p>如果你想得到单个包的信息，也可以使用<code>info</code> 命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$ bower info bootstrap#3.0.0</span><br><span class="line">bower bootstrap#3.0.0           cached git://github.com/twbs/bootstrap.git#3.0.0</span><br><span class="line">bower bootstrap#3.0.0         validate 3.0.0 against git://github.com/twbs/bootstrap.git#3.0.0</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  name: &apos;bootstrap&apos;,</span><br><span class="line">  version: &apos;3.0.0&apos;,</span><br><span class="line">  main: [</span><br><span class="line">    &apos;./dist/js/bootstrap.js&apos;,</span><br><span class="line">    &apos;./dist/css/bootstrap.css&apos;</span><br><span class="line">  ],</span><br><span class="line">  ignore: [</span><br><span class="line">    &apos;**/.*&apos;</span><br><span class="line">  ],</span><br><span class="line">  dependencies: &#123;</span><br><span class="line">    jquery: &apos;&gt;= 1.9.0&apos;</span><br><span class="line">  &#125;,</span><br><span class="line">  homepage: &apos;https://github.com/twbs/bootstrap&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="包的卸载"><a href="#包的卸载" class="headerlink" title="包的卸载"></a>包的卸载</h3><p>卸载包可以使用<code>uninstall</code> 命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bower uninstall jquery</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="bower-json文件的使用"><a href="#bower-json文件的使用" class="headerlink" title="bower.json文件的使用"></a>bower.json文件的使用</h2><p>bower.json文件的使用可以让包的安装更容易，你可以在应用程序的根目录下创建一个名为“bower.json”的文件，并定义它的依赖关系。使用<code>bower init</code> 命令来创建bower.json文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">$ bower init</span><br><span class="line">[?] name: blog</span><br><span class="line">[?] version: 0.0.1</span><br><span class="line">[?] description:</span><br><span class="line">[?] main file:</span><br><span class="line">[?] keywords:</span><br><span class="line">[?] authors: Shekhar Gulati &lt;shekhargulati84@gmail.com&gt;</span><br><span class="line">[?] license: MIT</span><br><span class="line">[?] homepage:</span><br><span class="line">[?] set currently installed components as dependencies? Yes</span><br><span class="line">[?] add commonly ignored files to ignore list? Yes</span><br><span class="line">[?] would you like to mark this package as private which prevents it from being accidentally published to the registry? No</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  name: &apos;blog&apos;,</span><br><span class="line">  version: &apos;0.0.1&apos;,</span><br><span class="line">  authors: [</span><br><span class="line">    &apos;Shekhar Gulati &lt;shekhargulati84@gmail.com&gt;&apos;</span><br><span class="line">  ],</span><br><span class="line">  license: &apos;MIT&apos;,</span><br><span class="line">  ignore: [</span><br><span class="line">    &apos;**/.*&apos;,</span><br><span class="line">    &apos;node_modules&apos;,</span><br><span class="line">    &apos;bower_components&apos;,</span><br><span class="line">    &apos;test&apos;,</span><br><span class="line">    &apos;tests&apos;</span><br><span class="line">  ],</span><br><span class="line">  dependencies: &#123;</span><br><span class="line">    jquery: &apos;~2.0.3&apos;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[?] Looks good? Yes</span><br></pre></td></tr></table></figure>
-<p>可以查看该文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;blog&quot;,</span><br><span class="line">  &quot;version&quot;: &quot;0.0.1&quot;,</span><br><span class="line">  &quot;authors&quot;: [</span><br><span class="line">    &quot;Shekhar Gulati &lt;shekhargulati84@gmail.com&gt;&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;license&quot;: &quot;MIT&quot;,</span><br><span class="line">  &quot;ignore&quot;: [</span><br><span class="line">    &quot;**/.*&quot;,</span><br><span class="line">    &quot;node_modules&quot;,</span><br><span class="line">    &quot;bower_components&quot;,</span><br><span class="line">    &quot;test&quot;,</span><br><span class="line">    &quot;tests&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;dependencies&quot;: &#123;</span><br><span class="line">    &quot;jquery&quot;: &quot;~2.0.3&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>注意看，它已经加入了jQuery依赖关系。</p>
-<p>现在假设也想用twitter bootstrap，我们可以用下面的命令安装twitter bootstrap并更新bower.json文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bower install bootstrap --save</span><br></pre></td></tr></table></figure>
-<p>它会自动安装最新版本的bootstrap并更新bower.json文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;blog&quot;,</span><br><span class="line">  &quot;version&quot;: &quot;0.0.1&quot;,</span><br><span class="line">  &quot;authors&quot;: [</span><br><span class="line">    &quot;Shekhar Gulati &lt;shekhargulati84@gmail.com&gt;&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;license&quot;: &quot;MIT&quot;,</span><br><span class="line">  &quot;ignore&quot;: [</span><br><span class="line">    &quot;**/.*&quot;,</span><br><span class="line">    &quot;node_modules&quot;,</span><br><span class="line">    &quot;bower_components&quot;,</span><br><span class="line">    &quot;test&quot;,</span><br><span class="line">    &quot;tests&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;dependencies&quot;: &#123;</span><br><span class="line">    &quot;jquery&quot;: &quot;~2.0.3&quot;,</span><br><span class="line">    &quot;bootstrap&quot;: &quot;~3.0.0&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这就是今天的学习，希望能让你对bower有个足够的了解，最好可以自己尝试一下。</p>
-<hr>
-<p>原文 <a href="https://www.openshift.com/blogs/day-1-bower-manage-your-client-side-dependencies" target="_blank" rel="noopener">Day 1: Bower–Manage Your Client Side Dependencies</a><br>翻译 <a href="http://segmentfault.com/" target="_blank" rel="noopener">SegmentFault</a></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2477,7 +2464,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-count">36</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

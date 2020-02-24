@@ -44,6 +44,8 @@
 
 
 
+  <meta name="google-site-verification" content="HzD3jseSmctf--z1mHXLAwERIBzdqIvVavEv6fq47pI">
+
 
 
 
@@ -115,19 +117,19 @@
 
 
 
-  <meta name="description" content="服务异常的处理流程 负载查看机器 cpu 的负载1top -b -n 1 |grep java|awk &apos;&amp;#123;print &quot;VIRT:&quot;$5,&quot;RES:&quot;$6,&quot;cpu:&quot;$9&quot;%&quot;,&quot;mem:&quot;$10&quot;%&quot;&amp;#125;&apos; 查找 cpu 占用率高的线程1234top -p 25603 -Hprintf 0x%x 25842jstack 25603 | grep 0x64f2cat /pro">
-<meta name="keywords" content="JAVA,异常处理">
+  <meta name="description" content="服务异常的处理流程 CPU负载说明针对应用程序，我们通常关注的是内核CPU调度器功能和性能。 线程的状态分析主要是分析线程的时间用在什么地方，而线程状态的分类一般分为： a. on-CPU：执行中，执行中的时间通常又分为用户态时间user和系统态时间sys。 b. off-CPU：等待下一轮上CPU，或者等待I/O、锁、换页等等，其状态可以细分为可执行、匿名换页、睡眠、锁、空闲等状态。 如果大量时">
+<meta name="keywords" content="Linux,异常处理,Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JAVA实用的服务异常处理指南">
+<meta property="og:title" content="Linux实用的服务异常处理指南">
 <meta property="og:url" content="https://vincentruan.github.io/2020/02/12/JAVA实用的服务异常处理指南/index.html">
 <meta property="og:site_name" content="星辰大海">
-<meta property="og:description" content="服务异常的处理流程 负载查看机器 cpu 的负载1top -b -n 1 |grep java|awk &apos;&amp;#123;print &quot;VIRT:&quot;$5,&quot;RES:&quot;$6,&quot;cpu:&quot;$9&quot;%&quot;,&quot;mem:&quot;$10&quot;%&quot;&amp;#125;&apos; 查找 cpu 占用率高的线程1234top -p 25603 -Hprintf 0x%x 25842jstack 25603 | grep 0x64f2cat /pro">
+<meta property="og:description" content="服务异常的处理流程 CPU负载说明针对应用程序，我们通常关注的是内核CPU调度器功能和性能。 线程的状态分析主要是分析线程的时间用在什么地方，而线程状态的分类一般分为： a. on-CPU：执行中，执行中的时间通常又分为用户态时间user和系统态时间sys。 b. off-CPU：等待下一轮上CPU，或者等待I/O、锁、换页等等，其状态可以细分为可执行、匿名换页、睡眠、锁、空闲等状态。 如果大量时">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/12/JAVA实用的服务异常处理指南/0ce47abcae0d474bb5bf9ebc993e6ad3.jpeg">
-<meta property="og:updated_time" content="2020-02-17T02:40:44.580Z">
+<meta property="og:updated_time" content="2020-02-24T06:36:58.034Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JAVA实用的服务异常处理指南">
-<meta name="twitter:description" content="服务异常的处理流程 负载查看机器 cpu 的负载1top -b -n 1 |grep java|awk &apos;&amp;#123;print &quot;VIRT:&quot;$5,&quot;RES:&quot;$6,&quot;cpu:&quot;$9&quot;%&quot;,&quot;mem:&quot;$10&quot;%&quot;&amp;#125;&apos; 查找 cpu 占用率高的线程1234top -p 25603 -Hprintf 0x%x 25842jstack 25603 | grep 0x64f2cat /pro">
+<meta name="twitter:title" content="Linux实用的服务异常处理指南">
+<meta name="twitter:description" content="服务异常的处理流程 CPU负载说明针对应用程序，我们通常关注的是内核CPU调度器功能和性能。 线程的状态分析主要是分析线程的时间用在什么地方，而线程状态的分类一般分为： a. on-CPU：执行中，执行中的时间通常又分为用户态时间user和系统态时间sys。 b. off-CPU：等待下一轮上CPU，或者等待I/O、锁、换页等等，其状态可以细分为可执行、匿名换页、睡眠、锁、空闲等状态。 如果大量时">
 <meta name="twitter:image" content="https://vincentruan.github.io/2020/02/12/JAVA实用的服务异常处理指南/0ce47abcae0d474bb5bf9ebc993e6ad3.jpeg">
 
 
@@ -145,7 +147,7 @@
   };
 </script>
 
-  <title>JAVA实用的服务异常处理指南 | 星辰大海</title>
+  <title>Linux实用的服务异常处理指南 | 星辰大海</title>
   
 
 
@@ -340,7 +342,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">JAVA实用的服务异常处理指南
+          <h1 class="post-title" itemprop="name headline">Linux实用的服务异常处理指南
               
             
           </h1>
@@ -382,7 +384,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-24 14:36:58" itemprop="dateModified" datetime="2020-02-24T14:36:58+08:00">2020-02-24</time>
               
             
           </span>
@@ -399,7 +401,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
 
                 
                 
@@ -434,11 +436,140 @@
 
       
         <h1 id="服务异常的处理流程"><a href="#服务异常的处理流程" class="headerlink" title="服务异常的处理流程"></a>服务异常的处理流程</h1><p><img src="/2020/02/12/JAVA实用的服务异常处理指南/0ce47abcae0d474bb5bf9ebc993e6ad3.jpeg" alt="img"></p>
-<h1 id="负载"><a href="#负载" class="headerlink" title="负载"></a>负载</h1><h2 id="查看机器-cpu-的负载"><a href="#查看机器-cpu-的负载" class="headerlink" title="查看机器 cpu 的负载"></a>查看机器 cpu 的负载</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top -b -n 1 |grep java|awk <span class="string">'&#123;print "VIRT:"$5,"RES:"$6,"cpu:"$9"%","mem:"$10"%"&#125;'</span></span><br></pre></td></tr></table></figure>
+<h1 id="CPU负载"><a href="#CPU负载" class="headerlink" title="CPU负载"></a>CPU负载</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>针对应用程序，我们通常关注的是内核CPU调度器功能和性能。</p>
+<p>线程的状态分析主要是分析线程的时间用在什么地方，而线程状态的分类一般分为：</p>
+<p>a. on-CPU：执行中，执行中的时间通常又分为用户态时间user和系统态时间sys。<br> b. off-CPU：等待下一轮上CPU，或者等待I/O、锁、换页等等，其状态可以细分为可执行、匿名换页、睡眠、锁、空闲等状态。</p>
+<p>如果大量时间花在CPU上，对CPU的剖析能够迅速解释原因；如果系统时间大量处于off-cpu状态，定位问题就会费时很多。但是仍然需要清楚一些概念：</p>
+<ul>
+<li>处理器</li>
+<li>核</li>
+<li>硬件线程</li>
+<li>CPU内存缓存</li>
+<li>时钟频率</li>
+<li>每指令周期数CPI和每周期指令数IPC</li>
+<li>CPU指令</li>
+<li>使用率</li>
+<li>用户时间／内核时间</li>
+<li>调度器</li>
+<li>运行队列</li>
+<li>抢占</li>
+<li>多进程</li>
+<li>多线程</li>
+<li>字长</li>
+</ul>
+<h2 id="分析工具"><a href="#分析工具" class="headerlink" title="分析工具"></a>分析工具</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>uptime</td>
+<td>平均负载</td>
+</tr>
+<tr>
+<td>vmstat</td>
+<td>包括系统范围的cpu平均负载</td>
+</tr>
+<tr>
+<td>mpstat</td>
+<td>查看所有cpu核信息</td>
+</tr>
+<tr>
+<td>top</td>
+<td>监控每个进程cpu用量</td>
+</tr>
+<tr>
+<td>sar -u</td>
+<td>查看cpu信息</td>
+</tr>
+<tr>
+<td>pidstat</td>
+<td>每个进程cpu用量分解</td>
+</tr>
+<tr>
+<td>perf</td>
+<td>cpu剖析和跟踪，性能计数分析</td>
+</tr>
+</tbody>
+</table>
+<p>说明:</p>
+<ul>
+<li>uptime,vmstat,mpstat,top,pidstat只能查询到cpu及负载的的使用情况。</li>
+<li>perf可以跟着到进程内部具体函数耗时情况，并且可以指定内核函数进行统计，指哪打哪。</li>
+</ul>
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//查看系统cpu使用情况</span><br><span class="line">top</span><br><span class="line"></span><br><span class="line">//查看所有cpu核信息</span><br><span class="line">mpstat -P ALL 1</span><br><span class="line"></span><br><span class="line">//查看cpu使用情况以及平均负载</span><br><span class="line">vmstat 1</span><br><span class="line"></span><br><span class="line">//进程cpu的统计信息</span><br><span class="line">pidstat -u 1 -p pid</span><br><span class="line"></span><br><span class="line">//跟踪进程内部函数级cpu使用情况</span><br><span class="line">perf top -p pid -e cpu-clock</span><br></pre></td></tr></table></figure>
+<h2 id="查看机器-cpu-的负载"><a href="#查看机器-cpu-的负载" class="headerlink" title="查看机器 cpu 的负载"></a>查看机器 cpu 的负载</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top -b -n 1 |grep java|awk <span class="string">'&#123;print "VIRT:"$5,"RES:"$6,"cpu:"$9"%","mem:"$10"%"&#125;'</span></span><br></pre></td></tr></table></figure>
 <h2 id="查找-cpu-占用率高的线程"><a href="#查找-cpu-占用率高的线程" class="headerlink" title="查找 cpu 占用率高的线程"></a>查找 cpu 占用率高的线程</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">top -p 25603 -H</span><br><span class="line"><span class="built_in">printf</span> 0x%x 25842</span><br><span class="line">jstack 25603 | grep 0x64f2</span><br><span class="line">cat /proc/interrupts</span><br></pre></td></tr></table></figure>
 <p>（1）CPU<br>（2）Memory<br>（3）IO<br>（4）Network</p>
 <p>可以从以下几个方面监控CPU的信息：<br>（1）中断；<br>（2）上下文切换；<br>（3）可运行队列；<br>（4）CPU 利用率</p>
-<h1 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h1><h2 id="系统内存"><a href="#系统内存" class="headerlink" title="系统内存"></a>系统内存</h2><p>free 命令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@server ~]<span class="comment"># free</span></span><br><span class="line"></span><br><span class="line">             total       used       free     shared    buffers     cached</span><br><span class="line">Mem:       3266180    3250000      10000          0     201000    3002000</span><br><span class="line">-/+ buffers/cache:      47000    3213000</span><br><span class="line">Swap:      2048276      80160    1968116</span><br></pre></td></tr></table></figure></p>
+<h1 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h1><h2 id="说明-1"><a href="#说明-1" class="headerlink" title="说明"></a>说明</h2><p>内存是为提高效率而生，实际分析问题的时候，内存出现问题可能不只是影响性能，而是影响服务或者引起其他问题。同样对于内存有些概念需要清楚：</p>
+<ul>
+<li>主存</li>
+<li>虚拟内存</li>
+<li>常驻内存</li>
+<li>地址空间</li>
+<li>OOM</li>
+<li>页缓存</li>
+<li>缺页</li>
+<li>换页</li>
+<li>交换空间</li>
+<li>交换</li>
+<li>用户分配器libc、glibc、libmalloc和mtmalloc</li>
+<li>LINUX内核级SLUB分配器</li>
+</ul>
+<h2 id="分析工具-1"><a href="#分析工具-1" class="headerlink" title="分析工具"></a>分析工具</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>free</td>
+<td>缓存容量统计信息</td>
+</tr>
+<tr>
+<td>vmstat</td>
+<td>虚拟内存统计信息</td>
+</tr>
+<tr>
+<td>top</td>
+<td>监视每个进程的内存使用情况</td>
+</tr>
+<tr>
+<td>pidstat</td>
+<td>显示活动进程的内存使用统计</td>
+</tr>
+<tr>
+<td>pmap</td>
+<td>查看进程的内存映像信息</td>
+</tr>
+<tr>
+<td>sar -r</td>
+<td>查看内存</td>
+</tr>
+<tr>
+<td>dtrace</td>
+<td>动态跟踪</td>
+</tr>
+<tr>
+<td>valgrind</td>
+<td>分析程序性能及程序中的内存泄露错误</td>
+</tr>
+</tbody>
+</table>
+<p><strong>说明</strong>：</p>
+<ul>
+<li>free,vmstat,top,pidstat,pmap只能统计内存信息以及进程的内存使用情况。</li>
+<li>valgrind可以分析内存泄漏问题。</li>
+<li>dtrace动态跟踪。需要对内核函数有很深入的了解，通过D语言编写脚本完成跟踪。</li>
+</ul>
+<h2 id="使用方式-1"><a href="#使用方式-1" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//查看系统内存使用情况</span><br><span class="line">free -m</span><br><span class="line"></span><br><span class="line">//虚拟内存统计信息</span><br><span class="line">vmstat 1</span><br><span class="line"></span><br><span class="line">//查看系统内存情况</span><br><span class="line">top</span><br><span class="line"></span><br><span class="line">//1s采集周期，获取内存的统计信息</span><br><span class="line">pidstat -p pid -r 1</span><br><span class="line"></span><br><span class="line">//查看进程的内存映像信息</span><br><span class="line">pmap -d pid</span><br><span class="line"></span><br><span class="line">//检测程序内存问题</span><br><span class="line">valgrind --tool=memcheck --leak-check=full --<span class="built_in">log</span>-file=./log.txt  ./程序名</span><br></pre></td></tr></table></figure>
+<h2 id="系统内存"><a href="#系统内存" class="headerlink" title="系统内存"></a>系统内存</h2><p>free 命令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@server ~]<span class="comment"># free</span></span><br><span class="line"></span><br><span class="line">             total       used       free     shared    buffers     cached</span><br><span class="line">Mem:       3266180    3250000      10000          0     201000    3002000</span><br><span class="line">-/+ buffers/cache:      47000    3213000</span><br><span class="line">Swap:      2048276      80160    1968116</span><br></pre></td></tr></table></figure></p>
 <p>这里的默认显示单位是kb。<br>各项指标解释</p>
 <ul>
 <li>total:总计物理内存的大小。</li>
@@ -496,6 +627,94 @@
 <h3 id="分析-JVM-堆内存中的对象"><a href="#分析-JVM-堆内存中的对象" class="headerlink" title="分析 JVM 堆内存中的对象"></a>分析 JVM 堆内存中的对象</h3><p><strong>查看存活的对象统计</strong><br>jmap -histo:live [pid]</p>
 <p><strong>dump 内存</strong><br>jmap -dump:format=b,file=heapDump [pid]</p>
 <p>然后用jhat命令可以参看<br>jhat -port 5000 heapDump<br>在浏览器中访问：<a href="http://localhost:5000/" target="_blank" rel="noopener">http://localhost:5000/</a> 查看详细信息</p>
+<h1 id="磁盘IO"><a href="#磁盘IO" class="headerlink" title="磁盘IO"></a>磁盘IO</h1><h2 id="说明-2"><a href="#说明-2" class="headerlink" title="说明"></a>说明</h2><p>磁盘通常是计算机最慢的子系统，也是最容易出现性能瓶颈的地方，因为磁盘离 CPU 距离最远而且 CPU 访问磁盘要涉及到机械操作，比如转轴、寻轨等。访问硬盘和访问内存之间的速度差别是以数量级来计算的，就像1天和1分钟的差别一样。要监测 IO 性能，有必要了解一下基本原理和 Linux 是如何处理硬盘和内存之间的 IO 的。</p>
+<p>在理解磁盘IO之前，同样我们需要理解一些概念，例如：</p>
+<ul>
+<li>文件系统</li>
+<li>VFS</li>
+<li>文件系统缓存</li>
+<li>页缓存page cache</li>
+<li>缓冲区高速缓存buffer cache</li>
+<li>目录缓存</li>
+<li>inode</li>
+<li>inode缓存</li>
+<li>noop调用策略</li>
+</ul>
+<h2 id="分析工具-2"><a href="#分析工具-2" class="headerlink" title="分析工具"></a>分析工具</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>iostat</td>
+<td>磁盘详细统计信息</td>
+</tr>
+<tr>
+<td>iotop</td>
+<td>按进程查看磁盘IO的使用情况</td>
+</tr>
+<tr>
+<td>pidstat</td>
+<td>按进程查看磁盘IO的使用情况</td>
+</tr>
+<tr>
+<td>perf</td>
+<td>动态跟踪工具</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用方式-2"><a href="#使用方式-2" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//查看系统io信息</span><br><span class="line">iotop</span><br><span class="line"></span><br><span class="line">//统计io详细信息</span><br><span class="line">iostat -d -x -k 1 10</span><br><span class="line"></span><br><span class="line">//查看进程级io的信息</span><br><span class="line">pidstat -d 1 -p  pid</span><br><span class="line"></span><br><span class="line">//查看系统IO的请求，比如可以在发现系统IO异常时，可以使用该命令进行调查，就能指定到底是什么原因导致的IO异常</span><br><span class="line">perf record -e block:block_rq_issue -ag</span><br><span class="line">^C</span><br><span class="line">perf report</span><br></pre></td></tr></table></figure>
+<h1 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h1><h2 id="说明-3"><a href="#说明-3" class="headerlink" title="说明"></a>说明</h2><p>网络的监测是所有 Linux 子系统里面最复杂的，有太多的因素在里面，比如：延迟、阻塞、冲突、丢包等，更糟的是与 Linux 主机相连的路由器、交换机、无线信号都会影响到整体网络并且很难判断是因为 Linux 网络子系统的问题还是别的设备的问题，增加了监测和判断的复杂度。现在我们使用的所有网卡都称为自适应网卡，意思是说能根据网络上的不同网络设备导致的不同网络速度和工作模式进行自动调整。</p>
+<h2 id="分析工具-3"><a href="#分析工具-3" class="headerlink" title="分析工具"></a>分析工具</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ping</td>
+<td>主要透过 ICMP 封包 来进行整个网络的状况报告</td>
+</tr>
+<tr>
+<td>traceroute</td>
+<td>用来检测发出数据包的主机到目标主机之间所经过的网关数量的工具</td>
+</tr>
+<tr>
+<td>netstat</td>
+<td>用于显示与IP、TCP、UDP和ICMP协议相关的统计数据，一般用于检验本机各端口的网络连接情况</td>
+</tr>
+<tr>
+<td>ss</td>
+<td>可以用来获取socket统计信息，而且比netstat更快速更高效</td>
+</tr>
+<tr>
+<td>host</td>
+<td>可以用来查出某个主机名的 IP,跟nslookup作用一样</td>
+</tr>
+<tr>
+<td>tcpdump</td>
+<td>是以包为单位进行输出的，阅读起来不是很方便</td>
+</tr>
+<tr>
+<td>tcpflow</td>
+<td>是面向tcp流的, 每个tcp传输会保存成一个文件,很方便的查看</td>
+</tr>
+<tr>
+<td>sar -n DEV</td>
+<td>网卡流量情况</td>
+</tr>
+<tr>
+<td>sar -n SOCK</td>
+<td>查询网络以及tcp，udp状态信息</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用方式-3"><a href="#使用方式-3" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">//显示网络统计信息</span><br><span class="line">netstat -s</span><br><span class="line"></span><br><span class="line">//显示当前UDP连接状况</span><br><span class="line">netstat -nu</span><br><span class="line"></span><br><span class="line">//显示UDP端口号的使用情况</span><br><span class="line">netstat -apu</span><br><span class="line"></span><br><span class="line">//统计机器中网络连接各个状态个数</span><br><span class="line">netstat -a | awk <span class="string">'/^tcp/ &#123;++S[$NF]&#125; END &#123;for(a in S) print a, S[a]&#125;'</span></span><br><span class="line"></span><br><span class="line">//显示TCP连接</span><br><span class="line">ss -t -a</span><br><span class="line"></span><br><span class="line">//显示sockets摘要信息</span><br><span class="line">ss -s</span><br><span class="line"></span><br><span class="line">//显示所有udp sockets</span><br><span class="line">ss -u -a</span><br><span class="line"></span><br><span class="line">//tcp,etcp状态</span><br><span class="line">sar -n TCP,ETCP 1</span><br><span class="line"></span><br><span class="line">//查看网络IO</span><br><span class="line">sar -n DEV 1</span><br><span class="line"></span><br><span class="line">//抓包以包为单位进行输出</span><br><span class="line">tcpdump -i eth1 host 192.168.1.1 and port 80 </span><br><span class="line"></span><br><span class="line">//抓包以流为单位显示数据内容</span><br><span class="line">tcpflow -cp host 192.168.1.1</span><br></pre></td></tr></table></figure>
 <h1 id="服务指标"><a href="#服务指标" class="headerlink" title="服务指标"></a>服务指标</h1><h2 id="响应时间-RT"><a href="#响应时间-RT" class="headerlink" title="响应时间(RT)"></a>响应时间(RT)</h2><p>响应时间是指系统对请求作出响应的时间。直观上看，这个指标与人对软件性能的主观感受是非常一致的，因为它完整地记录了整个计算机系统处理请求的时间。由于一个系统通常会提供许多功能，而不同功能的处理逻辑也千差万别，因而不同功能的响应时间也不尽相同，甚至同一功能在不同输入数据的情况下响应时间也不相同。所以，在讨论一个系统的响应时间时，人们通常是指该系统所有功能的平均时间或者所有功能的最大响应时间。当然，往往也需要对每个或每组功能讨论其平均响应时间和最大响应时间。</p>
 <p>对于单机的没有并发操作的应用系统而言，人们普遍认为响应时间是一个合理且准确的性能指标。需要指出的是，响应时间的绝对值并不能直接反映软件的性能的高低，软件性能的高低实际上取决于用户对该响应时间的接受程度。对于一个游戏软件来说，响应时间小于100毫秒应该是不错的，响应时间在1秒左右可能属于勉强可以接受，如果响应时间达到3秒就完全难以接受了。而对于编译系统来说，完整编译一个较大规模软件的源代码可能需要几十分钟甚至更长时间，但这些响应时间对于用户来说都是可以接受的。</p>
 <h2 id="吞吐量-Throughput"><a href="#吞吐量-Throughput" class="headerlink" title="吞吐量(Throughput)"></a>吞吐量(Throughput)</h2><p>吞吐量是指系统在单位时间内处理请求的数量。对于无并发的应用系统而言，吞吐量与响应时间成严格的反比关系，实际上此时吞吐量就是响应时间的倒数。前面已经说过，对于单用户的系统，响应时间（或者系统响应时间和应用延迟时间）可以很好地度量系统的性能，但对于并发系统，通常需要用吞吐量作为性能指标。</p>
@@ -516,7 +735,8 @@
 <li><p>dmesg</p>
 <p>dmesg命令用于显示开机信息。</p>
 <p>kernel会将开机信息存储在ring buffer中。您若是开机时来不及查看信息，可利用dmesg来查看。开机信息亦保存在/var/log目录中，名称为dmesg的文件里。</p>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dmesg [-cn][-s &lt;缓冲区大小&gt;]</span><br></pre></td></tr></table></figure>
+<p><strong>语法</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dmesg [-cn][-s &lt;缓冲区大小&gt;]</span><br></pre></td></tr></table></figure>
 <p><strong>参数说明</strong>：</p>
 <ul>
 <li>-c 　显示信息后，清除ring buffer中的内容。</li>
@@ -549,11 +769,44 @@
 <li><p>dstat<br>综合工具，综合了 vmstat, iostat, ifstat, netstat 等多个信息</p>
 </li>
 </ul>
+<h1 id="系统负载"><a href="#系统负载" class="headerlink" title="系统负载"></a>系统负载</h1><h2 id="说明-4"><a href="#说明-4" class="headerlink" title="说明"></a>说明</h2><p>Load 就是对计算机干活多少的度量（WikiPedia：the system Load is a measure of the amount of work that a compute system is doing）简单的说是进程队列的长度。Load Average 就是一段时间（1分钟、5分钟、15分钟）内平均Load。</p>
+<h2 id="分析工具-4"><a href="#分析工具-4" class="headerlink" title="分析工具"></a>分析工具</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>top</td>
+<td>查看系统负载情况</td>
+</tr>
+<tr>
+<td>uptime</td>
+<td>查看系统负载情况</td>
+</tr>
+<tr>
+<td>strace</td>
+<td>统计跟踪内核态信息</td>
+</tr>
+<tr>
+<td>vmstat</td>
+<td>查看负载情况</td>
+</tr>
+<tr>
+<td>dmesg</td>
+<td>查看内核日志信息</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用方式-4"><a href="#使用方式-4" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//查看负载情况</span></span><br><span class="line">uptime</span><br><span class="line"></span><br><span class="line">top</span><br><span class="line"></span><br><span class="line">vmstat</span><br><span class="line"></span><br><span class="line"><span class="comment">//统计系统调用耗时情况</span></span><br><span class="line">strace -<span class="built_in">c</span> -p pid</span><br><span class="line"></span><br><span class="line"><span class="comment">//跟踪指定的系统操作例如epoll_wait</span></span><br><span class="line">strace -<span class="type">T</span> -e epoll_wait -p pid</span><br><span class="line"></span><br><span class="line"><span class="comment">//查看内核日志信息</span></span><br><span class="line">dmesg</span><br></pre></td></tr></table></figure>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
 <li><a href="http://tmq.qq.com/2016/07/it-is-necessary-to-know-the-background-performance-test/" target="_blank" rel="noopener">http://tmq.qq.com/2016/07/it-is-necessary-to-know-the-background-performance-test/</a></li>
 <li><a href="https://www.ibm.com/developerworks/java/library/j-nativememory-linux/" target="_blank" rel="noopener">https://www.ibm.com/developerworks/java/library/j-nativememory-linux/</a></li>
 <li><a href="http://www.oracle.com/technetwork/java/javase/index-137495.html" target="_blank" rel="noopener">http://www.oracle.com/technetwork/java/javase/index-137495.html</a></li>
 <li><a href="http://www.hollischuang.com/archives/303" target="_blank" rel="noopener">http://www.hollischuang.com/archives/303</a></li>
+<li><a href="https://www.jianshu.com/p/0bbac570fa4c" target="_blank" rel="noopener">https://www.jianshu.com/p/0bbac570fa4c</a></li>
 </ol>
 
       
@@ -575,9 +828,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/JAVA/" rel="tag"># JAVA</a>
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
           
             <a href="/tags/异常处理/" rel="tag"># 异常处理</a>
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
         </div>
       
@@ -680,7 +935,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-count">36</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -879,7 +1134,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#服务异常的处理流程"><span class="nav-number">1.</span> <span class="nav-text">服务异常的处理流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#负载"><span class="nav-number">2.</span> <span class="nav-text">负载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看机器-cpu-的负载"><span class="nav-number">2.1.</span> <span class="nav-text">查看机器 cpu 的负载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查找-cpu-占用率高的线程"><span class="nav-number">2.2.</span> <span class="nav-text">查找 cpu 占用率高的线程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存"><span class="nav-number">3.</span> <span class="nav-text">内存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#系统内存"><span class="nav-number">3.1.</span> <span class="nav-text">系统内存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是buffer-cache？"><span class="nav-number">3.1.1.</span> <span class="nav-text">什么是buffer/cache？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统如何回收cache？"><span class="nav-number">3.1.2.</span> <span class="nav-text">系统如何回收cache？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程内存"><span class="nav-number">3.2.</span> <span class="nav-text">进程内存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程内存统计"><span class="nav-number">3.2.1.</span> <span class="nav-text">进程内存统计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM-内存分配"><span class="nav-number">3.2.2.</span> <span class="nav-text">JVM 内存分配</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方法区"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">方法区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#虚拟机栈"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">虚拟机栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本地方法栈"><span class="nav-number">3.2.2.3.</span> <span class="nav-text">本地方法栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#堆"><span class="nav-number">3.2.2.4.</span> <span class="nav-text">堆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#程序计数器"><span class="nav-number">3.2.2.5.</span> <span class="nav-text">程序计数器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#直接内存"><span class="nav-number">3.2.2.6.</span> <span class="nav-text">直接内存</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM-内存分析"><span class="nav-number">3.3.</span> <span class="nav-text">JVM 内存分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看-JVM-堆内存情况"><span class="nav-number">3.3.1.</span> <span class="nav-text">查看 JVM 堆内存情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看-JVM-堆各个分区的内存情况"><span class="nav-number">3.3.2.</span> <span class="nav-text">查看 JVM 堆各个分区的内存情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析-JVM-堆内存中的对象"><span class="nav-number">3.3.3.</span> <span class="nav-text">分析 JVM 堆内存中的对象</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#服务指标"><span class="nav-number">4.</span> <span class="nav-text">服务指标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#响应时间-RT"><span class="nav-number">4.1.</span> <span class="nav-text">响应时间(RT)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#吞吐量-Throughput"><span class="nav-number">4.2.</span> <span class="nav-text">吞吐量(Throughput)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并发用户数"><span class="nav-number">4.3.</span> <span class="nav-text">并发用户数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QPS每秒查询率-Query-Per-Second"><span class="nav-number">4.4.</span> <span class="nav-text">QPS每秒查询率(Query Per Second)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU利用率"><span class="nav-number">4.5.</span> <span class="nav-text">CPU利用率</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工具"><span class="nav-number">5.</span> <span class="nav-text">工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法"><span class="nav-number">5.0.1.</span> <span class="nav-text">语法</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#服务异常的处理流程"><span class="nav-number">1.</span> <span class="nav-text">服务异常的处理流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CPU负载"><span class="nav-number">2.</span> <span class="nav-text">CPU负载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明"><span class="nav-number">2.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析工具"><span class="nav-number">2.2.</span> <span class="nav-text">分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式"><span class="nav-number">2.3.</span> <span class="nav-text">使用方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看机器-cpu-的负载"><span class="nav-number">2.4.</span> <span class="nav-text">查看机器 cpu 的负载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查找-cpu-占用率高的线程"><span class="nav-number">2.5.</span> <span class="nav-text">查找 cpu 占用率高的线程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存"><span class="nav-number">3.</span> <span class="nav-text">内存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明-1"><span class="nav-number">3.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析工具-1"><span class="nav-number">3.2.</span> <span class="nav-text">分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式-1"><span class="nav-number">3.3.</span> <span class="nav-text">使用方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统内存"><span class="nav-number">3.4.</span> <span class="nav-text">系统内存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是buffer-cache？"><span class="nav-number">3.4.1.</span> <span class="nav-text">什么是buffer/cache？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统如何回收cache？"><span class="nav-number">3.4.2.</span> <span class="nav-text">系统如何回收cache？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程内存"><span class="nav-number">3.5.</span> <span class="nav-text">进程内存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程内存统计"><span class="nav-number">3.5.1.</span> <span class="nav-text">进程内存统计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM-内存分配"><span class="nav-number">3.5.2.</span> <span class="nav-text">JVM 内存分配</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方法区"><span class="nav-number">3.5.2.1.</span> <span class="nav-text">方法区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#虚拟机栈"><span class="nav-number">3.5.2.2.</span> <span class="nav-text">虚拟机栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本地方法栈"><span class="nav-number">3.5.2.3.</span> <span class="nav-text">本地方法栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#堆"><span class="nav-number">3.5.2.4.</span> <span class="nav-text">堆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#程序计数器"><span class="nav-number">3.5.2.5.</span> <span class="nav-text">程序计数器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#直接内存"><span class="nav-number">3.5.2.6.</span> <span class="nav-text">直接内存</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM-内存分析"><span class="nav-number">3.6.</span> <span class="nav-text">JVM 内存分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看-JVM-堆内存情况"><span class="nav-number">3.6.1.</span> <span class="nav-text">查看 JVM 堆内存情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看-JVM-堆各个分区的内存情况"><span class="nav-number">3.6.2.</span> <span class="nav-text">查看 JVM 堆各个分区的内存情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析-JVM-堆内存中的对象"><span class="nav-number">3.6.3.</span> <span class="nav-text">分析 JVM 堆内存中的对象</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#磁盘IO"><span class="nav-number">4.</span> <span class="nav-text">磁盘IO</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明-2"><span class="nav-number">4.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析工具-2"><span class="nav-number">4.2.</span> <span class="nav-text">分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式-2"><span class="nav-number">4.3.</span> <span class="nav-text">使用方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络"><span class="nav-number">5.</span> <span class="nav-text">网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明-3"><span class="nav-number">5.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析工具-3"><span class="nav-number">5.2.</span> <span class="nav-text">分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式-3"><span class="nav-number">5.3.</span> <span class="nav-text">使用方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#服务指标"><span class="nav-number">6.</span> <span class="nav-text">服务指标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#响应时间-RT"><span class="nav-number">6.1.</span> <span class="nav-text">响应时间(RT)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#吞吐量-Throughput"><span class="nav-number">6.2.</span> <span class="nav-text">吞吐量(Throughput)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并发用户数"><span class="nav-number">6.3.</span> <span class="nav-text">并发用户数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QPS每秒查询率-Query-Per-Second"><span class="nav-number">6.4.</span> <span class="nav-text">QPS每秒查询率(Query Per Second)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU利用率"><span class="nav-number">6.5.</span> <span class="nav-text">CPU利用率</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工具"><span class="nav-number">7.</span> <span class="nav-text">工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#系统负载"><span class="nav-number">8.</span> <span class="nav-text">系统负载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明-4"><span class="nav-number">8.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析工具-4"><span class="nav-number">8.2.</span> <span class="nav-text">分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式-4"><span class="nav-number">8.3.</span> <span class="nav-text">使用方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">9.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>

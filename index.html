@@ -44,6 +44,8 @@
 
 
 
+  <meta name="google-site-verification" content="HzD3jseSmctf--z1mHXLAwERIBzdqIvVavEv6fq47pI">
+
 
 
 
@@ -305,6 +307,428 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/24/Java性能优化和JVM-GC（垃圾回收机制）详解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vincent">
+      <meta itemprop="description" content="The King is dead, long live the King!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/24/Java性能优化和JVM-GC（垃圾回收机制）详解/" itemprop="url">
+                  Java性能优化和JVM GC（垃圾回收机制）详解
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-24 14:42:01 / 修改时间：15:02:34" itemprop="dateCreated datePublished" datetime="2020-02-24T14:42:01+08:00">2020-02-24</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Java的性能优化，JVM GC（垃圾回收机制）在学习Java GC 之前，我们需要记住一个单词：stop-the-world 。它会在任何一种GC算法中发生。stop-the-world 意味着JVM因为需要执行GC而停止了应用程序的执行。当stop-the-world 发生时，除GC所需的线程外，所有的线程都进入等待状态，直到GC任务完成。GC优化很多时候就是减少stop-the-world 的发生。</p>
+<h1 id="JVM-GC回收哪个区域内的垃圾？"><a href="#JVM-GC回收哪个区域内的垃圾？" class="headerlink" title="JVM GC回收哪个区域内的垃圾？"></a><strong>JVM GC回收哪个区域内的垃圾？</strong></h1><p>需要注意的是，JVM GC只回收堆区和方法区内的对象。而栈区的数据，在超出作用域后会被JVM自动释放掉，所以其不在JVM GC的管理范围内。</p>
+<h1 id="JVM-GC怎么判断对象可以被回收了？"><a href="#JVM-GC怎么判断对象可以被回收了？" class="headerlink" title="JVM GC怎么判断对象可以被回收了？"></a><strong>JVM GC怎么判断对象可以被回收了？</strong></h1><ul>
+<li><p>对象没有引用</p>
+</li>
+<li><p>作用域发生未捕获异常</p>
+</li>
+<li><p>程序在作用域正常执行完毕</p>
+</li>
+<li><p>程序执行了System.exit()</p>
+</li>
+<li><p>程序发生意外终止（被杀线程等）</p>
+</li>
+</ul>
+<p>在Java程序中不能显式的分配和注销缓存，因为这些事情JVM都帮我们做了，那就是GC。</p>
+<p>有些时候我们可以将相关的对象设置成null 来试图显示的清除缓存，但是并不是设置为null 就会一定被标记为可回收，有可能会发生逃逸。</p>
+<p>将对象设置成null 至少没有什么坏处，但是使用System.gc() 便不可取了，使用System.gc() 时候并不是马上执行GC操作，而是会等待一段时间，甚至不执行，而且System.gc() 如果被执行，会触发Full GC ，这非常影响性能。</p>
+<h1 id="JVM-GC什么时候执行？"><a href="#JVM-GC什么时候执行？" class="headerlink" title="JVM GC什么时候执行？"></a><strong>JVM GC什么时候执行？</strong></h1><p>eden区空间不够存放新对象的时候，执行Minro GC。升到老年代的对象大于老年代剩余空间的时候执行Full GC，或者小于的时候被HandlePromotionFailure 参数强制Full GC 。调优主要是减少 Full GC 的触发次数，可以通过 NewRatio 控制新生代转老年代的比例，通过MaxTenuringThreshold 设置对象进入老年代的年龄阀值（后面会介绍到）。</p>
+<h1 id="按代的垃圾回收机制"><a href="#按代的垃圾回收机制" class="headerlink" title="按代的垃圾回收机制"></a><strong>按代的垃圾回收机制</strong></h1><p>新生代（Young generation）：绝大多数最新被创建的对象都会被分配到这里，由于大部分在创建后很快变得不可达，很多对象被创建在新生代，然后“消失”。对象从这个区域“消失”的过程我们称之为：Minor GC 。</p>
+<p>老年代（Old generation）：对象没有变得不可达，并且从新生代周期中存活了下来，会被拷贝到这里。其区域分配的空间要比新生代多。也正由于其相对大的空间，发生在老年代的GC次数要比新生代少得多。对象从老年代中消失的过程，称之为：Major GC 或者 Full GC。</p>
+<p>持久代（Permanent generation）也称之为 方法区（Method area）：用于保存类常量以及字符串常量。注意，这个区域不是用于存储那些从老年代存活下来的对象，这个区域也可能发生GC。发生在这个区域的GC事件也被算为 Major GC 。只不过在这个区域发生GC的条件非常严苛，必须符合以下三种条件才会被回收：</p>
+<ol>
+<li>所有实例被回收</li>
+<li>加载该类的ClassLoader 被回收</li>
+<li>Class 对象无法通过任何途径访问（包括反射）</li>
+</ol>
+<p>可能我们会有疑问：</p>
+<p>如果老年代的对象需要引用新生代的对象，会发生什么呢？</p>
+<p>为了解决这个问题，老年代中存在一个 card table ，它是一个512byte大小的块。所有老年代的对象指向新生代对象的引用都会被记录在这个表中。当针对新生代执行GC的时候，只需要查询 card table 来决定是否可以被回收，而不用查询整个老年代。这个 card table 由一个write barrier 来管理。write barrier给GC带来了很大的性能提升，虽然由此可能带来一些开销，但完全是值得的。</p>
+<blockquote>
+<p>默认的新生代（Young generation）、老年代（Old generation）所占空间比例为 1 : 2 。</p>
+</blockquote>
+<h1 id="新生代空间的构成与逻辑"><a href="#新生代空间的构成与逻辑" class="headerlink" title="新生代空间的构成与逻辑"></a><strong>新生代空间的构成与逻辑</strong></h1><p>为了更好的理解GC，我们来学习新生代的构成，它用来保存那些第一次被创建的对象，它被分成三个空间：</p>
+<ul>
+<li><p>一个伊甸园空间（Eden）</p>
+</li>
+<li><p>两个幸存者空间（Fron Survivor、To Survivor）</p>
+</li>
+</ul>
+<p>默认新生代空间的分配：<code>Eden : Fron : To = 8 : 1 : 1</code></p>
+<p>每个空间的执行顺序如下：</p>
+<ol>
+<li>绝大多数刚刚被创建的对象会存放在伊甸园空间（Eden）。</li>
+<li>在伊甸园空间执行第一次GC（Minor GC）之后，存活的对象被移动到其中一个幸存者空间（Survivor）。</li>
+<li>此后，每次伊甸园空间执行GC后，存活的对象会被堆积在同一个幸存者空间。</li>
+<li>当一个幸存者空间饱和，还在存活的对象会被移动到另一个幸存者空间。然后会清空已经饱和的哪个幸存者空间。</li>
+<li>在以上步骤中重复N次（N = MaxTenuringThreshold（年龄阀值设定，默认15））依然存活的对象，就会被移动到老年代。</li>
+</ol>
+<p>从上面的步骤可以发现，两个幸存者空间，必须有一个是保持空的。如果两个两个幸存者空间都有数据，或两个空间都是空的，那一定是你的系统出现了某种错误。</p>
+<p>我们需要重点记住的是，对象在刚刚被创建之后，是保存在伊甸园空间的（Eden）。那些长期存活的对象会经由幸存者空间（Survivor）转存到老年代空间（Old generation）。</p>
+<p>也有例外出现，对于一些比较大的对象（需要分配一块比较大的连续内存空间）则直接进入到老年代。一般在Survivor 空间不足的情况下发生。</p>
+<h1 id="老年代空间的构成与逻辑"><a href="#老年代空间的构成与逻辑" class="headerlink" title="老年代空间的构成与逻辑"></a>老年代空间的构成与逻辑</h1><p>老年代空间的构成其实很简单，它不像新生代空间那样划分为几个区域，它只有一个区域，里面存储的对象并不像新生代空间绝大部分都是朝闻道，夕死矣。这里的对象几乎都是从Survivor 空间中熬过来的，它们绝不会轻易的狗带。因此，Full GC（Major GC）发生的次数不会有Minor GC 那么频繁，并且做一次Major GC 的时间比Minor GC 要更长（约10倍）。</p>
+<h1 id="JVM-GC-算法讲解"><a href="#JVM-GC-算法讲解" class="headerlink" title="JVM GC 算法讲解"></a>JVM GC 算法讲解</h1><h2 id="根搜索算法"><a href="#根搜索算法" class="headerlink" title="根搜索算法"></a>根搜索算法</h2><p>根搜索算法是从离散数学中的图论引入的，程序把所有引用关系看作一张图，从一个节点GC ROOT 开始，寻找对应的引用节点，找到这个节点后，继续寻找这个节点的引用节点。当所有的引用节点寻找完毕后，剩余的节点则被认为是没有被引用到的节点，即无用的节点。</p>
+<p><img src="/2020/02/24/Java性能优化和JVM-GC（垃圾回收机制）详解/image-20200224145513084.png" alt="image-20200224145513084"></p>
+<p>上图红色为无用的节点，可以被回收。</p>
+<p>目前Java中可以作为GC ROOT的对象有：</p>
+<ol>
+<li>虚拟机栈中引用的对象（本地变量表）</li>
+<li>方法区中静态属性引用的对象</li>
+<li>方法区中常量引用的对象</li>
+<li>本地方法栈中引用的对象（Native对象）</li>
+</ol>
+<p>基本所有GC算法都引用根搜索算法这种概念。</p>
+<h2 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记 - 清除算法"></a>标记 - 清除算法</h2><p>标记-清除算法采用从根集合进行扫描，对存活的对象进行标记，标记完毕后，再扫描整个空间中未被标记的对象进行直接回收，如上图。</p>
+<p>标记-清除算法不需要进行对象的移动，并且仅对不存活的对象进行处理，在存活的对象比较多的情况下极为高效，但由于标记-清除算法直接回收不存活的对象，并没有对还存活的对象进行整理，因此会导致内存碎片。</p>
+<h2 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a>复制算法</h2><p><img src="/2020/02/24/Java性能优化和JVM-GC（垃圾回收机制）详解/image-20200224145555734.png" alt="image-20200224145555734">复制算法将内存划分为两个区间，使用此算法时，所有动态分配的对象都只能分配在其中一个区间（活动区间），而另外一个区间（空间区间）则是空闲的。</p>
+<p>复制算法采用从根集合扫描，将存活的对象复制到空闲区间，当扫描完毕活动区间后，会的将活动区间一次性全部回收。此时原本的空闲区间变成了活动区间。下次GC时候又会重复刚才的操作，以此循环。</p>
+<p>复制算法在存活对象比较少的时候，极为高效，但是带来的成本是牺牲一半的内存空间用于进行对象的移动。所以复制算法的使用场景，必须是对象的存活率非常低才行，而且最重要的是，我们需要克服50%内存的浪费。</p>
+<h2 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记 - 整理算法"></a>标记 - 整理算法</h2><p><img src="/2020/02/24/Java性能优化和JVM-GC（垃圾回收机制）详解/image-20200224145614350.png" alt="image-20200224145614350">标记-整理算法采用 <code>标记-清除</code> 算法一样的方式进行对象的标记、清除，但在回收不存活的对象占用的空间后，会将所有存活的对象往左端空闲空间移动，并更新对应的指针。标记-整理 算法是在标记-清除 算法之上，又进行了对象的移动排序整理，因此成本更高，但却解决了内存碎片的问题。</p>
+<p>JVM为了优化内存的回收，使用了分代回收的方式，对于新生代内存的回收（Minor GC）主要采用复制算法。而对于老年代的回收（Major GC），大多采用标记-整理算法。</p>
+<h1 id="垃圾回收器简介"><a href="#垃圾回收器简介" class="headerlink" title="垃圾回收器简介"></a>垃圾回收器简介</h1><p>需要注意的是，每一个回收器都存在Stop The World 的问题，只不过各个回收器在Stop The World 时间优化程度、算法的不同，可根据自身需求选择适合的回收器。</p>
+<h2 id="Serial（-XX-UseSerialGC）"><a href="#Serial（-XX-UseSerialGC）" class="headerlink" title="Serial（-XX:+UseSerialGC）"></a>Serial（-XX:+UseSerialGC）</h2><p>从名字我们可以看出，这是一个串行收集器。</p>
+<p>Serial收集器是Java虚拟机中最基本、历史最悠久的收集器。在JDK1.3之前是Java虚拟机新生代收集器的唯一选择。目前也是ClientVM下ServerVM 4核4GB以下机器默认垃圾回收器。Serial收集器并不是只能使用一个CPU进行收集，而是当JVM需要进行垃圾回收的时候，需暂停所有的用户线程，直到回收结束。</p>
+<p>使用算法：复制算法</p>
+<p><img src="/2020/02/24/Java性能优化和JVM-GC（垃圾回收机制）详解/image-20200224145650521.png" alt="image-20200224145650521">JVM中文名称为Java虚拟机，因此它像一台虚拟的电脑在工作，而其中的每一个线程都被认为是JVM的一个处理器，因此图中的CPU0、CPU1实际上为用户的线程，而不是真正的机器CPU，不要误解哦。</p>
+<p>Serial收集器虽然是最老的，但是它对于限定单个CPU的环境来说，由于没有线程交互的开销，专心做垃圾收集，所以它在这种情况下是相对于其他收集器中最高效的。</p>
+<h2 id="SerialOld（-XX-UseSerialGC）"><a href="#SerialOld（-XX-UseSerialGC）" class="headerlink" title="SerialOld（-XX:+UseSerialGC）"></a>SerialOld（-XX:+UseSerialGC）</h2><p>SerialOld是Serial收集器的老年代收集器版本，它同样是一个单线程收集器，这个收集器目前主要用于Client模式下使用。如果在Server模式下，它主要还有两大用途：一个是在JDK1.5及之前的版本中与Parallel Scavenge收集器搭配使用，另外一个就是作为CMS收集器的后备预案，如果CMS出现Concurrent Mode Failure，则SerialOld将作为后备收集器。</p>
+<p>使用算法：标记 - 整理算法</p>
+<p>运行示意图与上图一致。</p>
+<h2 id="ParNew（-XX-UseParNewGC）"><a href="#ParNew（-XX-UseParNewGC）" class="headerlink" title="ParNew（-XX:+UseParNewGC）"></a>ParNew（-XX:+UseParNewGC）</h2><p>ParNew其实就是Serial收集器的多线程版本。除了Serial收集器外，只有它能与CMS收集器配合工作。</p>
+<p>使用算法：复制算法</p>
+<p><img src="/2020/02/24/Java性能优化和JVM-GC（垃圾回收机制）详解/image-20200224145719526.png" alt="image-20200224145719526"></p>
+<p>ParNew是许多运行在Server模式下的JVM首选的新生代收集器。但是在单CPU的情况下，它的效率远远低于Serial收集器，所以一定要注意使用场景。</p>
+<h2 id="ParallelScavenge（-XX-UseParallelGC）"><a href="#ParallelScavenge（-XX-UseParallelGC）" class="headerlink" title="ParallelScavenge（-XX:+UseParallelGC）"></a><strong>ParallelScavenge（-XX:+UseParallelGC）</strong></h2><p>ParallelScavenge又被称为吞吐量优先收集器，和ParNew 收集器类似，是一个新生代收集器。</p>
+<p>使用算法：复制算法</p>
+<p>ParallelScavenge收集器的目标是达到一个可控件的吞吐量，所谓吞吐量就是CPU用于运行用户代码的时间与CPU总消耗时间的比值，即吞吐量 = 运行用户代码时间 / （运行用户代码时间 + 垃圾收集时间）。如果虚拟机总共运行了100分钟，其中垃圾收集花了1分钟，那么吞吐量就是99% 。</p>
+<h2 id="ParallelOld（-XX-UseParallelOldGC）"><a href="#ParallelOld（-XX-UseParallelOldGC）" class="headerlink" title="ParallelOld（-XX:+UseParallelOldGC）"></a><strong>ParallelOld（-XX:+UseParallelOldGC）</strong></h2><p>ParallelOld是并行收集器，和SerialOld一样，ParallelOld是一个老年代收集器，是老年代吞吐量优先的一个收集器。这个收集器在JDK1.6之后才开始提供的，在此之前，ParallelScavenge只能选择SerialOld来作为其老年代的收集器，这严重拖累了ParallelScavenge整体的速度。而ParallelOld的出现后，“吞吐量优先”收集器才名副其实！</p>
+<p>使用算法：标记 - 整理算法</p>
+<p><img src="/2020/02/24/Java性能优化和JVM-GC（垃圾回收机制）详解/image-20200224145812172.png" alt="image-20200224145812172"></p>
+<p>在注重吞吐量与CPU数量大于1的情况下，都可以优先考虑ParallelScavenge + ParalleloOld收集器。</p>
+<h2 id="CMS-（-XX-UseConcMarkSweepGC）"><a href="#CMS-（-XX-UseConcMarkSweepGC）" class="headerlink" title="CMS （-XX:+UseConcMarkSweepGC）"></a><strong>CMS （-XX:+UseConcMarkSweepGC）</strong></h2><p>CMS是一个老年代收集器，全称 Concurrent Low Pause Collector，是JDK1.4后期开始引用的新GC收集器，在JDK1.5、1.6中得到了进一步的改进。它是对于响应时间的重要性需求大于吞吐量要求的收集器。对于要求服务器响应速度高的情况下，使用CMS非常合适。</p>
+<p>CMS的一大特点，就是用两次短暂的暂停来代替串行或并行标记整理算法时候的长暂停。</p>
+<p>使用算法：<code>标记 - 清理</code></p>
+<p>CMS的执行过程如下：</p>
+<p><strong>· 初始标记（STW initial mark）</strong></p>
+<p>在这个阶段，需要虚拟机停顿正在执行的应用线程，官方的叫法STW（Stop Tow World）。这个过程从根对象扫描直接关联的对象，并作标记。这个过程会很快的完成。</p>
+<p><strong>· 并发标记（Concurrent marking）</strong></p>
+<p>这个阶段紧随初始标记阶段，在“初始标记”的基础上继续向下追溯标记。注意这里是并发标记，表示用户线程可以和GC线程一起并发执行，这个阶段不会暂停用户的线程哦。</p>
+<p>· 并发预清理（Concurrent precleaning）</p>
+<p>这个阶段任然是并发的，JVM查找正在执行“并发标记”阶段时候进入老年代的对象（可能这时会有对象从新生代晋升到老年代，或被分配到老年代）。通过重新扫描，减少在一个阶段“重新标记”的工作，因为下一阶段会STW。</p>
+<p><strong>· 重新标记（STW remark）</strong></p>
+<p>这个阶段会再次暂停正在执行的应用线程，重新重根对象开始查找并标记并发阶段遗漏的对象（在并发标记阶段结束后对象状态的更新导致），并处理对象关联。这一次耗时会比“初始标记”更长，并且这个阶段可以并行标记。</p>
+<p><strong>· 并发清理（Concurrent sweeping）</strong></p>
+<p>这个阶段是并发的，应用线程和GC清除线程可以一起并发执行。</p>
+<p><strong>· 并发重置（Concurrent reset）</strong></p>
+<p>这个阶段任然是并发的，重置CMS收集器的数据结构，等待下一次垃圾回收。</p>
+<p><strong>CMS的缺点：</strong></p>
+<p>1、内存碎片。由于使用了 标记-清理 算法，导致内存空间中会产生内存碎片。不过CMS收集器做了一些小的优化，就是把未分配的空间汇总成一个列表，当有JVM需要分配内存空间的时候，会搜索这个列表找到符合条件的空间来存储这个对象。但是内存碎片的问题依然存在，如果一个对象需要3块连续的空间来存储，因为内存碎片的原因，寻找不到这样的空间，就会导致Full GC。</p>
+<p>2、需要更多的CPU资源。由于使用了并发处理，很多情况下都是GC线程和应用线程并发执行的，这样就需要占用更多的CPU资源，也是牺牲了一定吞吐量的原因。</p>
+<p>3、需要更大的堆空间。因为CMS标记阶段应用程序的线程还是执行的，那么就会有堆空间继续分配的问题，为了保障CMS在回收堆空间之前还有空间分配给新加入的对象，必须预留一部分空间。CMS默认在老年代空间使用68%时候启动垃圾回收。可以通过-XX:CMSinitiatingOccupancyFraction=n来设置这个阀值。</p>
+<h2 id="GarbageFirst（G1）"><a href="#GarbageFirst（G1）" class="headerlink" title="GarbageFirst（G1）"></a><strong>GarbageFirst（G1）</strong></h2><p>这是一个新的垃圾回收器，既可以回收新生代也可以回收老年代，SunHotSpot1.6u14以上EarlyAccess版本加入了这个回收器，Sun公司预期SunHotSpot1.7发布正式版本。通过重新划分内存区域，整合优化CMS，同时注重吞吐量和响应时间。杯具的是Oracle收购这个收集器之后将其用于商用收费版收集器。因此目前暂时没有发现哪个公司使用它，这个放在之后再去研究吧。</p>
+<p>整理一下新生代和老年代的收集器。</p>
+<p><strong>新生代收集器：</strong></p>
+<ul>
+<li><p>Serial （-XX:+UseSerialGC）</p>
+</li>
+<li><p>ParNew（-XX:+UseParNewGC）</p>
+</li>
+<li><p>ParallelScavenge（-XX:+UseParallelGC）</p>
+</li>
+<li><p>G1 收集器</p>
+</li>
+</ul>
+<p><strong>老年代收集器：</strong></p>
+<ul>
+<li><p>SerialOld（-XX:+UseSerialOldGC）</p>
+</li>
+<li><p>ParallelOld（-XX:+UseParallelOldGC）</p>
+</li>
+<li><p>CMS（-XX:+UseConcMarkSweepGC）</p>
+</li>
+<li><p>G1 收集器</p>
+</li>
+</ul>
+<h2 id="调优jvm参数介绍"><a href="#调优jvm参数介绍" class="headerlink" title="调优jvm参数介绍"></a><strong>调优jvm参数介绍</strong></h2><p>堆设置</p>
+<ul>
+<li><p>-Xmx3550m：设置JVM最大堆内存 为3550M。</p>
+</li>
+<li><p>-Xms3550m：设置JVM初始堆内存 为3550M。此值可以设置与-Xmx相同，以避免每次垃圾回收完成后JVM重新分配内存。</p>
+</li>
+<li><p>-Xss128k：设置每个线程的栈 大小。JDK5.0以后每个线程栈大小为1M，之前每个线程栈大小为256K。应当根据应用的线程所需内存大小进行调整。在相同物理内存下，减小这个值能 生成更多的线程。但是操作系统对一个进程内的线程数还是有限制的，不能无限生成，经验值在3000~5000左右。</p>
+</li>
+<li><p>-Xmn2g：设置堆内存年轻代 大小为2G。整个堆内存大小 = 年轻代大小 + 年老代大小 + 持久代大小 。持久代一般固定大小为64m，所以增大年轻代后，将会减小年老代大小。此值对系统性能影响较大，Sun官方推荐配置为整个堆的3/8。</p>
+</li>
+<li><p>-XX:PermSize=256M：设置堆内存持久代 初始值为256M。(貌似是Eclipse等IDE的初始化参数)</p>
+</li>
+<li><p>-XX:MaxNewSize=size：新生成的对象能占用内存的最大值。</p>
+</li>
+<li><p>-XX:MaxPermSize=512M：设置持久代最大值为512M。</p>
+</li>
+<li><p>-XX:NewRatio=4：设置堆内存年轻代（包括Eden和两个Survivor区）与堆内存年老代的比值（除去持久代） 。设置为4，则年轻代所占与年老代所占的比值为1:4。</p>
+</li>
+<li><p>-XX:SurvivorRatio=4：设置堆内存年轻代中Eden区与Survivor区大小的比值 。设置为4，则两个Survivor区（JVM堆内存年轻代中默认有2个Survivor区）与一个Eden区的比值为2:4，一个Survivor区占 整个年轻代的1/6。</p>
+</li>
+<li><p>-XX:MaxTenuringThreshold=7：表示一个对象如果在救助空间（Survivor区）移动7次还没有被回收就放入年老代。如果设置为0的话，则年轻代对象不经过Survivor区，直接进入年老代，对于年老代比较多的应用，这样做可以提高效率。如果将此值设置为一个较大值，则年轻代对象会在Survivor区进行多次复制，这样可以增加对象在年轻代存活时间，增加对象在年轻代即被回收的概率。</p>
+</li>
+</ul>
+<p>回收器选择JVM给了三种选择：串行收集器、并行收集器、并发收集器，但是串行收集器只适用于小数据量的情况，所以这里的选择主要针对并行收集器和并发收集器。</p>
+<p>默认情况下，JDK5.0以前都是使用串行收集器，如果想使用其他收集器需要在启动时加入相应参数。JDK5.0以后，JVM会根据当前系统配置进行智能判断。</p>
+<h2 id="串行收集器"><a href="#串行收集器" class="headerlink" title="串行收集器"></a><strong>串行收集器</strong></h2><ul>
+<li>-XX:+UseSerialGC：设置串行收集器</li>
+</ul>
+<h2 id="并行收集器-吞吐量优先"><a href="#并行收集器-吞吐量优先" class="headerlink" title="并行收集器(吞吐量优先)"></a>并行收集器(吞吐量优先)</h2><ul>
+<li><p>-XX:+UseParallelGC：选择垃圾收集器为并行收集器。此配置仅对年轻代有效。即上述配置下，年轻代使用并发收集，而年老代仍旧使用串行收集。</p>
+</li>
+<li><p>-XX:ParallelGCThreads=20：配置并行收集器的线程数，即：同时多少个线程一起进行垃圾回收。此值最好配置与处理器数目相等。</p>
+</li>
+<li><p>-XX:+UseParallelOldGC：配置年老代垃圾收集方式为并行收集。JDK6.0支持对年老代并行收集。</p>
+</li>
+<li><p>-XX:MaxGCPauseMillis=100：设置每次年轻代垃圾回收的最长时间（单位毫秒），如果无法满足此时间，JVM会自动调整年轻代大小，以满足此值。</p>
+</li>
+<li><p>-XX:+UseAdaptiveSizePolicy：设置此选项后，并行收集器会自动选择年轻代区大小和相应的Survivor区比例，以达到目标系统规定的最低响应时间或者收集频率等。</p>
+</li>
+</ul>
+<p>此参数建议使用并行收集器时，一直打开。</p>
+<h2 id="并发收集器-响应时间优先"><a href="#并发收集器-响应时间优先" class="headerlink" title="并发收集器(响应时间优先)"></a>并发收集器(响应时间优先)</h2><ul>
+<li>-XX:+UseParNewGC：设置年轻代为并发收集。可与CMS收集同时使用。JDK5.0以上，JVM会根据系统配置自行设置，所以无需再设置此值。</li>
+</ul>
+<h2 id="CMS"><a href="#CMS" class="headerlink" title="CMS"></a>CMS</h2><p>全称Concurrent Low Pause Collector，是jdk1.4后期版本开始引入的新gc算法，在jdk5和jdk6中得到了进一步改进，它的主要适合场景是对响应时间的重要性需求 大于对吞吐量的要求，能够承受垃圾回收线程和应用线程共享处理器资源，并且应用中存在比较多的长生命周期的对象的应用。CMS是用于对tenured generation的回收，也就是年老代的回收，目标是尽量减少应用的暂停时间，减少FullGC发生的几率，利用和应用程序线程并发的垃圾回收线程来标记清除年老代。</p>
+<ul>
+<li><p>-XX:+UseConcMarkSweepGC：设置年老代为并发收集。测试中配置这个以后，-XX:NewRatio=4的配置失效了。所以，此时年轻代大小最好用-Xmn设置。</p>
+</li>
+<li><p>-XX:CMSFullGCsBeforeCompaction=：由于并发收集器不对内存空间进行压缩、整理，所以运行一段时间以后会产生“碎片”，使得运行效率降低。此参数设置运行次FullGC以后对内存空间进行压缩、整理。</p>
+</li>
+<li><p>-XX:+UseCMSCompactAtFullCollection：打开对年老代的压缩。可能会影响性能，但是可以消除内存碎片。</p>
+</li>
+<li><p>-XX:+CMSIncrementalMode：设置为增量收集模式。一般适用于单CPU情况。</p>
+</li>
+<li><p>-XX:CMSInitiatingOccupancyFraction=70：表示年老代空间到70%时就开始执行CMS，确保年老代有足够的空间接纳来自年轻代的对象。</p>
+</li>
+</ul>
+<p>注：如果使用 throughput collector 和 concurrent low pause collector 这两种垃圾收集器，需要适当的挺高内存大小，为多线程做准备。</p>
+<p>其它</p>
+<ul>
+<li><p>-XX:+ScavengeBeforeFullGC：新生代GC优先于Full GC执行。</p>
+</li>
+<li><p>-XX:-DisableExplicitGC：禁止调用System.gc()，但JVM的gc仍然有效。</p>
+</li>
+<li><p>-XX:+MaxFDLimit：最大化文件描述符的数量限制。</p>
+</li>
+<li><p>-XX:+UseThreadPriorities：启用本地线程优先级API，即使 java.lang.Thread.setPriority() 生效，反之无效。</p>
+</li>
+<li><p>-XX:SoftRefLRUPolicyMSPerMB=0：“软引用”的对象在最后一次被访问后能存活0毫秒（默认为1秒）。</p>
+</li>
+<li><p>-XX:TargetSurvivorRatio=90：允许90%的Survivor空间被占用（默认为50%）。提高对于Survivor的使用率——超过就会尝试垃圾回收。</p>
+</li>
+</ul>
+<p><strong>辅助信息</strong></p>
+<ul>
+<li><p>-XX:-CITime：打印消耗在JIT编译的时间</p>
+</li>
+<li><p>-XX:ErrorFile=./hs_err_pid.log：保存错误日志或者数据到指定文件中</p>
+</li>
+<li><p>-XX:-ExtendedDTraceProbes：开启solaris特有的dtrace探针</p>
+</li>
+<li><p>-XX:HeapDumpPath=./java_pid.hprof：指定导出堆信息时的路径或文件名</p>
+</li>
+<li><p>-XX:-HeapDumpOnOutOfMemoryError：当首次遭遇内存溢出时导出此时堆中相关信息</p>
+</li>
+<li><p>-XX:OnError=”;”：出现致命ERROR之后运行自定义命令</p>
+</li>
+<li><p>-XX:OnOutOfMemoryError=”;”：当首次遭遇内存溢出时执行自定义命令</p>
+</li>
+<li><p>-XX:-PrintClassHistogram：遇到Ctrl-Break后打印类实例的柱状信息，与jmap -histo功能相同</p>
+</li>
+<li><p>-XX:-PrintConcurrentLocks：遇到Ctrl-Break后打印并发锁的相关信息，与jstack -l功能相同</p>
+</li>
+<li><p>-XX:-PrintCommandLineFlags：打印在命令行中出现过的标记</p>
+</li>
+<li><p>-XX:-PrintCompilation：当一个方法被编译时打印相关信息</p>
+</li>
+<li><p>-XX:-PrintGC：每次GC时打印相关信息</p>
+</li>
+<li><p>-XX:-PrintGC Details：每次GC时打印详细信息</p>
+</li>
+<li><p>-XX:-PrintGCTimeStamps：打印每次GC的时间戳</p>
+</li>
+<li><p>-XX:-TraceClassLoading：跟踪类的加载信息</p>
+</li>
+<li><p>-XX:-TraceClassLoadingPreorder：跟踪被引用到的所有类的加载信息</p>
+</li>
+<li><p>-XX:-TraceClassResolution：跟踪常量池</p>
+</li>
+<li><p>-XX:-TraceClassUnloading：跟踪类的卸载信息</p>
+</li>
+<li><p>-XX:-TraceLoaderConstraints：跟踪类加载器约束的相关信息</p>
+</li>
+</ul>
+<h1 id="JVM服务调优实战"><a href="#JVM服务调优实战" class="headerlink" title="JVM服务调优实战"></a><strong>JVM服务调优实战</strong></h1><p>服务器：8 cup, 8G mem</p>
+<p>e.g.</p>
+<p>java -Xmx3550m -Xms3550m -Xss128k -XX:NewRatio=4 -XX:SurvivorRatio=4 -XX:MaxPermSize=16m -XX:MaxTenuringThreshold=0</p>
+<h2 id="调优方案："><a href="#调优方案：" class="headerlink" title="调优方案："></a><strong>调优方案：</strong></h2><p>-Xmx5g：设置JVM最大可用内存为5G。</p>
+<p>-Xms5g：设置JVM初始内存为5G。此值可以设置与-Xmx相同，以避免每次垃圾回收完成后JVM重新分配内存。</p>
+<p>-Xmn2g：设置年轻代大小为2G。整个堆内存大小 = 年轻代大小 + 年老代大小 + 持久代大小 。持久代一般固定大小为64m，所以增大年轻代后，将会减小年老代大小。此值对系统性能影响较大，Sun官方推荐配置为整个堆的3/8。</p>
+<p>-XX:+UseParNewGC：设置年轻代为并行收集。可与CMS收集同时使用。JDK5.0以上，JVM会根据系统配置自行设置，所以无需再设置此值。</p>
+<p>-XX:ParallelGCThreads=8：配置并行收集器的线程数，即：同时多少个线程一起进行垃圾回收。此值最好配置与处理器数目相等。</p>
+<p>-XX:SurvivorRatio=6：设置年轻代中Eden区与Survivor区的大小比值。根据经验设置为6，则两个Survivor区与一个Eden区的比值为2:6，一个Survivor区占整个年轻代的1/8。</p>
+<p>-XX:MaxTenuringThreshold=30：设置垃圾最大年龄（次数）。如果设置为0的话，则年轻代对象不经过Survivor区直接进入年老代。对于年老代比较多的应用，可以提高效率。如果将此值 设置为一个较大值，则年轻代对象会在Survivor区进行多次复制，这样可以增加对象再年轻代的存活时间，增加在年轻代即被回收的概率。设置为30表示 一个对象如果在Survivor空间移动30次还没有被回收就放入年老代。</p>
+<p>-XX:+UseConcMarkSweepGC：设置年老代为并发收集。测试配置这个参数以后，参数-XX:NewRatio=4就失效了，所以，此时年轻代大小最好用-Xmn设置，因此这个参数不建议使用。</p>
+<h1 id="参考资料-JVM堆内存的分代"><a href="#参考资料-JVM堆内存的分代" class="headerlink" title="参考资料 - JVM堆内存的分代"></a><strong>参考资料 - JVM堆内存的分代</strong></h1><p>虚拟机的堆内存共划分为三个代：年轻代（Young Generation）、年老代（Old Generation）和持久代（Permanent Generation）。其中持久代主要存放的是Java类的类信息，与垃圾收集器要收集的Java对象关系不大。所以，年轻代和年老代的划分才是对垃圾 收集影响比较大的。</p>
+<h2 id="年轻代"><a href="#年轻代" class="headerlink" title="年轻代"></a><strong>年轻代</strong></h2><p>所有新生成的对象首先都是放在年轻代的。年轻代的目标就是尽可能快速的收集掉那些生命周期短的对象。年轻代分三个区。一个Eden区，两个 Survivor区(一般而言)。</p>
+<p>大部分对象在Eden区中生成。当Eden区满时，还存活的对象将被复制到Survivor区（两个中的一个），当一个Survivor区满 时，此区的存活对象将被复制到另外一个Survivor区，当另一个Survivor区也满了的时候，从前一个Survivor区复制过来的并且此时还存 活的对象，将被复制“年老区(Tenured)”。</p>
+<p>需要注意，两个Survivor区是对称的，没先后关系，所以同一个Survivor区中可能同时存在从Eden区复制过来对象，和从另一个 Survivor区复制过来的对象；而复制到年老区的只有从前一个Survivor区（相对的）过来的对象。而且，Survivor区总有一个是空的。特 殊的情况下，根据程序需要，Survivor区是可以配置为多个的（多于两个），这样可以增加对象在年轻代中的存在时间，减少被放到年老代的可能。</p>
+<h2 id="年老代"><a href="#年老代" class="headerlink" title="年老代"></a><strong>年老代</strong></h2><p>在年轻代中经历了N（可配置）次垃圾回收后仍然存活的对象，就会被放到年老代中。因此，可以认为年老代中存放的都是一些生命周期较长的对象。</p>
+<h2 id="持久代"><a href="#持久代" class="headerlink" title="持久代"></a><strong>持久代</strong></h2><p>用于存放静态数据，如 Java Class, Method 等。持久代对垃圾回收没有显著影响，但是有些应用可能动态生成或者调用一些Class，例如 Hibernate 等，在这种时候需要设置一个比较大的持久代空间来存放这些运行过程中动态增加的类型。持久代大小通过 -XX:MaxPermSize= 进行设置。1.8已经移除改为metaspace。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -2384,7 +2808,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 <a class="post-title-link" href="/2020/02/12/JAVA实用的服务异常处理指南/" itemprop="url">
-                  JAVA实用的服务异常处理指南
+                  Linux实用的服务异常处理指南
                 </a>
               
             
@@ -2427,7 +2851,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-24 14:36:58" itemprop="dateModified" datetime="2020-02-24T14:36:58+08:00">2020-02-24</time>
               
             
           </span>
@@ -2444,7 +2868,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
 
                 
                 
@@ -2481,11 +2905,140 @@
         
           
             <h1 id="服务异常的处理流程"><a href="#服务异常的处理流程" class="headerlink" title="服务异常的处理流程"></a>服务异常的处理流程</h1><p><img src="/2020/02/12/JAVA实用的服务异常处理指南/0ce47abcae0d474bb5bf9ebc993e6ad3.jpeg" alt="img"></p>
-<h1 id="负载"><a href="#负载" class="headerlink" title="负载"></a>负载</h1><h2 id="查看机器-cpu-的负载"><a href="#查看机器-cpu-的负载" class="headerlink" title="查看机器 cpu 的负载"></a>查看机器 cpu 的负载</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top -b -n 1 |grep java|awk <span class="string">'&#123;print "VIRT:"$5,"RES:"$6,"cpu:"$9"%","mem:"$10"%"&#125;'</span></span><br></pre></td></tr></table></figure>
+<h1 id="CPU负载"><a href="#CPU负载" class="headerlink" title="CPU负载"></a>CPU负载</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>针对应用程序，我们通常关注的是内核CPU调度器功能和性能。</p>
+<p>线程的状态分析主要是分析线程的时间用在什么地方，而线程状态的分类一般分为：</p>
+<p>a. on-CPU：执行中，执行中的时间通常又分为用户态时间user和系统态时间sys。<br> b. off-CPU：等待下一轮上CPU，或者等待I/O、锁、换页等等，其状态可以细分为可执行、匿名换页、睡眠、锁、空闲等状态。</p>
+<p>如果大量时间花在CPU上，对CPU的剖析能够迅速解释原因；如果系统时间大量处于off-cpu状态，定位问题就会费时很多。但是仍然需要清楚一些概念：</p>
+<ul>
+<li>处理器</li>
+<li>核</li>
+<li>硬件线程</li>
+<li>CPU内存缓存</li>
+<li>时钟频率</li>
+<li>每指令周期数CPI和每周期指令数IPC</li>
+<li>CPU指令</li>
+<li>使用率</li>
+<li>用户时间／内核时间</li>
+<li>调度器</li>
+<li>运行队列</li>
+<li>抢占</li>
+<li>多进程</li>
+<li>多线程</li>
+<li>字长</li>
+</ul>
+<h2 id="分析工具"><a href="#分析工具" class="headerlink" title="分析工具"></a>分析工具</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>uptime</td>
+<td>平均负载</td>
+</tr>
+<tr>
+<td>vmstat</td>
+<td>包括系统范围的cpu平均负载</td>
+</tr>
+<tr>
+<td>mpstat</td>
+<td>查看所有cpu核信息</td>
+</tr>
+<tr>
+<td>top</td>
+<td>监控每个进程cpu用量</td>
+</tr>
+<tr>
+<td>sar -u</td>
+<td>查看cpu信息</td>
+</tr>
+<tr>
+<td>pidstat</td>
+<td>每个进程cpu用量分解</td>
+</tr>
+<tr>
+<td>perf</td>
+<td>cpu剖析和跟踪，性能计数分析</td>
+</tr>
+</tbody>
+</table>
+<p>说明:</p>
+<ul>
+<li>uptime,vmstat,mpstat,top,pidstat只能查询到cpu及负载的的使用情况。</li>
+<li>perf可以跟着到进程内部具体函数耗时情况，并且可以指定内核函数进行统计，指哪打哪。</li>
+</ul>
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//查看系统cpu使用情况</span><br><span class="line">top</span><br><span class="line"></span><br><span class="line">//查看所有cpu核信息</span><br><span class="line">mpstat -P ALL 1</span><br><span class="line"></span><br><span class="line">//查看cpu使用情况以及平均负载</span><br><span class="line">vmstat 1</span><br><span class="line"></span><br><span class="line">//进程cpu的统计信息</span><br><span class="line">pidstat -u 1 -p pid</span><br><span class="line"></span><br><span class="line">//跟踪进程内部函数级cpu使用情况</span><br><span class="line">perf top -p pid -e cpu-clock</span><br></pre></td></tr></table></figure>
+<h2 id="查看机器-cpu-的负载"><a href="#查看机器-cpu-的负载" class="headerlink" title="查看机器 cpu 的负载"></a>查看机器 cpu 的负载</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top -b -n 1 |grep java|awk <span class="string">'&#123;print "VIRT:"$5,"RES:"$6,"cpu:"$9"%","mem:"$10"%"&#125;'</span></span><br></pre></td></tr></table></figure>
 <h2 id="查找-cpu-占用率高的线程"><a href="#查找-cpu-占用率高的线程" class="headerlink" title="查找 cpu 占用率高的线程"></a>查找 cpu 占用率高的线程</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">top -p 25603 -H</span><br><span class="line"><span class="built_in">printf</span> 0x%x 25842</span><br><span class="line">jstack 25603 | grep 0x64f2</span><br><span class="line">cat /proc/interrupts</span><br></pre></td></tr></table></figure>
 <p>（1）CPU<br>（2）Memory<br>（3）IO<br>（4）Network</p>
 <p>可以从以下几个方面监控CPU的信息：<br>（1）中断；<br>（2）上下文切换；<br>（3）可运行队列；<br>（4）CPU 利用率</p>
-<h1 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h1><h2 id="系统内存"><a href="#系统内存" class="headerlink" title="系统内存"></a>系统内存</h2><p>free 命令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@server ~]<span class="comment"># free</span></span><br><span class="line"></span><br><span class="line">             total       used       free     shared    buffers     cached</span><br><span class="line">Mem:       3266180    3250000      10000          0     201000    3002000</span><br><span class="line">-/+ buffers/cache:      47000    3213000</span><br><span class="line">Swap:      2048276      80160    1968116</span><br></pre></td></tr></table></figure></p>
+<h1 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h1><h2 id="说明-1"><a href="#说明-1" class="headerlink" title="说明"></a>说明</h2><p>内存是为提高效率而生，实际分析问题的时候，内存出现问题可能不只是影响性能，而是影响服务或者引起其他问题。同样对于内存有些概念需要清楚：</p>
+<ul>
+<li>主存</li>
+<li>虚拟内存</li>
+<li>常驻内存</li>
+<li>地址空间</li>
+<li>OOM</li>
+<li>页缓存</li>
+<li>缺页</li>
+<li>换页</li>
+<li>交换空间</li>
+<li>交换</li>
+<li>用户分配器libc、glibc、libmalloc和mtmalloc</li>
+<li>LINUX内核级SLUB分配器</li>
+</ul>
+<h2 id="分析工具-1"><a href="#分析工具-1" class="headerlink" title="分析工具"></a>分析工具</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>free</td>
+<td>缓存容量统计信息</td>
+</tr>
+<tr>
+<td>vmstat</td>
+<td>虚拟内存统计信息</td>
+</tr>
+<tr>
+<td>top</td>
+<td>监视每个进程的内存使用情况</td>
+</tr>
+<tr>
+<td>pidstat</td>
+<td>显示活动进程的内存使用统计</td>
+</tr>
+<tr>
+<td>pmap</td>
+<td>查看进程的内存映像信息</td>
+</tr>
+<tr>
+<td>sar -r</td>
+<td>查看内存</td>
+</tr>
+<tr>
+<td>dtrace</td>
+<td>动态跟踪</td>
+</tr>
+<tr>
+<td>valgrind</td>
+<td>分析程序性能及程序中的内存泄露错误</td>
+</tr>
+</tbody>
+</table>
+<p><strong>说明</strong>：</p>
+<ul>
+<li>free,vmstat,top,pidstat,pmap只能统计内存信息以及进程的内存使用情况。</li>
+<li>valgrind可以分析内存泄漏问题。</li>
+<li>dtrace动态跟踪。需要对内核函数有很深入的了解，通过D语言编写脚本完成跟踪。</li>
+</ul>
+<h2 id="使用方式-1"><a href="#使用方式-1" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//查看系统内存使用情况</span><br><span class="line">free -m</span><br><span class="line"></span><br><span class="line">//虚拟内存统计信息</span><br><span class="line">vmstat 1</span><br><span class="line"></span><br><span class="line">//查看系统内存情况</span><br><span class="line">top</span><br><span class="line"></span><br><span class="line">//1s采集周期，获取内存的统计信息</span><br><span class="line">pidstat -p pid -r 1</span><br><span class="line"></span><br><span class="line">//查看进程的内存映像信息</span><br><span class="line">pmap -d pid</span><br><span class="line"></span><br><span class="line">//检测程序内存问题</span><br><span class="line">valgrind --tool=memcheck --leak-check=full --<span class="built_in">log</span>-file=./log.txt  ./程序名</span><br></pre></td></tr></table></figure>
+<h2 id="系统内存"><a href="#系统内存" class="headerlink" title="系统内存"></a>系统内存</h2><p>free 命令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@server ~]<span class="comment"># free</span></span><br><span class="line"></span><br><span class="line">             total       used       free     shared    buffers     cached</span><br><span class="line">Mem:       3266180    3250000      10000          0     201000    3002000</span><br><span class="line">-/+ buffers/cache:      47000    3213000</span><br><span class="line">Swap:      2048276      80160    1968116</span><br></pre></td></tr></table></figure></p>
 <p>这里的默认显示单位是kb。<br>各项指标解释</p>
 <ul>
 <li>total:总计物理内存的大小。</li>
@@ -2543,6 +3096,94 @@
 <h3 id="分析-JVM-堆内存中的对象"><a href="#分析-JVM-堆内存中的对象" class="headerlink" title="分析 JVM 堆内存中的对象"></a>分析 JVM 堆内存中的对象</h3><p><strong>查看存活的对象统计</strong><br>jmap -histo:live [pid]</p>
 <p><strong>dump 内存</strong><br>jmap -dump:format=b,file=heapDump [pid]</p>
 <p>然后用jhat命令可以参看<br>jhat -port 5000 heapDump<br>在浏览器中访问：<a href="http://localhost:5000/" target="_blank" rel="noopener">http://localhost:5000/</a> 查看详细信息</p>
+<h1 id="磁盘IO"><a href="#磁盘IO" class="headerlink" title="磁盘IO"></a>磁盘IO</h1><h2 id="说明-2"><a href="#说明-2" class="headerlink" title="说明"></a>说明</h2><p>磁盘通常是计算机最慢的子系统，也是最容易出现性能瓶颈的地方，因为磁盘离 CPU 距离最远而且 CPU 访问磁盘要涉及到机械操作，比如转轴、寻轨等。访问硬盘和访问内存之间的速度差别是以数量级来计算的，就像1天和1分钟的差别一样。要监测 IO 性能，有必要了解一下基本原理和 Linux 是如何处理硬盘和内存之间的 IO 的。</p>
+<p>在理解磁盘IO之前，同样我们需要理解一些概念，例如：</p>
+<ul>
+<li>文件系统</li>
+<li>VFS</li>
+<li>文件系统缓存</li>
+<li>页缓存page cache</li>
+<li>缓冲区高速缓存buffer cache</li>
+<li>目录缓存</li>
+<li>inode</li>
+<li>inode缓存</li>
+<li>noop调用策略</li>
+</ul>
+<h2 id="分析工具-2"><a href="#分析工具-2" class="headerlink" title="分析工具"></a>分析工具</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>iostat</td>
+<td>磁盘详细统计信息</td>
+</tr>
+<tr>
+<td>iotop</td>
+<td>按进程查看磁盘IO的使用情况</td>
+</tr>
+<tr>
+<td>pidstat</td>
+<td>按进程查看磁盘IO的使用情况</td>
+</tr>
+<tr>
+<td>perf</td>
+<td>动态跟踪工具</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用方式-2"><a href="#使用方式-2" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//查看系统io信息</span><br><span class="line">iotop</span><br><span class="line"></span><br><span class="line">//统计io详细信息</span><br><span class="line">iostat -d -x -k 1 10</span><br><span class="line"></span><br><span class="line">//查看进程级io的信息</span><br><span class="line">pidstat -d 1 -p  pid</span><br><span class="line"></span><br><span class="line">//查看系统IO的请求，比如可以在发现系统IO异常时，可以使用该命令进行调查，就能指定到底是什么原因导致的IO异常</span><br><span class="line">perf record -e block:block_rq_issue -ag</span><br><span class="line">^C</span><br><span class="line">perf report</span><br></pre></td></tr></table></figure>
+<h1 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h1><h2 id="说明-3"><a href="#说明-3" class="headerlink" title="说明"></a>说明</h2><p>网络的监测是所有 Linux 子系统里面最复杂的，有太多的因素在里面，比如：延迟、阻塞、冲突、丢包等，更糟的是与 Linux 主机相连的路由器、交换机、无线信号都会影响到整体网络并且很难判断是因为 Linux 网络子系统的问题还是别的设备的问题，增加了监测和判断的复杂度。现在我们使用的所有网卡都称为自适应网卡，意思是说能根据网络上的不同网络设备导致的不同网络速度和工作模式进行自动调整。</p>
+<h2 id="分析工具-3"><a href="#分析工具-3" class="headerlink" title="分析工具"></a>分析工具</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ping</td>
+<td>主要透过 ICMP 封包 来进行整个网络的状况报告</td>
+</tr>
+<tr>
+<td>traceroute</td>
+<td>用来检测发出数据包的主机到目标主机之间所经过的网关数量的工具</td>
+</tr>
+<tr>
+<td>netstat</td>
+<td>用于显示与IP、TCP、UDP和ICMP协议相关的统计数据，一般用于检验本机各端口的网络连接情况</td>
+</tr>
+<tr>
+<td>ss</td>
+<td>可以用来获取socket统计信息，而且比netstat更快速更高效</td>
+</tr>
+<tr>
+<td>host</td>
+<td>可以用来查出某个主机名的 IP,跟nslookup作用一样</td>
+</tr>
+<tr>
+<td>tcpdump</td>
+<td>是以包为单位进行输出的，阅读起来不是很方便</td>
+</tr>
+<tr>
+<td>tcpflow</td>
+<td>是面向tcp流的, 每个tcp传输会保存成一个文件,很方便的查看</td>
+</tr>
+<tr>
+<td>sar -n DEV</td>
+<td>网卡流量情况</td>
+</tr>
+<tr>
+<td>sar -n SOCK</td>
+<td>查询网络以及tcp，udp状态信息</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用方式-3"><a href="#使用方式-3" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">//显示网络统计信息</span><br><span class="line">netstat -s</span><br><span class="line"></span><br><span class="line">//显示当前UDP连接状况</span><br><span class="line">netstat -nu</span><br><span class="line"></span><br><span class="line">//显示UDP端口号的使用情况</span><br><span class="line">netstat -apu</span><br><span class="line"></span><br><span class="line">//统计机器中网络连接各个状态个数</span><br><span class="line">netstat -a | awk <span class="string">'/^tcp/ &#123;++S[$NF]&#125; END &#123;for(a in S) print a, S[a]&#125;'</span></span><br><span class="line"></span><br><span class="line">//显示TCP连接</span><br><span class="line">ss -t -a</span><br><span class="line"></span><br><span class="line">//显示sockets摘要信息</span><br><span class="line">ss -s</span><br><span class="line"></span><br><span class="line">//显示所有udp sockets</span><br><span class="line">ss -u -a</span><br><span class="line"></span><br><span class="line">//tcp,etcp状态</span><br><span class="line">sar -n TCP,ETCP 1</span><br><span class="line"></span><br><span class="line">//查看网络IO</span><br><span class="line">sar -n DEV 1</span><br><span class="line"></span><br><span class="line">//抓包以包为单位进行输出</span><br><span class="line">tcpdump -i eth1 host 192.168.1.1 and port 80 </span><br><span class="line"></span><br><span class="line">//抓包以流为单位显示数据内容</span><br><span class="line">tcpflow -cp host 192.168.1.1</span><br></pre></td></tr></table></figure>
 <h1 id="服务指标"><a href="#服务指标" class="headerlink" title="服务指标"></a>服务指标</h1><h2 id="响应时间-RT"><a href="#响应时间-RT" class="headerlink" title="响应时间(RT)"></a>响应时间(RT)</h2><p>响应时间是指系统对请求作出响应的时间。直观上看，这个指标与人对软件性能的主观感受是非常一致的，因为它完整地记录了整个计算机系统处理请求的时间。由于一个系统通常会提供许多功能，而不同功能的处理逻辑也千差万别，因而不同功能的响应时间也不尽相同，甚至同一功能在不同输入数据的情况下响应时间也不相同。所以，在讨论一个系统的响应时间时，人们通常是指该系统所有功能的平均时间或者所有功能的最大响应时间。当然，往往也需要对每个或每组功能讨论其平均响应时间和最大响应时间。</p>
 <p>对于单机的没有并发操作的应用系统而言，人们普遍认为响应时间是一个合理且准确的性能指标。需要指出的是，响应时间的绝对值并不能直接反映软件的性能的高低，软件性能的高低实际上取决于用户对该响应时间的接受程度。对于一个游戏软件来说，响应时间小于100毫秒应该是不错的，响应时间在1秒左右可能属于勉强可以接受，如果响应时间达到3秒就完全难以接受了。而对于编译系统来说，完整编译一个较大规模软件的源代码可能需要几十分钟甚至更长时间，但这些响应时间对于用户来说都是可以接受的。</p>
 <h2 id="吞吐量-Throughput"><a href="#吞吐量-Throughput" class="headerlink" title="吞吐量(Throughput)"></a>吞吐量(Throughput)</h2><p>吞吐量是指系统在单位时间内处理请求的数量。对于无并发的应用系统而言，吞吐量与响应时间成严格的反比关系，实际上此时吞吐量就是响应时间的倒数。前面已经说过，对于单用户的系统，响应时间（或者系统响应时间和应用延迟时间）可以很好地度量系统的性能，但对于并发系统，通常需要用吞吐量作为性能指标。</p>
@@ -2563,7 +3204,8 @@
 <li><p>dmesg</p>
 <p>dmesg命令用于显示开机信息。</p>
 <p>kernel会将开机信息存储在ring buffer中。您若是开机时来不及查看信息，可利用dmesg来查看。开机信息亦保存在/var/log目录中，名称为dmesg的文件里。</p>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dmesg [-cn][-s &lt;缓冲区大小&gt;]</span><br></pre></td></tr></table></figure>
+<p><strong>语法</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dmesg [-cn][-s &lt;缓冲区大小&gt;]</span><br></pre></td></tr></table></figure>
 <p><strong>参数说明</strong>：</p>
 <ul>
 <li>-c 　显示信息后，清除ring buffer中的内容。</li>
@@ -2596,11 +3238,44 @@
 <li><p>dstat<br>综合工具，综合了 vmstat, iostat, ifstat, netstat 等多个信息</p>
 </li>
 </ul>
+<h1 id="系统负载"><a href="#系统负载" class="headerlink" title="系统负载"></a>系统负载</h1><h2 id="说明-4"><a href="#说明-4" class="headerlink" title="说明"></a>说明</h2><p>Load 就是对计算机干活多少的度量（WikiPedia：the system Load is a measure of the amount of work that a compute system is doing）简单的说是进程队列的长度。Load Average 就是一段时间（1分钟、5分钟、15分钟）内平均Load。</p>
+<h2 id="分析工具-4"><a href="#分析工具-4" class="headerlink" title="分析工具"></a>分析工具</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>top</td>
+<td>查看系统负载情况</td>
+</tr>
+<tr>
+<td>uptime</td>
+<td>查看系统负载情况</td>
+</tr>
+<tr>
+<td>strace</td>
+<td>统计跟踪内核态信息</td>
+</tr>
+<tr>
+<td>vmstat</td>
+<td>查看负载情况</td>
+</tr>
+<tr>
+<td>dmesg</td>
+<td>查看内核日志信息</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用方式-4"><a href="#使用方式-4" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//查看负载情况</span></span><br><span class="line">uptime</span><br><span class="line"></span><br><span class="line">top</span><br><span class="line"></span><br><span class="line">vmstat</span><br><span class="line"></span><br><span class="line"><span class="comment">//统计系统调用耗时情况</span></span><br><span class="line">strace -<span class="built_in">c</span> -p pid</span><br><span class="line"></span><br><span class="line"><span class="comment">//跟踪指定的系统操作例如epoll_wait</span></span><br><span class="line">strace -<span class="type">T</span> -e epoll_wait -p pid</span><br><span class="line"></span><br><span class="line"><span class="comment">//查看内核日志信息</span></span><br><span class="line">dmesg</span><br></pre></td></tr></table></figure>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
 <li><a href="http://tmq.qq.com/2016/07/it-is-necessary-to-know-the-background-performance-test/" target="_blank" rel="noopener">http://tmq.qq.com/2016/07/it-is-necessary-to-know-the-background-performance-test/</a></li>
 <li><a href="https://www.ibm.com/developerworks/java/library/j-nativememory-linux/" target="_blank" rel="noopener">https://www.ibm.com/developerworks/java/library/j-nativememory-linux/</a></li>
 <li><a href="http://www.oracle.com/technetwork/java/javase/index-137495.html" target="_blank" rel="noopener">http://www.oracle.com/technetwork/java/javase/index-137495.html</a></li>
 <li><a href="http://www.hollischuang.com/archives/303" target="_blank" rel="noopener">http://www.hollischuang.com/archives/303</a></li>
+<li><a href="https://www.jianshu.com/p/0bbac570fa4c" target="_blank" rel="noopener">https://www.jianshu.com/p/0bbac570fa4c</a></li>
 </ol>
 
           
@@ -3713,332 +4388,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/11/如何提高服务器的并发处理能力/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="vincent">
-      <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="星辰大海">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/11/如何提高服务器的并发处理能力/" itemprop="url">
-                  如何提高服务器的并发处理能力
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2020-02-11 15:22:05" itemprop="dateCreated datePublished" datetime="2020-02-11T15:22:05+08:00">2020-02-11</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/架构设计/" itemprop="url" rel="index"><span itemprop="name">架构设计</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>以下内容为入门级介绍，意在对老技术作较全的总结而不是较深的研究。主要参考《构建高性能Web站点》一书。</p>
-<h2 id="什么是服务器并发处理能力"><a href="#什么是服务器并发处理能力" class="headerlink" title="什么是服务器并发处理能力"></a>什么是服务器并发处理能力</h2><p>一台服务器在单位时间里能处理的请求越多，服务器的能力越高，也就是服务器并发处理能力越强</p>
-<h2 id="有什么方法衡量服务器并发处理能力"><a href="#有什么方法衡量服务器并发处理能力" class="headerlink" title="有什么方法衡量服务器并发处理能力"></a>有什么方法衡量服务器并发处理能力</h2><h3 id="1-吞吐率"><a href="#1-吞吐率" class="headerlink" title="1. 吞吐率"></a><strong>1. 吞吐率</strong></h3><p>吞吐率，单位时间里服务器处理的最大请求数，单位req/s</p>
-<p>从服务器角度，实际并发用户数的可以理解为服务器当前维护的代表不同用户的文件描述符总数，也就是并发连接数。</p>
-<p>服务器一般会限制同时服务的最多用户数，比如apache的MaxClents参数。</p>
-<p>这里再深入一下，对于服务器来说，服务器希望支持高吞吐率，对于用户来说，用户只希望等待最少的时间，显然，双方不能满足，所以双方利益的平衡点，就是我们希望的最大并发用户数。</p>
-<h3 id="2-压力测试"><a href="#2-压力测试" class="headerlink" title="2. 压力测试"></a><strong>2. 压力测试</strong></h3><p>有一个原理一定要先搞清楚，假如100个用户同时向服务器分别进行10个请求，与1个用户向服务器连续进行1000次请求，对服务器的压力是一样吗？</p>
-<p>实际上是不一样的，因对每一个用户，连续发送请求实际上是指发送一个请求并接收到响应数据后再发送下一个请求。</p>
-<p>这样对于1个用户向服务器连续进行1000次请求, 任何时刻服务器的网卡接收缓冲区中只有1个请求，而对于100个用户同时向服务器分别进行10个请求，服务器的网卡接收缓冲区最多有100个等待处理的请求，显然这时的服务器压力更大。</p>
-<p>压力测试前提考虑的条件</p>
-<ul>
-<li>并发用户数: 指在某一时刻同时向服务器发送请求的用户总数(HttpWatch)</li>
-<li>总请求数</li>
-<li>请求资源描述</li>
-<li>请求等待时间(用户等待时间)</li>
-<li>用户平均请求的等待时间</li>
-<li>服务器平均请求处理的时间</li>
-<li>硬件环境</li>
-</ul>
-<p>压力测试中关心的时间又细分以下2种:</p>
-<ol>
-<li>用户平均请求等待时间（这里暂不把数据在网络的传输时间，还有用户PC本地的计算时间计算入内）</li>
-<li>服务器平均请求处理时间</li>
-</ol>
-<p>用户平均请求等待时间主要用于衡量服务器在一定并发用户数下，单个用户的服务质量；而服务器平均请求处理时间就是吞吐率的倒数。</p>
-<p>一般来说，用户平均请求等待时间 = 服务器平均请求处理时间 * 并发用户数</p>
-<h2 id="怎么提高服务器的并发处理能力"><a href="#怎么提高服务器的并发处理能力" class="headerlink" title="怎么提高服务器的并发处理能力"></a>怎么提高服务器的并发处理能力</h2><h3 id="1-提高CPU并发计算能力"><a href="#1-提高CPU并发计算能力" class="headerlink" title="1. 提高CPU并发计算能力"></a><strong>1. 提高CPU并发计算能力</strong></h3><p>服务器之所以可以同时处理多个请求，在于操作系统通过多执行流体系设计使得多个任务可以轮流使用系统资源。</p>
-<p>这些资源包括CPU，内存以及I/O. 这里的I/O主要指磁盘I/O, 和网络I/O。</p>
-<h5 id="多进程-amp-多线程"><a href="#多进程-amp-多线程" class="headerlink" title="多进程 &amp; 多线程"></a><strong>多进程 &amp; 多线程</strong></h5><p>多执行流的一般便是进程，多进程的好处可以对CPU时间的轮流使用，对CPU计算和IO操作重叠利用。这里的IO主要是指磁盘IO和网络IO，相对CPU而言，它们慢的可怜。</p>
-<p>而实际上，大多数进程的时间主要消耗在I/O操作上。</p>
-<p>现代计算机的DMA技术可以让CPU不参与I/O操作的全过程，比如进程通过系统调用，使得CPU向网卡或者磁盘等I/O设备发出指令，然后进程被挂起，释放出CPU资源，等待I/O设备完成工作后通过中断来通知进程重新就绪。</p>
-<p>对于单任务而言，CPU大部分时间空闲，这时候多进程的作用尤为重要。</p>
-<p>多进程不仅能够提高CPU的并发度。其优越性还体现在独立的内存地址空间和生命周期所带来的稳定性和健壮性，其中一个进程崩溃不会影响到另一个进程。</p>
-<p>但是进程也有如下<strong>缺点</strong>：</p>
-<ol>
-<li>fork()系统调用开销很大: prefork</li>
-<li>进程间调度和上下文切换成本: 减少进程数量</li>
-<li>庞大的内存重复：共享内存</li>
-<li>IPC编程相对比较麻烦</li>
-</ol>
-<h4 id="减少进程切换"><a href="#减少进程切换" class="headerlink" title="减少进程切换"></a><strong>减少进程切换</strong></h4><p>当硬件上下文频繁装入和移出时，所消耗的时间是非常可观的。可用Nmon工具监视服务器每秒的上下文切换次数。</p>
-<p>为了尽量减少上下文切换次数，最简单的做法就是减少进程数，尽量使用线程并配合其它I/O模型来设计并发策略。</p>
-<p>还可以考虑使用进程绑定CPU技术，增加CPU缓存的命中率。若进程不断在各CPU上切换，这样旧的CPU缓存就会失效。</p>
-<h4 id="减少使用不必要的锁"><a href="#减少使用不必要的锁" class="headerlink" title="减少使用不必要的锁"></a><strong>减少使用不必要的锁</strong></h4><p>服务器处理大量并发请求时，多个请求处理任务时存在一些资源抢占竞争，这时一般采用“锁”机制来控制资源的占用。到底<code>什么是重入锁</code>附录内容推荐大家看下。</p>
-<p>当一个任务占用资源时，我们锁住资源，这时其它任务都在等待锁的释放，这个现象称为<strong>锁竞争</strong>。</p>
-<p>通过锁竞争的本质，我们要意识到尽量减少并发请求对于共享资源的竞争。</p>
-<p>比如在允许情况下关闭服务器访问日志，这可以大大减少在锁等待时的延迟时间。要最大程度减少无辜的等待时间。</p>
-<p>这里说下无锁编程，就是由内核完成这个锁机制，主要是使用原子操作替代锁来实现对共享资源的访问保护。</p>
-<p>使用原子操作时，在进行实际的写操作时，使用了lock指令，这样就可以阻止其他任务写这块内存，避免出现数据竞争现象。<strong>原子操作速度比锁快，一般要快一倍以上</strong>。</p>
-<p>例如fwrite(), fopen()，其是使用append方式写文件，其原理就是使用了无锁编程，无锁编程的复杂度高，但是效率快，而且发生死锁概率低。</p>
-<h4 id="考虑进程优先级"><a href="#考虑进程优先级" class="headerlink" title="考虑进程优先级"></a><strong>考虑进程优先级</strong></h4><p>进程调度器会动态调整运行队列中进程的优先级，通过top观察进程的PR值</p>
-<h4 id="考虑系统负载"><a href="#考虑系统负载" class="headerlink" title="考虑系统负载"></a><strong>考虑系统负载</strong></h4><p>可在任何时刻查看/proc/loadavg, top中的load average也可看出</p>
-<h4 id="考虑CPU使用率"><a href="#考虑CPU使用率" class="headerlink" title="考虑CPU使用率"></a><strong>考虑CPU使用率</strong></h4><p>除了用户空间和内核空间的CPU使用率以外，还要关注I/O wait,它是指CPU空闲并且等待I/O操作完成的时间比例（top中查看wa的值）。</p>
-<h3 id="2-考虑减少内存分配和释放"><a href="#2-考虑减少内存分配和释放" class="headerlink" title="2. 考虑减少内存分配和释放"></a><strong>2. 考虑减少内存分配和释放</strong></h3><p>服务器的工作过程中，需要大量的内存，使得内存的分配和释放工作尤为重要。</p>
-<p>可以通过改善数据结构和算法复制度来适当减少中间临时变量的内存分配及数据复制时间，而服务器本身也使用了各自的策略来提高效率。</p>
-<p>例如Apache,在运行开始时一次申请大片的内存作为内存池，若随后需要时就在内存池中直接获取，不需要再次分配，避免了频繁的内存分配和释放引起的内存整理时间。</p>
-<p>再如Nginx使用多线程来处理请求，使得多个线程之间可以共享内存资源，从而令它的内存总体使用量大大减少。</p>
-<p>另外，Nginx分阶段的内存分配策略，按需分配，及时释放，使得内存使用量保持在很小的数量范围。</p>
-<p>另外，还可以考虑<strong>共享内存</strong>。</p>
-<p>共享内存指在多处理器的计算机系统中，可以被不同中央处理器（CPU）访问的大容量内存，也可以由不同进程共享，是非常快的进程通信方式。</p>
-<p>但是使用共享内存也有不好的地方，就是对于多机器时数据不好统一。</p>
-<p>shell命令ipcs可用来显示系统下共享内存的状态，函数shmget可以创建或打开一块共享内存区，函数shmat将一个存在的共享内存段连接到本进程空间, 函数shmctl可以对共享内存段进行多种操作，函数shmdt函数分离该共享内存。</p>
-<h3 id="3-考虑使用持久连接"><a href="#3-考虑使用持久连接" class="headerlink" title="3. 考虑使用持久连接"></a><strong>3. 考虑使用持久连接</strong></h3><p>持久连接也为<strong>长连接</strong>，它本身是TCP通信的一种普通方式，即在一次TCP连接中持续发送多分数据而不断开连接。</p>
-<p>与它相反的方式称为<strong>短连接</strong>，也就是建立连接后发送一份数据就断开，然后再次建立连接发送下一份数据， 周而复始。</p>
-<p>是否采用持久连接，完全取决于应用特点。</p>
-<p>从性能角度看，建立TCP连接的操作本身是一项不小的开销，在允许的情况下，连接次数越少，越有利于性能的提升; 尤其对于密集型的图片或网页等小数据请求处理有明显的加速所用。</p>
-<p>HTTP长连接需要浏览器和web服务器的共同协作，目前浏览器普遍支持长连接，表现在其发出的HTTP请求数据头中包含关于长连接的声明，如下：Connection: Keep-Alive</p>
-<p>主流的web服务器都支持长连接，比如apache中，可以用KeepAlive off关闭长连接。</p>
-<p>对于长连接的有效使用，还有关键一点在于长连接超时时间的设置，即长连接在什么时候关闭吗？</p>
-<p>Apache的默认设置为5s, 若这个时间设置过长，则可能导致资源无效占有，维持大量空闲进程，影响服务器性能。</p>
-<h3 id="4-改进I-O-模型"><a href="#4-改进I-O-模型" class="headerlink" title="4. 改进I/O 模型"></a><strong>4. 改进I/O 模型</strong></h3><p>I/O操作根据设备的不同分为很多类型，比如内存I/O, 网络I/O, 磁盘I/O。</p>
-<p>对于网络I/O和磁盘I/O, 它们的速度要慢很多，尽管使用RAID磁盘阵列可通过并行磁盘磁盘来加快磁盘I/O速度，购买大连独享网络带宽以及使用高带宽网络适配器可以提高网络I/O的速度。</p>
-<p>但这些I/O操作需要内核系统调用来完成，这些需要CPU来调度，这使得CPU不得不浪费宝贵的时间来等待慢速I/O操作。</p>
-<p>我们希望让CPU足够少的时间在i/O操作的调度上，如何让高速的CPU和慢速的I/O设备更好地协调工作，是现代计算机一直探讨的话题。各种I/O模型的本质区别在于CPU的参与方式。</p>
-<h4 id="DMA技术"><a href="#DMA技术" class="headerlink" title="DMA技术"></a><strong>DMA技术</strong></h4><p>I/O设备和内存之间的数据传输方式由DMA控制器完成。在DMA模式下，CPU只需向DMA下达命令，让DMA控制器来处理数据的传送，这样可以大大节省系统资源。</p>
-<h4 id="异步I-O"><a href="#异步I-O" class="headerlink" title="异步I/O"></a><strong>异步I/O</strong></h4><p>异步I/O指主动请求数据后便可以继续处理其它任务，随后等待I/O操作的通知，这样进程在数据读写时不发生阻塞。</p>
-<p>异步I/O是非阻塞的，当函数返回时，真正的I/O传输已经完成，这让CPU处理和I/O操作达到很好的重叠。</p>
-<h4 id="I-O多路复用"><a href="#I-O多路复用" class="headerlink" title="I/O多路复用"></a><strong>I/O多路复用</strong></h4><p>epoll服务器同时处理大量的文件描述符是必不可少的，若采用同步非阻塞I/O模型，若同时接收TCP连接的数据，就必须轮流对每个socket调用接收数据的方法，不管这些socket有没有可接收的数据，都要询问一次。</p>
-<p>假如大部分socket并没有数据可以接收，那么进程便会浪费很多CPU时间用于检查这些socket有没有可以接收的数据。</p>
-<p>多路I/O就绪通知的出现，提供了对大量文件描述符就绪检查的高性能方案，它允许进程通过一种方法同时监视所有文件描述符，并可以快速获得所有就绪的文件描述符，然后只针对这些文件描述符进行数据访问。</p>
-<p>epoll可以同时支持水平触发和边缘触发，理论上边缘触发性能更高，但是代码实现复杂，因为任何意外的丢失事件都会造成请求处理错误。</p>
-<p>epoll主要有2大改进：</p>
-<ol>
-<li><p>epoll只告知就绪的文件描述符，而且当调用epoll_wait()获得文件描述符时，返回并不是实际的描述符，而是一个代表就绪描述符数量的值，然后只需去epoll指定的一个数组中依次取得相应数量的文件描述符即可。</p>
-<p>这里使用了内存映射(mmap)技术，这样彻底省掉了这些文件描述符在系统调用时复制的开销。</p>
-</li>
-<li><p>epoll采用基于事件的就绪通知方式。其事先通过epoll_ctrl()注册每一个文件描述符，一旦某个文件描述符就绪时，内核会采用类似callback的回调机制，当进程调用epoll_wait()时得到通知</p>
-</li>
-</ol>
-<p>关于IO模型，可以参考笔者前面写的相关文章Java NIO.2；关于epoll，可以参考笔者前面写的文章select、poll和epoll简介。</p>
-<h4 id="Sendfile"><a href="#Sendfile" class="headerlink" title="Sendfile"></a><strong>Sendfile</strong></h4><p>大多数时候，我们都向服务器请求静态文件，比如图片，样式表等。</p>
-<p>在处理这些请求时，磁盘文件的数据先经过内核缓冲区，然后到用户内存空间，不需经过任何处理，其又被送到网卡对应的内核缓冲区，接着再被送入网卡进行发送。</p>
-<p>Linux提供sendfile()系统调用，可以讲磁盘文件的特定部分直接传送到代表客户端的socket描述符，加快了静态文件的请求速度，同时减少CPU和内存的开销。</p>
-<p>适用场景：对于请求较小的静态文件，sendfile发挥的作用不那么明显，因发送数据的环节在整个过程中所占时间的比例相比于大文件请求时小很多。</p>
-<h4 id="内存映射"><a href="#内存映射" class="headerlink" title="内存映射"></a><strong>内存映射</strong></h4><p>Linux内核提供一种访问磁盘文件的特殊方式，它可以将内存中某块地址空间和我们指定的磁盘文件相关联，从而对这块内存的访问转换为对磁盘文件的访问。这种技术称为<strong>内存映射</strong>。</p>
-<p>多数情况下，内存映射可以提高磁盘I/O的性能，无须使用read()或write()等系统调用来访问文件，而是通过mmap()系统调用来建立内存和磁盘文件的关联，然后像访问内存一样自由访问文件。</p>
-<p><strong>缺点</strong>：在处理较大文件时，内存映射会导致较大的内存开销，得不偿失。</p>
-<h4 id="直接I-O"><a href="#直接I-O" class="headerlink" title="直接I/O"></a><strong>直接I/O</strong></h4><p>在linux 2.6中，内存映射和直接访问文件没有本质差异，因为数据需要经过2次复制，即在磁盘与内核缓冲区之间以及在内核缓冲区与用户态内存空间。</p>
-<p>引入内核缓冲区的目的在于<strong>提高磁盘文件的访问性能</strong>，然而对于一些复杂的应用，比如数据库服务器，它们为了进一步提高性能，希望绕过内核缓冲区，由自己在用户态空间实现并管理I/O缓冲区，比如数据库可根据更加合理的策略来提高查询缓存命中率。</p>
-<p>另一方面，绕过内核缓冲区也可以减少系统内存的开销，因内核缓冲区本身就在使用系统内存。</p>
-<p>Linux在open()系统调用中增加参数选项O_DIRECT,即可绕过内核缓冲区直接访问文件,实现直接I/O。</p>
-<p>在Mysql中，对于Innodb存储引擎，自身进行数据和索引的缓存管理，可在my.cnf配置中分配raw分区跳过内核缓冲区，实现直接I/O。</p>
-<h3 id="5-改进服务器并发策略"><a href="#5-改进服务器并发策略" class="headerlink" title="5. 改进服务器并发策略"></a><strong>5. 改进服务器并发策略</strong></h3><p>服务器并发策略的目的，是让I/O操作和CPU计算尽量重叠进行，一方面让CPU在I/O等待时不要空闲，另一方面让CPU在I/O调度上尽量花最少的时间。</p>
-<h4 id="一个进程处理一个连接，非阻塞I-O"><a href="#一个进程处理一个连接，非阻塞I-O" class="headerlink" title="一个进程处理一个连接，非阻塞I/O"></a><strong>一个进程处理一个连接，非阻塞I/O</strong></h4><p>这样会存在多个并发请求同时到达时，服务器必然要准备多个进程来处理请求。其进程的开销限制了它的并发连接数。</p>
-<p>但从稳定性和兼容性的角度，则其相对安全，任何一个子进程的崩溃不会影响服务器本身，父进程可以创建新的子进程；这种策略典型的例子就是Apache的fork和prefork模式。</p>
-<p>对于并发数不高（如150以内）的站点同时依赖Apache其它功能时的应用选择Apache还是可以的。</p>
-<h4 id="一个线程处理一个连接，非阻塞IO"><a href="#一个线程处理一个连接，非阻塞IO" class="headerlink" title="一个线程处理一个连接，非阻塞IO"></a><strong>一个线程处理一个连接，非阻塞IO</strong></h4><p>这种方式允许在一个进程中通过多个线程来处理多个连接，一个线程处理一个连接。Apache的worker模式就是这种典型例子，使其可支持更多的并发连接。不过这种模式的总体性能还不如prefork，所以一般不选用worker模式。</p>
-<h4 id="一个进程处理多个连接，异步I-O"><a href="#一个进程处理多个连接，异步I-O" class="headerlink" title="一个进程处理多个连接，异步I/O"></a><strong>一个进程处理多个连接，异步I/O</strong></h4><p>一个线程同时处理多个连接，潜在的前提条件就是使用IO多路复用就绪通知。</p>
-<p>这种情况下，将处理多个连接的进程叫做worker进程或服务进程。worker的数量可以配置，如Nginx中的worker_processes 4。</p>
-<h4 id="一个线程处理多个连接，异步IO"><a href="#一个线程处理多个连接，异步IO" class="headerlink" title="一个线程处理多个连接，异步IO"></a><strong>一个线程处理多个连接，异步IO</strong></h4><p>即使有高性能的IO多路复用就绪通知，但磁盘IO的等待还是无法避免的。更加高效的方法是对磁盘文件使用异步IO，目前很少有Web服务器真正意义上支持这种异步IO。</p>
-<h3 id="6-改进硬件环境"><a href="#6-改进硬件环境" class="headerlink" title="6. 改进硬件环境"></a><strong>6. 改进硬件环境</strong></h3><p>还有一点要提及的是硬件环境，服务器的硬件配置对应用程序的性能提升往往是最直接，也是最简单的方式，这就是所谓的scale up。这里不做论述。</p>
-<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="什么是重入锁"><a href="#什么是重入锁" class="headerlink" title="什么是重入锁"></a>什么是重入锁</h3><blockquote>
-<p>java.util.concurrent.locks.ReentrantLock</p>
-</blockquote>
-<p>这个是 JDK @since 1.5 添加的一种颗粒度更小的锁，它完全可以替代 synchronized 关键字来实现它的所有功能，而且 ReentrantLock 锁的灵活度要远远大于 synchronized 关键字。</p>
-<p><img src="/2020/02/11/如何提高服务器的并发处理能力/640.webp" alt="img"></p>
-<p>从类结构图看出，ReentrantLock 实现了 Lock 接口，ReentrantLock 只是 Lock 接口的一个实现而已。</p>
-<blockquote>
-<p>java.util.concurrent.locks.Lock</p>
-</blockquote>
-<p>它们都是 java.util.concurrent 包里面的内容（俗称 JUC、并发包），也都是 JDK 1.5 开始加入的。</p>
-<h3 id="为什么叫重入锁呢？"><a href="#为什么叫重入锁呢？" class="headerlink" title="为什么叫重入锁呢？"></a>为什么叫重入锁呢？</h3><p><code>ReentrantLock</code>，我们把它拆开来看就明了了。</p>
-<p>Re-Entrant-Lock：即表示可重新反复进入的锁，但仅限于当前线程；</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    lock.lock();</span><br><span class="line">    lock.lock();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// ... method body</span></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      lock.unlock()</span><br><span class="line">      lock.unlock()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如示例代码所示，当前线程可以反复加锁，但也需要释放同样加锁次数的锁，即重入了多少次，就要释放多少次，不然也会导入锁不被释放。</p>
-<p>试想一下，如果不设计成可重入锁，那自己如果反复给自己加锁，不是会把自己加死锁了吗？所以，到现在，重入锁的概念大概应该清楚了吧？</p>
-<h3 id="重入锁最重要的几个方法"><a href="#重入锁最重要的几个方法" class="headerlink" title="重入锁最重要的几个方法"></a>重入锁最重要的几个方法</h3><p>这几个方法都是 Lock 接口中定义的：</p>
-<p><img src="/2020/02/11/如何提高服务器的并发处理能力/640.webp" alt="img"></p>
-<p><strong>1）lock()</strong></p>
-<p>获取锁，有以下三种情况：</p>
-<ul>
-<li>锁空闲：直接获取锁并返回，同时设置锁持有者数量为：1；</li>
-<li>当前线程持有锁：直接获取锁并返回，同时锁持有者数量递增1；</li>
-<li>其他线程持有锁：当前线程会休眠等待，直至获取锁为止；</li>
-</ul>
-<p><strong>2）lockInterruptibly()</strong></p>
-<p>获取锁，逻辑和 lock() 方法一样，但这个方法在获取锁过程中能响应中断。</p>
-<p><strong>3）tryLock()</strong></p>
-<p>从关键字字面理解，这是在尝试获取锁，获取成功返回：true，获取失败返回：false, 这个方法不会等待，有以下三种情况：</p>
-<ul>
-<li>锁空闲：直接获取锁并返回：true，同时设置锁持有者数量为：1；</li>
-<li>当前线程持有锁：直接获取锁并返回：true，同时锁持有者数量递增1；</li>
-<li>其他线程持有锁：获取锁失败，返回：false；</li>
-</ul>
-<p><strong>4）tryLock(long timeout, TimeUnit unit)</strong></p>
-<p>逻辑和 tryLock() 差不多，只是这个方法是带时间的。</p>
-<p><strong>5）unlock()</strong></p>
-<p>释放锁，每次锁持有者数量递减 1，直到 0 为止。所以，现在知道为什么 lock 多少次，就要对应 unlock 多少次了吧。</p>
-<p><strong>6）newCondition</strong></p>
-<p>返回一个这个锁的 Condition 实例，可以实现 synchronized 关键字类似 wait/ notify 实现多线程通信的功能，不过这个比 wait/ notify 要更灵活，更强大！</p>
-<h3 id="重入锁大概的用法"><a href="#重入锁大概的用法" class="headerlink" title="重入锁大概的用法"></a>重入锁大概的用法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> ReentrantLock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    lock.lock();  <span class="comment">// block until condition holds</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// ... method body</span></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      lock.unlock()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;&#125;</span><br></pre></td></tr></table></figure>
-<p>看见没有，加锁和释放锁都在方法里面进行，可以自由控制，比 synchronized 更灵活，更方便。但要注意的是，释放锁操作必须在 finally 里面，不然如果出现异常导致锁不能被正常释放，进而会卡死后续所有访问该锁的线程。</p>
-<h3 id="synchronized-是重入锁吗？"><a href="#synchronized-是重入锁吗？" class="headerlink" title="synchronized 是重入锁吗？"></a>synchronized 是重入锁吗？</h3><p>那么问题来了，synchronized 是重入锁吗？</p>
-<p>你可能会说不是，因为 ReentrantLock 既然是重入锁，根据推理，相反，那 synchronized 肯定就不是重入锁，那你就错了。</p>
-<p>答案是：yes，为什么？看下面的例子：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">operation</span><span class="params">()</span></span>&#123;</span><br><span class="line">    add();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>operation 方法调用了 add 方法，两个方法都是用 synchronized 修饰的，add()  方法可以成功获取当前线程 operation() 方法已经获取到的锁，说明 synchronized 就是可重入锁。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -4086,7 +4435,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-count">36</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
