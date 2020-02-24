@@ -1,9 +1,9 @@
 ---
 title: JVM 性能调优监控工具 jps、jstack、jmap、jhat、jstat、hprof 使用详解
 date: 2020-01-27 12:51:30
-categories: JVM
+categories: Java
 tags:
--  Java
+- Java
 - Linux
 - JVM
 ---
