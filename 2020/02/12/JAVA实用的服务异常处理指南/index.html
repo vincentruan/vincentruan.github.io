@@ -121,19 +121,19 @@
 
 
 
-  <meta name="description" content="服务异常的处理流程 CPU负载说明针对应用程序，我们通常关注的是内核CPU调度器功能和性能。 线程的状态分析主要是分析线程的时间用在什么地方，而线程状态的分类一般分为： a. on-CPU：执行中，执行中的时间通常又分为用户态时间user和系统态时间sys。 b. off-CPU：等待下一轮上CPU，或者等待I/O、锁、换页等等，其状态可以细分为可执行、匿名换页、睡眠、锁、空闲等状态。 如果大量时">
+  <meta name="description" content="服务异常的处理流程">
 <meta name="keywords" content="Linux,异常处理,Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux实用的服务异常处理指南">
 <meta property="og:url" content="https://vincentruan.github.io/2020/02/12/JAVA实用的服务异常处理指南/index.html">
 <meta property="og:site_name" content="星辰大海">
-<meta property="og:description" content="服务异常的处理流程 CPU负载说明针对应用程序，我们通常关注的是内核CPU调度器功能和性能。 线程的状态分析主要是分析线程的时间用在什么地方，而线程状态的分类一般分为： a. on-CPU：执行中，执行中的时间通常又分为用户态时间user和系统态时间sys。 b. off-CPU：等待下一轮上CPU，或者等待I/O、锁、换页等等，其状态可以细分为可执行、匿名换页、睡眠、锁、空闲等状态。 如果大量时">
+<meta property="og:description" content="服务异常的处理流程">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/12/JAVA实用的服务异常处理指南/0ce47abcae0d474bb5bf9ebc993e6ad3.jpeg">
-<meta property="og:updated_time" content="2020-02-24T06:36:58.034Z">
+<meta property="og:updated_time" content="2020-02-25T15:09:15.040Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux实用的服务异常处理指南">
-<meta name="twitter:description" content="服务异常的处理流程 CPU负载说明针对应用程序，我们通常关注的是内核CPU调度器功能和性能。 线程的状态分析主要是分析线程的时间用在什么地方，而线程状态的分类一般分为： a. on-CPU：执行中，执行中的时间通常又分为用户态时间user和系统态时间sys。 b. off-CPU：等待下一轮上CPU，或者等待I/O、锁、换页等等，其状态可以细分为可执行、匿名换页、睡眠、锁、空闲等状态。 如果大量时">
+<meta name="twitter:description" content="服务异常的处理流程">
 <meta name="twitter:image" content="https://vincentruan.github.io/2020/02/12/JAVA实用的服务异常处理指南/0ce47abcae0d474bb5bf9ebc993e6ad3.jpeg">
 
 
@@ -422,7 +422,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-24 14:36:58" itemprop="dateModified" datetime="2020-02-24T14:36:58+08:00">2020-02-24</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -502,6 +502,7 @@
 
       
         <h1 id="服务异常的处理流程"><a href="#服务异常的处理流程" class="headerlink" title="服务异常的处理流程"></a>服务异常的处理流程</h1><p><img src="/2020/02/12/JAVA实用的服务异常处理指南/0ce47abcae0d474bb5bf9ebc993e6ad3.jpeg" alt="img"></p>
+<a id="more"></a>
 <h1 id="CPU负载"><a href="#CPU负载" class="headerlink" title="CPU负载"></a>CPU负载</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>针对应用程序，我们通常关注的是内核CPU调度器功能和性能。</p>
 <p>线程的状态分析主要是分析线程的时间用在什么地方，而线程状态的分类一般分为：</p>
 <p>a. on-CPU：执行中，执行中的时间通常又分为用户态时间user和系统态时间sys。<br> b. off-CPU：等待下一轮上CPU，或者等待I/O、锁、换页等等，其状态可以细分为可执行、匿名换页、睡眠、锁、空闲等状态。</p>
@@ -1262,7 +1263,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   

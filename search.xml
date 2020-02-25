@@ -3,12 +3,20 @@
   <entry>
     <title>【转载】多次尝试学习，终于搞懂了微服务架构</title>
     <url>/2020/02/25/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E5%A4%9A%E6%AC%A1%E5%B0%9D%E8%AF%95%E5%AD%A6%E4%B9%A0%EF%BC%8C%E7%BB%88%E4%BA%8E%E6%90%9E%E6%87%82%E4%BA%86%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/</url>
-    <content><![CDATA[<p>原文转载自<a href="https://mp.weixin.qq.com/s/Pfs57ee6KpW342cKmJTGrw" target="_blank" rel="noopener">多次尝试学习，终于搞懂了微服务架构</a></p>
-<h1 id="什么是微服务"><a href="#什么是微服务" class="headerlink" title="什么是微服务?"></a>什么是微服务?</h1><p>微服务 Microservices 之父，马丁.福勒，对微服务大概的概述如下：</p>
+    <content><![CDATA[<h1 id="什么是微服务"><a href="#什么是微服务" class="headerlink" title="什么是微服务?"></a>什么是微服务?</h1><p>微服务 Microservices 之父，马丁.福勒，对微服务大概的概述如下：</p>
+<blockquote>
 <p>就目前而言，对于微服务业界并没有一个统一的、标准的定义(While there is no precise definition of this architectural style ) 。</p>
+</blockquote>
+<blockquote>
 <p>但通常在其而言，微服务架构是一种架构模式或者说是一种架构风格，它提倡将单一应用程序划分成一组小的服务，每个服务运行独立的自己的进程中，服务之间互相协调、互相配合，为用户提供最终价值。</p>
+</blockquote>
+<blockquote>
 <p>服务之间采用轻量级的通信机制互相沟通(通常是基于 HTTP 的 RESTful API ) 。每个服务都围绕着具体业务进行构建，并且能够被独立地部署到生产环境、类生产环境等。</p>
+</blockquote>
+<blockquote>
 <p>另外，应尽量避免统一的、集中式的服务管理机制，对具体的一个服务而言，应根据业务上下文，选择合适的语言、工具对其进行构建，可以有一个非常轻量级的集中式管理来协调这些服务。可以使用不同的语言来编写服务，也可以使用不同的数据存储。</p>
+</blockquote>
+<a id="more"></a>
 <p>根据马丁.福勒的描述，我总结了以下几点：</p>
 <p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/e242f34d8c87c66437d98b728f4a171d.jpg" alt="img"></p>
 <h2 id="小服务"><a href="#小服务" class="headerlink" title="小服务"></a>小服务</h2><p>小服务，没有特定的标准或者规范，但他在总体规范上一定是小的。</p>
@@ -148,6 +156,10 @@
 <li>微服务架构的理论基础 - 康威定律</li>
 <li>调用链选型之Zipkin，Pinpoint，SkyWalking，CAT</li>
 </ul>
+<hr>
+<blockquote>
+<p>原文转载自<a href="https://mp.weixin.qq.com/s/Pfs57ee6KpW342cKmJTGrw" target="_blank" rel="noopener">多次尝试学习，终于搞懂了微服务架构</a></p>
+</blockquote>
 ]]></content>
       <categories>
         <category>架构设计</category>
@@ -159,20 +171,56 @@
   <entry>
     <title>【转载】我花了10个小时，写出了这篇K8S架构解析</title>
     <url>/2020/02/25/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E6%88%91%E8%8A%B1%E4%BA%8610%E4%B8%AA%E5%B0%8F%E6%97%B6%EF%BC%8C%E5%86%99%E5%87%BA%E4%BA%86%E8%BF%99%E7%AF%87K8S%E6%9E%B6%E6%9E%84%E8%A7%A3%E6%9E%90/</url>
-    <content><![CDATA[<p>原文转载自51CTO技术栈，崔皓，我花了10个小时，<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&amp;mid=2655827885&amp;idx=1&amp;sn=47feb253e0aa012023d6f421572a04b3&amp;chksm=bd74fa7a8a03736c08e43b4e7082c3763c0e64491e7b7ef3ddd9f3756cfa5e536730f8f022e8&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">写出了这篇K8S架构解析</a></p>
-<blockquote>
+    <content><![CDATA[<blockquote>
 <p>互联网技术飞速发展的今天，为了承载请求的高并发和业务的多样性，微服务的架构成了各个公司的标配。</p>
 </blockquote>
 <p>每个微服务通过 Docker 进行发布，随着业务的发展，系统中遍布着各种各样的容器。于是，容器的资源调度，部署运行，扩容缩容就是我们要面临的问题。</p>
 <p>基于 Kubernetes 作为容器集群的管理平台被广泛应用，今天我们一起来看看 Kubernetes 的架构中有那些常用的组件以及运行原理。</p>
+<a id="more"></a>
 <h1 id="Kubernetes-架构概述"><a href="#Kubernetes-架构概述" class="headerlink" title="Kubernetes 架构概述"></a>Kubernetes 架构概述</h1><p>Kubernetes 是用来管理容器集群的平台。既然是管理集群，那么就存在被管理节点，针对每个 Kubernetes 集群都由一个 Master 负责管理和控制集群节点。</p>
 <p>我们通过 Master 对每个节点 Node 发送命令。简单来说，Master 就是管理者，Node 就是被管理者。</p>
 <p>Node 可以是一台机器或者一台虚拟机。在 Node 上面可以运行多个 Pod，Pod 是 Kubernetes 管理的最小单位，同时每个 Pod 可以包含多个容器（Docker）。</p>
 <p>通过下面的 Kubernetes 架构简图可以看到 Master 和 Node 之间的关系：</p>
 <p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612508509.webp" alt="img"></p>
-<center><i>Kubernetes 架构简图</i></center><br>通常我们都是通过 kubectl 对 Kubernetes 下命令的，它通过 APIServer 去调用各个进程来完成对 Node 的部署和控制。<br><br>APIServer 的核心功能是对核心对象（例如：Pod，Service，RC）的增删改查操作，同时也是集群内模块之间数据交换的枢纽。<br><br>它包括了常用的 API，访问（权限）控制，注册，信息存储（etcd）等功能。在它的下面我们可以看到 Scheduler，它将待调度的 Pod 绑定到 Node 上，并将绑定信息写入 etcd 中。<br><br>etcd 包含在 APIServer 中，用来存储资源信息。接下来就是 Controller Manager 了，如果说 Kubernetes 是一个自动化运行的系统，那么就需要有一套管理规则来控制这套系统。<br><br>Controller Manager 就是这个管理者，或者说是控制者。它包括 8 个 Controller，分别对应着副本，节点，资源，命名空间，服务等等。<br><br>紧接着，Scheduler 会把 Pod 调度到 Node 上，调度完以后就由 kubelet 来管理 Node 了。<br><br>kubelet 用于处理 Master 下发到 Node 的任务（即 Scheduler 的调度任务），同时管理 Pod 及 Pod 中的容器。<br><br>在完成资源调度以后，kubelet 进程也会在 APIServer 上注册 Node 信息，定期向 Master 汇报 Node 信息，并通过 cAdvisor 监控容器和节点资源。<br><br>由于，微服务的部署都是分布式的，所以对应的 Pod 以及容器的部署也是。为了能够方便地找到这些 Pod 或者容器，引入了 Service（kube-proxy）进程，它来负责反向代理和负载均衡的实施。<br><br>上面就是 Kubernetes 架构的简易说明，涉及到了一些核心概念以及简单的信息流动。<br><br>将一些功能收录到了 APIServer 中，这个简图比官网的图显得简单一些，主要是方便大家记忆。<br><br>后面我们会用一个简单的例子，带大家把 Kubernetes 的概念的由来做深入的了解。<br><br># 从一个例子开始<br><br>假设使用 Kubernetes 部署 Tomcat 和 MySQL 服务到两个 Node 上面。其中 Tomcat 服务生成两个实例也就是生成两个 Pod，用来对其做水平扩展。<br><br>MySQL 只部署一个实例，也就是一个 Pod。可以通过外网访问 Tomcat，而 Tomcat 可以在内网访问 MySQL。<br><br><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612580738.webp" alt="img"><br><br><center><i>例子示意图</i></center><br>这里我们假设 Kubernetes 和 Docker 的安装都已经完成，并且镜像文件都已经准备好了。重点看 Kubernetes 如何部署和管理容器。<br><br># kubectl 和 APIServer<br><br>既然我们要完成上面的例子，接下来就要部署两个应用。<br><br>首先，根据要部署的应用建立 Replication Controller（RC）。RC 是用来声明应用副本的个数，也就是 Pod 的个数。<br><br>按照上面的例子，Tomcat 的 RC 就是 2，MySQL 的 RC 就是 1。<br><br>由于 kubectl 作为用户接口向 Kubernetes 下发指令，那么指令是通过“.yaml”的配置文件编写的。<br><br>定义 ysql-rc.yaml 的配置文件来描述 MySQL 的 RC：<br><br><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">V1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ReplicationController</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">mysql#RC的名称，全局唯一</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="string">replicas:1</span> <span class="comment">#Pod 副本的期待数量</span></span><br><span class="line"><span class="attr">selector :</span></span><br><span class="line"><span class="attr">app:</span> <span class="string">mysql</span></span><br><span class="line"> <span class="attr">template:</span> <span class="comment">#Pod模版，用这个模版来创建Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">labels:</span></span><br><span class="line"><span class="string">app:mysql#Pod副本的标签</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="string">containers:#容器定义部分</span></span><br><span class="line">     <span class="string">-name:mysql</span></span><br><span class="line"><span class="string">Image:mysql#容器对应的DockerImage</span></span><br><span class="line">      <span class="attr">Ports:</span></span><br><span class="line">      <span class="string">-containerPort:3306#容器应用监听的端口号</span></span><br><span class="line">      <span class="string">Env:#注入容器的环境变量</span></span><br><span class="line">      <span class="string">-name:MYSQL_ROOT_PASSWORD</span></span><br><span class="line">      <span class="string">Value:”123456”</span></span><br></pre></td></tr></table></figure><br><br>从上面的配置文件可以看出，需要对这个 RC 定义一个名字，以及期望的副本数，以及容器中的镜像文件。然后通过 kubectl 作为客户端的 cli 工具，执行这个配置文件。<br><br><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612852256.webp" alt="img"><br><br><center><i>通过 kubectl 执行 RC 配置文件</i></center><br>执行了上面的命令以后，Kubernetes 会帮助我们部署副本 MySQL 的 Pod 到 Node。<br><br>此时先不着急看结果，回到最开始的架构图，可以看到 kubectl 会向 Master 中的 APIServer 发起命令，看看 APIServer 的结构和信息的传递吧。<br><br><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612887167.png" alt="img"><br><br>Kubernetes API Server 通过一个名为 kube-apiserver 的进程提供服务，该进程运行在 Master 上。<br><br>可以通过 Master 的 8080 端口访问 kube-apiserver 进程，它提供 REST 服务。<br><br>因此可以通过命令行工具 kubectl 来与 Kubernetes APIServer 交互，它们之间的接口是 RESTful API。<br><br><strong>APIServer 的架构从上到下分为四层</strong>：<br><br>- <strong>API 层：</strong>主要以 REST 方式提供各种 API 接口，针对 Kubernetes 资源对象的 CRUD 和 Watch 等主要 API，还有健康检查、UI、日志、性能指标等运维监控相关的 API。<br>- <strong>访问控制层：</strong>负责身份鉴权，核准用户对资源的访问权限，设置访问逻辑（Admission Control）。<br>- <strong>注册表层：</strong>选择要访问的资源对象。PS：Kubernetes 把所有资源对象都保存在注册表（Registry）中，例如：Pod，Service，Deployment 等等。<br>- <strong>etcd 数据库：</strong>保存创建副本的信息。用来持久化 Kubernetes 资源对象的 Key-Value 数据库。<br><br><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612449162.webp" alt="img"><br><br><center><i>APIServer 分层架构图</i></center>
-
-<p>当 kubectl 用 Create 命令建立 Pod 时，是通过 APIServer 中的 API 层调用对应的 RESTAPI 方法。</p>
+<p><center><i>Kubernetes 架构简图</i></center><br>通常我们都是通过 kubectl 对 Kubernetes 下命令的，它通过 APIServer 去调用各个进程来完成对 Node 的部署和控制。</p>
+<p>APIServer 的核心功能是对核心对象（例如：Pod，Service，RC）的增删改查操作，同时也是集群内模块之间数据交换的枢纽。</p>
+<p>它包括了常用的 API，访问（权限）控制，注册，信息存储（etcd）等功能。在它的下面我们可以看到 Scheduler，它将待调度的 Pod 绑定到 Node 上，并将绑定信息写入 etcd 中。</p>
+<p>etcd 包含在 APIServer 中，用来存储资源信息。接下来就是 Controller Manager 了，如果说 Kubernetes 是一个自动化运行的系统，那么就需要有一套管理规则来控制这套系统。</p>
+<p>Controller Manager 就是这个管理者，或者说是控制者。它包括 8 个 Controller，分别对应着副本，节点，资源，命名空间，服务等等。</p>
+<p>紧接着，Scheduler 会把 Pod 调度到 Node 上，调度完以后就由 kubelet 来管理 Node 了。</p>
+<p>kubelet 用于处理 Master 下发到 Node 的任务（即 Scheduler 的调度任务），同时管理 Pod 及 Pod 中的容器。</p>
+<p>在完成资源调度以后，kubelet 进程也会在 APIServer 上注册 Node 信息，定期向 Master 汇报 Node 信息，并通过 cAdvisor 监控容器和节点资源。</p>
+<p>由于，微服务的部署都是分布式的，所以对应的 Pod 以及容器的部署也是。为了能够方便地找到这些 Pod 或者容器，引入了 Service（kube-proxy）进程，它来负责反向代理和负载均衡的实施。</p>
+<p>上面就是 Kubernetes 架构的简易说明，涉及到了一些核心概念以及简单的信息流动。</p>
+<p>将一些功能收录到了 APIServer 中，这个简图比官网的图显得简单一些，主要是方便大家记忆。</p>
+<p>后面我们会用一个简单的例子，带大家把 Kubernetes 的概念的由来做深入的了解。</p>
+<h1 id="从一个例子开始"><a href="#从一个例子开始" class="headerlink" title="从一个例子开始"></a>从一个例子开始</h1><p>假设使用 Kubernetes 部署 Tomcat 和 MySQL 服务到两个 Node 上面。其中 Tomcat 服务生成两个实例也就是生成两个 Pod，用来对其做水平扩展。</p>
+<p>MySQL 只部署一个实例，也就是一个 Pod。可以通过外网访问 Tomcat，而 Tomcat 可以在内网访问 MySQL。</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612580738.webp" alt="img"></p>
+<p><center><i>例子示意图</i></center><br>这里我们假设 Kubernetes 和 Docker 的安装都已经完成，并且镜像文件都已经准备好了。重点看 Kubernetes 如何部署和管理容器。</p>
+<h1 id="kubectl-和-APIServer"><a href="#kubectl-和-APIServer" class="headerlink" title="kubectl 和 APIServer"></a>kubectl 和 APIServer</h1><p>既然我们要完成上面的例子，接下来就要部署两个应用。</p>
+<p>首先，根据要部署的应用建立 Replication Controller（RC）。RC 是用来声明应用副本的个数，也就是 Pod 的个数。</p>
+<p>按照上面的例子，Tomcat 的 RC 就是 2，MySQL 的 RC 就是 1。</p>
+<p>由于 kubectl 作为用户接口向 Kubernetes 下发指令，那么指令是通过“.yaml”的配置文件编写的。</p>
+<p>定义 ysql-rc.yaml 的配置文件来描述 MySQL 的 RC：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">V1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ReplicationController</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">mysql#RC的名称，全局唯一</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="string">replicas:1</span> <span class="comment">#Pod 副本的期待数量</span></span><br><span class="line"><span class="attr">selector :</span></span><br><span class="line"><span class="attr">app:</span> <span class="string">mysql</span></span><br><span class="line"> <span class="attr">template:</span> <span class="comment">#Pod模版，用这个模版来创建Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">labels:</span></span><br><span class="line"><span class="string">app:mysql#Pod副本的标签</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="string">containers:#容器定义部分</span></span><br><span class="line">     <span class="string">-name:mysql</span></span><br><span class="line"><span class="string">Image:mysql#容器对应的DockerImage</span></span><br><span class="line">      <span class="attr">Ports:</span></span><br><span class="line">      <span class="string">-containerPort:3306#容器应用监听的端口号</span></span><br><span class="line">      <span class="string">Env:#注入容器的环境变量</span></span><br><span class="line">      <span class="string">-name:MYSQL_ROOT_PASSWORD</span></span><br><span class="line">      <span class="string">Value:”123456”</span></span><br></pre></td></tr></table></figure>
+<p>从上面的配置文件可以看出，需要对这个 RC 定义一个名字，以及期望的副本数，以及容器中的镜像文件。然后通过 kubectl 作为客户端的 cli 工具，执行这个配置文件。</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612852256.webp" alt="img"></p>
+<p><center><i>通过 kubectl 执行 RC 配置文件</i></center><br>执行了上面的命令以后，Kubernetes 会帮助我们部署副本 MySQL 的 Pod 到 Node。</p>
+<p>此时先不着急看结果，回到最开始的架构图，可以看到 kubectl 会向 Master 中的 APIServer 发起命令，看看 APIServer 的结构和信息的传递吧。</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612887167.png" alt="img"></p>
+<p>Kubernetes API Server 通过一个名为 kube-apiserver 的进程提供服务，该进程运行在 Master 上。</p>
+<p>可以通过 Master 的 8080 端口访问 kube-apiserver 进程，它提供 REST 服务。</p>
+<p>因此可以通过命令行工具 kubectl 来与 Kubernetes APIServer 交互，它们之间的接口是 RESTful API。</p>
+<p><strong>APIServer 的架构从上到下分为四层</strong>：</p>
+<ul>
+<li><strong>API 层：</strong>主要以 REST 方式提供各种 API 接口，针对 Kubernetes 资源对象的 CRUD 和 Watch 等主要 API，还有健康检查、UI、日志、性能指标等运维监控相关的 API。</li>
+<li><strong>访问控制层：</strong>负责身份鉴权，核准用户对资源的访问权限，设置访问逻辑（Admission Control）。</li>
+<li><strong>注册表层：</strong>选择要访问的资源对象。PS：Kubernetes 把所有资源对象都保存在注册表（Registry）中，例如：Pod，Service，Deployment 等等。</li>
+<li><strong>etcd 数据库：</strong>保存创建副本的信息。用来持久化 Kubernetes 资源对象的 Key-Value 数据库。</li>
+</ul>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612449162.webp" alt="img"></p>
+<p><center><i>APIServer 分层架构图</i></center><br>当 kubectl 用 Create 命令建立 Pod 时，是通过 APIServer 中的 API 层调用对应的 RESTAPI 方法。</p>
 <p>之后会进入权限控制层，通过 Authentication 获取调用者身份，Authorization 获取权限信息。</p>
 <p>AdmissionControl 中可配置权限认证插件，通过插件来检查请求约束。例如：启动容器之前需要下载镜像，或者检查具备某命名空间的资源。</p>
 <p>还记得 mysql-rc.yaml 中配置需要生成的 Pod 的个数为 1。到了 Registry 层会从 CoreRegistry 资源中取出 1 个 Pod 作为要创建的 Kubernetes 资源对象。</p>
@@ -289,6 +337,9 @@
 <p>APIServer 和 Controller Manager，Scheduler 以及 kubelete 之间通过 List-Watch 方式通信（事件发送与监听）。</p>
 <p>Controller Manager 通过 etcd 获取需要创建资源的副本数，交由 Scheduler 进行策略分析。</p>
 <p>最后 kubelet 负责最终的 Pod 创建和容器加载。部署好容器以后，通过 Service 进行访问，通过 cAdvisor 监控资源。</p>
+<blockquote>
+<p>原文转载自51CTO技术栈，崔皓，<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&amp;mid=2655827885&amp;idx=1&amp;sn=47feb253e0aa012023d6f421572a04b3&amp;chksm=bd74fa7a8a03736c08e43b4e7082c3763c0e64491e7b7ef3ddd9f3756cfa5e536730f8f022e8&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">我花了10个小时，写出了这篇K8S架构解析</a></p>
+</blockquote>
 ]]></content>
       <categories>
         <category>架构设计</category>
@@ -302,10 +353,7 @@
   <entry>
     <title>【转载】神一样的CAP理论被应用在何方</title>
     <url>/2020/02/24/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E7%A5%9E%E4%B8%80%E6%A0%B7%E7%9A%84CAP%E7%90%86%E8%AE%BA%E8%A2%AB%E5%BA%94%E7%94%A8%E5%9C%A8%E4%BD%95%E6%96%B9/</url>
-    <content><![CDATA[<blockquote>
-<p>转载自陈于喆 - 神一样的CAP理论被应用在何方，原文地址<a href="https://juejin.im/post/5d720e86f265da03cc08de74" target="_blank" rel="noopener">https://juejin.im/post/5d720e86f265da03cc08de74</a></p>
-</blockquote>
-<p>对于开发或设计分布式系统的架构师工程师来说，CAP是必须要掌握的理论。</p>
+    <content><![CDATA[<p>对于开发或设计分布式系统的架构师工程师来说，CAP是必须要掌握的理论。</p>
 <blockquote>
 <p>（but：这个文章的重点并不是讨论CAP理论和细节，重点是说说CAP在微服务中的开发怎么起到一个指引作用，会通过几个微服务开发的例子说说明，尽量的去贴近开发）</p>
 </blockquote>
@@ -491,6 +539,10 @@
 <p>RocketMQ的设置要结合业务场景，合理设置刷盘方式和主从复制方式，尤其是SYNC_FLUSH方式，由于频繁的触发写磁盘动作，会明显降低性能。通常情况下，应该把Master和Slave设置成ASYNC_FLUSH的刷盘方式，主从之间配置成SYNC_MASTER的复制方式，这样即使有一台机器出故障，仍然可以保证数据不丢。</p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在微服务的构建中，永远都逃离不了CAP理论，因为网络永远不稳定，硬件总会老化，软件会可能出现bug，所以分区容错性在微服务中是躲不过的命题，可以这么说，只要是分布式，只要是集群都面临着AP或者CP的选择，但你很贪心的时候，既要一致性又要可用性，那只能对一致性作出一点妥协，也就是引入了BASE理论，在业务允许的情况下实现最终一致性。</p>
 <p>究竟是选AP还是选CP，真的在于对业务的了解，例如金钱，库存相关会优先考虑CP模型，例如社区发帖相关可以优先选择AP模型，这个说白了其实基于对业务的了解是一个选择和妥协的过程。</p>
+<hr>
+<blockquote>
+<p>转载自陈于喆 - 神一样的CAP理论被应用在何方，原文地址<br><a href="https://juejin.im/post/5d720e86f265da03cc08de74" target="_blank" rel="noopener">https://juejin.im/post/5d720e86f265da03cc08de74</a></p>
+</blockquote>
 ]]></content>
       <categories>
         <category>架构设计</category>
@@ -507,6 +559,7 @@
 <p>在10亿数据中只需要进行10几次比较就能查找到目标时，不禁感叹编程之魅力！人类之伟大呀！ &gt;                                                                                - 学红黑树有感。</p>
 </blockquote>
 <p>终于，在学习了几天的红黑树相关的知识后，我想把我所学所想和所感分享给大家。红黑树是一种比较难的数据结构，要完全搞懂非常耗时耗力，红黑树怎么自平衡？什么时候需要左旋或右旋？插入和删除破坏了树的平衡后怎么处理？等等一连串的问题在学习前困扰着我。如果你在学习过程中也会存在我的疑问，那么本文对你会有帮助，本文帮助你全面、彻底地理解红黑树！</p>
+<a id="more"></a>
 <p>本文将通过图文的方式讲解红黑树的知识点，并且不会涉及到任何代码，相信我，在懂得红黑树实现原理前，看代码会一头雾水的，当原理懂了，代码也就按部就班写而已，没任何难度。</p>
 <p>阅读本文你需具备知识点：</p>
 <ul>
@@ -530,10 +583,121 @@
 </ul>
 <p>图1就是一颗简单的红黑树。其中Nil为叶子结点，并且它是黑色的。(值得提醒注意的是，在Java中，叶子结点是为null的结点。)</p>
 <p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-4996bbfb4017a3b2.webp" alt="img"></p>
-<center>图1 一颗简单的红黑树</center><br>红黑树并不是一个<em>完美</em>平衡二叉查找树，从图1可以看到，根结点P的左子树显然比右子树高，但左子树和右子树的黑结点的层数是相等的，也即任意一个结点到到每个叶子结点的路径都包含数量相同的黑结点(性质5)。所以我们叫红黑树这种平衡为<strong>黑色完美平衡</strong>。<br><br>介绍到此，为了后面讲解不至于混淆，我们还需要来约定下红黑树一些结点的叫法，如图2所示。<br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-abedf3ecc733ccd5.webp" alt="img"><br><center>图2 结点叫法约定</center><br>我们把正在处理(遍历)的结点叫做当前结点，如图2中的D，它的父亲叫做父结点，它的父亲的另外一个子结点叫做兄弟结点，父亲的父亲叫做祖父结点。<br><br>前面讲到红黑树能自平衡，它靠的是什么？三种操作：左旋、右旋和变色。<br><br>- <strong>左旋</strong>：以某个结点作为支点(旋转结点)，其右子结点变为旋转结点的父结点，右子结点的左子结点变为旋转结点的右子结点，左子结点保持不变。如图3。<br>- <strong>右旋</strong>：以某个结点作为支点(旋转结点)，其左子结点变为旋转结点的父结点，左子结点的右子结点变为旋转结点的左子结点，右子结点保持不变。如图4。<br>- <strong>变色</strong>：结点的颜色由红变黑或由黑变红。<br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-a95db442f1b47f8a.webp" alt="img"><br><center>图3 左旋</center><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-0676a8e2a12e2a0b.webp" alt="img"><br><center>图4 右旋</center><br>上面所说的旋转结点也即旋转的支点，图4和图5中的P结点。<br>我们先忽略颜色，可以看到旋转操作不会影响旋转结点的父结点，父结点以上的结构还是保持不变的。<br><strong>左旋</strong>只影响旋转结点和其<strong>右子树</strong>的结构，把右子树的结点往左子树挪了。<br><strong>右旋</strong>只影响旋转结点和其<strong>左子树</strong>的结构，把左子树的结点往右子树挪了。<br><br>所以旋转操作是<strong>局部</strong>的。另外可以看出旋转能保持红黑树平衡的一些端详了：当一边子树的结点少了，那么向另外一边子树“借”一些结点；当一边子树的结点多了，那么向另外一边子树“租”一些结点。<br><br>但要保持红黑树的性质，结点不能乱挪，还得靠变色了。怎么变？具体情景又不同变法，后面会具体讲到，现在只需要记住<strong>红黑树总是通过旋转和变色达到自平衡</strong>。<br><br>balabala了这么多，相信你对红黑树有一定印象了，那么现在来考考你：<br><br><strong><em>思考题1：黑结点可以同时包含一个红子结点和一个黑子结点吗？</em></strong> (答案见文末)<br><br>接下来先讲解红黑树的查找热热身。<br><br>——<br><br>#### 红黑树查找<br><br>因为红黑树是一颗二叉平衡树，并且查找不会破坏树的平衡，所以查找跟二叉平衡树的查找无异：<br><br>1. 从根结点开始查找，把根结点设置为当前结点；<br>2. 若当前结点为空，返回null；<br>3. 若当前结点不为空，用当前结点的key跟查找key作比较；<br>4. 若当前结点key等于查找key，那么该key就是查找目标，返回当前结点；<br>5. 若当前结点key大于查找key，把当前结点的左子结点设置为当前结点，重复步骤2；<br>6. 若当前结点key小于查找key，把当前结点的右子结点设置为当前结点，重复步骤2；<br><br>如图5所示。<br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-07b47eb3722981e6.webp" alt="img"><br><center>图5 二叉树查找流程图</center><br>非常简单，但简单不代表它效率不好。正由于红黑树总保持黑色完美平衡，所以它的查找最坏时间复杂度为O(2lgN)，也即整颗树刚好红黑相隔的时候。能有这么好的查找效率得益于红黑树自平衡的特性，而这背后的付出，红黑树的插入操作功不可没～<br><br>——<br><br>#### 红黑树插入<br><br>插入操作包括两部分工作：一查找插入的位置；二插入后自平衡。查找插入的父结点很简单，跟查找操作区别不大：<br><br>1. 从根结点开始查找；<br>2. 若根结点为空，那么插入结点作为根结点，结束。<br>3. 若根结点不为空，那么把根结点作为当前结点；<br>4. 若当前结点为null，返回当前结点的父结点，结束。<br>5. 若当前结点key等于查找key，那么该key所在结点就是插入结点，更新结点的值，结束。<br>6. 若当前结点key大于查找key，把当前结点的左子结点设置为当前结点，重复步骤4；<br>7. 若当前结点key小于查找key，把当前结点的右子结点设置为当前结点，重复步骤4；<br><br>如图6所示。<br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-7521866b50683a24.webp" alt="img"><br><br><center>图6 红黑树插入位置查找</center><br>ok，插入位置已经找到，把插入结点放到正确的位置就可以啦，但插入结点是应该是什么颜色呢？答案是<strong>红色</strong>。理由很简单，红色在父结点（如果存在）为黑色结点时，红黑树的黑色平衡没被破坏，不需要做自平衡操作。但如果插入结点是黑色，那么插入位置所在的子树黑色结点总是多1，必须做自平衡。<br><br>所有插入情景如图7所示。<br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-fa2b78271263d2c8.webp" alt="img"><br><center>图7 红黑树插入情景</center><br>嗯，插入情景很多呢，8种插入情景！但情景1、2和3的处理很简单，而情景4.2和情景4.3只是方向反转而已，懂得了一种情景就能推出另外一种情景，所以总体来看，并不复杂，后续我们将一个一个情景来看，把它彻底搞懂。<br><br>另外，根据二叉树的性质，<strong>除了情景2，所有插入操作都是在叶子结点进行的</strong>。这点应该不难理解，因为查找插入位置时，我们就是在找子结点为空的父结点的。<br><br>在开始每个情景的讲解前，我们还是先来约定下，如图8所示。<br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-9ac3d6b69ef7ead3.webp" alt="img"><br><br><center>图8 插入操作结点的叫法约定</center><br>图8的字母并不代表结点Key的大小。I表示插入结点，P表示插入结点的父结点，S表示插入结点的叔叔结点，PP表示插入结点的祖父结点。<br><br>好了，下面让我们一个一个来分析每个插入的情景以其处理。<br><br>##### 插入情景1：红黑树为空树<br><br>最简单的一种情景，直接把插入结点作为根结点就行，但注意，根据红黑树性质2：根节点是黑色。还需要把插入结点设为黑色。<br><br><strong>处理：把插入结点作为根结点，并把结点设置为黑色</strong>。<br><br>##### 插入情景2：插入结点的Key已存在<br><br>插入结点的Key已存在，既然红黑树总保持平衡，在插入前红黑树已经是平衡的，那么把插入结点设置为将要替代结点的颜色，再把结点的值更新就完成插入。<br><br><strong>处理：</strong><br><br>- <strong>把I设为当前结点的颜色</strong><br>- <strong>更新当前结点的值为插入结点的值</strong><br><br>##### 插入情景3：插入结点的父结点为黑结点<br><br>由于插入的结点是红色的，当插入结点的黑色时，并不会影响红黑树的平衡，直接插入即可，无需做自平衡。<br><br><strong>处理：直接插入</strong>。<br><br>##### 插入情景4：插入结点的父结点为红结点<br><br>再次回想下红黑树的性质2：根结点是黑色。<strong>如果插入的父结点为红结点，那么该父结点不可能为根结点，所以插入结点总是存在祖父结点</strong>。这点很重要，因为后续的旋转操作肯定需要祖父结点的参与。<br><br>情景4又分为很多子情景，下面将进入重点部分，各位看官请留神了。<br><br><strong>插入情景4.1：叔叔结点存在并且为红结点</strong><br> 从红黑树性质4可以，祖父结点肯定为黑结点，因为不可以同时存在两个相连的红结点。那么此时该插入子树的红黑层数的情况是：黑红红。显然最简单的处理方式是把其改为：红黑红。如图9和图10所示。<br><br><strong>处理：</strong><br><br>- <strong>将P和S设置为黑色</strong><br>- <strong>将PP设置为红色</strong><br>- <strong>把PP设置为当前插入结点</strong><br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-9f2c746bf0769f49.webp" alt="img"><br><center>图9 插入情景4.1_1</center><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-5374ea3c2956b441.webp" alt="img"><br><center>图10 插入情景4.1_2</center><br>可以看到，我们把PP结点设为红色了，如果PP的父结点是黑色，那么无需再做任何处理；但如果PP的父结点是红色，根据性质4，此时红黑树已不平衡了，所以还需要把PP当作新的插入结点，继续做插入操作自平衡处理，直到平衡为止。<br><br>试想下PP刚好为根结点时，那么根据性质2，我们必须把PP重新设为黑色，那么树的红黑结构变为：黑黑红。换句话说，从根结点到叶子结点的路径中，黑色结点增加了。<strong>这也是唯一一种会增加红黑树黑色结点层数的插入情景</strong>。<br><br>我们还可以总结出另外一个经验：<strong>红黑树的生长是自底向上的</strong>。这点不同于普通的二叉查找树，普通的二叉查找树的生长是自顶向下的。<br><br><strong>插入情景4.2：叔叔结点不存在或为黑结点，并且插入结点的父亲结点是祖父结点的左子结点</strong><br> 单纯从插入前来看，也即不算情景4.1自底向上处理时的情况，叔叔结点非红即为叶子结点(Nil)。因为如果叔叔结点为黑结点，而父结点为红结点，那么叔叔结点所在的子树的黑色结点就比父结点所在子树的多了，这不满足红黑树的性质5。后续情景同样如此，不再多做说明了。<br><br>前文说了，需要旋转操作时，肯定一边子树的结点多了或少了，需要租或借给另一边。插入显然是多的情况，那么把多的结点租给另一边子树就可以了。<br><br><strong>插入情景4.2.1：插入结点是其父结点的左子结点</strong><br> <strong>处理：</strong><br><br>- <strong>将P设为黑色</strong><br>- <strong>将PP设为红色</strong><br>- <strong>对PP进行右旋</strong><br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-ab4097b750826870.webp" alt="img"><br><center>图11 插入情景4.2.1</center><br>由图11可得，左边两个红结点，右边不存在，那么一边一个刚刚好，并且因为为红色，肯定不会破坏树的平衡。<br><br>咦，可以把P设为红色，I和PP设为黑色吗？答案是可以！看过《算法：第4版》的同学可能知道，书中讲解的就是把P设为红色，I和PP设为黑色。但把P设为红色，显然又会出现情景4.1的情况，需要自底向上处理，做多了无谓的操作，既然能自己消化就不要麻烦祖辈们啦～<br><br><strong>插入情景4.2.2：插入结点是其父结点的右子结点</strong><br> 这种情景显然可以转换为情景4.2.1，如图12所示，不做过多说明了。<br><br><strong>处理：</strong><br><br>- <strong>对P进行左旋</strong><br>- <strong>把P设置为插入结点，得到情景4.2.1</strong><br>- <strong>进行情景4.2.1的处理</strong><br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-fbfc4f299941cb8b.webp" alt="img"><br><center>图12 插入情景4.2.2</center><br><strong>插入情景4.3：叔叔结点不存在或为黑结点，并且插入结点的父亲结点是祖父结点的右子结点</strong><br> 该情景对应情景4.2，只是方向反转，不做过多说明了，直接看图。<br><br><strong>插入情景4.3.1：插入结点是其父结点的右子结点</strong><br> <strong>处理：</strong><br><br>- <strong>将P设为黑色</strong><br>- <strong>将PP设为红色</strong><br>- <strong>对PP进行左旋</strong><br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-2bc24a78b68dae51.webp" alt="img"><br><center>图13 插入情景4.3.1</center><br><strong>插入情景4.3.2：插入结点是其父结点的右子结点</strong><br> <strong>处理：</strong><br><br>- <strong>对P进行右旋</strong><br>- <strong>把P设置为插入结点，得到情景4.3.1</strong><br>- <strong>进行情景4.3.1的处理</strong><br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-ee1a9027ddcc210a.webp" alt="img"><br><center>图14 插入情景4.3.2</center><br>好了，讲完插入的所有情景了。可能又同学会想：上面的情景举例的都是第一次插入而不包含自底向上处理的情况，那么上面所说的情景都适合自底向上的情况吗？答案是肯定的。理由很简单，但每棵子树都能自平衡，那么整棵树最终总是平衡的。好吧，在出个习题，请大家拿出笔和纸画下试试（请务必动手画下，加深印象）：<br><br><strong>习题1：请画出图15的插入自平衡处理过程。</strong>（答案见文末）<br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-28186be7e43be254.webp" alt="img"><br><center>图15 习题1</center>
-
+<p><center>图1 一颗简单的红黑树</center><br>红黑树并不是一个<em>完美</em>平衡二叉查找树，从图1可以看到，根结点P的左子树显然比右子树高，但左子树和右子树的黑结点的层数是相等的，也即任意一个结点到到每个叶子结点的路径都包含数量相同的黑结点(性质5)。所以我们叫红黑树这种平衡为<strong>黑色完美平衡</strong>。</p>
+<p>介绍到此，为了后面讲解不至于混淆，我们还需要来约定下红黑树一些结点的叫法，如图2所示。</p>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-abedf3ecc733ccd5.webp" alt="img"></p>
+<p><center>图2 结点叫法约定</center><br>我们把正在处理(遍历)的结点叫做当前结点，如图2中的D，它的父亲叫做父结点，它的父亲的另外一个子结点叫做兄弟结点，父亲的父亲叫做祖父结点。</p>
+<p>前面讲到红黑树能自平衡，它靠的是什么？三种操作：左旋、右旋和变色。</p>
+<ul>
+<li><strong>左旋</strong>：以某个结点作为支点(旋转结点)，其右子结点变为旋转结点的父结点，右子结点的左子结点变为旋转结点的右子结点，左子结点保持不变。如图3。</li>
+<li><strong>右旋</strong>：以某个结点作为支点(旋转结点)，其左子结点变为旋转结点的父结点，左子结点的右子结点变为旋转结点的左子结点，右子结点保持不变。如图4。</li>
+<li><strong>变色</strong>：结点的颜色由红变黑或由黑变红。</li>
+</ul>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-a95db442f1b47f8a.webp" alt="img"></p>
+<p><center>图3 左旋</center><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-0676a8e2a12e2a0b.webp" alt="img"></p>
+<p><center>图4 右旋</center><br>上面所说的旋转结点也即旋转的支点，图4和图5中的P结点。<br>我们先忽略颜色，可以看到旋转操作不会影响旋转结点的父结点，父结点以上的结构还是保持不变的。<br><strong>左旋</strong>只影响旋转结点和其<strong>右子树</strong>的结构，把右子树的结点往左子树挪了。<br><strong>右旋</strong>只影响旋转结点和其<strong>左子树</strong>的结构，把左子树的结点往右子树挪了。</p>
+<p>所以旋转操作是<strong>局部</strong>的。另外可以看出旋转能保持红黑树平衡的一些端详了：当一边子树的结点少了，那么向另外一边子树“借”一些结点；当一边子树的结点多了，那么向另外一边子树“租”一些结点。</p>
+<p>但要保持红黑树的性质，结点不能乱挪，还得靠变色了。怎么变？具体情景又不同变法，后面会具体讲到，现在只需要记住<strong>红黑树总是通过旋转和变色达到自平衡</strong>。</p>
+<p>balabala了这么多，相信你对红黑树有一定印象了，那么现在来考考你：</p>
+<p><strong><em>思考题1：黑结点可以同时包含一个红子结点和一个黑子结点吗？</em></strong> (答案见文末)</p>
+<p>接下来先讲解红黑树的查找热热身。</p>
 <hr>
-<h4 id="红黑树删除"><a href="#红黑树删除" class="headerlink" title="红黑树删除"></a>红黑树删除</h4><p>红黑树插入已经够复杂了，但删除更复杂，也是红黑树最复杂的操作了。但稳住，胜利的曙光就在前面了！</p>
+<h4 id="红黑树查找"><a href="#红黑树查找" class="headerlink" title="红黑树查找"></a>红黑树查找</h4><p>因为红黑树是一颗二叉平衡树，并且查找不会破坏树的平衡，所以查找跟二叉平衡树的查找无异：</p>
+<ol>
+<li>从根结点开始查找，把根结点设置为当前结点；</li>
+<li>若当前结点为空，返回null；</li>
+<li>若当前结点不为空，用当前结点的key跟查找key作比较；</li>
+<li>若当前结点key等于查找key，那么该key就是查找目标，返回当前结点；</li>
+<li>若当前结点key大于查找key，把当前结点的左子结点设置为当前结点，重复步骤2；</li>
+<li>若当前结点key小于查找key，把当前结点的右子结点设置为当前结点，重复步骤2；</li>
+</ol>
+<p>如图5所示。</p>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-07b47eb3722981e6.webp" alt="img"></p>
+<p><center>图5 二叉树查找流程图</center><br>非常简单，但简单不代表它效率不好。正由于红黑树总保持黑色完美平衡，所以它的查找最坏时间复杂度为O(2lgN)，也即整颗树刚好红黑相隔的时候。能有这么好的查找效率得益于红黑树自平衡的特性，而这背后的付出，红黑树的插入操作功不可没～</p>
+<hr>
+<h4 id="红黑树插入"><a href="#红黑树插入" class="headerlink" title="红黑树插入"></a>红黑树插入</h4><p>插入操作包括两部分工作：一查找插入的位置；二插入后自平衡。查找插入的父结点很简单，跟查找操作区别不大：</p>
+<ol>
+<li>从根结点开始查找；</li>
+<li>若根结点为空，那么插入结点作为根结点，结束。</li>
+<li>若根结点不为空，那么把根结点作为当前结点；</li>
+<li>若当前结点为null，返回当前结点的父结点，结束。</li>
+<li>若当前结点key等于查找key，那么该key所在结点就是插入结点，更新结点的值，结束。</li>
+<li>若当前结点key大于查找key，把当前结点的左子结点设置为当前结点，重复步骤4；</li>
+<li>若当前结点key小于查找key，把当前结点的右子结点设置为当前结点，重复步骤4；</li>
+</ol>
+<p>如图6所示。</p>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-7521866b50683a24.webp" alt="img"></p>
+<p><center>图6 红黑树插入位置查找</center><br>ok，插入位置已经找到，把插入结点放到正确的位置就可以啦，但插入结点是应该是什么颜色呢？答案是<strong>红色</strong>。理由很简单，红色在父结点（如果存在）为黑色结点时，红黑树的黑色平衡没被破坏，不需要做自平衡操作。但如果插入结点是黑色，那么插入位置所在的子树黑色结点总是多1，必须做自平衡。</p>
+<p>所有插入情景如图7所示。</p>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-fa2b78271263d2c8.webp" alt="img"></p>
+<p><center>图7 红黑树插入情景</center><br>嗯，插入情景很多呢，8种插入情景！但情景1、2和3的处理很简单，而情景4.2和情景4.3只是方向反转而已，懂得了一种情景就能推出另外一种情景，所以总体来看，并不复杂，后续我们将一个一个情景来看，把它彻底搞懂。</p>
+<p>另外，根据二叉树的性质，<strong>除了情景2，所有插入操作都是在叶子结点进行的</strong>。这点应该不难理解，因为查找插入位置时，我们就是在找子结点为空的父结点的。</p>
+<p>在开始每个情景的讲解前，我们还是先来约定下，如图8所示。</p>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-9ac3d6b69ef7ead3.webp" alt="img"></p>
+<p><center>图8 插入操作结点的叫法约定</center><br>图8的字母并不代表结点Key的大小。I表示插入结点，P表示插入结点的父结点，S表示插入结点的叔叔结点，PP表示插入结点的祖父结点。</p>
+<p>好了，下面让我们一个一个来分析每个插入的情景以其处理。</p>
+<h5 id="插入情景1：红黑树为空树"><a href="#插入情景1：红黑树为空树" class="headerlink" title="插入情景1：红黑树为空树"></a>插入情景1：红黑树为空树</h5><p>最简单的一种情景，直接把插入结点作为根结点就行，但注意，根据红黑树性质2：根节点是黑色。还需要把插入结点设为黑色。</p>
+<p><strong>处理：把插入结点作为根结点，并把结点设置为黑色</strong>。</p>
+<h5 id="插入情景2：插入结点的Key已存在"><a href="#插入情景2：插入结点的Key已存在" class="headerlink" title="插入情景2：插入结点的Key已存在"></a>插入情景2：插入结点的Key已存在</h5><p>插入结点的Key已存在，既然红黑树总保持平衡，在插入前红黑树已经是平衡的，那么把插入结点设置为将要替代结点的颜色，再把结点的值更新就完成插入。</p>
+<p><strong>处理：</strong></p>
+<ul>
+<li><strong>把I设为当前结点的颜色</strong></li>
+<li><strong>更新当前结点的值为插入结点的值</strong></li>
+</ul>
+<h5 id="插入情景3：插入结点的父结点为黑结点"><a href="#插入情景3：插入结点的父结点为黑结点" class="headerlink" title="插入情景3：插入结点的父结点为黑结点"></a>插入情景3：插入结点的父结点为黑结点</h5><p>由于插入的结点是红色的，当插入结点的黑色时，并不会影响红黑树的平衡，直接插入即可，无需做自平衡。</p>
+<p><strong>处理：直接插入</strong>。</p>
+<h5 id="插入情景4：插入结点的父结点为红结点"><a href="#插入情景4：插入结点的父结点为红结点" class="headerlink" title="插入情景4：插入结点的父结点为红结点"></a>插入情景4：插入结点的父结点为红结点</h5><p>再次回想下红黑树的性质2：根结点是黑色。<strong>如果插入的父结点为红结点，那么该父结点不可能为根结点，所以插入结点总是存在祖父结点</strong>。这点很重要，因为后续的旋转操作肯定需要祖父结点的参与。</p>
+<p>情景4又分为很多子情景，下面将进入重点部分，各位看官请留神了。</p>
+<p><strong>插入情景4.1：叔叔结点存在并且为红结点</strong><br> 从红黑树性质4可以，祖父结点肯定为黑结点，因为不可以同时存在两个相连的红结点。那么此时该插入子树的红黑层数的情况是：黑红红。显然最简单的处理方式是把其改为：红黑红。如图9和图10所示。</p>
+<p><strong>处理：</strong></p>
+<ul>
+<li><strong>将P和S设置为黑色</strong></li>
+<li><strong>将PP设置为红色</strong></li>
+<li><strong>把PP设置为当前插入结点</strong></li>
+</ul>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-9f2c746bf0769f49.webp" alt="img"></p>
+<p><center>图9 插入情景4.1_1</center><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-5374ea3c2956b441.webp" alt="img"></p>
+<p><center>图10 插入情景4.1_2</center><br>可以看到，我们把PP结点设为红色了，如果PP的父结点是黑色，那么无需再做任何处理；但如果PP的父结点是红色，根据性质4，此时红黑树已不平衡了，所以还需要把PP当作新的插入结点，继续做插入操作自平衡处理，直到平衡为止。</p>
+<p>试想下PP刚好为根结点时，那么根据性质2，我们必须把PP重新设为黑色，那么树的红黑结构变为：黑黑红。换句话说，从根结点到叶子结点的路径中，黑色结点增加了。<strong>这也是唯一一种会增加红黑树黑色结点层数的插入情景</strong>。</p>
+<p>我们还可以总结出另外一个经验：<strong>红黑树的生长是自底向上的</strong>。这点不同于普通的二叉查找树，普通的二叉查找树的生长是自顶向下的。</p>
+<p><strong>插入情景4.2：叔叔结点不存在或为黑结点，并且插入结点的父亲结点是祖父结点的左子结点</strong><br> 单纯从插入前来看，也即不算情景4.1自底向上处理时的情况，叔叔结点非红即为叶子结点(Nil)。因为如果叔叔结点为黑结点，而父结点为红结点，那么叔叔结点所在的子树的黑色结点就比父结点所在子树的多了，这不满足红黑树的性质5。后续情景同样如此，不再多做说明了。</p>
+<p>前文说了，需要旋转操作时，肯定一边子树的结点多了或少了，需要租或借给另一边。插入显然是多的情况，那么把多的结点租给另一边子树就可以了。</p>
+<p><strong>插入情景4.2.1：插入结点是其父结点的左子结点</strong><br> <strong>处理：</strong></p>
+<ul>
+<li><strong>将P设为黑色</strong></li>
+<li><strong>将PP设为红色</strong></li>
+<li><strong>对PP进行右旋</strong></li>
+</ul>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-ab4097b750826870.webp" alt="img"></p>
+<p><center>图11 插入情景4.2.1</center><br>由图11可得，左边两个红结点，右边不存在，那么一边一个刚刚好，并且因为为红色，肯定不会破坏树的平衡。</p>
+<p>咦，可以把P设为红色，I和PP设为黑色吗？答案是可以！看过《算法：第4版》的同学可能知道，书中讲解的就是把P设为红色，I和PP设为黑色。但把P设为红色，显然又会出现情景4.1的情况，需要自底向上处理，做多了无谓的操作，既然能自己消化就不要麻烦祖辈们啦～</p>
+<p><strong>插入情景4.2.2：插入结点是其父结点的右子结点</strong><br> 这种情景显然可以转换为情景4.2.1，如图12所示，不做过多说明了。</p>
+<p><strong>处理：</strong></p>
+<ul>
+<li><strong>对P进行左旋</strong></li>
+<li><strong>把P设置为插入结点，得到情景4.2.1</strong></li>
+<li><strong>进行情景4.2.1的处理</strong></li>
+</ul>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-fbfc4f299941cb8b.webp" alt="img"></p>
+<p><center>图12 插入情景4.2.2</center><br><strong>插入情景4.3：叔叔结点不存在或为黑结点，并且插入结点的父亲结点是祖父结点的右子结点</strong><br> 该情景对应情景4.2，只是方向反转，不做过多说明了，直接看图。</p>
+<p><strong>插入情景4.3.1：插入结点是其父结点的右子结点</strong><br> <strong>处理：</strong></p>
+<ul>
+<li><strong>将P设为黑色</strong></li>
+<li><strong>将PP设为红色</strong></li>
+<li><strong>对PP进行左旋</strong></li>
+</ul>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-2bc24a78b68dae51.webp" alt="img"></p>
+<p><center>图13 插入情景4.3.1</center><br><strong>插入情景4.3.2：插入结点是其父结点的右子结点</strong><br> <strong>处理：</strong></p>
+<ul>
+<li><strong>对P进行右旋</strong></li>
+<li><strong>把P设置为插入结点，得到情景4.3.1</strong></li>
+<li><strong>进行情景4.3.1的处理</strong></li>
+</ul>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-ee1a9027ddcc210a.webp" alt="img"></p>
+<p><center>图14 插入情景4.3.2</center><br>好了，讲完插入的所有情景了。可能又同学会想：上面的情景举例的都是第一次插入而不包含自底向上处理的情况，那么上面所说的情景都适合自底向上的情况吗？答案是肯定的。理由很简单，但每棵子树都能自平衡，那么整棵树最终总是平衡的。好吧，在出个习题，请大家拿出笔和纸画下试试（请务必动手画下，加深印象）：</p>
+<p><strong>习题1：请画出图15的插入自平衡处理过程。</strong>（答案见文末）</p>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-28186be7e43be254.webp" alt="img"></p>
+<h2 id="图15-习题1"><a href="#图15-习题1" class="headerlink" title="图15 习题1"></a><center>图15 习题1</center></h2><h4 id="红黑树删除"><a href="#红黑树删除" class="headerlink" title="红黑树删除"></a>红黑树删除</h4><p>红黑树插入已经够复杂了，但删除更复杂，也是红黑树最复杂的操作了。但稳住，胜利的曙光就在前面了！</p>
 <p>红黑树的删除操作也包括两部分工作：一查找目标结点；而删除后自平衡。查找目标结点显然可以复用查找操作，当不存在目标结点时，忽略本次操作；当存在目标结点时，删除后就得做自平衡处理了。删除了结点后我们还需要找结点来替代删除结点的位置，不然子树跟父辈结点断开了，除非删除结点刚好没子结点，那么就不需要替代。</p>
 <p>二叉树删除结点找替代结点有3种情情景：</p>
 <ul>
@@ -543,10 +707,106 @@
 </ul>
 <p>补充说明下，情景3的后继结点是大于删除结点的最小结点，也是删除结点的右子树种最左结点。那么可以拿前继结点（删除结点的左子树最左结点）替代吗？可以的。但习惯上大多都是拿后继结点来替代，后文的讲解也是用后继结点来替代。另外告诉大家一种找前继和后继结点的直观的方法（不知为何没人提过，大家都知道？）：<strong>把二叉树所有结点投射在X轴上，所有结点都是从左到右排好序的，所有目标结点的前后结点就是对应前继和后继结点</strong>。如图16所示。</p>
 <p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-dc4f0ab5d111ff96.webp" alt="img"></p>
-<center>图16 二叉树投射x轴后有序</center><br>接下来，讲一个重要的思路：<strong>删除结点被替代后，在不考虑结点的键值的情况下，对于树来说，可以认为删除的是替代结点！</strong>话很苍白，我们看图17。在不看键值对的情况下，图17的红黑树最终结果是删除了Q所在位置的结点！这种思路非常重要，大大简化了后文讲解红黑树删除的情景！<br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-f45799daa674d0ad.webp" alt="img"><br><center>图17 删除结点换位思路</center><br>基于此，上面所说的3种二叉树的删除情景可以相互转换并且最终都是转换为情景1！<br><br>- 情景2：删除结点用其唯一的子结点替换，子结点替换为删除结点后，可以认为删除的是子结点，若子结点又有两个子结点，那么相当于转换为情景3，一直自顶向下转换，总是能转换为情景1。（对于红黑树来说，根据性质5.1，只存在一个子结点的结点肯定在树末了）<br>- 情景3：删除结点用后继结点（肯定不存在左结点），如果后继结点有右子结点，那么相当于转换为情景2，否则转为为情景1。<br><br>二叉树删除结点情景关系图如图18所示。<br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-a48550e315b3b132.webp" alt="img"><br><center>图18 二叉树删除情景转换</center><br>综上所述，<strong>删除操作删除的结点可以看作删除替代结点，而替代结点最后总是在树末。</strong>有了这结论，我们讨论的删除红黑树的情景就少了很多，因为我们只考虑删除树末结点的情景了。<br><br>同样的，我们也是先来总体看下删除操作的所有情景，如图19所示。<br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-edaf96e55f08c198.webp" alt="img"><br><center>图19 红黑树删除情景</center><br>哈哈，是的，即使简化了还是有9种情景！但跟插入操作一样，存在左右对称的情景，只是方向变了，没有本质区别。同样的，我们还是来约定下，如图20所示。<br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-db3468a5977ad998-1582549732988.webp" alt="img"><br><center>图20 删除操作结点的叫法约定</center><br>图20的字母并不代表结点Key的大小。R<em>表示替代结点</em>，P表示替代结点的父结点，S表示替代结点的兄弟结点，SL表示兄弟结点的左子结点，SR表示兄弟结点的右子结点。灰色结点表示它可以是红色也可以是黑色。<br><br>值得特别提醒的是，<strong>R是即将被替换到删除结点的位置的替代结点，在删除前，它还在原来所在位置参与树的子平衡，平衡后再替换到删除结点的位置，才算删除完成。</strong><br><br>万事具备，我们进入最后的也是最难的讲解。<br><br>##### 删除情景1：替换结点是红色结点<br><br>我们把替换结点换到了删除结点的位置时，由于替换结点时红色，删除也了不会影响红黑树的平衡，只要把替换结点的颜色设为删除的结点的颜色即可重新平衡。<br><br><strong>处理：颜色变为删除结点的颜色</strong><br><br>##### 删除情景2：替换结点是黑结点<br><br>当替换结点是黑色时，我们就不得不进行自平衡处理了。我们必须还得考虑替换结点是其父结点的左子结点还是右子结点，来做不同的旋转操作，使树重新平衡。<br><br><strong>删除情景2.1：替换结点是其父结点的左子结点</strong><br> <strong>删除情景2.1.1：替换结点的兄弟结点是红结点</strong><br> 若兄弟结点是红结点，那么根据性质4，兄弟结点的父结点和子结点肯定为黑色，不会有其他子情景，我们按图21处理，得到删除情景2.1.2.3（后续讲解，这里先记住，此时R仍然是替代结点，它的新的兄弟结点SL和兄弟结点的子结点都是黑色）。<br><br><strong>处理：</strong><br><br>- <strong>将S设为黑色</strong><br>- <strong>将P设为红色</strong><br>- <strong>对P进行左旋，得到情景2.1.2.3</strong><br>- <strong>进行情景2.1.2.3的处理</strong><br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-1e4c3388491b588f.webp" alt="img"><br><center>图21 删除情景2.1.1</center><br><strong>删除情景2.1.2：替换结点的兄弟结点是黑结点</strong><br> 当兄弟结点为黑时，其父结点和子结点的具体颜色也无法确定（如果也不考虑自底向上的情况，子结点非红即为叶子结点Nil，Nil结点为黑结点），此时又得考虑多种子情景。<br><br><strong>删除情景2.1.2.1：替换结点的兄弟结点的右子结点是红结点，左子结点任意颜色</strong><br> 即将删除的左子树的一个黑色结点，显然左子树的黑色结点少1了，然而右子树又又红色结点，那么我们直接向右子树“借”个红结点来补充黑结点就好啦，此时肯定需要用旋转处理了。如图22所示。<br><br><strong>处理：</strong><br><br>- <strong>将S的颜色设为P的颜色</strong><br>- <strong>将P设为黑色</strong><br>- <strong>将SR设为黑色</strong><br>- <strong>对P进行左旋</strong><br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-7eea721cbb855876.webp" alt="img"><br><center>图22 删除情景2.1.2.1</center><br>平衡后的图怎么不满足红黑树的性质？前文提醒过，R是即将替换的，它还参与树的自平衡，平衡后再替换到删除结点的位置，所以R最终可以看作是删除的。另外图2.1.2.1是考虑到第一次替换和自底向上处理的情况，如果只考虑第一次替换的情况，根据红黑树性质，SL肯定是红色或为Nil，所以最终结果树是平衡的。如果是自底向上处理的情况，同样，每棵子树都保持平衡状态，最终整棵树肯定是平衡的。后续的情景同理，不做过多说明了。<br><br><strong>删除情景2.1.2.2：替换结点的兄弟结点的右子结点为黑结点，左子结点为红结点</strong><br> 兄弟结点所在的子树有红结点，我们总是可以向兄弟子树借个红结点过来，显然该情景可以转换为情景2.1.2.1。图如23所示。<br><br><strong>处理：</strong><br><br>- <strong>将S设为红色</strong><br>- <strong>将SL设为黑色</strong><br>- <strong>对S进行右旋，得到情景2.1.2.1</strong><br>- <strong>进行情景2.1.2.1的处理</strong><br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-dc29605ce9889973.webp" alt="img"><br><center>图23 删除情景2.1.2.2</center><br><strong>删除情景2.1.2.3：替换结点的兄弟结点的子结点都为黑结点</strong><br> 好了，此次兄弟子树都没红结点“借”了，兄弟帮忙不了，找父母呗，这种情景我们把兄弟结点设为红色，再把父结点当作替代结点，自底向上处理，去找父结点的兄弟结点去“借”。但为什么需要把兄弟结点设为红色呢？显然是为了在P所在的子树中保证平衡（R即将删除，少了一个黑色结点，子树也需要少一个），后续的平衡工作交给父辈们考虑了，还是那句，当每棵子树都保持平衡时，最终整棵总是平衡的。<br><br><strong>处理：</strong><br><br>- <strong>将S设为红色</strong><br>- <strong>把P作为新的替换结点</strong><br>- <strong>重新进行删除结点情景处理</strong><br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-75293515d8d87024.webp" alt="img"><br><center>图24 情景2.1.2.3</center><br><strong>删除情景2.2：替换结点是其父结点的右子结点</strong><br> 好啦，右边的操作也是方向相反，不做过多说明了，相信理解了删除情景2.1后，肯定可以理解2.2。<br><br><strong>删除情景2.2.1：替换结点的兄弟结点是红结点</strong><br> 处理：<br><br>- <strong>将S设为黑色</strong><br>- <strong>将P设为红色</strong><br>- <strong>对P进行右旋，得到情景2.2.2.3</strong><br>- <strong>进行情景2.2.2.3的处理</strong><br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-387664c771b21f1b.webp" alt="img"><br><center>图25 删除情景2.2.1</center><br><strong>删除情景2.2.2：替换结点的兄弟结点是黑结点</strong><br> <strong>删除情景2.2.2.1：替换结点的兄弟结点的左子结点是红结点，右子结点任意颜色</strong><br> <strong>处理：</strong><br><br>- <strong>将S的颜色设为P的颜色</strong><br>- <strong>将P设为黑色</strong><br>- <strong>将SL设为黑色</strong><br>- <strong>对P进行右旋</strong><br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-b1ea52c823ce0b0b.webp" alt="img"><br><center>图26 删除情景2.2.2.1</center><br><strong>删除情景2.2.2.2：替换结点的兄弟结点的左子结点为黑结点，右子结点为红结点</strong><br> <strong>处理：</strong><br><br>- <strong>将S设为红色</strong><br>- <strong>将SR设为黑色</strong><br>- <strong>对S进行左旋，得到情景2.2.2.1</strong><br>- <strong>进行情景2.2.2.1的处理</strong><br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-edcb4ea6ac87e342.webp" alt="img"><br><center>图27 删除情景2.2.2.2</center><br><strong>删除情景2.2.2.3：替换结点的兄弟结点的子结点都为黑结点</strong><br> <strong>处理：</strong><br><br>- <strong>将S设为红色</strong><br>- <strong>把P作为新的替换结点</strong><br>- <strong>重新进行删除结点情景处理</strong><br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-6559c4cccf3df81c.webp" alt="img"><br><center>图28 删除情景2.2.2.3</center><br>综上，红黑树删除后自平衡的处理可以总结为：<br><br>1. 自己能搞定的自消化（情景1）<br>2. 自己不能搞定的叫兄弟帮忙（除了情景1、情景2.1.2.3和情景2.2.2.3）<br>3. 兄弟都帮忙不了的，通过父母，找远方亲戚（情景2.1.2.3和情景2.2.2.3）<br><br>哈哈，是不是跟现实中很像，当我们有困难时，首先先自己解决，自己无力了总兄弟姐妹帮忙，如果连兄弟姐妹都帮不上，再去找远方的亲戚了。这里记忆应该会好记点～<br><br>最后再做个习题加深理解（请不熟悉的同学务必动手画下）：<br><br><strong>习题2：请画出图29的删除自平衡处理过程。 </strong><br><br><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-d3231b6890ab76a3.webp" alt="img"><br><center>习题2</center>
-
-<hr>
-<h3 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h3><p>耗时良久，终于写完了～自己加深了红黑树的理解的同时，也希望能帮助大家。如果你之前没学习过红黑树，看完这篇文章后可能还存在很多疑问，如果有疑问可以在评论区写出来，我会尽自己所能解答。另外给大家推荐一个支持红黑树在线生成的网站，来做各种情景梳理很有帮助：<a href="https://sandbox.runjs.cn/show/2nngvn8w" target="_blank" rel="noopener">在线生成红黑树</a>。（删除操作那个把替代结点看作删除结点思路就是我自己在用这个网站时自己顿悟的，我觉得这样讲解更容易理解。）</p>
+<p><center>图16 二叉树投射x轴后有序</center><br>接下来，讲一个重要的思路：<strong>删除结点被替代后，在不考虑结点的键值的情况下，对于树来说，可以认为删除的是替代结点！</strong>话很苍白，我们看图17。在不看键值对的情况下，图17的红黑树最终结果是删除了Q所在位置的结点！这种思路非常重要，大大简化了后文讲解红黑树删除的情景！</p>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-f45799daa674d0ad.webp" alt="img"></p>
+<p><center>图17 删除结点换位思路</center><br>基于此，上面所说的3种二叉树的删除情景可以相互转换并且最终都是转换为情景1！</p>
+<ul>
+<li>情景2：删除结点用其唯一的子结点替换，子结点替换为删除结点后，可以认为删除的是子结点，若子结点又有两个子结点，那么相当于转换为情景3，一直自顶向下转换，总是能转换为情景1。（对于红黑树来说，根据性质5.1，只存在一个子结点的结点肯定在树末了）</li>
+<li>情景3：删除结点用后继结点（肯定不存在左结点），如果后继结点有右子结点，那么相当于转换为情景2，否则转为为情景1。</li>
+</ul>
+<p>二叉树删除结点情景关系图如图18所示。</p>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-a48550e315b3b132.webp" alt="img"></p>
+<p><center>图18 二叉树删除情景转换</center><br>综上所述，<strong>删除操作删除的结点可以看作删除替代结点，而替代结点最后总是在树末。</strong>有了这结论，我们讨论的删除红黑树的情景就少了很多，因为我们只考虑删除树末结点的情景了。</p>
+<p>同样的，我们也是先来总体看下删除操作的所有情景，如图19所示。</p>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-edaf96e55f08c198.webp" alt="img"></p>
+<p><center>图19 红黑树删除情景</center><br>哈哈，是的，即使简化了还是有9种情景！但跟插入操作一样，存在左右对称的情景，只是方向变了，没有本质区别。同样的，我们还是来约定下，如图20所示。</p>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-db3468a5977ad998-1582549732988.webp" alt="img"></p>
+<p><center>图20 删除操作结点的叫法约定</center><br>图20的字母并不代表结点Key的大小。R<em>表示替代结点</em>，P表示替代结点的父结点，S表示替代结点的兄弟结点，SL表示兄弟结点的左子结点，SR表示兄弟结点的右子结点。灰色结点表示它可以是红色也可以是黑色。</p>
+<p>值得特别提醒的是，<strong>R是即将被替换到删除结点的位置的替代结点，在删除前，它还在原来所在位置参与树的子平衡，平衡后再替换到删除结点的位置，才算删除完成。</strong></p>
+<p>万事具备，我们进入最后的也是最难的讲解。</p>
+<h5 id="删除情景1：替换结点是红色结点"><a href="#删除情景1：替换结点是红色结点" class="headerlink" title="删除情景1：替换结点是红色结点"></a>删除情景1：替换结点是红色结点</h5><p>我们把替换结点换到了删除结点的位置时，由于替换结点时红色，删除也了不会影响红黑树的平衡，只要把替换结点的颜色设为删除的结点的颜色即可重新平衡。</p>
+<p><strong>处理：颜色变为删除结点的颜色</strong></p>
+<h5 id="删除情景2：替换结点是黑结点"><a href="#删除情景2：替换结点是黑结点" class="headerlink" title="删除情景2：替换结点是黑结点"></a>删除情景2：替换结点是黑结点</h5><p>当替换结点是黑色时，我们就不得不进行自平衡处理了。我们必须还得考虑替换结点是其父结点的左子结点还是右子结点，来做不同的旋转操作，使树重新平衡。</p>
+<p><strong>删除情景2.1：替换结点是其父结点的左子结点</strong><br> <strong>删除情景2.1.1：替换结点的兄弟结点是红结点</strong><br> 若兄弟结点是红结点，那么根据性质4，兄弟结点的父结点和子结点肯定为黑色，不会有其他子情景，我们按图21处理，得到删除情景2.1.2.3（后续讲解，这里先记住，此时R仍然是替代结点，它的新的兄弟结点SL和兄弟结点的子结点都是黑色）。</p>
+<p><strong>处理：</strong></p>
+<ul>
+<li><strong>将S设为黑色</strong></li>
+<li><strong>将P设为红色</strong></li>
+<li><strong>对P进行左旋，得到情景2.1.2.3</strong></li>
+<li><strong>进行情景2.1.2.3的处理</strong></li>
+</ul>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-1e4c3388491b588f.webp" alt="img"></p>
+<p><center>图21 删除情景2.1.1</center><br><strong>删除情景2.1.2：替换结点的兄弟结点是黑结点</strong><br> 当兄弟结点为黑时，其父结点和子结点的具体颜色也无法确定（如果也不考虑自底向上的情况，子结点非红即为叶子结点Nil，Nil结点为黑结点），此时又得考虑多种子情景。</p>
+<p><strong>删除情景2.1.2.1：替换结点的兄弟结点的右子结点是红结点，左子结点任意颜色</strong><br> 即将删除的左子树的一个黑色结点，显然左子树的黑色结点少1了，然而右子树又又红色结点，那么我们直接向右子树“借”个红结点来补充黑结点就好啦，此时肯定需要用旋转处理了。如图22所示。</p>
+<p><strong>处理：</strong></p>
+<ul>
+<li><strong>将S的颜色设为P的颜色</strong></li>
+<li><strong>将P设为黑色</strong></li>
+<li><strong>将SR设为黑色</strong></li>
+<li><strong>对P进行左旋</strong></li>
+</ul>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-7eea721cbb855876.webp" alt="img"></p>
+<p><center>图22 删除情景2.1.2.1</center><br>平衡后的图怎么不满足红黑树的性质？前文提醒过，R是即将替换的，它还参与树的自平衡，平衡后再替换到删除结点的位置，所以R最终可以看作是删除的。另外图2.1.2.1是考虑到第一次替换和自底向上处理的情况，如果只考虑第一次替换的情况，根据红黑树性质，SL肯定是红色或为Nil，所以最终结果树是平衡的。如果是自底向上处理的情况，同样，每棵子树都保持平衡状态，最终整棵树肯定是平衡的。后续的情景同理，不做过多说明了。</p>
+<p><strong>删除情景2.1.2.2：替换结点的兄弟结点的右子结点为黑结点，左子结点为红结点</strong><br> 兄弟结点所在的子树有红结点，我们总是可以向兄弟子树借个红结点过来，显然该情景可以转换为情景2.1.2.1。图如23所示。</p>
+<p><strong>处理：</strong></p>
+<ul>
+<li><strong>将S设为红色</strong></li>
+<li><strong>将SL设为黑色</strong></li>
+<li><strong>对S进行右旋，得到情景2.1.2.1</strong></li>
+<li><strong>进行情景2.1.2.1的处理</strong></li>
+</ul>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-dc29605ce9889973.webp" alt="img"></p>
+<p><center>图23 删除情景2.1.2.2</center><br><strong>删除情景2.1.2.3：替换结点的兄弟结点的子结点都为黑结点</strong><br> 好了，此次兄弟子树都没红结点“借”了，兄弟帮忙不了，找父母呗，这种情景我们把兄弟结点设为红色，再把父结点当作替代结点，自底向上处理，去找父结点的兄弟结点去“借”。但为什么需要把兄弟结点设为红色呢？显然是为了在P所在的子树中保证平衡（R即将删除，少了一个黑色结点，子树也需要少一个），后续的平衡工作交给父辈们考虑了，还是那句，当每棵子树都保持平衡时，最终整棵总是平衡的。</p>
+<p><strong>处理：</strong></p>
+<ul>
+<li><strong>将S设为红色</strong></li>
+<li><strong>把P作为新的替换结点</strong></li>
+<li><strong>重新进行删除结点情景处理</strong></li>
+</ul>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-75293515d8d87024.webp" alt="img"></p>
+<p><center>图24 情景2.1.2.3</center><br><strong>删除情景2.2：替换结点是其父结点的右子结点</strong><br> 好啦，右边的操作也是方向相反，不做过多说明了，相信理解了删除情景2.1后，肯定可以理解2.2。</p>
+<p><strong>删除情景2.2.1：替换结点的兄弟结点是红结点</strong><br> 处理：</p>
+<ul>
+<li><strong>将S设为黑色</strong></li>
+<li><strong>将P设为红色</strong></li>
+<li><strong>对P进行右旋，得到情景2.2.2.3</strong></li>
+<li><strong>进行情景2.2.2.3的处理</strong></li>
+</ul>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-387664c771b21f1b.webp" alt="img"></p>
+<p><center>图25 删除情景2.2.1</center><br><strong>删除情景2.2.2：替换结点的兄弟结点是黑结点</strong><br> <strong>删除情景2.2.2.1：替换结点的兄弟结点的左子结点是红结点，右子结点任意颜色</strong><br> <strong>处理：</strong></p>
+<ul>
+<li><strong>将S的颜色设为P的颜色</strong></li>
+<li><strong>将P设为黑色</strong></li>
+<li><strong>将SL设为黑色</strong></li>
+<li><strong>对P进行右旋</strong></li>
+</ul>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-b1ea52c823ce0b0b.webp" alt="img"></p>
+<p><center>图26 删除情景2.2.2.1</center><br><strong>删除情景2.2.2.2：替换结点的兄弟结点的左子结点为黑结点，右子结点为红结点</strong><br> <strong>处理：</strong></p>
+<ul>
+<li><strong>将S设为红色</strong></li>
+<li><strong>将SR设为黑色</strong></li>
+<li><strong>对S进行左旋，得到情景2.2.2.1</strong></li>
+<li><strong>进行情景2.2.2.1的处理</strong></li>
+</ul>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-edcb4ea6ac87e342.webp" alt="img"></p>
+<p><center>图27 删除情景2.2.2.2</center><br><strong>删除情景2.2.2.3：替换结点的兄弟结点的子结点都为黑结点</strong><br> <strong>处理：</strong></p>
+<ul>
+<li><strong>将S设为红色</strong></li>
+<li><strong>把P作为新的替换结点</strong></li>
+<li><strong>重新进行删除结点情景处理</strong></li>
+</ul>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-6559c4cccf3df81c.webp" alt="img"></p>
+<p><center>图28 删除情景2.2.2.3</center><br>综上，红黑树删除后自平衡的处理可以总结为：</p>
+<ol>
+<li>自己能搞定的自消化（情景1）</li>
+<li>自己不能搞定的叫兄弟帮忙（除了情景1、情景2.1.2.3和情景2.2.2.3）</li>
+<li>兄弟都帮忙不了的，通过父母，找远方亲戚（情景2.1.2.3和情景2.2.2.3）</li>
+</ol>
+<p>哈哈，是不是跟现实中很像，当我们有困难时，首先先自己解决，自己无力了总兄弟姐妹帮忙，如果连兄弟姐妹都帮不上，再去找远方的亲戚了。这里记忆应该会好记点～</p>
+<p>最后再做个习题加深理解（请不熟悉的同学务必动手画下）：</p>
+<p><strong>习题2：请画出图29的删除自平衡处理过程。 </strong></p>
+<p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-d3231b6890ab76a3.webp" alt="img"></p>
+<h2 id="习题2"><a href="#习题2" class="headerlink" title="习题2"></a><center>习题2</center></h2><h3 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h3><p>耗时良久，终于写完了～自己加深了红黑树的理解的同时，也希望能帮助大家。如果你之前没学习过红黑树，看完这篇文章后可能还存在很多疑问，如果有疑问可以在评论区写出来，我会尽自己所能解答。另外给大家推荐一个支持红黑树在线生成的网站，来做各种情景梳理很有帮助：<a href="https://sandbox.runjs.cn/show/2nngvn8w" target="_blank" rel="noopener">在线生成红黑树</a>。（删除操作那个把替代结点看作删除结点思路就是我自己在用这个网站时自己顿悟的，我觉得这样讲解更容易理解。）</p>
 <p>少了代码是不是觉得有点空虚？哈哈，后续我会写关于Java和HashMap和TreeMap的文章，里面都有红黑树相关的知识。相信看了这篇文章后，再去看Java和HashMap和TreeMap的源码绝对没难度！</p>
 <p>最后来看下思考题和习题的答案吧。</p>
 <hr>
@@ -556,6 +816,8 @@
 <p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-f4c0891c264a2243.webp" alt="img"></p>
 <p><strong><em>习题2：请画出图29的删除自平衡处理过程。</em></strong><br> 答：</p>
 <p><img src="/2020/02/24/30张图带你彻底理解红黑树/2392382-b037e4c29cbffc4d.webp" alt="img"></p>
+<hr>
+<p>转载自<a href="https://www.jianshu.com/p/e136ec79235c" target="_blank" rel="noopener">30张图带你彻底理解红黑树</a></p>
 ]]></content>
       <categories>
         <category>算法</category>
@@ -568,9 +830,8 @@
   <entry>
     <title>[译]StackOverflow: 你没见过的七个最好的Java答案</title>
     <url>/2020/02/24/%E8%AF%91-StackOverflow-%E4%BD%A0%E6%B2%A1%E8%A7%81%E8%BF%87%E7%9A%84%E4%B8%83%E4%B8%AA%E6%9C%80%E5%A5%BD%E7%9A%84Java%E7%AD%94%E6%A1%88/</url>
-    <content><![CDATA[<p>原文：<a href="https://dzone.com/articles/stackoverflow-7-of-the-best-java-answers-that-you" target="_blank" rel="noopener">https://dzone.com/articles/stackoverflow-7-of-the-best-java-answers-that-you</a></p>
-<p>译文: <a href="https://www.rowkey.me/blog/2016/08/03/so-java-7-answers/" target="_blank" rel="noopener">https://www.rowkey.me/blog/2016/08/03/so-java-7-answers/</a></p>
-<p>StackOverflow(后边简称so)发展到目前，已经成为了全球开发者的金矿。它能够帮助我们找到在各个领域遇到的问题的最有用的解决方案，同时我们也会从中学习到很多新的东西。这篇文章是在我们审阅了so上最流行的Java问题以及答案后从中挑出来的。即使你是一个有丰富经验的开发者，也能从中学到不少东西。</p>
+    <content><![CDATA[<p>StackOverflow(后边简称so)发展到目前，已经成为了全球开发者的金矿。它能够帮助我们找到在各个领域遇到的问题的最有用的解决方案，同时我们也会从中学习到很多新的东西。这篇文章是在我们审阅了so上最流行的Java问题以及答案后从中挑出来的。即使你是一个有丰富经验的开发者，也能从中学到不少东西。</p>
+<a id="more"></a>
 <h2 id="分支预测"><a href="#分支预测" class="headerlink" title="分支预测"></a>分支预测</h2><p>SO上最多投票的一个Java问题是：<a href="http://stackoverflow.com/questions/11227809/why-is-it-faster-to-process-a-sorted-array-than-an-unsorted-array" target="_blank" rel="noopener">为什么处理一个排序数组要比非排序数组快的多</a>。为了回答这个问题，你需要使用分支预测(branch prediction)。分支预测是一种架构，旨在通过在真实的路径发生前猜测某一分支的下一步来提升处理过程。</p>
 <p>分支在这里即一个if语句。这样的话，如果是一个排序数组，那么分支预测将会进行，否则不会进行。<a href="http://stackoverflow.com/questions/11227809/why-is-it-faster-to-process-a-sorted-array-than-an-unsorted-array/11227902#11227902" target="_blank" rel="noopener">Mysticial</a>(so上的一个回答者)试图使用铁路和火车来简单介绍这个概念。假设你在铁轨连接处要决定火车要走哪条路，你会选择左边还是右边？你可以拦住火车，然后问司机该往那里，但是这样会让整个过程变慢。因此你只能去猜正确的方向，那么如何去猜呢？最好的办法就是通过观察目前这个火车每次经过时的路线，推测出正确的方向。</p>
 <p>这就是分支预测：识别模式并使用它。</p>
@@ -599,6 +860,9 @@
 <p>如果你还是对这些感到困惑，这里有一个相关说明的图表可以<a href="http://zeroturnaround.com/wp-content/uploads/2016/04/Java-Collections-cheat-sheet.png" target="_blank" rel="noopener">参考</a>(Rebel Labs制作)。</p>
 <p><img src="/2020/02/24/译-StackOverflow-你没见过的七个最好的Java答案/Java-Collections-cheat-sheet.png" alt="Java-Collections-cheat-sheet"></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>对于Java，其实关键的不在于你懂多少，而是在于你可以一直学到更多的东西。StackOverflow不仅在code上的一些问题可以帮助我们，也有助于我们回过头来去深入地学习一些我们已经知道的知识。</p>
+<blockquote>
+<p>转载文章<br>原文：<a href="https://dzone.com/articles/stackoverflow-7-of-the-best-java-answers-that-you" target="_blank" rel="noopener">https://dzone.com/articles/stackoverflow-7-of-the-best-java-answers-that-you</a><br>译文: <a href="https://www.rowkey.me/blog/2016/08/03/so-java-7-answers/" target="_blank" rel="noopener">https://www.rowkey.me/blog/2016/08/03/so-java-7-answers/</a></p>
+</blockquote>
 ]]></content>
       <categories>
         <category>Java</category>
@@ -612,6 +876,7 @@
     <title>Java性能优化和JVM GC（垃圾回收机制）详解</title>
     <url>/2020/02/24/Java%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%92%8CJVM-GC%EF%BC%88%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6%EF%BC%89%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<p>Java的性能优化，JVM GC（垃圾回收机制）在学习Java GC 之前，我们需要记住一个单词：stop-the-world 。它会在任何一种GC算法中发生。stop-the-world 意味着JVM因为需要执行GC而停止了应用程序的执行。当stop-the-world 发生时，除GC所需的线程外，所有的线程都进入等待状态，直到GC任务完成。GC优化很多时候就是减少stop-the-world 的发生。</p>
+<a id="more"></a>
 <h1 id="JVM-GC回收哪个区域内的垃圾？"><a href="#JVM-GC回收哪个区域内的垃圾？" class="headerlink" title="JVM GC回收哪个区域内的垃圾？"></a><strong>JVM GC回收哪个区域内的垃圾？</strong></h1><p>需要注意的是，JVM GC只回收堆区和方法区内的对象。而栈区的数据，在超出作用域后会被JVM自动释放掉，所以其不在JVM GC的管理范围内。</p>
 <h1 id="JVM-GC怎么判断对象可以被回收了？"><a href="#JVM-GC怎么判断对象可以被回收了？" class="headerlink" title="JVM GC怎么判断对象可以被回收了？"></a><strong>JVM GC怎么判断对象可以被回收了？</strong></h1><ul>
 <li><p>对象没有引用</p>
@@ -891,6 +1156,7 @@
     <content><![CDATA[<h2 id="1-ZooKeeper是什么？"><a href="#1-ZooKeeper是什么？" class="headerlink" title="1.ZooKeeper是什么？"></a>1.ZooKeeper是什么？</h2><p>ZooKeeper是一个分布式的，开放源码的分布式应用程序协调服务，是Google的Chubby一个开源的实现，它是集群的管理者，监视着集群中各个节点的状态根据节点提交的反馈进行下一步合理操作。最终，将简单易用的接口和性能高效、功能稳定的系统提供给用户。</p>
 <p>客户端的读请求可以被集群中的任意一台机器处理，如果读请求在节点上注册了监听器，这个监听器也是由所连接的zookeeper机器来处理。对于写请求，这些请求会同时发给其他zookeeper机器并且达成一致后，请求才会返回成功。因此，随着zookeeper的集群机器增多，读请求的吞吐会提高但是写请求的吞吐会下降。</p>
 <p>有序性是zookeeper中非常重要的一个特性，所有的更新都是全局有序的，每个更新都有一个唯一的时间戳，这个时间戳称为zxid（Zookeeper Transaction Id）。而读请求只会相对于更新有序，也就是读请求的返回结果中会带有这个zookeeper最新的zxid。</p>
+<a id="more"></a>
 <h2 id="2-ZooKeeper提供了什么？"><a href="#2-ZooKeeper提供了什么？" class="headerlink" title="2.ZooKeeper提供了什么？"></a>2.ZooKeeper提供了什么？</h2><p>1、文件系统</p>
 <p>2、通知机制</p>
 <h2 id="3-Zookeeper文件系统"><a href="#3-Zookeeper文件系统" class="headerlink" title="3.Zookeeper文件系统"></a>3.Zookeeper文件系统</h2><p>Zookeeper提供一个多层级的节点命名空间（节点称为znode）。与文件系统不同的是，这些节点都可以设置关联的数据，而文件系统中只有文件节点可以存放数据而目录节点不行。Zookeeper为了保证高吞吐和低延迟，在内存中维护了这个树状的目录结构，这种特性使得Zookeeper不能用于存放大量的数据，每个节点的存放数据上限为1M。</p>
@@ -993,6 +1259,7 @@
     <title>MyBatis中的九种设计模式</title>
     <url>/2020/02/12/MyBatis%E4%B8%AD%E7%9A%84%E4%B9%9D%E7%A7%8D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p>虽然我们都知道有26个设计模式，但是大多停留在概念层面，真实开发中很少遇到，Mybatis源码中使用了大量的设计模式，阅读源码并观察设计模式在其中的应用，能够更深入的理解设计模式。</p>
+<a id="more"></a>
 <p>Mybatis至少遇到了以下的设计模式的使用：</p>
 <ol>
 <li>Builder模式，例如SqlSessionFactoryBuilder、XMLConfigBuilder、XMLMapperBuilder、XMLStatementBuilder、CacheBuilder；</li>
@@ -1135,6 +1402,9 @@
 <li>mybatis缓存机制详解（一）——Cache</li>
 <li><a href="https://my.oschina.net/lixin91/blog/620068" target="_blank" rel="noopener">https://my.oschina.net/lixin91/blog/620068</a></li>
 </ul>
+<blockquote>
+<p>转载自<a href="http://www.crazyant.net/2022.html" target="_blank" rel="noopener">http://www.crazyant.net/2022.html</a> </p>
+</blockquote>
 ]]></content>
       <categories>
         <category>JAVA</category>
@@ -1148,8 +1418,8 @@
   <entry>
     <title>不可不说的Java锁事</title>
     <url>/2020/02/12/%E4%B8%8D%E5%8F%AF%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E9%94%81%E4%BA%8B/</url>
-    <content><![CDATA[<p>转载自美团技术团队，<a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">原文地址</a>，在原文基础上有修改.</p>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Java提供了种类丰富的锁，每种锁因其特性的不同，在适当的场景下能够展现出非常高的效率。本文旨在对锁相关源码（本文中的源码来自JDK 8和Netty 3.10.6）、使用场景进行举例，为读者介绍主流锁的知识点，以及不同的锁的适用场景。</p>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Java提供了种类丰富的锁，每种锁因其特性的不同，在适当的场景下能够展现出非常高的效率。本文旨在对锁相关源码（本文中的源码来自JDK 8和Netty 3.10.6）、使用场景进行举例，为读者介绍主流锁的知识点，以及不同的锁的适用场景。</p>
+<a id="more"></a>
 <h1 id="JAVA主流锁"><a href="#JAVA主流锁" class="headerlink" title="JAVA主流锁"></a>JAVA主流锁</h1><p>Java中往往是按照是否含有某一特性来定义锁，我们通过特性将锁进行分组归类，再使用对比的方式进行介绍，帮助大家更快捷的理解相关知识。下面给出本文内容的总体分类目录：</p>
 <p><img src="/2020/02/12/不可不说的Java锁事/7f749fc8.png" alt="img"></p>
 <h2 id="1-乐观锁-VS-悲观锁"><a href="#1-乐观锁-VS-悲观锁" class="headerlink" title="1. 乐观锁 VS 悲观锁"></a>1. 乐观锁 VS 悲观锁</h2><p>乐观锁与悲观锁是一种广义上的概念，体现了看待线程同步的不同角度。在Java和数据库中都有此概念对应的实际应用。</p>
@@ -1405,6 +1675,9 @@
 <li><a href="https://my.oschina.net/adan1/blog/158107" target="_blank" rel="noopener">Java多线程（十）之ReentrantReadWriteLock深入分析</a></li>
 <li><a href="https://mrdear.cn/2018/06/23/java/java--readwritelock" target="_blank" rel="noopener">Java–读写锁的实现原理</a></li>
 </ol>
+<blockquote>
+<p>转载自美团技术团队，<a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">原文地址</a>，在原文基础上有修改.</p>
+</blockquote>
 ]]></content>
       <categories>
         <category>JAVA</category>
@@ -1420,6 +1693,7 @@
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Java中的大部分同步类（Lock、Semaphore、ReentrantLock等）都是基于AbstractQueuedSynchronizer（简称为AQS）实现的。AQS是一种提供了原子式管理同步状态、阻塞和唤醒线程功能以及队列模型的简单框架。本文会从应用层逐渐深入到原理层，并通过ReentrantLock的基本特性和ReentrantLock与AQS的关联，来深入解读AQS相关独占锁的知识点，同时采取问答的模式来帮助大家理解AQS。由于篇幅原因，本篇文章主要阐述AQS中独占锁的逻辑和Sync Queue，不讲述包含共享锁和Condition Queue的部分（本篇文章核心为AQS原理剖析，只是简单介绍了ReentrantLock，感兴趣同学可以阅读一下ReentrantLock的源码）。</p>
 <p>下面列出本篇文章的大纲和思路，以便于大家更好地理解：</p>
 <p><img src="/2020/02/12/从ReentrantLock的实现看AQS的原理及应用/9d182d944e0889c304ef529ba50a4fcd205214.png" alt="img"></p>
+<a id="more"></a>
 <h2 id="1-ReentrantLock"><a href="#1-ReentrantLock" class="headerlink" title="1 ReentrantLock"></a>1 ReentrantLock</h2><h3 id="1-1-ReentrantLock特性概览"><a href="#1-1-ReentrantLock特性概览" class="headerlink" title="1.1 ReentrantLock特性概览"></a>1.1 ReentrantLock特性概览</h3><p>ReentrantLock意思为可重入锁，指的是一个线程能够对一个临界资源重复加锁。为了帮助大家更好地理解ReentrantLock的特性，我们先将ReentrantLock跟常用的Synchronized进行比较，其特性如下（蓝色部分为本篇文章主要剖析的点）：</p>
 <p><img src="/2020/02/12/从ReentrantLock的实现看AQS的原理及应用/412d294ff5535bbcddc0d979b2a339e6102264.png" alt="img"></p>
 <p>下面通过伪代码，进行更加直观的比较：</p>
@@ -1815,6 +2089,9 @@
 <li>《Java并发编程实战》</li>
 <li><a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">不可不说的Java“锁”事</a></li>
 </ul>
+<blockquote>
+<p>转载自美团技术团队 <a href="https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html" target="_blank" rel="noopener">https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html</a></p>
+</blockquote>
 ]]></content>
       <categories>
         <category>JAVA</category>
@@ -1830,7 +2107,8 @@
     <title>MySQL增删改查都会用到什么锁?</title>
     <url>/2020/02/12/MySQL%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E9%83%BD%E4%BC%9A%E7%94%A8%E5%88%B0%E4%BB%80%E4%B9%88%E9%94%81/</url>
     <content><![CDATA[<p>日常的操作中，增删改查都会使用什么类型的锁？其实这个问题，可以分为两个方面，一方面是读，一方面是写。</p>
-<h1 id="01-读（select）"><a href="#01-读（select）" class="headerlink" title="01 读（select）"></a>01 读（select）</h1><p>  我们先来看读的部分。读的操作，其实分为两种，分别是<strong>一致性读</strong>和<strong>锁定读</strong>，</p>
+<a id="more"></a>
+<h1 id="读（select）"><a href="#读（select）" class="headerlink" title="读（select）"></a>读（select）</h1><p>  我们先来看读的部分。读的操作，其实分为两种，分别是<strong>一致性读</strong>和<strong>锁定读</strong>，</p>
 <p>  这里我们温习一下，一致性读其实就是利用事务的MVCC机制，来读取一份数据的快照，所以有的书上也称之为快照读，一致性读是不加锁的，其他的事务是可以对表中的数据记录进行改动的。一般情况下，常见的读，例如：</p>
 <p>select * from table；</p>
 <p>select * from table left join table2;</p>
@@ -1842,7 +2120,7 @@
 <p>1、在Serializable这种事务的隔离级别下，普通的select操作会升级为select…in share mode；的模式。</p>
 <p>2、在唯一索引上使用唯一的查询条件，会使用记录锁，而不会封锁记录之间的间隔，即不会使用间隙锁。</p>
 <p>3、其他类型的索引使用范围的查询条件或者唯一的查询条件，innodb会自动锁定被扫描的范围，避免索引范围区间内插入新的记录。这块儿可能比较模糊，文章最后面给出各种类型下的加锁测试结果。</p>
-<h1 id="02-写（update、delete、insert）"><a href="#02-写（update、delete、insert）" class="headerlink" title="02 写（update、delete、insert）"></a>02 写（update、delete、insert）</h1><h2 id="关于delete"><a href="#关于delete" class="headerlink" title="关于delete"></a>关于delete</h2><p>  对一条数据做delete的过程实际上是要先在索引的B+树上获取该记录的位置，然后再这个记录所在的位置加X锁，也就是排它锁。</p>
+<h1 id="写（update、delete、insert）"><a href="#写（update、delete、insert）" class="headerlink" title="写（update、delete、insert）"></a>写（update、delete、insert）</h1><h2 id="关于delete"><a href="#关于delete" class="headerlink" title="关于delete"></a>关于delete</h2><p>  对一条数据做delete的过程实际上是要先在索引的B+树上获取该记录的位置，然后再这个记录所在的位置加X锁，也就是排它锁。</p>
 <p>  如果对某个范围内的数据做delete操作，则会在索引B+树上对范围内符合查询条件的记录以及记录之前的区间加next-key锁(本质是记录锁和间隙锁的组合，后面的文章会讲到)。  </p>
 <p>   加完锁之后，再进行delete操作。这个delete操作的本质，其实是先将delete的标识为标识为1，而不是真正进行删除，如果下次这块空间可以复用，则innodb会直接进行复用。</p>
 <p>   更多详情请见：Innodb数据页简介</p>
@@ -1952,43 +2230,7 @@
 <p>上面两种存储引擎在处理多进程数据操作的时候是如何表现的，就是我们接下来要讨论的问题。</p>
 <p>为了让整个描述更加清晰，我们将表级锁和行级锁以及 MyISAM，InnoDB 存储引擎，就形成了一个 2*2 的象限。</p>
 <p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478029.webp" alt="img"></p>
-<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图*</center>
-
-<p>由于 MyISAM 存储引擎不支持行级锁，实际上后面讨论的问题会围绕三个象限的讨论展开。</p>
-<p>从内容上来看，InnoDB 作为使用最多的存储引擎遇到的问题和值得注意的地方较多，也是本文的重点。</p>
-<p>MyISAM 存储引擎和表级锁</p>
-<p>首先，来看第一象限的内容：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212160055676.png" alt="image-20200212160055676"></p>
-<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图-第一象限*</center>
-
-<p>MyISAM 存储引擎支持表级锁，并且支持两种锁模式：</p>
-<ul>
-<li><strong>对 MyISAM 表的读操作（共享锁），</strong>不会阻塞其他进程对同一表的读请求，但会阻塞对其的写请求。当读锁释放后，才会执行其他进程的写操作。</li>
-<li><strong>对 MyISAM 表的写操作（排他锁），</strong>会阻塞其他进程对同一表的读写操作，当该锁释放后，才会执行其他进程的读写操作。</li>
-</ul>
-<h3 id="MyISAM-优化建议"><a href="#MyISAM-优化建议" class="headerlink" title="MyISAM 优化建议"></a>MyISAM 优化建议</h3><p>在使用 MyISAM 存储引擎时。执行 SQL 语句，会自动为 SELECT 语句加上共享锁，为 UDI（更新，删除，插入）操作加上排他锁。</p>
-<p>由于这个特性在多进程并发插入同一张表的时候，就会因为排他锁而进行等待。</p>
-<p>因此可以通过配置 concurrent_insert 系统变量，来控制其并发的插入行为。</p>
-<p><strong>①concurrent_insert=0 时，</strong>不允许并发插入。</p>
-<p><strong>②concurrent_insert=1 时，</strong>如果 MyISAM 表中没有空洞（即表中没有被删除的行），允许一个进程读表时，另一个进程向表的尾部插入记录（MySQL 默认设置）。</p>
-<blockquote>
-<p>注：空洞是行记录被删除以后，只是被标记为“已删除”其存储空间没有被回收，也就是说没有被物理删除。由另外一个进程，异步对这个数据进行删除。</p>
-<p>因为空间长度问题，删除以后的物理空间不能被新的记录所使用，从而形成了空洞。</p>
-</blockquote>
-<p><strong>③concurrent_insert=2 时，</strong>无论 MyISAM 表中有没有空洞，都允许在表尾并发插入记录。</p>
-<p>如果在数据插入的时候，没有并发删除操作的话，可以尝试把 concurrent_insert 设置为 1。</p>
-<p>反之，在数据插入的时候有删除操作且量较大时，也就是会产生“空洞”的时候，就需要把 concurrent_insert 设置为 2。</p>
-<p>另外，当一个进程请求某个 MyISAM 表的读锁，另一个进程也请求同一表的写锁。</p>
-<p>即使读请求先到达，写请求后到达，写请求也会插到读请求之前。因为 MySQL 的默认设置认为，写请求比读请求重要。</p>
-<p>我们可以通过 low_priority_updates 来调节读写行为的优先级：</p>
-<ul>
-<li>数据库以读为主时，要优先保证查询性能时，可通过 low_priority_updates=1 设置读优先级高于写优先级。</li>
-<li>数据库以写为主时，则不用设置 low_priority_updates 参数。</li>
-</ul>
-<h3 id="InnoDB-存储引擎和表级锁"><a href="#InnoDB-存储引擎和表级锁" class="headerlink" title="InnoDB 存储引擎和表级锁"></a>InnoDB 存储引擎和表级锁</h3><p>再来看看第二象限的内容：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493477955.webp" alt="img"></p>
-<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图-第二象限*</center>
-
+<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图<em></em></center><br>由于 MyISAM 存储引擎不支持行级锁，实际上后面讨论的问题会围绕三个象限的讨论展开。<br><br>从内容上来看，InnoDB 作为使用最多的存储引擎遇到的问题和值得注意的地方较多，也是本文的重点。<br><br>MyISAM 存储引擎和表级锁<br><br><br><br>首先，来看第一象限的内容：<br><br><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212160055676.png" alt="image-20200212160055676"><br><br><center>2*2 表行锁，MyISAM，InnoDB 示意图-第一象限<em></em></center><br>MyISAM 存储引擎支持表级锁，并且支持两种锁模式：<br><br>- <strong>对 MyISAM 表的读操作（共享锁），</strong>不会阻塞其他进程对同一表的读请求，但会阻塞对其的写请求。当读锁释放后，才会执行其他进程的写操作。<br>- <strong>对 MyISAM 表的写操作（排他锁），</strong>会阻塞其他进程对同一表的读写操作，当该锁释放后，才会执行其他进程的读写操作。<br><br>### MyISAM 优化建议<br><br>在使用 MyISAM 存储引擎时。执行 SQL 语句，会自动为 SELECT 语句加上共享锁，为 UDI（更新，删除，插入）操作加上排他锁。<br><br>由于这个特性在多进程并发插入同一张表的时候，就会因为排他锁而进行等待。<br><br>因此可以通过配置 concurrent_insert 系统变量，来控制其并发的插入行为。<br><br><strong>①concurrent_insert=0 时，</strong>不允许并发插入。<br><br><strong>②concurrent_insert=1 时，</strong>如果 MyISAM 表中没有空洞（即表中没有被删除的行），允许一个进程读表时，另一个进程向表的尾部插入记录（MySQL 默认设置）。<br><br>&gt; 注：空洞是行记录被删除以后，只是被标记为“已删除”其存储空间没有被回收，也就是说没有被物理删除。由另外一个进程，异步对这个数据进行删除。<br>&gt;<br>&gt; 因为空间长度问题，删除以后的物理空间不能被新的记录所使用，从而形成了空洞。<br><br><br><br><strong>③concurrent_insert=2 时，</strong>无论 MyISAM 表中有没有空洞，都允许在表尾并发插入记录。<br><br><br><br>如果在数据插入的时候，没有并发删除操作的话，可以尝试把 concurrent_insert 设置为 1。<br><br>反之，在数据插入的时候有删除操作且量较大时，也就是会产生“空洞”的时候，就需要把 concurrent_insert 设置为 2。<br><br>另外，当一个进程请求某个 MyISAM 表的读锁，另一个进程也请求同一表的写锁。<br><br>即使读请求先到达，写请求后到达，写请求也会插到读请求之前。因为 MySQL 的默认设置认为，写请求比读请求重要。<br><br>我们可以通过 low_priority_updates 来调节读写行为的优先级：<br><br>- 数据库以读为主时，要优先保证查询性能时，可通过 low_priority_updates=1 设置读优先级高于写优先级。<br>- 数据库以写为主时，则不用设置 low_priority_updates 参数。<br><br>### InnoDB 存储引擎和表级锁<br><br>再来看看第二象限的内容：<br><br><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493477955.webp" alt="img"><br><br><center>2*2 表行锁，MyISAM，InnoDB 示意图-第二象限*</center>
 
 
 <p>InnoDB 存储引擎表锁。当没有对数据表中的索引数据进行查询时，会执行表锁操作。</p>
@@ -2004,12 +2246,7 @@
 <p><strong>InnoDB表锁的实现方式：</strong>假设有一个表 test2，有两个字段分别是 id 和 name。</p>
 <p>没有设置主键同时也没有设置任何索引（index）如下：</p>
 <p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478033.webp" alt="img"></p>
-<center><em>InnoDB 表锁实现方式图</em></center>
-
-<h3 id="InnoDB-存储引擎和行级锁"><a href="#InnoDB-存储引擎和行级锁" class="headerlink" title="InnoDB 存储引擎和行级锁"></a>InnoDB 存储引擎和行级锁</h3><p>第四象限我们使用的比较多，讨论的内容也相对多些：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478031.webp" alt="img"></p>
-<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图-第四象限*</center>
-
+<center><em>InnoDB 表锁实现方式图</em></center><br>### InnoDB 存储引擎和行级锁<br><br>第四象限我们使用的比较多，讨论的内容也相对多些：<br><br><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478031.webp" alt="img"><br><br><center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图-第四象限*</center>
 
 
 <p>InnoDB 存储引擎行锁，当数据查询时针对索引数据进行时，会使用行级锁。</p>
@@ -2023,12 +2260,10 @@
 <center><em>InnoDB 行锁实现方式图</em></center>
 
 
-
 <p>在高并发的情况下，多个事务同时请求更新数据，由于资源被占用等待事务增多。</p>
 <p>如此，会造成性能问题，可以通过 innodb_lock_wait_timeout 来解决。innodb_lock_wait_timeout 是事务等待获取资源的最长时间，单位为秒。如果超过时间还未分配到资源，则会返回应用失败。</p>
 <h3 id="四种锁的兼容情况"><a href="#四种锁的兼容情况" class="headerlink" title="四种锁的兼容情况"></a>四种锁的兼容情况</h3><p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155859778.png" alt="image-20200212155859778"></p>
 <center><em>共享锁，排他锁，意向共享锁，意向排他锁兼容图例</em></center>
-
 
 
 <p>如果一个事务请求的锁模式与当前的锁兼容， InnoDB 就将请求的锁授予该事务；反之， 如果两者不兼容，该事务就要等待锁释放。</p>
@@ -2046,11 +2281,9 @@
 <center><em>间隙锁图</em></center>
 
 
-
 <h4 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a><strong>死锁</strong></h4><p>两个事务都需要获得对方持有的排他锁才能继续完成任务，这种互相等待对方释放资源的情况就是死锁。</p>
 <p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478014.webp" alt="img"></p>
 <center><em>死锁图</em></center>
-
 
 
 <p><strong>检测死锁：</strong>InnoDB 存储引擎能检测到死锁的循环依赖并立即返回一个错误。</p>
@@ -2092,45 +2325,10 @@
 <center><em>脏读例子</em></center>
 
 
-
 <p><strong>不可重复读（non-repeatable read），</strong>在事务范围内，多次查询某条记录，每次得到不同的结果。</p>
 <p>第一个事务中的两次读取数据之间，由于第二个事务的修改，第一个事务两次读到的数据可能不一样。</p>
 <p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155748878.png" alt="image-20200212155748878"></p>
-<center><em>不可重复读例子</em></center>
-
-<p><strong>幻读（phantom read），</strong>是事务非独立执行时发生的一种现象。</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155718409.png" alt="image-20200212155718409"></p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155728846.png" alt="image-20200212155728846"></p>
-<center><em>幻读的例子</em></center>
-
-<p>在同一时间点，数据库允许多个并发事务，同时对数据进行读写操作，会造成数据不一致性。</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493477920.webp" alt="img"></p>
-<center><em>四种隔离级别，解决事务并发问题对照图</em></center>
-
-<p>隔离性就是用来防止这种数据不一致的。事务隔离根据级别不同，从低到高包括：</p>
-<ul>
-<li><p><strong>读未提交（read uncommitted）：</strong>它是最低的事务隔离级别，一个事务还没提交时，它做的变更就能被别的事务看到。有脏读的可能性。</p>
-</li>
-<li><p><strong>读提交（read committed）：</strong>保证一个事物提交后才能被另外一个事务读取。另外一个事务不能读取该事物未提交的数据。可避免脏读的发生，但是可能会造成不可重复读。</p>
-</li>
-<li><p><strong>可重复读（repeatable read MySQL 默认方式）：</strong>多次读取同一范围的数据会返回第一次查询的快照，即使其他事务对该数据做了更新修改。事务在执行期间看到的数据前后必须是一致的。</p>
-</li>
-<li><p><strong>串行化（serializable）：</strong>是最可靠的事务隔离级别。“写”会加“排他锁”，“读”会加“共享锁”。</p>
-<p>当出现读写锁冲突的时候，后访问的事务必须等前一个事务执行完成，所以事务执行是串行的。可避免脏读、不可重复读、幻读。</p>
-</li>
-</ul>
-<h3 id="InnoDB-优化建议"><a href="#InnoDB-优化建议" class="headerlink" title="InnoDB 优化建议"></a>InnoDB 优化建议</h3><p>从锁机制的实现方面来说，InnoDB 的行级锁带来的性能损耗可能比表级锁要高一点，但在并发方面的处理能力远远优于 MyISAM 的表级锁。这也是大多数公司的 MySQL 都是使用 InnoDB 模式的原因。</p>
-<p>但是，InnoDB 也有脆弱的一面，下面提出几个优化建议供大家参考：</p>
-<ul>
-<li>尽可能让数据检索通过索引完成，避免 InnoDB 因为无法通过索引加行锁，而导致升级为表锁的情况。换句话说就是，多用行锁，少用表锁。</li>
-<li>加索引的时候尽量准确，避免造成不必要的锁定影响其他查询。</li>
-<li>尽量减少给予范围的数据检索（间隙锁），避免因为间隙锁带来的影响，锁定了不该锁定的记录。</li>
-<li>尽量控制事务的大小，减少锁定的资源量和锁定时间。</li>
-<li>尽量使用较低级别的事务隔离，减少 MySQL 因为事务隔离带来的成本。</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155627181.png" alt="image-20200212155627181"></p>
-<center><em>MySQL 数据库锁的思维导图</em></center>
-
+<center><em>不可重复读例子</em></center><br><strong>幻读（phantom read），</strong>是事务非独立执行时发生的一种现象。<br><br><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155718409.png" alt="image-20200212155718409"><br><br><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155728846.png" alt="image-20200212155728846"><br><br><center><em>幻读的例子</em></center><br>在同一时间点，数据库允许多个并发事务，同时对数据进行读写操作，会造成数据不一致性。<br><br><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493477920.webp" alt="img"><br><br><center><em>四种隔离级别，解决事务并发问题对照图</em></center><br>隔离性就是用来防止这种数据不一致的。事务隔离根据级别不同，从低到高包括：<br><br>- <strong>读未提交（read uncommitted）：</strong>它是最低的事务隔离级别，一个事务还没提交时，它做的变更就能被别的事务看到。有脏读的可能性。<br><br>- <strong>读提交（read committed）：</strong>保证一个事物提交后才能被另外一个事务读取。另外一个事务不能读取该事物未提交的数据。可避免脏读的发生，但是可能会造成不可重复读。<br><br>- <strong>可重复读（repeatable read MySQL 默认方式）：</strong>多次读取同一范围的数据会返回第一次查询的快照，即使其他事务对该数据做了更新修改。事务在执行期间看到的数据前后必须是一致的。<br><br>- <strong>串行化（serializable）：</strong>是最可靠的事务隔离级别。“写”会加“排他锁”，“读”会加“共享锁”。<br><br>  当出现读写锁冲突的时候，后访问的事务必须等前一个事务执行完成，所以事务执行是串行的。可避免脏读、不可重复读、幻读。<br><br>### InnoDB 优化建议<br><br>从锁机制的实现方面来说，InnoDB 的行级锁带来的性能损耗可能比表级锁要高一点，但在并发方面的处理能力远远优于 MyISAM 的表级锁。这也是大多数公司的 MySQL 都是使用 InnoDB 模式的原因。<br><br>但是，InnoDB 也有脆弱的一面，下面提出几个优化建议供大家参考：<br><br>- 尽可能让数据检索通过索引完成，避免 InnoDB 因为无法通过索引加行锁，而导致升级为表锁的情况。换句话说就是，多用行锁，少用表锁。<br>- 加索引的时候尽量准确，避免造成不必要的锁定影响其他查询。<br>- 尽量减少给予范围的数据检索（间隙锁），避免因为间隙锁带来的影响，锁定了不该锁定的记录。<br>- 尽量控制事务的大小，减少锁定的资源量和锁定时间。<br>- 尽量使用较低级别的事务隔离，减少 MySQL 因为事务隔离带来的成本。<br><br>### 总结<br><br><br><br><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155627181.png" alt="image-20200212155627181"><br><br><center><em>MySQL 数据库锁的思维导图</em></center>
 
 
 <p>MySQL 的锁主要分为表级锁和行级锁。MyISAM 引擎使用的是表级锁，针对表级的共享锁和排他锁，可以通过 concurrent_insert 和 low_priority_updates 参数来优化。</p>
@@ -2150,6 +2348,7 @@
     <title>Linux实用的服务异常处理指南</title>
     <url>/2020/02/12/JAVA%E5%AE%9E%E7%94%A8%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%8C%87%E5%8D%97/</url>
     <content><![CDATA[<h1 id="服务异常的处理流程"><a href="#服务异常的处理流程" class="headerlink" title="服务异常的处理流程"></a>服务异常的处理流程</h1><p><img src="/2020/02/12/JAVA实用的服务异常处理指南/0ce47abcae0d474bb5bf9ebc993e6ad3.jpeg" alt="img"></p>
+<a id="more"></a>
 <h1 id="CPU负载"><a href="#CPU负载" class="headerlink" title="CPU负载"></a>CPU负载</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>针对应用程序，我们通常关注的是内核CPU调度器功能和性能。</p>
 <p>线程的状态分析主要是分析线程的时间用在什么地方，而线程状态的分类一般分为：</p>
 <p>a. on-CPU：执行中，执行中的时间通常又分为用户态时间user和系统态时间sys。<br> b. off-CPU：等待下一轮上CPU，或者等待I/O、锁、换页等等，其状态可以细分为可执行、匿名换页、睡眠、锁、空闲等状态。</p>
@@ -2536,6 +2735,7 @@
     <title>操作系统基础概念简述</title>
     <url>/2020/02/11/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5%E7%AE%80%E8%BF%B0/</url>
     <content><![CDATA[<h2 id="操作系统概念"><a href="#操作系统概念" class="headerlink" title="操作系统概念"></a>操作系统概念</h2><p>大部分操作系统提供了特定的基础概念和抽象，例如进程、地址空间、文件等，它们是需要理解的核心内容。下面我们会简要介绍一些基本概念，为了说明这些概念，我们会不时的从 <code>UNIX</code> 中提出示例，相同的示例也会存在于其他系统中，我们后面会进行介绍。</p>
+<a id="more"></a>
 <h3 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h3><p>操作系统一个很关键的概念就是 <code>进程(Process)</code>。进程的本质就是操作系统执行的一个程序。与每个进程相关的是<code>地址空间(address space)</code>，这是从某个最小值的存储位置(通常是零)到某个最大值的存储位置的列表。在这个地址空间中，进程可以进行读写操作。地址空间中存放有可执行程序，程序所需要的数据和它的栈。与每个进程相关的还有资源集，通常包括<code>寄存器(registers)</code>（寄存器一般包括<code>程序计数器(program counter)</code>和<code>堆栈指针(stack pointer)</code>）、打开文件的清单、突发的报警、有关的进程清单和其他需要执行程序的信息。你可以把进程看作是容纳运行一个程序所有信息的一个容器。</p>
 <p>对进程建立一种直观感觉的方式是考虑建立一种多程序的系统。考虑下面这种情况：用户启动一个视频编辑程序，指示它按照某种格式转换视频，然后再去浏览网页。同时，一个检查电子邮件的后台进程被唤醒并开始运行，这样，我们目前就会有三个活动进程：视频编辑器、Web 浏览器和电子邮件接收程序。操作系统周期性的挂起一个进程然后启动运行另一个进程，这可能是由于过去一两秒钟程序用完了 CPU 分配的时间片，而 CPU 转而运行另外的程序。</p>
 <p>像这样暂时中断进程后，下次应用程序在此启动时，必须要恢复到与中断时刻相同的状态，这在我们用户看起来是习以为常的事情，但是操作系统内部却做了巨大的事情。<strong>这就像和足球比赛一样，一场完美精彩的比赛是可以忽略裁判的存在的</strong>。这也意味着在挂起时该进程的所有信息都要被保存下来。例如，进程可能打开了多个文件进行读取。与每个文件相关联的是提供当前位置的指针（即下一个需要读取的字节或记录的编号）。当进程被挂起时，必须要保存这些指针，以便在重新启动进程后执行的 <code>read</code>调用将能够正确的读取数据。在许多操作系统中，与一个进程有关的所有信息，除了该进程自身地址空间的内容以外，均存放在操作系统的一张表中，称为 <code>进程表(process table)</code>，进程表是数组或者链表结构，当前存在每个进程都要占据其中的一项。</p>
@@ -2960,6 +3160,9 @@
 <li><a href="http://faculty.cs.niu.edu/~hutchins/csci360/hchnotes/psw.htm" target="_blank" rel="noopener">http://faculty.cs.niu.edu/~hutchins/csci360/hchnotes/psw.htm</a></li>
 <li><a href="https://www.computerhope.com/jargon/c/clockcyc.htm" target="_blank" rel="noopener">https://www.computerhope.com/jargon/c/clockcyc.htm</a></li>
 </ol>
+<blockquote>
+<p>转载自<a href="https://blog.csdn.net/qq_36894974/article/details/104246844" target="_blank" rel="noopener">这些操作系统的概念，保你没听过！</a> 作者：cxuann</p>
+</blockquote>
 ]]></content>
       <categories>
         <category>架构</category>
@@ -3030,9 +3233,9 @@
   <entry>
     <title>Java8开发的4个小技巧</title>
     <url>/2020/02/11/Java8%E5%BC%80%E5%8F%91%E7%9A%844%E4%B8%AA%E5%B0%8F%E6%8A%80%E5%B7%A7/</url>
-    <content><![CDATA[<p>原文：<a href="https://dzone.com/articles/java-8-top-tips" target="_blank" rel="noopener">https://dzone.com/articles/java-8-top-tips</a></p>
-<h1 id="Optional"><a href="#Optional" class="headerlink" title="Optional"></a>Optional</h1><p>Optional是一个评价过低的特性，它可以显著的降低代码抛出NullPointerException的可能。它在边界代码(你正在使用的API或者你发布的API)中特别有用。</p>
+    <content><![CDATA[<h1 id="Optional"><a href="#Optional" class="headerlink" title="Optional"></a>Optional</h1><p>Optional是一个评价过低的特性，它可以显著的降低代码抛出NullPointerException的可能。它在边界代码(你正在使用的API或者你发布的API)中特别有用。</p>
 <p>但是对于它的不适当的使用和设计很容易使一个小的变动影响到很多的类，或者降低代码的可阅读性。这里有一些如何更加高效使用Optional的建议。</p>
+<a id="more"></a>
 <h3 id="Optional应该仅仅用在返回类型中"><a href="#Optional应该仅仅用在返回类型中" class="headerlink" title="Optional应该仅仅用在返回类型中"></a>Optional应该仅仅用在返回类型中</h3><p>不要用在参数或者域中。<a href="http://blog.joda.org/2015/08/java-se-8-optional-pragmatic-approach.html" target="_blank" rel="noopener">阅读这篇博文</a>可以看到如何正确使用Optional进行编码。幸运的是，IntelliJ IDEA可以打开inspections去检查你是否遵循了这些推荐规范。</p>
 <p><img src="/2020/02/11/Java8开发的4个小技巧/OptionalParamWarning.png" alt="OptionalParamWarning.png"></p>
 <p>要尽早在Optional出现的地方对它进行处理。IntelliJ IDEA会阻止Optional出现在你代码的各个地方，所以记住一定要在Optional出现的地方就对他进行处理。</p>
@@ -3112,7 +3315,10 @@
 <h4 id="2、集合批量操作"><a href="#2、集合批量操作" class="headerlink" title="2、集合批量操作"></a>2、集合批量操作</h4><p>下面打印list集合的两种写法是等价的。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list = Arrays.asList(<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>);</span><br><span class="line"><span class="keyword">for</span>(String str : list) &#123;    </span><br><span class="line">	System.out.println(str);</span><br><span class="line">&#125;</span><br><span class="line">list.forEach((e) -&gt; System.out.println(e));</span><br></pre></td></tr></table></figure>
 <h4 id="3、流操作"><a href="#3、流操作" class="headerlink" title="3、流操作"></a>3、流操作</h4><p>下面是流查询list集合中等于 <code>&quot;a&quot;</code>的数量。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">list.stream().filter((e) -&gt; <span class="string">"a"</span>.equals(e)).count();</span><br></pre></td></tr></table></figure>]]></content>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">list.stream().filter((e) -&gt; <span class="string">"a"</span>.equals(e)).count();</span><br></pre></td></tr></table></figure>
+<hr>
+<p>原文：<a href="https://dzone.com/articles/java-8-top-tips" target="_blank" rel="noopener">https://dzone.com/articles/java-8-top-tips</a></p>
+]]></content>
       <categories>
         <category>JAVA</category>
       </categories>
@@ -3125,6 +3331,7 @@
     <url>/2020/02/11/%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%B9%B6%E5%8F%91%E5%A4%84%E7%90%86%E8%83%BD%E5%8A%9B/</url>
     <content><![CDATA[<p>以下内容为入门级介绍，意在对老技术作较全的总结而不是较深的研究。主要参考《构建高性能Web站点》一书。</p>
 <h2 id="什么是服务器并发处理能力"><a href="#什么是服务器并发处理能力" class="headerlink" title="什么是服务器并发处理能力"></a>什么是服务器并发处理能力</h2><p>一台服务器在单位时间里能处理的请求越多，服务器的能力越高，也就是服务器并发处理能力越强</p>
+<a id="more"></a>
 <h2 id="有什么方法衡量服务器并发处理能力"><a href="#有什么方法衡量服务器并发处理能力" class="headerlink" title="有什么方法衡量服务器并发处理能力"></a>有什么方法衡量服务器并发处理能力</h2><h3 id="1-吞吐率"><a href="#1-吞吐率" class="headerlink" title="1. 吞吐率"></a><strong>1. 吞吐率</strong></h3><p>吞吐率，单位时间里服务器处理的最大请求数，单位req/s</p>
 <p>从服务器角度，实际并发用户数的可以理解为服务器当前维护的代表不同用户的文件描述符总数，也就是并发连接数。</p>
 <p>服务器一般会限制同时服务的最多用户数，比如apache的MaxClents参数。</p>
@@ -3280,6 +3487,9 @@
 <p>答案是：yes，为什么？看下面的例子：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">operation</span><span class="params">()</span></span>&#123;</span><br><span class="line">    add();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>operation 方法调用了 add 方法，两个方法都是用 synchronized 修饰的，add()  方法可以成功获取当前线程 operation() 方法已经获取到的锁，说明 synchronized 就是可重入锁。</p>
+<blockquote>
+<p>转载自<a href="http://www.cnblogs.com/zengjin93/p/5569556.html" target="_blank" rel="noopener">www.cnblogs.com/zengjin93/p/5569556.html</a> 原作者：潇洒一剑，在原文基础上有修改。</p>
+</blockquote>
 ]]></content>
       <categories>
         <category>架构设计</category>
@@ -3294,6 +3504,7 @@
     <title>分布式基础要点</title>
     <url>/2020/02/06/%E5%88%86%E5%B8%83%E5%BC%8F%E5%9F%BA%E7%A1%80%E8%A6%81%E7%82%B9/</url>
     <content><![CDATA[<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a><strong>概念</strong></h2><h3 id="模型"><a href="#模型" class="headerlink" title="模型"></a><strong>模型</strong></h3><h4 id="节点"><a href="#节点" class="headerlink" title="节点"></a><strong>节点</strong></h4><p>在具体的工程项目中，一个节点往往是一个操作系统上的进程。在本文的模型中，认为节点是一个完整的、不可分的整体，如果某个程序进程实际上由若干相对独立部分构成，则在模型中可以将一个进程划分为多个节点。</p>
+<a id="more"></a>
 <h4 id="异常"><a href="#异常" class="headerlink" title="异常"></a><strong>异常</strong></h4><ol>
 <li><strong>机器宕机</strong>：机器宕机是最常见的异常之一。在大型集群中每日宕机发生的概率为千分之一左右，在实践中，一台宕机的机器恢复的时间通常认为是24 小时，一般需要人工介入重启机器。</li>
 <li><strong>网络异常</strong>：消息丢失，两片节点之间彼此完全无法通信，即出现了“网络分化”；消息乱序，有一定的概率不是按照发送时的顺序依次到达目的节点，考虑使用序列号等机制处理网络消息的乱序问题，使得无效的、过期的网络消息不影响系统的正确性；数据错误；不可靠的TCP，TCP 协议为应用层提供了可靠的、面向连接的传输服务，但在分布式系统的协议设计中不能认为所有网络通信都基于TCP 协议则通信就是可靠的。TCP协议只能保证同一个TCP 链接内的网络消息不乱序，TCP 链接之间的网络消息顺序则无法保证。</li>
@@ -3537,70 +3748,10 @@
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建node节点</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> node</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> data</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">createNode</span><span class="params">(String node, String data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">byte</span>[] bytes = data.getBytes();</span><br><span class="line">            <span class="comment">//同步创建临时顺序节点</span></span><br><span class="line">            String path = zk.create(ZkConstant.ZK_RPC_DATA_PATH+<span class="string">"/"</span>+node+<span class="string">"-"</span>, bytes, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);</span><br><span class="line">            log.info(<span class="string">"create zookeeper node (&#123;&#125; =&gt; &#123;&#125;)"</span>, path, data);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (KeeperException e) &#123;</span><br><span class="line">        	log.error(<span class="string">""</span>, e);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;<span class="keyword">catch</span> (InterruptedException ex)&#123;</span><br><span class="line">        	log.error(<span class="string">""</span>, ex);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>如下面zookeeper中写入的临时顺序节点信息：</p>
 <p><img src="/2020/02/06/分布式基础要点/16934302e903e720" alt="子节点1"></p>
-<center>子节点1</center>
+<center>子节点1</center><br><img src="/2020/02/06/分布式基础要点/16934329ec3a33b7" alt="子节点2"><br><br><center>子节点2</center><br>- com.black.blackrpc.test.HelloWord （发布服务时对外的名称）<br>- 00000000010，00000000011          （zk 顺序节点id）<br>- 127.0.0.1:8888，127.0.0.1:8889    （服务地址端口）<br>- Protostuff                        （序列化方式） 1.0                               （权值，负载均衡策略使用）<br><br>这里使用的是zookeeper的临时顺序节点，为什么使用临时顺序节点。主要是考虑以下两点：<br><br><strong>一、</strong> 当服务提供者异常下线时，与zookeeper的连接会中断，zookeeper服务器会主动删除临时节点，同步给服务消费者。这样就能避免服务消费者去请求异常的服务器。<br><br>&gt; 校稿注： 一般消费方也会在实际发起请求前，对当前获取到的服务提供方节点进行心跳，避免请求连接有问题的节点<br><br><strong>二、</strong> zk下面是不允许创建2个名称相同的zk子节点的，通过顺序节点就能避免创建相同的名称。当然也可以不用顺序节点的方式,直接以com.black.blackrpc.test.HelloWord创建节点，在该节点下创建数据节点。<br><br>下面是zk的数据同步过程：<br><br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 同步节点 （通知模式）</span></span><br><span class="line"><span class="comment">     * syncNodes会通过级联方式，在每次watcher被触发后，就会再挂上新的watcher。完成了类似链式触发的功能</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">syncNodes</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            List&lt;String&gt; nodeList = zk.getChildren(ZkConstant.ZK_RPC_DATA_PATH, <span class="keyword">new</span> Watcher() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(WatchedEvent event)</span> </span>&#123;</span><br><span class="line">                    <span class="keyword">if</span> (event.getType() == Event.EventType.NodeChildrenChanged) &#123;</span><br><span class="line">                    	syncNodes();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">            Map&lt;String,List&lt;String&gt;&gt; map =<span class="keyword">new</span> HashMap&lt;String,List&lt;String&gt;&gt;();</span><br><span class="line">            <span class="keyword">for</span> (String node : nodeList) &#123;</span><br><span class="line">                <span class="keyword">byte</span>[] bytes = zk.getData(ZkConstant.ZK_RPC_DATA_PATH + <span class="string">"/"</span> + node, <span class="keyword">false</span>, <span class="keyword">null</span>);</span><br><span class="line">                String key =node.substring(<span class="number">0</span>, node.lastIndexOf(ZkConstant.DELIMITED_MARKER));</span><br><span class="line">                String value=<span class="keyword">new</span> String(bytes);</span><br><span class="line">                Object object =map.get(key);</span><br><span class="line">                <span class="keyword">if</span>(object!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                	((List&lt;String&gt;)object).add(value);</span><br><span class="line">                &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                	List&lt;String&gt; dataList = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">                	dataList.add(value);</span><br><span class="line">                	map.put(key,dataList);</span><br><span class="line">                &#125;</span><br><span class="line">                log.info(<span class="string">"node: [&#123;&#125;] data: [&#123;&#125;]"</span>,node,<span class="keyword">new</span> String(bytes));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">/**修改连接的地址缓存*/</span></span><br><span class="line">            <span class="keyword">if</span>(MapUtil.isNotEmpty(map))&#123;</span><br><span class="line">                log.debug(<span class="string">"invoking service cache updateing...."</span>);</span><br><span class="line">            	InvokingServiceCache.updataInvokingServiceMap(map);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (KeeperException | InterruptedException e) &#123;</span><br><span class="line">        	log.error(e.toString());</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure><br><br>当数据同步到本地时，一般会写入到本地文件中，防止因zookeeper集群异常下线而无法获取服务提者信息。<br><br>### 通讯与协议<br><br>服务消费者无论是与注册中心还是与服务提供者，都需要存在网络连接传输数据，而这就涉及到通讯。笔者之前也做过这方面的工作，当时使用的是<strong>java BIO</strong>简单的写了一个通讯包，使用场景没有多大的并发,阻塞式的<strong>BIO</strong>也未暴露太多问题。<strong>java BIO</strong>因其建立连接之后会阻塞线程等待数据，这种方式必须以一连接一线程的方式，即客户端有连接请求时服务器端就需要启动一个线程进行处理。当连接数过大时，会建立相当多的线程，性能直线下降。<br><br>- <strong>Java NIO</strong> : 同步非阻塞，服务器实现模式为一个请求一个线程，即客户端发送的连接请求都会注册到多路复用器上，多路复用器轮询到连接有I/O请求时才启动一个线程进行处理。<br><br>- <strong>Java AIO</strong> : 异步非阻塞，服务器实现模式为一个有效请求一个线程，客户端的I/O请求都是由OS先完成了再通知服务器应用去启动线程进行处理， <strong>BIO、NIO、AIO</strong>适用场景分析:<br><br>- <strong>BIO</strong> 用于连接数目比较小且固定的架构，这种方式对服务器资源要求比较高，并发局限于应用中，但程序直观简单易理解。<br><br>- <strong>NIO</strong> 适用于连接数目多且连接比较短（轻操作）的架构，比如聊天服务器，并发局限于应用中，编程比较复杂，目前主流的通讯框架 <strong>Netty、Apache Mina、Grizzl、NIO Framework</strong>都是基于其实现的。<br><br>- <strong>AIO</strong> 用于连接数目多且连接比较长（重操作）的架构，比如图片服务器，文件传输等，充分调用OS参与并发操作，编程比较复杂。<br>   (有兴趣可以看看这篇文章：<a href="https://blog.csdn.net/ty497122758/article/details/78979302" target="_blank" rel="noopener">BIO与NIO、AIO的区别</a> )<br><br>  ​        作为基石的通讯，其实要考虑很多东西。如：丢包粘包的情况，心跳机制，断连重连，消息缓存重发，资源的优雅释放，长连接还是短连接等。<br><br>下面是<strong>Netty</strong>建立服务端，客户端的简单实现：<br><br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> io.netty.bootstrap.ServerBootstrap;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelInitializer;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelPipeline;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.EventLoopGroup;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.nio.NioEventLoopGroup;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.socket.SocketChannel;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.socket.nio.NioServerSocketChannel;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.LengthFieldBasedFrameDecoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.LengthFieldPrepender;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.bytes.ByteArrayDecoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.bytes.ByteArrayEncoder;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="comment">/***</span></span><br><span class="line"><span class="comment"> * netty tcp 服务端</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> v_wangshiyu</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NettyTcpService</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(NettyTcpService<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">	<span class="keyword">private</span> String host;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> port;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NettyTcpService</span><span class="params">(String address)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        String str[] = address.split(<span class="string">":"</span>);</span><br><span class="line">        <span class="keyword">this</span>.host=str[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">this</span>.port=Integer.valueOf(str[<span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">NettyTcpService</span><span class="params">(String host,<span class="keyword">int</span> port)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.host=host;</span><br><span class="line">		<span class="keyword">this</span>.port=port;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">/**用于分配处理业务线程的线程组个数 */</span>  </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BIZGROUPSIZE = Runtime.getRuntime().availableProcessors()*<span class="number">2</span>; <span class="comment">//默认  </span></span><br><span class="line">    <span class="comment">/** 业务出现线程大小*/</span>  </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BIZTHREADSIZE = <span class="number">4</span>;  </span><br><span class="line">    <span class="comment">/* </span></span><br><span class="line"><span class="comment">     * NioEventLoopGroup实际上就是个线程,</span></span><br><span class="line"><span class="comment">     * NioEventLoopGroup在后台启动了n个NioEventLoop来处理Channel事件, </span></span><br><span class="line"><span class="comment">     * 每一个NioEventLoop负责处理m个Channel, </span></span><br><span class="line"><span class="comment">     * NioEventLoopGroup从NioEventLoop数组里挨个取出NioEventLoop来处理Channel</span></span><br><span class="line"><span class="comment">     */</span>  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> EventLoopGroup bossGroup = <span class="keyword">new</span> NioEventLoopGroup(BIZGROUPSIZE);  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> EventLoopGroup workerGroup = <span class="keyword">new</span> NioEventLoopGroup(BIZTHREADSIZE);  </span><br><span class="line">      </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    	log.info(<span class="string">"Netty Tcp Service Run..."</span>);</span><br><span class="line">        ServerBootstrap b = <span class="keyword">new</span> ServerBootstrap();  </span><br><span class="line">        b.group(bossGroup, workerGroup);  </span><br><span class="line">        b.channel(NioServerSocketChannel<span class="class">.<span class="keyword">class</span>)</span>;  </span><br><span class="line">        b.childHandler(<span class="keyword">new</span> ChannelInitializer&lt;SocketChannel&gt;() &#123;  </span><br><span class="line">            <span class="meta">@Override</span>  </span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;  </span><br><span class="line">                ChannelPipeline pipeline = ch.pipeline();  </span><br><span class="line">                pipeline.addLast(<span class="string">"frameDecoder"</span>, <span class="keyword">new</span> LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, <span class="number">0</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">4</span>));  </span><br><span class="line">                pipeline.addLast(<span class="string">"frameEncoder"</span>, <span class="keyword">new</span> LengthFieldPrepender(<span class="number">4</span>));  </span><br><span class="line">                pipeline.addLast(<span class="string">"decoder"</span>, <span class="keyword">new</span> ByteArrayDecoder());  </span><br><span class="line">                pipeline.addLast(<span class="string">"encoder"</span>, <span class="keyword">new</span> ByteArrayEncoder());  </span><br><span class="line">              <span class="comment">//  pipeline.addLast(new Encoder());</span></span><br><span class="line">              <span class="comment">//  pipeline.addLast(new Decoder());</span></span><br><span class="line">                pipeline.addLast(<span class="keyword">new</span> TcpServerHandler());</span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;);  </span><br><span class="line">        b.bind(host, port).sync();  </span><br><span class="line">        log.info(<span class="string">"Netty Tcp Service Success!"</span>);</span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 停止服务并释放资源</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">shutdown</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        workerGroup.shutdownGracefully();  </span><br><span class="line">        bossGroup.shutdownGracefully();  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelHandlerContext;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.SimpleChannelInboundHandler;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 服务端处理器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TcpServerHandler</span> <span class="keyword">extends</span> <span class="title">SimpleChannelInboundHandler</span>&lt;<span class="title">Object</span>&gt;</span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(TcpServerHandler<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">channelRead0</span><span class="params">(ChannelHandlerContext ctx, Object msg)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">byte</span>[] data=(<span class="keyword">byte</span>[])msg;</span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> io.netty.bootstrap.Bootstrap;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.Channel;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelInitializer;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelOption;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelPipeline;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.EventLoopGroup;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.nio.NioEventLoopGroup;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.socket.nio.NioSocketChannel;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.LengthFieldBasedFrameDecoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.LengthFieldPrepender;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.bytes.ByteArrayDecoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.bytes.ByteArrayEncoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.util.concurrent.Future;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * netty tcp 客户端</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> v_wangshiyu</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NettyTcpClient</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(NettyTcpClient<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">	<span class="keyword">private</span> String host;  </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> port;  </span><br><span class="line">	<span class="keyword">private</span> Bootstrap bootstrap;  </span><br><span class="line">	<span class="keyword">private</span> Channel channel;</span><br><span class="line">	<span class="keyword">private</span> EventLoopGroup group;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">NettyTcpClient</span><span class="params">(String host,<span class="keyword">int</span> port)</span></span>&#123;</span><br><span class="line">		bootstrap=getBootstrap();</span><br><span class="line">		channel= getChannel(host,port);</span><br><span class="line">		<span class="keyword">this</span>.host=host;</span><br><span class="line">		<span class="keyword">this</span>.port=port;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getHost</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> host;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getPort</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> port;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/** </span></span><br><span class="line"><span class="comment">     * 初始化Bootstrap </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> </span></span><br><span class="line"><span class="comment">     */</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Bootstrap <span class="title">getBootstrap</span><span class="params">()</span></span>&#123;  </span><br><span class="line">    	group = <span class="keyword">new</span> NioEventLoopGroup();  </span><br><span class="line">        Bootstrap b = <span class="keyword">new</span> Bootstrap();  </span><br><span class="line">        b.group(group).channel(NioSocketChannel<span class="class">.<span class="keyword">class</span>)</span>;  </span><br><span class="line">        b.handler(<span class="keyword">new</span> ChannelInitializer&lt;Channel&gt;() &#123;  </span><br><span class="line">            <span class="meta">@Override</span>  </span><br><span class="line">            <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(Channel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;  </span><br><span class="line">                ChannelPipeline pipeline = ch.pipeline();  </span><br><span class="line">                 <span class="comment">// pipeline.addLast(new Encoder());</span></span><br><span class="line">                 <span class="comment">// pipeline.addLast(new Decoder());</span></span><br><span class="line">                pipeline.addLast(<span class="string">"frameDecoder"</span>, <span class="keyword">new</span> LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, <span class="number">0</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">4</span>));  </span><br><span class="line">                pipeline.addLast(<span class="string">"frameEncoder"</span>, <span class="keyword">new</span> LengthFieldPrepender(<span class="number">4</span>));  </span><br><span class="line">                pipeline.addLast(<span class="string">"decoder"</span>, <span class="keyword">new</span> ByteArrayDecoder());  </span><br><span class="line">                pipeline.addLast(<span class="string">"encoder"</span>, <span class="keyword">new</span> ByteArrayEncoder());  </span><br><span class="line">                </span><br><span class="line">                pipeline.addLast(<span class="string">"handler"</span>, <span class="keyword">new</span> TcpClientHandler());</span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;);  </span><br><span class="line">        b.option(ChannelOption.SO_KEEPALIVE, <span class="keyword">true</span>);  </span><br><span class="line">        <span class="keyword">return</span> b;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 连接，获取Channel</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> host</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> port</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Channel <span class="title">getChannel</span><span class="params">(String host,<span class="keyword">int</span> port)</span></span>&#123;  </span><br><span class="line">        Channel channel = <span class="keyword">null</span>;  </span><br><span class="line">        <span class="keyword">try</span> &#123;  </span><br><span class="line">            channel = bootstrap.connect(host, port).sync().channel();  </span><br><span class="line">            <span class="keyword">return</span> channel;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;  </span><br><span class="line">        	log.info(String.format(<span class="string">"connect Server(IP[%s],PORT[%s]) fail!"</span>, host,port));  </span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;  </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 发送消息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> msg</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">sendMsg</span><span class="params">(Object msg)</span> <span class="keyword">throws</span> Exception </span>&#123;  </span><br><span class="line">        <span class="keyword">if</span>(channel!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            channel.writeAndFlush(msg).sync();  </span><br><span class="line">            log.debug(<span class="string">"msg flush success"</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;  </span><br><span class="line">        	log.debug(<span class="string">"msg flush fail,connect is null"</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 连接断开</span></span><br><span class="line"><span class="comment">     * 并且释放资源</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">disconnectConnect</span><span class="params">()</span></span>&#123;</span><br><span class="line">    	<span class="comment">//channel.close().awaitUninterruptibly();</span></span><br><span class="line">    	Future&lt;?&gt; future =group.shutdownGracefully();<span class="comment">//shutdownGracefully释放所有资源，并且关闭所有当前正在使用的channel</span></span><br><span class="line">    	future.syncUninterruptibly();</span><br><span class="line">    	<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelHandlerContext;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.SimpleChannelInboundHandler;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 客户端处理器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TcpClientHandler</span> <span class="keyword">extends</span> <span class="title">SimpleChannelInboundHandler</span>&lt;<span class="title">Object</span>&gt;</span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(TcpClientHandler<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">channelRead0</span><span class="params">(ChannelHandlerContext ctx, Object msg)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">byte</span>[] data=(<span class="keyword">byte</span>[])msg;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><br>说到通讯就不能不说协议，通信时所遵守的规则，访问什么，传输的格式等都属于协议。作为一个开发人员，应该都了解TCP/IP协议，它是一个网络通信模型，以及一整套网络传输协议家族，是互联网的基础通信架构。也都应该用过http（超文本传输协议），Web服务器传输超文本到本地浏览器的传送协议，该协议建立在TCP/IP协议之上。分布式服务框架服务间的调用也会规定协议。为了支持不同场景，分布式服务框架会存在多种协议，如<strong>Dubbo</strong>就支持7种协议：<strong>dubbo协议(默认)</strong>，<strong>rmi协议</strong>，<strong>hessian协议</strong>，<strong>http协议</strong>，<strong>webservice协议</strong>，<strong>thrift协议</strong>，<strong>memcached协议</strong>，<strong>redis协议</strong>每种协议应对的场景不尽相同，具体场景具体对待。<br> (这里详细介绍了Dubbo 的协议：<a href="https://blog.csdn.net/xiaojin21cen/article/details/79834222" target="_blank" rel="noopener">Dubbo 的7种协议</a> )<br><br>### 服务路由<br><br>分布式服务上线时都是集群组网部署，集群中会存在某个服务的多实例，消费者如何从服务列表中选择合适的服务提供者进行调用，这就涉及到服务路由。分布式服务框架需要能够满足用户灵活的路由需求。<br><br>#### 透明化路由<br><br>很多开源的RPC框架调用者需要配置服务提供者的地址信息，尽管可以通过读取数据库的服务地址列表等方式避免硬编码地址信息，但是消费者依然要感知服务提供者的地址信息，这违反了透明化路由原则。而基于服务注册中心的服务订阅发布，消费者通过主动查询和被动通知的方式获取服务提供者的地址信息，而不再需要通过硬编码方式得到提供者的地址信息，只需要知道当前系统发布了那些服务，而不需要知道服务具体存在于什么位置，这就是透明化路由。  <br><br>#### 负载均衡<br><br>负载均衡策略是服务的重要属性，分布式服务框架通常会提供多种负载均衡策略，同时支持用户扩展负载均衡策略。<br><br>##### 随机<br><br>通常在对等集群组网中，采用随机算法进行负债均衡，随机路由算法消息分发还是比较均匀的，采用JDK提供的<strong>java.util.Random</strong>或者<strong>java.security.SecureRandom</strong>在指定服务提供者列表中生成随机地址。消费者基于随机生成的服务提供者地址进行远程调用。<br><br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 随机</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RandomStrategy</span> <span class="keyword">implements</span> <span class="title">ClusterStrategy</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> RemoteServiceBase <span class="title">select</span><span class="params">(List&lt;RemoteServiceBase&gt; list)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> MAX_LEN = list.size();</span><br><span class="line">        <span class="keyword">int</span> index = RandomUtil.nextInt(MAX_LEN);</span><br><span class="line">        <span class="keyword">return</span> list.get(index);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><br>随机还是存在缺点的，可能出现部分节点的碰撞的概率较高，另外硬件配置差异较大时，会导致各节点负载不均匀。为避免这些问题，需要对服务列表加权，性能好的机器接收的请求的概率应该高于一般机器。<br><br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 加权随机</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WeightingRandomStrategy</span> <span class="keyword">implements</span> <span class="title">ClusterStrategy</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> RemoteServiceBase <span class="title">select</span><span class="params">(List&lt;RemoteServiceBase&gt; list)</span> </span>&#123;</span><br><span class="line">		 <span class="comment">//存放加权后的服务提供者列表</span></span><br><span class="line">        List&lt;RemoteServiceBase&gt; weightingList = <span class="keyword">new</span> ArrayList&lt;RemoteServiceBase&gt;();</span><br><span class="line">        <span class="keyword">for</span> (RemoteServiceBase remoteServiceBase : list) &#123;</span><br><span class="line">            <span class="comment">//扩大10倍</span></span><br><span class="line">            <span class="keyword">int</span> weight = (<span class="keyword">int</span>) (remoteServiceBase.getWeight()*<span class="number">10</span>);</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; weight; i++) &#123;</span><br><span class="line">            	weightingList.add(remoteServiceBase);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> MAX_LEN = weightingList.size();</span><br><span class="line">        <span class="keyword">int</span> index = RandomUtil.nextInt(MAX_LEN);</span><br><span class="line">        <span class="keyword">return</span> weightingList.get(index);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><br>##### 轮询<br><br>逐个请求服务地址，到达边界之后，继续绕接。主要缺点：慢的提供者会累积请求。例如第二台机器很慢，但没挂。当请求第二台机器时被卡在那。久而久之，所有请求都卡在第二台机器上。 轮询策略实现非常简单，顺序循环遍历服务提供者列表，达到边界之后重新归零开始，继续顺序循环。<br><br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 轮询</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PollingStrategy</span> <span class="keyword">implements</span> <span class="title">ClusterStrategy</span> </span>&#123;</span><br><span class="line">	<span class="comment">//计数器</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> Lock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> RemoteServiceBase <span class="title">select</span><span class="params">(List&lt;RemoteServiceBase&gt; list)</span> </span>&#123;</span><br><span class="line">		RemoteServiceBase service = <span class="keyword">null</span>;</span><br><span class="line">	        <span class="keyword">try</span> &#123;</span><br><span class="line">	            lock.tryLock(<span class="number">10</span>, TimeUnit.MILLISECONDS);</span><br><span class="line">	            <span class="comment">//若计数大于服务提供者个数,将计数器归0</span></span><br><span class="line">	            <span class="keyword">if</span> (index &gt;= list.size()) &#123;</span><br><span class="line">	                index = <span class="number">0</span>;</span><br><span class="line">	            &#125;</span><br><span class="line">	            service = list.get(index);</span><br><span class="line">	            index++;</span><br><span class="line">	        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">	            e.printStackTrace();</span><br><span class="line">	        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">	            lock.unlock();</span><br><span class="line">	        &#125;</span><br><span class="line">	      <span class="comment">//兜底,保证程序健壮性,若未取到服务,则直接取第一个</span></span><br><span class="line">	        <span class="keyword">if</span> (service == <span class="keyword">null</span>) &#123;</span><br><span class="line">	            service = list.get(<span class="number">0</span>);</span><br><span class="line">	        &#125;		</span><br><span class="line">        <span class="keyword">return</span> service;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><br>加权轮询的话，需要给服务地址添加权重。<br><br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 加权轮询</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WeightingPollingStrategy</span> <span class="keyword">implements</span> <span class="title">ClusterStrategy</span> </span>&#123;</span><br><span class="line">	<span class="comment">//计数器</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//计数器锁</span></span><br><span class="line">    <span class="keyword">private</span> Lock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RemoteServiceBase <span class="title">select</span><span class="params">(List&lt;RemoteServiceBase&gt; list)</span> </span>&#123;</span><br><span class="line">    	RemoteServiceBase service = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            lock.tryLock(<span class="number">10</span>, TimeUnit.MILLISECONDS);</span><br><span class="line">            <span class="comment">//存放加权后的服务提供者列表</span></span><br><span class="line">            List&lt;RemoteServiceBase&gt; weightingList = <span class="keyword">new</span> ArrayList&lt;RemoteServiceBase&gt;();</span><br><span class="line">            <span class="keyword">for</span> (RemoteServiceBase remoteServiceBase : list) &#123;</span><br><span class="line">                <span class="comment">//扩大10倍</span></span><br><span class="line">                <span class="keyword">int</span> weight = (<span class="keyword">int</span>) (remoteServiceBase.getWeight()*<span class="number">10</span>);</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; weight; i++) &#123;</span><br><span class="line">                	weightingList.add(remoteServiceBase);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//若计数大于服务提供者个数,将计数器归0</span></span><br><span class="line">            <span class="keyword">if</span> (index &gt;= weightingList.size()) &#123;</span><br><span class="line">                index = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            service = weightingList.get(index);</span><br><span class="line">            index++;</span><br><span class="line">            <span class="keyword">return</span> service;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//兜底,保证程序健壮性,若未取到服务,则直接取第一个</span></span><br><span class="line">        <span class="keyword">return</span> list.get(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><br>##### 服务调用时延<br><br>消费者缓存所有服务提供者的调用时延，周期性的计算服务调用平均时延。然后计算每个服务提供者服务调用时延与平均时延的差值，根据差值大小动态调整权重，保证服务时延大的服务提供者接收更少的消息，防止消息堆积。 该策略的特点：保证处理能力强的服务接受更多的消息，通过动态的权重分配消除服务调用时延的震荡范围，使所有服务的调用时延接近平均值，实现负载均衡。<br><br>##### 一致性哈希<br><br>相同参数的请求总是发送到统一服务提供者，当某一台服务提供者宕机时，原本发往跟提供者的请求，基于虚拟节点，平摊到其他提供者，不会引起剧烈变动，平台提供默认的虚拟节点数，可以通过配置文件修改虚拟节点个数。一致性Hash环工作原理如下图所示：<br><br><img src="/2020/02/06/分布式基础要点/169314f26588cc57" alt="一致性哈希">一致性哈希<br><br><br>#### 路由规则<br><br>负载均衡只能保证服务提供者压力的平衡，但是在一些业务场景中需要设置一些过滤规则，比较常用的是基本表达式的条件路由。<br> 通过IP条件表达式配置黑白名单访问控制：consumerIP != 192.168.1.1。<br> 只暴露部分服务提供者，防止这个集群服务都被冲垮，导致其他服务也不可用。例如providerIP = 192.168.3<em>。 读写分离：method=find</em>,list<em>,get</em>,query<em>=&gt;providerIP=192.168.1.</em>。 前后台分离：app=web<em>=&gt;providerIP=192.168.1.</em>,app=java<em>=&gt;providerIP=192.168.2.</em>。 灰度升级：将WEB前台应用理由到新的服务版本上：app=web<em>=&gt;provicerIP=192.168.1.</em>。<br><br>由于篇幅原因这里不细说，还是丢个说的比较详细的文章地址： <a href="https://blog.csdn.net/zhengzhaoyang122/article/details/80842859" target="_blank" rel="noopener">服务路由</a><br><br>### 序列化与反序列化<br><br>把对象转换为字节序列的过程称为序列化，把字节序列恢复为对象的过程称为反序列化。运程调用的时候，我们需要先将Java对象进行序列化，然后通过网络，IO进行传输，当到达目的地之后，再进行反序列化获取到我们想要的结果对象。分布式系统中，传输的对象会很多，这就要求序列化速度快，产生字节序列小的序列化技术。<br> 序列化技术：<strong>Serializable, xml, Jackson, MessagePack, fastjson, Protocol Buffer, Thrift,Gson, Avro,Hessian</strong>等<br><br>- <strong>Serializable</strong> 是java自带的序列化技术，无法跨平台，序列化和反序列化的速度相对较慢。<br>- <strong>XML</strong>技术多平台支持好，常用于与银行交互的报文，但是其字节序列产生较大，不太适合用作分布式通讯框架。<br>- <strong>Fastjson</strong>是Java语言编写的高性能的JSON处理器,由阿里巴巴公司开发,字节序列为json串，可读性好，序列化也速度非常的快。<br>- <strong>Protocol Buffer</strong> 序列化速度非常快，字节序列较小，但是可读性较差。<br>   ( 这里就不一一介绍，有兴趣可以看看这篇文章：<a href="https://www.jianshu.com/p/937883b6b2e5" target="_blank" rel="noopener">序列化技术比较</a> )<br>   一般分布式服务框架会内置多种序列化协议可供选择，如<strong>Dubbo</strong> 支持的7种协议用到的序列化技术就不完全相同。<br><br>### 服务调用<br><br>本地环境下，使用某个接口很简单，直接调用就行。分布式环境下就不是那么简单了，消费者方只会存在接口的定义，没有具体的实现。想要像本地环境下直接调用远程接口那就得耗费一些功夫了，需要用到<strong>远程代理</strong>。<br> 下面是我盗的图：<br><br><br><br><img src="/2020/02/06/分布式基础要点/1692da5592a081c3" alt="远程代理"><center>远程代理</center>
 
-<p><img src="/2020/02/06/分布式基础要点/16934329ec3a33b7" alt="子节点2"></p>
-<center>子节点2</center>
 
-<ul>
-<li>com.black.blackrpc.test.HelloWord （发布服务时对外的名称）</li>
-<li>00000000010，00000000011          （zk 顺序节点id）</li>
-<li>127.0.0.1:8888，127.0.0.1:8889    （服务地址端口）</li>
-<li>Protostuff                        （序列化方式） 1.0                               （权值，负载均衡策略使用）</li>
-</ul>
-<p>这里使用的是zookeeper的临时顺序节点，为什么使用临时顺序节点。主要是考虑以下两点：</p>
-<p><strong>一、</strong> 当服务提供者异常下线时，与zookeeper的连接会中断，zookeeper服务器会主动删除临时节点，同步给服务消费者。这样就能避免服务消费者去请求异常的服务器。</p>
-<blockquote>
-<p>校稿注： 一般消费方也会在实际发起请求前，对当前获取到的服务提供方节点进行心跳，避免请求连接有问题的节点</p>
-</blockquote>
-<p><strong>二、</strong> zk下面是不允许创建2个名称相同的zk子节点的，通过顺序节点就能避免创建相同的名称。当然也可以不用顺序节点的方式,直接以com.black.blackrpc.test.HelloWord创建节点，在该节点下创建数据节点。</p>
-<p>下面是zk的数据同步过程：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 同步节点 （通知模式）</span></span><br><span class="line"><span class="comment">     * syncNodes会通过级联方式，在每次watcher被触发后，就会再挂上新的watcher。完成了类似链式触发的功能</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">syncNodes</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            List&lt;String&gt; nodeList = zk.getChildren(ZkConstant.ZK_RPC_DATA_PATH, <span class="keyword">new</span> Watcher() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(WatchedEvent event)</span> </span>&#123;</span><br><span class="line">                    <span class="keyword">if</span> (event.getType() == Event.EventType.NodeChildrenChanged) &#123;</span><br><span class="line">                    	syncNodes();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">            Map&lt;String,List&lt;String&gt;&gt; map =<span class="keyword">new</span> HashMap&lt;String,List&lt;String&gt;&gt;();</span><br><span class="line">            <span class="keyword">for</span> (String node : nodeList) &#123;</span><br><span class="line">                <span class="keyword">byte</span>[] bytes = zk.getData(ZkConstant.ZK_RPC_DATA_PATH + <span class="string">"/"</span> + node, <span class="keyword">false</span>, <span class="keyword">null</span>);</span><br><span class="line">                String key =node.substring(<span class="number">0</span>, node.lastIndexOf(ZkConstant.DELIMITED_MARKER));</span><br><span class="line">                String value=<span class="keyword">new</span> String(bytes);</span><br><span class="line">                Object object =map.get(key);</span><br><span class="line">                <span class="keyword">if</span>(object!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                	((List&lt;String&gt;)object).add(value);</span><br><span class="line">                &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                	List&lt;String&gt; dataList = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">                	dataList.add(value);</span><br><span class="line">                	map.put(key,dataList);</span><br><span class="line">                &#125;</span><br><span class="line">                log.info(<span class="string">"node: [&#123;&#125;] data: [&#123;&#125;]"</span>,node,<span class="keyword">new</span> String(bytes));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">/**修改连接的地址缓存*/</span></span><br><span class="line">            <span class="keyword">if</span>(MapUtil.isNotEmpty(map))&#123;</span><br><span class="line">                log.debug(<span class="string">"invoking service cache updateing...."</span>);</span><br><span class="line">            	InvokingServiceCache.updataInvokingServiceMap(map);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (KeeperException | InterruptedException e) &#123;</span><br><span class="line">        	log.error(e.toString());</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>当数据同步到本地时，一般会写入到本地文件中，防止因zookeeper集群异常下线而无法获取服务提者信息。</p>
-<h3 id="通讯与协议"><a href="#通讯与协议" class="headerlink" title="通讯与协议"></a>通讯与协议</h3><p>服务消费者无论是与注册中心还是与服务提供者，都需要存在网络连接传输数据，而这就涉及到通讯。笔者之前也做过这方面的工作，当时使用的是<strong>java BIO</strong>简单的写了一个通讯包，使用场景没有多大的并发,阻塞式的<strong>BIO</strong>也未暴露太多问题。<strong>java BIO</strong>因其建立连接之后会阻塞线程等待数据，这种方式必须以一连接一线程的方式，即客户端有连接请求时服务器端就需要启动一个线程进行处理。当连接数过大时，会建立相当多的线程，性能直线下降。</p>
-<ul>
-<li><p><strong>Java NIO</strong> : 同步非阻塞，服务器实现模式为一个请求一个线程，即客户端发送的连接请求都会注册到多路复用器上，多路复用器轮询到连接有I/O请求时才启动一个线程进行处理。</p>
-</li>
-<li><p><strong>Java AIO</strong> : 异步非阻塞，服务器实现模式为一个有效请求一个线程，客户端的I/O请求都是由OS先完成了再通知服务器应用去启动线程进行处理， <strong>BIO、NIO、AIO</strong>适用场景分析:</p>
-</li>
-<li><p><strong>BIO</strong> 用于连接数目比较小且固定的架构，这种方式对服务器资源要求比较高，并发局限于应用中，但程序直观简单易理解。</p>
-</li>
-<li><p><strong>NIO</strong> 适用于连接数目多且连接比较短（轻操作）的架构，比如聊天服务器，并发局限于应用中，编程比较复杂，目前主流的通讯框架 <strong>Netty、Apache Mina、Grizzl、NIO Framework</strong>都是基于其实现的。</p>
-</li>
-<li><p><strong>AIO</strong> 用于连接数目多且连接比较长（重操作）的架构，比如图片服务器，文件传输等，充分调用OS参与并发操作，编程比较复杂。<br> (有兴趣可以看看这篇文章：<a href="https://blog.csdn.net/ty497122758/article/details/78979302" target="_blank" rel="noopener">BIO与NIO、AIO的区别</a> )</p>
-<p>​        作为基石的通讯，其实要考虑很多东西。如：丢包粘包的情况，心跳机制，断连重连，消息缓存重发，资源的优雅释放，长连接还是短连接等。</p>
-</li>
-</ul>
-<p>下面是<strong>Netty</strong>建立服务端，客户端的简单实现：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> io.netty.bootstrap.ServerBootstrap;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelInitializer;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelPipeline;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.EventLoopGroup;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.nio.NioEventLoopGroup;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.socket.SocketChannel;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.socket.nio.NioServerSocketChannel;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.LengthFieldBasedFrameDecoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.LengthFieldPrepender;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.bytes.ByteArrayDecoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.bytes.ByteArrayEncoder;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="comment">/***</span></span><br><span class="line"><span class="comment"> * netty tcp 服务端</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> v_wangshiyu</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NettyTcpService</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(NettyTcpService<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">	<span class="keyword">private</span> String host;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> port;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NettyTcpService</span><span class="params">(String address)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        String str[] = address.split(<span class="string">":"</span>);</span><br><span class="line">        <span class="keyword">this</span>.host=str[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">this</span>.port=Integer.valueOf(str[<span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">NettyTcpService</span><span class="params">(String host,<span class="keyword">int</span> port)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.host=host;</span><br><span class="line">		<span class="keyword">this</span>.port=port;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">/**用于分配处理业务线程的线程组个数 */</span>  </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BIZGROUPSIZE = Runtime.getRuntime().availableProcessors()*<span class="number">2</span>; <span class="comment">//默认  </span></span><br><span class="line">    <span class="comment">/** 业务出现线程大小*/</span>  </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BIZTHREADSIZE = <span class="number">4</span>;  </span><br><span class="line">    <span class="comment">/* </span></span><br><span class="line"><span class="comment">     * NioEventLoopGroup实际上就是个线程,</span></span><br><span class="line"><span class="comment">     * NioEventLoopGroup在后台启动了n个NioEventLoop来处理Channel事件, </span></span><br><span class="line"><span class="comment">     * 每一个NioEventLoop负责处理m个Channel, </span></span><br><span class="line"><span class="comment">     * NioEventLoopGroup从NioEventLoop数组里挨个取出NioEventLoop来处理Channel</span></span><br><span class="line"><span class="comment">     */</span>  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> EventLoopGroup bossGroup = <span class="keyword">new</span> NioEventLoopGroup(BIZGROUPSIZE);  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> EventLoopGroup workerGroup = <span class="keyword">new</span> NioEventLoopGroup(BIZTHREADSIZE);  </span><br><span class="line">      </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    	log.info(<span class="string">"Netty Tcp Service Run..."</span>);</span><br><span class="line">        ServerBootstrap b = <span class="keyword">new</span> ServerBootstrap();  </span><br><span class="line">        b.group(bossGroup, workerGroup);  </span><br><span class="line">        b.channel(NioServerSocketChannel<span class="class">.<span class="keyword">class</span>)</span>;  </span><br><span class="line">        b.childHandler(<span class="keyword">new</span> ChannelInitializer&lt;SocketChannel&gt;() &#123;  </span><br><span class="line">            <span class="meta">@Override</span>  </span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;  </span><br><span class="line">                ChannelPipeline pipeline = ch.pipeline();  </span><br><span class="line">                pipeline.addLast(<span class="string">"frameDecoder"</span>, <span class="keyword">new</span> LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, <span class="number">0</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">4</span>));  </span><br><span class="line">                pipeline.addLast(<span class="string">"frameEncoder"</span>, <span class="keyword">new</span> LengthFieldPrepender(<span class="number">4</span>));  </span><br><span class="line">                pipeline.addLast(<span class="string">"decoder"</span>, <span class="keyword">new</span> ByteArrayDecoder());  </span><br><span class="line">                pipeline.addLast(<span class="string">"encoder"</span>, <span class="keyword">new</span> ByteArrayEncoder());  </span><br><span class="line">              <span class="comment">//  pipeline.addLast(new Encoder());</span></span><br><span class="line">              <span class="comment">//  pipeline.addLast(new Decoder());</span></span><br><span class="line">                pipeline.addLast(<span class="keyword">new</span> TcpServerHandler());</span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;);  </span><br><span class="line">        b.bind(host, port).sync();  </span><br><span class="line">        log.info(<span class="string">"Netty Tcp Service Success!"</span>);</span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 停止服务并释放资源</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">shutdown</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        workerGroup.shutdownGracefully();  </span><br><span class="line">        bossGroup.shutdownGracefully();  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelHandlerContext;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.SimpleChannelInboundHandler;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 服务端处理器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TcpServerHandler</span> <span class="keyword">extends</span> <span class="title">SimpleChannelInboundHandler</span>&lt;<span class="title">Object</span>&gt;</span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(TcpServerHandler<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">channelRead0</span><span class="params">(ChannelHandlerContext ctx, Object msg)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">byte</span>[] data=(<span class="keyword">byte</span>[])msg;</span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> io.netty.bootstrap.Bootstrap;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.Channel;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelInitializer;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelOption;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelPipeline;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.EventLoopGroup;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.nio.NioEventLoopGroup;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.socket.nio.NioSocketChannel;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.LengthFieldBasedFrameDecoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.LengthFieldPrepender;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.bytes.ByteArrayDecoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.bytes.ByteArrayEncoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.util.concurrent.Future;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * netty tcp 客户端</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> v_wangshiyu</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NettyTcpClient</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(NettyTcpClient<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">	<span class="keyword">private</span> String host;  </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> port;  </span><br><span class="line">	<span class="keyword">private</span> Bootstrap bootstrap;  </span><br><span class="line">	<span class="keyword">private</span> Channel channel;</span><br><span class="line">	<span class="keyword">private</span> EventLoopGroup group;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">NettyTcpClient</span><span class="params">(String host,<span class="keyword">int</span> port)</span></span>&#123;</span><br><span class="line">		bootstrap=getBootstrap();</span><br><span class="line">		channel= getChannel(host,port);</span><br><span class="line">		<span class="keyword">this</span>.host=host;</span><br><span class="line">		<span class="keyword">this</span>.port=port;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getHost</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> host;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getPort</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> port;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/** </span></span><br><span class="line"><span class="comment">     * 初始化Bootstrap </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> </span></span><br><span class="line"><span class="comment">     */</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Bootstrap <span class="title">getBootstrap</span><span class="params">()</span></span>&#123;  </span><br><span class="line">    	group = <span class="keyword">new</span> NioEventLoopGroup();  </span><br><span class="line">        Bootstrap b = <span class="keyword">new</span> Bootstrap();  </span><br><span class="line">        b.group(group).channel(NioSocketChannel<span class="class">.<span class="keyword">class</span>)</span>;  </span><br><span class="line">        b.handler(<span class="keyword">new</span> ChannelInitializer&lt;Channel&gt;() &#123;  </span><br><span class="line">            <span class="meta">@Override</span>  </span><br><span class="line">            <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(Channel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;  </span><br><span class="line">                ChannelPipeline pipeline = ch.pipeline();  </span><br><span class="line">                 <span class="comment">// pipeline.addLast(new Encoder());</span></span><br><span class="line">                 <span class="comment">// pipeline.addLast(new Decoder());</span></span><br><span class="line">                pipeline.addLast(<span class="string">"frameDecoder"</span>, <span class="keyword">new</span> LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, <span class="number">0</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">4</span>));  </span><br><span class="line">                pipeline.addLast(<span class="string">"frameEncoder"</span>, <span class="keyword">new</span> LengthFieldPrepender(<span class="number">4</span>));  </span><br><span class="line">                pipeline.addLast(<span class="string">"decoder"</span>, <span class="keyword">new</span> ByteArrayDecoder());  </span><br><span class="line">                pipeline.addLast(<span class="string">"encoder"</span>, <span class="keyword">new</span> ByteArrayEncoder());  </span><br><span class="line">                </span><br><span class="line">                pipeline.addLast(<span class="string">"handler"</span>, <span class="keyword">new</span> TcpClientHandler());</span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;);  </span><br><span class="line">        b.option(ChannelOption.SO_KEEPALIVE, <span class="keyword">true</span>);  </span><br><span class="line">        <span class="keyword">return</span> b;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 连接，获取Channel</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> host</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> port</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Channel <span class="title">getChannel</span><span class="params">(String host,<span class="keyword">int</span> port)</span></span>&#123;  </span><br><span class="line">        Channel channel = <span class="keyword">null</span>;  </span><br><span class="line">        <span class="keyword">try</span> &#123;  </span><br><span class="line">            channel = bootstrap.connect(host, port).sync().channel();  </span><br><span class="line">            <span class="keyword">return</span> channel;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;  </span><br><span class="line">        	log.info(String.format(<span class="string">"connect Server(IP[%s],PORT[%s]) fail!"</span>, host,port));  </span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;  </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 发送消息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> msg</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">sendMsg</span><span class="params">(Object msg)</span> <span class="keyword">throws</span> Exception </span>&#123;  </span><br><span class="line">        <span class="keyword">if</span>(channel!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            channel.writeAndFlush(msg).sync();  </span><br><span class="line">            log.debug(<span class="string">"msg flush success"</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;  </span><br><span class="line">        	log.debug(<span class="string">"msg flush fail,connect is null"</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 连接断开</span></span><br><span class="line"><span class="comment">     * 并且释放资源</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">disconnectConnect</span><span class="params">()</span></span>&#123;</span><br><span class="line">    	<span class="comment">//channel.close().awaitUninterruptibly();</span></span><br><span class="line">    	Future&lt;?&gt; future =group.shutdownGracefully();<span class="comment">//shutdownGracefully释放所有资源，并且关闭所有当前正在使用的channel</span></span><br><span class="line">    	future.syncUninterruptibly();</span><br><span class="line">    	<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelHandlerContext;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.SimpleChannelInboundHandler;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 客户端处理器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TcpClientHandler</span> <span class="keyword">extends</span> <span class="title">SimpleChannelInboundHandler</span>&lt;<span class="title">Object</span>&gt;</span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(TcpClientHandler<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">channelRead0</span><span class="params">(ChannelHandlerContext ctx, Object msg)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">byte</span>[] data=(<span class="keyword">byte</span>[])msg;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>说到通讯就不能不说协议，通信时所遵守的规则，访问什么，传输的格式等都属于协议。作为一个开发人员，应该都了解TCP/IP协议，它是一个网络通信模型，以及一整套网络传输协议家族，是互联网的基础通信架构。也都应该用过http（超文本传输协议），Web服务器传输超文本到本地浏览器的传送协议，该协议建立在TCP/IP协议之上。分布式服务框架服务间的调用也会规定协议。为了支持不同场景，分布式服务框架会存在多种协议，如<strong>Dubbo</strong>就支持7种协议：<strong>dubbo协议(默认)</strong>，<strong>rmi协议</strong>，<strong>hessian协议</strong>，<strong>http协议</strong>，<strong>webservice协议</strong>，<strong>thrift协议</strong>，<strong>memcached协议</strong>，<strong>redis协议</strong>每种协议应对的场景不尽相同，具体场景具体对待。<br> (这里详细介绍了Dubbo 的协议：<a href="https://blog.csdn.net/xiaojin21cen/article/details/79834222" target="_blank" rel="noopener">Dubbo 的7种协议</a> )</p>
-<h3 id="服务路由"><a href="#服务路由" class="headerlink" title="服务路由"></a>服务路由</h3><p>分布式服务上线时都是集群组网部署，集群中会存在某个服务的多实例，消费者如何从服务列表中选择合适的服务提供者进行调用，这就涉及到服务路由。分布式服务框架需要能够满足用户灵活的路由需求。</p>
-<h4 id="透明化路由"><a href="#透明化路由" class="headerlink" title="透明化路由"></a>透明化路由</h4><p>很多开源的RPC框架调用者需要配置服务提供者的地址信息，尽管可以通过读取数据库的服务地址列表等方式避免硬编码地址信息，但是消费者依然要感知服务提供者的地址信息，这违反了透明化路由原则。而基于服务注册中心的服务订阅发布，消费者通过主动查询和被动通知的方式获取服务提供者的地址信息，而不再需要通过硬编码方式得到提供者的地址信息，只需要知道当前系统发布了那些服务，而不需要知道服务具体存在于什么位置，这就是透明化路由。  </p>
-<h4 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h4><p>负载均衡策略是服务的重要属性，分布式服务框架通常会提供多种负载均衡策略，同时支持用户扩展负载均衡策略。</p>
-<h5 id="随机"><a href="#随机" class="headerlink" title="随机"></a>随机</h5><p>通常在对等集群组网中，采用随机算法进行负债均衡，随机路由算法消息分发还是比较均匀的，采用JDK提供的<strong>java.util.Random</strong>或者<strong>java.security.SecureRandom</strong>在指定服务提供者列表中生成随机地址。消费者基于随机生成的服务提供者地址进行远程调用。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 随机</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RandomStrategy</span> <span class="keyword">implements</span> <span class="title">ClusterStrategy</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> RemoteServiceBase <span class="title">select</span><span class="params">(List&lt;RemoteServiceBase&gt; list)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> MAX_LEN = list.size();</span><br><span class="line">        <span class="keyword">int</span> index = RandomUtil.nextInt(MAX_LEN);</span><br><span class="line">        <span class="keyword">return</span> list.get(index);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>随机还是存在缺点的，可能出现部分节点的碰撞的概率较高，另外硬件配置差异较大时，会导致各节点负载不均匀。为避免这些问题，需要对服务列表加权，性能好的机器接收的请求的概率应该高于一般机器。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 加权随机</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WeightingRandomStrategy</span> <span class="keyword">implements</span> <span class="title">ClusterStrategy</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> RemoteServiceBase <span class="title">select</span><span class="params">(List&lt;RemoteServiceBase&gt; list)</span> </span>&#123;</span><br><span class="line">		 <span class="comment">//存放加权后的服务提供者列表</span></span><br><span class="line">        List&lt;RemoteServiceBase&gt; weightingList = <span class="keyword">new</span> ArrayList&lt;RemoteServiceBase&gt;();</span><br><span class="line">        <span class="keyword">for</span> (RemoteServiceBase remoteServiceBase : list) &#123;</span><br><span class="line">            <span class="comment">//扩大10倍</span></span><br><span class="line">            <span class="keyword">int</span> weight = (<span class="keyword">int</span>) (remoteServiceBase.getWeight()*<span class="number">10</span>);</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; weight; i++) &#123;</span><br><span class="line">            	weightingList.add(remoteServiceBase);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> MAX_LEN = weightingList.size();</span><br><span class="line">        <span class="keyword">int</span> index = RandomUtil.nextInt(MAX_LEN);</span><br><span class="line">        <span class="keyword">return</span> weightingList.get(index);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="轮询"><a href="#轮询" class="headerlink" title="轮询"></a>轮询</h5><p>逐个请求服务地址，到达边界之后，继续绕接。主要缺点：慢的提供者会累积请求。例如第二台机器很慢，但没挂。当请求第二台机器时被卡在那。久而久之，所有请求都卡在第二台机器上。 轮询策略实现非常简单，顺序循环遍历服务提供者列表，达到边界之后重新归零开始，继续顺序循环。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 轮询</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PollingStrategy</span> <span class="keyword">implements</span> <span class="title">ClusterStrategy</span> </span>&#123;</span><br><span class="line">	<span class="comment">//计数器</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> Lock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> RemoteServiceBase <span class="title">select</span><span class="params">(List&lt;RemoteServiceBase&gt; list)</span> </span>&#123;</span><br><span class="line">		RemoteServiceBase service = <span class="keyword">null</span>;</span><br><span class="line">	        <span class="keyword">try</span> &#123;</span><br><span class="line">	            lock.tryLock(<span class="number">10</span>, TimeUnit.MILLISECONDS);</span><br><span class="line">	            <span class="comment">//若计数大于服务提供者个数,将计数器归0</span></span><br><span class="line">	            <span class="keyword">if</span> (index &gt;= list.size()) &#123;</span><br><span class="line">	                index = <span class="number">0</span>;</span><br><span class="line">	            &#125;</span><br><span class="line">	            service = list.get(index);</span><br><span class="line">	            index++;</span><br><span class="line">	        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">	            e.printStackTrace();</span><br><span class="line">	        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">	            lock.unlock();</span><br><span class="line">	        &#125;</span><br><span class="line">	      <span class="comment">//兜底,保证程序健壮性,若未取到服务,则直接取第一个</span></span><br><span class="line">	        <span class="keyword">if</span> (service == <span class="keyword">null</span>) &#123;</span><br><span class="line">	            service = list.get(<span class="number">0</span>);</span><br><span class="line">	        &#125;		</span><br><span class="line">        <span class="keyword">return</span> service;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>加权轮询的话，需要给服务地址添加权重。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 加权轮询</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WeightingPollingStrategy</span> <span class="keyword">implements</span> <span class="title">ClusterStrategy</span> </span>&#123;</span><br><span class="line">	<span class="comment">//计数器</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//计数器锁</span></span><br><span class="line">    <span class="keyword">private</span> Lock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RemoteServiceBase <span class="title">select</span><span class="params">(List&lt;RemoteServiceBase&gt; list)</span> </span>&#123;</span><br><span class="line">    	RemoteServiceBase service = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            lock.tryLock(<span class="number">10</span>, TimeUnit.MILLISECONDS);</span><br><span class="line">            <span class="comment">//存放加权后的服务提供者列表</span></span><br><span class="line">            List&lt;RemoteServiceBase&gt; weightingList = <span class="keyword">new</span> ArrayList&lt;RemoteServiceBase&gt;();</span><br><span class="line">            <span class="keyword">for</span> (RemoteServiceBase remoteServiceBase : list) &#123;</span><br><span class="line">                <span class="comment">//扩大10倍</span></span><br><span class="line">                <span class="keyword">int</span> weight = (<span class="keyword">int</span>) (remoteServiceBase.getWeight()*<span class="number">10</span>);</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; weight; i++) &#123;</span><br><span class="line">                	weightingList.add(remoteServiceBase);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//若计数大于服务提供者个数,将计数器归0</span></span><br><span class="line">            <span class="keyword">if</span> (index &gt;= weightingList.size()) &#123;</span><br><span class="line">                index = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            service = weightingList.get(index);</span><br><span class="line">            index++;</span><br><span class="line">            <span class="keyword">return</span> service;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//兜底,保证程序健壮性,若未取到服务,则直接取第一个</span></span><br><span class="line">        <span class="keyword">return</span> list.get(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="服务调用时延"><a href="#服务调用时延" class="headerlink" title="服务调用时延"></a>服务调用时延</h5><p>消费者缓存所有服务提供者的调用时延，周期性的计算服务调用平均时延。然后计算每个服务提供者服务调用时延与平均时延的差值，根据差值大小动态调整权重，保证服务时延大的服务提供者接收更少的消息，防止消息堆积。 该策略的特点：保证处理能力强的服务接受更多的消息，通过动态的权重分配消除服务调用时延的震荡范围，使所有服务的调用时延接近平均值，实现负载均衡。</p>
-<h5 id="一致性哈希-1"><a href="#一致性哈希-1" class="headerlink" title="一致性哈希"></a>一致性哈希</h5><p>相同参数的请求总是发送到统一服务提供者，当某一台服务提供者宕机时，原本发往跟提供者的请求，基于虚拟节点，平摊到其他提供者，不会引起剧烈变动，平台提供默认的虚拟节点数，可以通过配置文件修改虚拟节点个数。一致性Hash环工作原理如下图所示：</p>
-<p><img src="/2020/02/06/分布式基础要点/169314f26588cc57" alt="一致性哈希">一致性哈希</p>
-<h4 id="路由规则"><a href="#路由规则" class="headerlink" title="路由规则"></a>路由规则</h4><p>负载均衡只能保证服务提供者压力的平衡，但是在一些业务场景中需要设置一些过滤规则，比较常用的是基本表达式的条件路由。<br> 通过IP条件表达式配置黑白名单访问控制：consumerIP != 192.168.1.1。<br> 只暴露部分服务提供者，防止这个集群服务都被冲垮，导致其他服务也不可用。例如providerIP = 192.168.3<em>。 读写分离：method=find</em>,list<em>,get</em>,query<em>=&gt;providerIP=192.168.1.</em>。 前后台分离：app=web<em>=&gt;providerIP=192.168.1.</em>,app=java<em>=&gt;providerIP=192.168.2.</em>。 灰度升级：将WEB前台应用理由到新的服务版本上：app=web<em>=&gt;provicerIP=192.168.1.</em>。</p>
-<p>由于篇幅原因这里不细说，还是丢个说的比较详细的文章地址： <a href="https://blog.csdn.net/zhengzhaoyang122/article/details/80842859" target="_blank" rel="noopener">服务路由</a></p>
-<h3 id="序列化与反序列化"><a href="#序列化与反序列化" class="headerlink" title="序列化与反序列化"></a>序列化与反序列化</h3><p>把对象转换为字节序列的过程称为序列化，把字节序列恢复为对象的过程称为反序列化。运程调用的时候，我们需要先将Java对象进行序列化，然后通过网络，IO进行传输，当到达目的地之后，再进行反序列化获取到我们想要的结果对象。分布式系统中，传输的对象会很多，这就要求序列化速度快，产生字节序列小的序列化技术。<br> 序列化技术：<strong>Serializable, xml, Jackson, MessagePack, fastjson, Protocol Buffer, Thrift,Gson, Avro,Hessian</strong>等</p>
-<ul>
-<li><strong>Serializable</strong> 是java自带的序列化技术，无法跨平台，序列化和反序列化的速度相对较慢。</li>
-<li><strong>XML</strong>技术多平台支持好，常用于与银行交互的报文，但是其字节序列产生较大，不太适合用作分布式通讯框架。</li>
-<li><strong>Fastjson</strong>是Java语言编写的高性能的JSON处理器,由阿里巴巴公司开发,字节序列为json串，可读性好，序列化也速度非常的快。</li>
-<li><strong>Protocol Buffer</strong> 序列化速度非常快，字节序列较小，但是可读性较差。<br> ( 这里就不一一介绍，有兴趣可以看看这篇文章：<a href="https://www.jianshu.com/p/937883b6b2e5" target="_blank" rel="noopener">序列化技术比较</a> )<br> 一般分布式服务框架会内置多种序列化协议可供选择，如<strong>Dubbo</strong> 支持的7种协议用到的序列化技术就不完全相同。</li>
-</ul>
-<h3 id="服务调用"><a href="#服务调用" class="headerlink" title="服务调用"></a>服务调用</h3><p>本地环境下，使用某个接口很简单，直接调用就行。分布式环境下就不是那么简单了，消费者方只会存在接口的定义，没有具体的实现。想要像本地环境下直接调用远程接口那就得耗费一些功夫了，需要用到<strong>远程代理</strong>。<br> 下面是我盗的图：</p>
-<p><img src="/2020/02/06/分布式基础要点/1692da5592a081c3" alt="远程代理"><center>远程代理</center></p>
+
 <p>通信时序如下：</p>
 <p><img src="/2020/02/06/分布式基础要点/1692da62bcb186fe" alt="通信时序">通信时序</p>
 <p>消费者端没有具体的实现，需要调用接口时会动态的去创建一个代理类。与spirng集成的情况，那直接在bean构建的时候注入代理类。</p>
@@ -3654,17 +3805,11 @@
 <p>当应用逐渐扩展，出现一个应用使用多个数据源的情况，这个时候本地事务已经无法满足数据一致性的要求。由于多个数据源的同时访问，事务需要跨多个数据源管理，分布式事务应运而生。其中最流行的就是两阶段提交（2PC），分布式事务由事务管理器（TM）统一管理。</p>
 <p>两阶段提交分为准备阶段和提交阶段。</p>
 <p><img src="/2020/02/06/分布式基础要点/5618351-87d7372a81a076d9.webp" alt="img"></p>
-<center>两阶段提交-commit</center>
-
-<p><img src="/2020/02/06/分布式基础要点/5618351-60418578c36b49a6.webp" alt="img"></p>
-<center>两阶段提交-rollback</center>
-
-<p>然而两阶段提交也不能完全保证数据一致性问题，并且有同步阻塞的问题，所以其优化版本三阶段提交（3PC）被发明了出来。</p>
+<p><center>两阶段提交-commit</center><br><img src="/2020/02/06/分布式基础要点/5618351-60418578c36b49a6.webp" alt="img"></p>
+<p><center>两阶段提交-rollback</center><br>然而两阶段提交也不能完全保证数据一致性问题，并且有同步阻塞的问题，所以其优化版本三阶段提交（3PC）被发明了出来。</p>
 <p>#####三阶段提交（3PC）</p>
 <p><img src="/2020/02/06/分布式基础要点/5618351-eda6a74280b005f1.webp" alt="img"></p>
-<center>三阶段提交</center>
-
-<p>然而3PC也只能保证绝大多数情况下的数据一致性。</p>
+<p><center>三阶段提交</center><br>然而3PC也只能保证绝大多数情况下的数据一致性。</p>
 <p>具体分布式事务2PC和3PC的详细介绍请见<a href="https://cloud.tencent.com/developer/article/1334942" target="_blank" rel="noopener">关于分布式事务、两阶段提交协议、三阶提交协议</a>。分布式事务不是本文的重点，故不展开。</p>
 <p>###微服务下的事务管理</p>
 <p>那么，分布式事务2PC或者3PC是否适合于微服务下的事务管理呢？答案是否定的，原因有三点：</p>
@@ -3792,6 +3937,7 @@
     <url>/2020/02/06/HTTP%E5%8D%8F%E8%AE%AE%E8%A6%81%E7%82%B9/</url>
     <content><![CDATA[<p>以下文章来源于Java建设者 ，作者cxuan</p>
 <h2 id="HTTP-内容协商"><a href="#HTTP-内容协商" class="headerlink" title="HTTP 内容协商"></a><strong>HTTP 内容协商</strong></h2><h3 id="什么是内容协商"><a href="#什么是内容协商" class="headerlink" title="什么是内容协商"></a><strong>什么是内容协商</strong></h3><p>在 HTTP 中，<code>内容协商</code>是一种用于在同一 URL 上提供资源的不同表示形式的机制。内容协商机制是指客户端和服务器端就响应的资源内容进行交涉，然后提供给客户端最为适合的资源。内容协商会以响应资源的语言、字符集、编码方式等作为判断的标准。</p>
+<a id="more"></a>
 <p><img src="/2020/02/06/HTTP协议要点/640.webp" alt="img"></p>
 <h3 id="内容协商的种类"><a href="#内容协商的种类" class="headerlink" title="内容协商的种类"></a><strong>内容协商的种类</strong></h3><p>内容协商主要有以下3种类型：</p>
 <ul>
@@ -4644,6 +4790,7 @@
     <url>/2020/02/04/%E4%BD%BF%E7%94%A8Apache-Bench-%E5%92%8C-Gnuplot%E4%BA%A7%E7%94%9F%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E5%9B%BE/</url>
     <content><![CDATA[<p><a href="http://httpd.apache.org/docs/2.2/programs/ab.html" target="_blank" rel="noopener">Apache Beach</a> (ab)是Apache自带的一个性能测试工具，专门用来测试网站的性能， 不仅限于Apache web服务器。</p>
 <p>它可以同时模拟多个并发请求，测试Web服务器的最大承载压力，同时也可以根据Apache Bench提供的测试结果对服务器性能参数进行调整。它可以记录测试数据，其它工具比如Gnuplot可以利用测试数据进行分析。它也可以提供一个summary，可以直观显示当前测试的web服务器的性能。</p>
+<a id="more"></a>
 <h2 id="安装ab"><a href="#安装ab" class="headerlink" title="安装ab"></a>安装ab</h2><p>  ab是Apache httpd的一部分。不同的发行版提供了不同的安装方法。<br>  比如在笔者使用的redhat 6.4上可以查看此工具在哪个包里：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#yum provides /usr/bin/ab</span></span><br><span class="line">......</span><br><span class="line">httpd-tools-2.2.15-30.el6.centos.x86_64 : Tools <span class="keyword">for</span> use with the Apache HTTP</span><br><span class="line">                                        : Server</span><br><span class="line">Repo        : updates</span><br><span class="line">Matched from:</span><br><span class="line">Filename    : /usr/bin/ab</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
 <p>它被打包在httpd-tools包里，安装httpd-tools:</p>
@@ -4682,6 +4829,7 @@
     <title>12个Git高级命令</title>
     <url>/2020/02/04/12%E4%B8%AAGit%E9%AB%98%E7%BA%A7%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>使用Git时常用的命令有pull、commit、push等，貌似很简单。不过，有时你会遇到合并冲突的情况，Git这时会将冲突标记出来，需要你手工来解决。有时，你会不小心将代码提交到错误的分支上，并且又推送到了远程仓库。还有些时候，你需要切换到不同的分支，但Git却不让你这么做，因为还有未保存的修改。如果需要通过另一个分支的提交来为代码打补丁该怎么做呢？本文就将介绍12个Git高级命令，合理使用这些命令可以大大提升应用Git的效率。</p>
+<a id="more"></a>
 <h2 id="1-使用rebase而非merge来拉取上游修改"><a href="#1-使用rebase而非merge来拉取上游修改" class="headerlink" title="1. 使用rebase而非merge来拉取上游修改"></a><strong>1. 使用rebase而非merge来拉取上游修改</strong></h2><p>分支合并会被记录为一次合并提交，这种做法是很有意义的。比如说，可以通过这种方式来标识一个新特性被合并到了发布分支中。不过，当多个团队成员工作在一个项目中并使用常规的git pull来同步分支时，提交时间线就会被不必要的合并提交所污染。更好的做法则是使用git rebase将一个feature分支变基到master分支：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git checkout feature</span><br><span class="line">$ git rebase master</span><br></pre></td></tr></table></figure>
 <p>这么做会将整个feature分支移动到master分支的起点，它会合并master分支上所有新的提交。不过，相比于使用合并提交来说，变基会通过在原来的分支中为每次提交创建全新提交来重写项目历史。变基的主要好处在于你会得到一个更加整洁的项目历史。此外，这里还有关于变基的陷阱的一些讨论。</p>
@@ -4735,6 +4883,7 @@
     <content><![CDATA[<p>CentOS的yum源中没有git，只能自己编译安装，现在记录下编译安装的内容，留给自己备忘。</p>
 <p>确保已安装了依赖的包</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install curl</span><br><span class="line">yum install curl-devel</span><br><span class="line">yum install zlib-devel</span><br><span class="line">yum install openssl-devel</span><br><span class="line">yum install perl</span><br><span class="line">yum install cpio</span><br><span class="line">yum install expat-devel</span><br><span class="line">yum install gettext-devel yum install perl-ExtUtils-CBuilder perl-ExtUtils-MakeMaker</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 <p>下载最新的git包</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget http://www.codemonkey.org.uk/projects/git-snapshots/git/git-latest.tar.gz</span><br><span class="line">tar xzvf git-latest.tar.gz</span><br><span class="line"><span class="built_in">cd</span> git-2011-11-30 ＃你的目录可能不是这个</span><br><span class="line">autoconf</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
 <p>检查下安装的版本，大功告成</p>
@@ -4753,6 +4902,7 @@
     <content><![CDATA[<p>缓存机制在我们的实际研发工作中，被极其广泛地应用，通过这些缓存机制来提升系统交互的效率。简单的总结来说，就是在两个环节或者系统之间，会引入一个cache/buffer做为提升整体效率的角色。</p>
 <p>而 有趣的是，这种缓存机制令人惊奇并且优美的遵循着“几何分形”的规律，也就是几何分形学中的“自相似性”：从整体上看遵循某种组成规律或者特性，同时从每 一个局部看，仍然遵循某种组成的规律或者特性。我们的这些系统，从整体上看遵循了缓存机制，每一个组成的局部也遵循缓存机制。</p>
 <p>等同类比的一个概念，我们常常说的“空间换时间”，牺牲一部分空间代价，来换取整体效率的提升。</p>
+<a id="more"></a>
 <pre class="mermaid">graph LR
 A[A] ==> B(Cache) ==> C[B]
 C[B] ==> B(Cache) ==> A[A]</pre>
@@ -4935,6 +5085,7 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
 <li><a href="https://github.com/electron/i18n/tree/master/content/zh-CN" target="_blank" rel="noopener">中文文档</a></li>
 <li><a href="https://www.w3cschool.cn/electronmanual/wcx31ql6.html" target="_blank" rel="noopener">W3C教程</a></li>
 </ol>
+<a id="more"></a>
 <h1 id="VUE概述"><a href="#VUE概述" class="headerlink" title="VUE概述"></a>VUE概述</h1><p><img src="/2020/01/31/electron-vue开发入门指南/68747470733a2f2f7675656a732e6f72672f696d616765732f6c6f676f2e706e67.png" alt="Vue logo"></p>
 <ol>
 <li><a href="https://github.com/vuejs/vue" target="_blank" rel="noopener">GitHub</a></li>
@@ -5357,13 +5508,14 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
 <li>……</li>
 </ul>
 <p>这些问题在日常开发、维护中可能被很多人忽视（比如有的人遇到上面的问题只是重启服务器或者调大内存，而不会深究问题根源），但能够理解并解决这些问题是Java程序员进阶的必备要求。本文将对一些常用的JVM性能调优监控工具进行介绍，希望能起抛砖引玉之用。</p>
-<h1 id="一、jps-Java-Virtual-Machine-Process-Status-Tool-：-基础工具"><a href="#一、jps-Java-Virtual-Machine-Process-Status-Tool-：-基础工具" class="headerlink" title="一、jps(Java Virtual Machine Process Status Tool)   ： 基础工具"></a>一、jps(Java Virtual Machine Process Status Tool)   ： 基础工具</h1><p>jps主要用来输出JVM中运行的进程状态信息。语法格式如下：</p>
+<a id="more"></a>
+<h1 id="jps-Java-Virtual-Machine-Process-Status-Tool-：-基础工具"><a href="#jps-Java-Virtual-Machine-Process-Status-Tool-：-基础工具" class="headerlink" title="jps(Java Virtual Machine Process Status Tool)   ： 基础工具"></a>jps(Java Virtual Machine Process Status Tool)   ： 基础工具</h1><p>jps主要用来输出JVM中运行的进程状态信息。语法格式如下：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">jps [options] [hostid]</span><br></pre></td></tr></table></figure>
 <p>如果不指定hostid就默认为当前主机或服务器。</p>
 <p>命令行参数选项说明如下：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">-q 不输出类名、Jar名和传入main方法的参数</span><br><span class="line"></span><br><span class="line">-m 输出传入main方法的参数</span><br><span class="line"></span><br><span class="line">-l 输出main类或Jar的全限名</span><br><span class="line"></span><br><span class="line">-v 输出传入JVM的参数</span><br></pre></td></tr></table></figure>
 <p>比如下面：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">root@ubuntu:/# jps -m -l</span><br><span class="line">2458 org.artifactory.standalone.main.Main /usr/local/artifactory-2.2.5/etc/jetty.xml</span><br><span class="line">29920 com.sun.tools.hat.Main -port 9998 /tmp/dump.dat</span><br><span class="line">3149 org.apache.catalina.startup.Bootstrap start</span><br><span class="line">30972 sun.tools.jps.Jps -m -l</span><br><span class="line">8247 org.apache.catalina.startup.Bootstrap start</span><br><span class="line">25687 com.sun.tools.hat.Main -port 9999 dump.dat</span><br><span class="line">21711 mrf-center.jar</span><br></pre></td></tr></table></figure></p>
-<h1 id="二、-jstack"><a href="#二、-jstack" class="headerlink" title="二、 jstack"></a>二、 jstack</h1><p>jstack主要用来查看某个Java进程内的线程堆栈信息。语法格式如下：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">jstack [option] pid</span><br><span class="line">jstack [option] executable core</span><br><span class="line">jstack [option] [server-id@]remote-hostname-or-ip</span><br></pre></td></tr></table></figure></p>
+<h1 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h1><p>jstack主要用来查看某个Java进程内的线程堆栈信息。语法格式如下：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">jstack [option] pid</span><br><span class="line">jstack [option] executable core</span><br><span class="line">jstack [option] [server-id@]remote-hostname-or-ip</span><br></pre></td></tr></table></figure></p>
 <p>命令行参数选项说明如下：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">-l long listings，会打印出额外的锁信息，在发生死锁时可以用jstack -l pid来观察锁持有情况-m mixed mode，不仅会输出Java堆栈信息，还会输出C/C++堆栈信息（比如Native方法）</span><br></pre></td></tr></table></figure></p>
 <p>jstack可以定位到线程堆栈，根据堆栈信息我们可以定位到具体代码，所以它在JVM性能调优中使用得非常多。下面我们来一个实例找出某个Java进程中最耗费CPU的Java线程并定位堆栈信息，用到的命令有ps、top、printf、jstack、grep。<br>第一步先找出Java进程ID，我部署在服务器上的Java应用名称为mrf-center：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">root@ubuntu:/# ps -ef | grep mrf-center | grep -v grep</span><br><span class="line">root     21711     1  1 14:47 pts/3    00:02:10 java -jar mrf-center.jar</span><br></pre></td></tr></table></figure>
@@ -5374,7 +5526,7 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
 <p>得到21742的十六进制值为54ee，下面会用到。<br>OK，下一步终于轮到jstack上场了，它用来输出进程21711的堆栈信息，然后根据线程ID的十六进制值grep，如下：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">root@ubuntu:/# jstack 21711 | grep 54ee</span><br><span class="line">"PollIntervalRetrySchedulerThread" prio=10 tid=0x00007f950043e000 nid=0x54ee in Object.wait() [0x00007f94c6eda000]</span><br></pre></td></tr></table></figure></p>
 <p>可以看到CPU消耗在PollIntervalRetrySchedulerThread这个类的Object.wait()，我找了下我的代码，定位到下面的代码：<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Idle wait</span></span><br><span class="line">getLog().info(<span class="string">"Thread ["</span> + getName() + <span class="string">"] is idle waiting..."</span>);</span><br><span class="line">schedulerThreadState = PollTaskSchedulerThreadState.IdleWaiting;</span><br><span class="line"><span class="keyword">long</span> now = System.currentTimeMillis();</span><br><span class="line"><span class="keyword">long</span> waitTime = now + getIdleWaitTime();</span><br><span class="line"><span class="keyword">long</span> timeUntilContinue = waitTime - now;</span><br><span class="line"><span class="keyword">synchronized</span>(sigLock) &#123;<span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(!halted.get()) &#123;</span><br><span class="line">    sigLock.wait(timeUntilContinue);</span><br><span class="line">    &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (InterruptedException ignore) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>它是轮询任务的空闲等待代码，上面的sigLock.wait(timeUntilContinue)就对应了前面的Object.wait()。</p>
-<h1 id="三、jmap（Memory-Map）和-jhat（Java-Heap-Analysis-Tool）"><a href="#三、jmap（Memory-Map）和-jhat（Java-Heap-Analysis-Tool）" class="headerlink" title="三、jmap（Memory Map）和 jhat（Java Heap Analysis Tool）"></a>三、jmap（Memory Map）和 jhat（Java Heap Analysis Tool）</h1><p>jmap导出堆内存，生产上使用曾经导致过进程hang住的情况(JDK1.7)，分析可能存在侵入内存区间读取时，有一定概率造成影响，建议如果机器有重要任务在运行或者不能立刻重启的进程谨慎使用！<br>然后使用jhat来进行分析<br>jmap语法格式如下：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">jmap [option] pid</span><br><span class="line">jmap [option] executable core</span><br><span class="line">jmap [option] [server-id@]remote-hostname-or-ip</span><br></pre></td></tr></table></figure></p>
+<h1 id="jmap（Memory-Map）和-jhat（Java-Heap-Analysis-Tool）"><a href="#jmap（Memory-Map）和-jhat（Java-Heap-Analysis-Tool）" class="headerlink" title="jmap（Memory Map）和 jhat（Java Heap Analysis Tool）"></a>jmap（Memory Map）和 jhat（Java Heap Analysis Tool）</h1><p>jmap导出堆内存，生产上使用曾经导致过进程hang住的情况(JDK1.7)，分析可能存在侵入内存区间读取时，有一定概率造成影响，建议如果机器有重要任务在运行或者不能立刻重启的进程谨慎使用！<br>然后使用jhat来进行分析<br>jmap语法格式如下：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">jmap [option] pid</span><br><span class="line">jmap [option] executable core</span><br><span class="line">jmap [option] [server-id@]remote-hostname-or-ip</span><br></pre></td></tr></table></figure></p>
 <p>如果运行在64位JVM上，可能需要指定-J-d64命令选项参数。<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">jmap -permstat pid</span><br></pre></td></tr></table></figure></p>
 <p>打印进程的类加载器和类加载器加载的持久代对象信息，输出：类加载器名称、对象是否存活（不可靠）、对象地址、父类加载器、已加载的类大小等信息，如下图：</p>
 <p><img src="/2020/01/27/JVM-性能调优监控工具-jps、jstack、jmap、jhat、jstat、hprof-使用详解/640_2.jpg" alt="img"></p>
@@ -5388,14 +5540,14 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
 <p>注意如果Dump文件太大，可能需要加上-J-Xmx512m这种参数指定最大堆内存，即jhat -J-Xmx512m -port 9998 /tmp/dump.dat。然后就可以在浏览器中输入主机地址:9998查看了：</p>
 <p><img src="/2020/01/27/JVM-性能调优监控工具-jps、jstack、jmap、jhat、jstat、hprof-使用详解/640_3.png" alt="img"></p>
 <p>上面红线框出来的部分大家可以自己去摸索下，最后一项支持OQL（Object Query Language对象查询语言）。</p>
-<h1 id="四、jstat（JVM统计监测工具）"><a href="#四、jstat（JVM统计监测工具）" class="headerlink" title="四、jstat（JVM统计监测工具）"></a>四、jstat（JVM统计监测工具）</h1><p>看看各个区内存和GC的情况<br>语法格式如下：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">jstat [ generalOption | outputOptions vmid [interval[s|ms] [count]] ]</span><br></pre></td></tr></table></figure></p>
+<h1 id="jstat（JVM统计监测工具）"><a href="#jstat（JVM统计监测工具）" class="headerlink" title="jstat（JVM统计监测工具）"></a>jstat（JVM统计监测工具）</h1><p>看看各个区内存和GC的情况<br>语法格式如下：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">jstat [ generalOption | outputOptions vmid [interval[s|ms] [count]] ]</span><br></pre></td></tr></table></figure></p>
 <p>vmid是Java虚拟机ID，在Linux/Unix系统上一般就是进程ID。interval是采样时间间隔。count是采样数目。比如下面输出的是GC信息，采样时间间隔为250ms，采样数为4：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">root@ubuntu:/# jstat -gc 21711 250 4 </span><br><span class="line">S0C    S1C    S0U    S1U      EC       EU        OC         OU       PC     PU    YGC     YGCT    FGC    FGCT     GCT   </span><br><span class="line">192.0  192.0   64.0   0.0    6144.0   1854.9   32000.0     4111.6   55296.0 25472.7    702    0.431   3      0.218    0.649</span><br><span class="line">192.0  192.0   64.0   0.0    6144.0   1972.2   32000.0     4111.6   55296.0 25472.7    702    0.431   3      0.218    0.649</span><br><span class="line">192.0  192.0   64.0   0.0    6144.0   1972.2   32000.0     4111.6   55296.0 25472.7    702    0.431   3      0.218    0.649</span><br><span class="line">192.0  192.0   64.0   0.0    6144.0   2109.7   32000.0     4111.6   55296.0 25472.7    702    0.431   3      0.218    0.649</span><br></pre></td></tr></table></figure></p>
 <p>要明白上面各列的意义，先看JVM堆内存布局：<br><img src="/2020/01/27/JVM-性能调优监控工具-jps、jstack、jmap、jhat、jstat、hprof-使用详解/640_4.jpg" alt="img"></p>
 <p>可以看出：</p>
 <figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">堆内存 = 年轻代 + 年老代 + 永久代</span><br><span class="line">年轻代 = Eden区 + 两个Survivor区（From和To）</span><br></pre></td></tr></table></figure>
 <p>现在来解释各列含义：</p>
 <figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">S0C、S1C、S0U、S1U：Survivor 0/1区容量（Capacity）和使用量（Used）</span><br><span class="line">EC、EU：Eden区容量和使用量</span><br><span class="line">OC、OU：年老代容量和使用量</span><br><span class="line">PC、PU：永久代容量和使用量</span><br><span class="line">YGC、YGT：年轻代GC次数和GC耗时</span><br><span class="line">FGC、FGCT：Full GC次数和Full GC耗时</span><br><span class="line">GCT：GC总耗时</span><br></pre></td></tr></table></figure>
-<h1 id="五、hprof（Heap-CPU-Profiling-Tool）"><a href="#五、hprof（Heap-CPU-Profiling-Tool）" class="headerlink" title="五、hprof（Heap/CPU Profiling Tool）"></a>五、hprof（Heap/CPU Profiling Tool）</h1><p>hprof能够展现CPU使用率，统计堆内存使用情况。<br>语法格式如下：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">java -agentlib:hprof[=options] ToBeProfiledClass</span><br><span class="line">java -Xrunprof[:options] ToBeProfiledClass</span><br><span class="line">javac -J-agentlib:hprof[=options] ToBeProfiledClass</span><br></pre></td></tr></table></figure></p>
+<h1 id="hprof（Heap-CPU-Profiling-Tool）"><a href="#hprof（Heap-CPU-Profiling-Tool）" class="headerlink" title="hprof（Heap/CPU Profiling Tool）"></a>hprof（Heap/CPU Profiling Tool）</h1><p>hprof能够展现CPU使用率，统计堆内存使用情况。<br>语法格式如下：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">java -agentlib:hprof[=options] ToBeProfiledClass</span><br><span class="line">java -Xrunprof[:options] ToBeProfiledClass</span><br><span class="line">javac -J-agentlib:hprof[=options] ToBeProfiledClass</span><br></pre></td></tr></table></figure></p>
 <p>完整的命令选项如下：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Option Name and Value  Description                    Default</span><br><span class="line">---------------------  -----------                    -------</span><br><span class="line">heap=dump|sites|all    heap profiling                 all</span><br><span class="line">cpu=samples|times|old  CPU usage                      off</span><br><span class="line">monitor=y|n            monitor contention             n</span><br><span class="line">format=a|b             text(txt) or binary output     a</span><br><span class="line">file=&lt;file&gt;            write data to file             java.hprof[.txt]</span><br><span class="line">net=&lt;host&gt;:&lt;port&gt;      send data over a socket        off</span><br><span class="line">depth=&lt;size&gt;           stack trace depth              4</span><br><span class="line">interval=&lt;ms&gt;          sample interval in ms          10</span><br><span class="line">cutoff=&lt;value&gt;         output cutoff point            0.0001</span><br><span class="line">lineno=y|n             line number in traces?         y</span><br><span class="line">thread=y|n             thread in traces?              n</span><br><span class="line">doe=y|n                dump on exit?                  y</span><br><span class="line">msa=y|n                Solaris micro state accounting n</span><br><span class="line">force=y|n              force output to &lt;file&gt;         y</span><br><span class="line">verbose=y|n            print messages about dumps     y</span><br></pre></td></tr></table></figure>
 <p>来几个官方指南上的实例。<br>CPU Usage Sampling Profiling(cpu=samples)的例子：<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">java -agentlib:hprof=cpu=samples,interval=20,depth=3 Hello</span><br></pre></td></tr></table></figure></p>
@@ -5420,6 +5572,7 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
     <url>/2020/01/27/Linux%E5%91%BD%E4%BB%A4-netstat/</url>
     <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>netstat 是一个告诉我们系统中所有 tcp/udp/unix socket 连接状态的命令行工具。它会列出所有已经连接或者等待连接状态的连接。 该工具在识别某个应用监听哪个端口时特别有用，我们也能用它来判断某个应用是否正常的在监听某个端口。</p>
 <p>netstat 命令还能显示其它各种各样的网络相关信息，例如路由表， 网卡统计信息， 虚假连接以及多播成员等。</p>
+<a id="more"></a>
 <h1 id="1-检查所有的连接"><a href="#1-检查所有的连接" class="headerlink" title="1 - 检查所有的连接"></a>1 - 检查所有的连接</h1><p>使用 <code>a</code> 选项可以列出系统中的所有连接，</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ netstat -a</span><br></pre></td></tr></table></figure>
 <p>这会显示系统所有的 tcp、udp 以及 unix 连接。</p>
@@ -5464,6 +5617,7 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
     <url>/2019/12/29/memcached%E4%B8%8Eredis%E5%AE%9E%E7%8E%B0%E7%9A%84%E5%AF%B9%E6%AF%94/</url>
     <content><![CDATA[<p>  memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。</p>
 <p>  文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。</p>
+<a id="more"></a>
 <h1 id="1-综述"><a href="#1-综述" class="headerlink" title="1. 综述"></a>1. 综述</h1><p>  读一个软件的源码，首先要弄懂软件是用作干什么的，那memcached和redis是干啥的？众所周知，数据一般会放在数据库中，但是查询数据会相对比较慢，特别是用户很多时，频繁的查询，需要耗费大量的时间。怎么办呢？数据放在哪里查询快？那肯定是内存中。memcached和redis就是将数据存储在内存中，按照key-value的方式查询，可以大幅度提高效率。所以一般它们都用做缓存服务器，缓存常用的数据，需要查询的时候，直接从它们那儿获取，减少查询数据库的次数，提高查询效率。</p>
 <h1 id="2-服务方式"><a href="#2-服务方式" class="headerlink" title="2. 服务方式"></a>2. 服务方式</h1><p>memcached和redis怎么提供服务呢？它们是独立的进程，需要的话，还可以让他们变成daemon进程，所以我们的用户进程要使用memcached和redis的服务的话，就需要进程间通信了。考虑到用户进程和memcached和redis不一定在同一台机器上，所以还需要支持网络间通信。因此，memcached和redis自己本身就是网络服务器，用户进程通过与他们通过网络来传输数据，显然最简单和最常用的就是使用tcp连接了。另外，memcached和redis都支持udp协议。而且当用户进程和memcached和redis在同一机器时，还可以使用unix域套接字通信。</p>
 <h1 id="3-事件模型"><a href="#3-事件模型" class="headerlink" title="3. 事件模型"></a>3. 事件模型</h1><p>下面开始讲他们具体是怎么实现的了。首先来看一下它们的事件模型。</p>
@@ -5554,6 +5708,7 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
     <url>/2019/12/22/%E8%BD%AC%E8%BD%BD-%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%EF%BC%9A%E5%8F%B2%E4%B8%8A%E6%9C%80%E8%AF%A6%E5%B0%BDV2Ray%E6%90%AD%E5%BB%BA%E5%9B%BE%E6%96%87%E6%95%99%E7%A8%8B/</url>
     <content><![CDATA[<p>本文转载自从零开始：<a href="https://www.4spaces.org/digitalocean-build-v2ray-0-1/" target="_blank" rel="noopener">史上最详尽V2Ray搭建图文教程</a>，根据实际服务器配置做部分修改。</p>
 <h2 id="一、服务端安装"><a href="#一、服务端安装" class="headerlink" title="一、服务端安装"></a>一、服务端安装</h2><p>以下所有操作都是使用root用户（普通用户自行sudo）进行操作的，服务器centos7。</p>
+<a id="more"></a>
 <p><strong>1.安装wget</strong></p>
 <p>如提示没有安装wget，在登录完成的窗口输入下面命令并回车进行wget安装：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum -y install wget</span><br></pre></td></tr></table></figure>
@@ -5611,12 +5766,11 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
   <entry>
     <title>详解分布式协调服务 ZooKeeper</title>
     <url>/2018/10/07/%E8%AF%A6%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E5%8D%8F%E8%B0%83%E6%9C%8D%E5%8A%A1-ZooKeeper/</url>
-    <content><![CDATA[<p><code>作者 | Draveness</code></p>
-<p><code>本文作者 Draveness，文章转载自 https://draveness.me/zookeeper-chubby， 对其内容进行过编辑。</code></p>
-<p><code>这篇文章主要会介绍 Zookeeper 的实现原理以及常见的应用</code></p>
+    <content><![CDATA[<p><code>这篇文章主要会介绍 Zookeeper 的实现原理以及常见的应用</code></p>
 <p>在 2006 年，Google 发表了一篇名为 The Chubby lock service for loosely-coupled distributed systems 的论文，其中描述了一个分布式锁服务 Chubby 的设计理念和实现原理；作为 Google 内部的一个基础服务，虽然 Chubby 与 GFS、Bigtable 和 MapReduce 相比并没有那么大的名气，不过它在 Google 内部也是非常重要的基础设施。</p>
 <p><img src="/2018/10/07/详解分布式协调服务-ZooKeeper/FE4VibF0SjfNC55Nwr7XreFBdYW0Q4icTg30dtZEX41yMutAaHrOdtng3gZrnXVS6ib5nUAGWphPdibZibF0xASOWWQ.png" alt="img"></p>
 <p>相比于名不见经传的 Chubby，作者相信 Zookeeper 更被广大开发者所熟知，作为非常出名的分布式协调服务，Zookeeper 有非常多的应用，包括发布订阅、命名服务、分数是协调和分布式锁，这篇文章主要会介绍 Zookeeper 的实现原理以及常见的应用，但是在具体介绍 Zookeeper 的功能和原理之前，我们会简单介绍一下分布式锁服务 Chubby 以及它与 Zookeeper 之间的异同。</p>
+<a id="more"></a>
 <h1 id="Chubby"><a href="#Chubby" class="headerlink" title="Chubby"></a>Chubby</h1><p>作为分布式锁服务，Chubby 的目的就是允许多个客户端对它们的行为进行同步，同时也能够解决客户端的环境相关信息的分发和粗粒度的同步问题，GFS 和 Bigtable 都使用了 Chubby 以解决主节点的选举等问题。在网络上你很难找到关于 Chubby 的相关资料，我们只能从 The Chubby lock service for loosely-coupled distributed systems 一文中窥见它的一些设计思路、技术架构等信息。</p>
 <p>虽然 Chubby 和 Zookeeper 有着比较相似的功能，但是它们的设计理念却非常不同，Chubby 在论文的摘要中写道：</p>
 <blockquote>
@@ -5721,6 +5875,9 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
 <p>作为分布式协调服务，Zookeeper 的应用场景非常广泛，不仅能够用于服务配置的下发、命名服务、协调分布式事务以及分布式锁，还能够用来实现微服务治理中的服务注册以及发现等功能，这些其实都源于 Zookeeper 能够提供高可用的分布式协调服务，能够为客户端提供分布式一致性的支持，在后面的文章中作者也会介绍其他用于分布式协调的服务。</p>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://zookeeper.apache.org/doc/r3.4.4/recipes.html" target="_blank" rel="noopener">https://zookeeper.apache.org/doc/r3.4.4/recipes.html</a></p>
 <p><a href="https://static.googleusercontent.com/media/research.google.com/en//archive/chubby-osdi06.pdf" target="_blank" rel="noopener">https://static.googleusercontent.com/media/research.google.com/en//archive/chubby-osdi06.pdf</a></p>
+<blockquote>
+<p>本文作者 Draveness，文章转载自 <a href="https://draveness.me/zookeeper-chubby" target="_blank" rel="noopener">https://draveness.me/zookeeper-chubby</a> , 对其内容进行过编辑。</p>
+</blockquote>
 ]]></content>
       <categories>
         <category>架构设计</category>
@@ -5735,7 +5892,8 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
     <url>/2018/07/13/Shadowsocks%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BB%A3%E7%90%86/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文讲述如何安装配置Shadowsocks Server，并支持通过代理方式（http/sock v4/5)连接因特网.</p>
 <p><img src="/2018/07/13/Shadowsocks服务器代理/1531388960253.png" alt="1531388960253"></p>
-<p>这里主要阐述服务端通过proxy连接的解决方案，shadowsocks server直连网络的方式比较简单，网上这块资料也比较齐全，不做过多描述，</p>
+<p>这里主要阐述服务端通过proxy连接的解决方案，shadowsocks server直连网络的方式比较简单，网上这块资料也比较齐全，不做过多描述</p>
+<a id="more"></a>
 <h2 id="ssserver代理安装配置"><a href="#ssserver代理安装配置" class="headerlink" title="ssserver代理安装配置"></a>ssserver代理安装配置</h2><h3 id="安装Shadowsocks-Server"><a href="#安装Shadowsocks-Server" class="headerlink" title="安装Shadowsocks Server"></a>安装Shadowsocks Server</h3><p>参考<a href="https://github.com/shadowsocks/shadowsocks/wiki/Install-Shadowsocks-Server-on-Windows" target="_blank" rel="noopener">Install Shadowsocks Server on Windows</a>，</p>
 <p>客户端的安装方式参考<a href="https://github.com/shadowsocks/shadowsocks/wiki/Ports-and-Clients#windows" target="_blank" rel="noopener">Shadowsocks Client安装</a>, 这里主要解决服务端通过代理解决shadowsocks server无法直连网络的问题，客户端这块不做过多描述。</p>
 <h3 id="更新代理脚本"><a href="#更新代理脚本" class="headerlink" title="更新代理脚本"></a>更新代理脚本</h3><p>​    这个问题的解决方案来自github的一个issue <a href="https://github.com/shadowsocks/shadowsocks/issues/771" target="_blank" rel="noopener">通过猴子补丁的方式给ss添加了一个前置代理的功能</a></p>
@@ -5854,6 +6012,7 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
     <url>/2018/06/17/Xshell%E6%98%BE%E7%A4%BAX11%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%95%8C%E9%9D%A2/</url>
     <content><![CDATA[<h3 id="安装Xmanager全家桶"><a href="#安装Xmanager全家桶" class="headerlink" title="安装Xmanager全家桶"></a>安装Xmanager全家桶</h3><p>使用前检查一下是否安装了Xshell、Xstart、Xmanager - Passive，正常安装Xmanager全家桶应该是全的</p>
 <p><img src="/2018/06/17/Xshell显示X11图形化界面/1529248519265.png" alt="1529248519265"></p>
+<a id="more"></a>
 <h3 id="使用XStart登录"><a href="#使用XStart登录" class="headerlink" title="使用XStart登录"></a>使用XStart登录</h3><p>通过SSH的方式尝试登录VPS，</p>
 <p><img src="/2018/06/17/Xshell显示X11图形化界面/1529248581921.png" alt="1529248581921"></p>
 <p>正常成功后会这样提示</p>
@@ -5941,10 +6100,10 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
   <entry>
     <title>Hexo集成Algolia搜索插件</title>
     <url>/2018/06/01/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/</url>
-    <content><![CDATA[<p><strong><em>本文转载自</em></strong><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/" target="_blank" rel="noopener">Hexo集成Algolia搜索插件</a></p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>个人博客自从2016年10月21日搭建以来，迄今为止已经有49 篇日志了。虽然不是很多篇文章，但是搜索站内的内容已经力不从心了。</p>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>个人博客自从2016年10月21日搭建以来，迄今为止已经有49 篇日志了。虽然不是很多篇文章，但是搜索站内的内容已经力不从心了。</p>
 <p>搜索了网上很多关于“Hexo 站内搜索”的内容，发现大部分都是使用<a href="https://swiftype.com/" target="_blank" rel="noopener">Swiftype</a>，但是发现Swiftype 搜索只有15 天的免费，之后就需要开始收费了。</p>
 <p>因为只是为自己的<a href="https://jobbym.github.io/" target="_blank" rel="noopener">个人博客 </a>使用站内搜索，所以希望找一个类似与Swiftype 的，但是<strong>免费的</strong>站内搜索。最后找了Algolia 这个免费版本替代。</p>
+<a id="more"></a>
 <p>下面简单说下搭建过程：</p>
 <h2 id="搭建过程"><a href="#搭建过程" class="headerlink" title="搭建过程"></a>搭建过程</h2><h3 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h3><p>如果你的Next 版本为5.1.0 之后，可以使用Algolia。如果不是，请先升级到5.1.0 版本之后</p>
 <h3 id="一个Algolia-帐号"><a href="#一个Algolia-帐号" class="headerlink" title="一个Algolia 帐号"></a>一个Algolia 帐号</h3><p><a href="https://www.algolia.com/users/sign_in" target="_blank" rel="noopener">官网地址</a> 使用GitHub 或Google 帐号登录。<br><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_login.jpg" target="_blank" rel="noopener"><img src="/2018/06/01/Hexo集成Algolia搜索插件/algolia_login.jpg" alt="img"></a></p>
@@ -5969,6 +6128,8 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
 <li><a href="https://github.com/iissnan/hexo-theme-next/wiki/Swiftype%E7%AB%99%E5%86%85%E6%90%9C%E7%B4%A2" target="_blank" rel="noopener">Swiftype站内搜索</a></li>
 <li><a href="http://theme-next.iissnan.com/third-party-services.html" target="_blank" rel="noopener">Next 第三方服务集成</a></li>
 </ol>
+<hr>
+<p><strong><em>本文转载自</em></strong><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/" target="_blank" rel="noopener">Hexo集成Algolia搜索插件</a></p>
 ]]></content>
       <categories>
         <category>Hexo使用攻略</category>
@@ -6018,6 +6179,7 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
     <content><![CDATA[<p><em>编者注：我们发现了比较有趣的系列文章<a href="http://segmentfault.com/a/1190000000349384" target="_blank" rel="noopener">《30天学习30种新技术》</a>，准备翻译，一天一篇更新，年终礼包。以下是第一天技术的译文。</em></p>
 <hr>
 <p>我决定将第一天的学习主题选为<a href="http://bower.io/" target="_blank" rel="noopener">Bower</a>。</p>
+<a id="more"></a>
 <p><img src="/2018/05/26/Day-1-Bower-——-管理你的客户端依赖关系/bVbC4e.jpg" alt="img-1"></p>
 <hr>
 <h2 id="什么是Bower？"><a href="#什么是Bower？" class="headerlink" title="什么是Bower？"></a>什么是Bower？</h2><p>Bower是一个客户端技术的软件包管理器，它可用于搜索、安装和卸载如JavaScript、HTML、CSS之类的网络资源。其他一些建立在Bower基础之上的开发工具，如YeoMan和Grunt，这个会在以后的文章中介绍。</p>
@@ -6086,6 +6248,7 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
     <title>30天学习30种新技术系列</title>
     <url>/2018/05/26/30-%E5%A4%A9%E5%AD%A6%E4%B9%A0-30-%E7%A7%8D%E6%96%B0%E6%8A%80%E6%9C%AF%E7%B3%BB%E5%88%97/</url>
     <content><![CDATA[<p>编者注：我们发现了比较有趣的系列文章《30 天学习 30 种新技术》，准备翻译，一天一篇更新，年终礼包。以下是译文，英文标题表示还未翻译，附原文链接；中文标题表示已翻译，附译文链接。</p>
+<a id="more"></a>
 <p>更新：全系列已经全部翻译完成。</p>
 <blockquote>
 <p>让你 30 天学习 30 种新技术，你会觉得这是挑战吗？</p>
@@ -6141,6 +6304,7 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
     <url>/2018/05/26/%E6%95%99%E4%BD%A0%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%EF%BC%8CHexo-Github/</url>
     <content><![CDATA[<h1 id="什么是-Hexo？"><a href="#什么是-Hexo？" class="headerlink" title="什么是 Hexo？"></a>什么是 Hexo？</h1><p><a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">https://hexo.io/zh-cn/docs/</a></p>
 <p>Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。</p>
+<a id="more"></a>
 <h1 id="一、配置Github"><a href="#一、配置Github" class="headerlink" title="一、配置Github"></a>一、配置Github</h1><p>首先注册、登录 <a href="https://github.com/" target="_blank" rel="noopener">https://github.com/</a></p>
 <p>记住自己的Username（很重要）</p>
 <p>然后右上角选择 Create a new repository <a href="https://github.com/new" target="_blank" rel="noopener">https://github.com/new</a></p>
@@ -6266,6 +6430,7 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
     <title>Hexo Hello World</title>
     <url>/2018/05/26/hexo-hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<a id="more"></a>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
@@ -6304,6 +6469,7 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
 <li><a href="https://zh.wikipedia.org/wiki/Markdown" target="_blank" rel="noopener">Markdown wikipedia 介绍</a></li>
 <li><a href="http://fletcherpenney.net/multimarkdown/" target="_blank" rel="noopener">MultiMarkdown</a> 引入更多标记特性和输出选项的改进版Markdown</li>
 </ul>
+<a id="more"></a>
 <h1 id="why-markdown"><a href="#why-markdown" class="headerlink" title="why markdown"></a>why markdown</h1><ul>
 <li>纯文本，兼容性极强，可以用任意文本编辑器打开.</li>
 <li>语法简单（the syntax is so simple you can barely call it “syntax.”），零学习成本，极好的可读性，让你专注于文字写作而不是页面排版，并且兼容 HTML，simple but powerful .</li>

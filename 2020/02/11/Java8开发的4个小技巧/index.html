@@ -121,13 +121,13 @@
 
 
 
-  <meta name="description" content="原文：https://dzone.com/articles/java-8-top-tips OptionalOptional是一个评价过低的特性，它可以显著的降低代码抛出NullPointerException的可能。它在边界代码(你正在使用的API或者你发布的API)中特别有用。 但是对于它的不适当的使用和设计很容易使一个小的变动影响到很多的类，或者降低代码的可阅读性。这里有一些如何更加高效使用">
+  <meta name="description" content="OptionalOptional是一个评价过低的特性，它可以显著的降低代码抛出NullPointerException的可能。它在边界代码(你正在使用的API或者你发布的API)中特别有用。 但是对于它的不适当的使用和设计很容易使一个小的变动影响到很多的类，或者降低代码的可阅读性。这里有一些如何更加高效使用Optional的建议。">
 <meta name="keywords" content="JAVA8">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java8开发的4个小技巧">
 <meta property="og:url" content="https://vincentruan.github.io/2020/02/11/Java8开发的4个小技巧/index.html">
 <meta property="og:site_name" content="星辰大海">
-<meta property="og:description" content="原文：https://dzone.com/articles/java-8-top-tips OptionalOptional是一个评价过低的特性，它可以显著的降低代码抛出NullPointerException的可能。它在边界代码(你正在使用的API或者你发布的API)中特别有用。 但是对于它的不适当的使用和设计很容易使一个小的变动影响到很多的类，或者降低代码的可阅读性。这里有一些如何更加高效使用">
+<meta property="og:description" content="OptionalOptional是一个评价过低的特性，它可以显著的降低代码抛出NullPointerException的可能。它在边界代码(你正在使用的API或者你发布的API)中特别有用。 但是对于它的不适当的使用和设计很容易使一个小的变动影响到很多的类，或者降低代码的可阅读性。这里有一些如何更加高效使用Optional的建议。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/11/Java8开发的4个小技巧/OptionalParamWarning.png">
 <meta property="og:image" content="https://www.rowkey.me/images/blog_images/java8/OptionalUseImmediately.png">
@@ -152,10 +152,10 @@
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/11/Java8开发的4个小技巧/StreamBefore.png">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/11/Java8开发的4个小技巧/StreamAfter.png">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/11/Java8开发的4个小技巧/640-1581423585086.webp">
-<meta property="og:updated_time" content="2020-02-24T07:31:01.555Z">
+<meta property="og:updated_time" content="2020-02-25T15:09:15.042Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java8开发的4个小技巧">
-<meta name="twitter:description" content="原文：https://dzone.com/articles/java-8-top-tips OptionalOptional是一个评价过低的特性，它可以显著的降低代码抛出NullPointerException的可能。它在边界代码(你正在使用的API或者你发布的API)中特别有用。 但是对于它的不适当的使用和设计很容易使一个小的变动影响到很多的类，或者降低代码的可阅读性。这里有一些如何更加高效使用">
+<meta name="twitter:description" content="OptionalOptional是一个评价过低的特性，它可以显著的降低代码抛出NullPointerException的可能。它在边界代码(你正在使用的API或者你发布的API)中特别有用。 但是对于它的不适当的使用和设计很容易使一个小的变动影响到很多的类，或者降低代码的可阅读性。这里有一些如何更加高效使用Optional的建议。">
 <meta name="twitter:image" content="https://vincentruan.github.io/2020/02/11/Java8开发的4个小技巧/OptionalParamWarning.png">
 
 
@@ -444,7 +444,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-24 15:31:01" itemprop="dateModified" datetime="2020-02-24T15:31:01+08:00">2020-02-24</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -523,9 +523,9 @@
       
 
       
-        <p>原文：<a href="https://dzone.com/articles/java-8-top-tips" target="_blank" rel="noopener">https://dzone.com/articles/java-8-top-tips</a></p>
-<h1 id="Optional"><a href="#Optional" class="headerlink" title="Optional"></a>Optional</h1><p>Optional是一个评价过低的特性，它可以显著的降低代码抛出NullPointerException的可能。它在边界代码(你正在使用的API或者你发布的API)中特别有用。</p>
+        <h1 id="Optional"><a href="#Optional" class="headerlink" title="Optional"></a>Optional</h1><p>Optional是一个评价过低的特性，它可以显著的降低代码抛出NullPointerException的可能。它在边界代码(你正在使用的API或者你发布的API)中特别有用。</p>
 <p>但是对于它的不适当的使用和设计很容易使一个小的变动影响到很多的类，或者降低代码的可阅读性。这里有一些如何更加高效使用Optional的建议。</p>
+<a id="more"></a>
 <h3 id="Optional应该仅仅用在返回类型中"><a href="#Optional应该仅仅用在返回类型中" class="headerlink" title="Optional应该仅仅用在返回类型中"></a>Optional应该仅仅用在返回类型中</h3><p>不要用在参数或者域中。<a href="http://blog.joda.org/2015/08/java-se-8-optional-pragmatic-approach.html" target="_blank" rel="noopener">阅读这篇博文</a>可以看到如何正确使用Optional进行编码。幸运的是，IntelliJ IDEA可以打开inspections去检查你是否遵循了这些推荐规范。</p>
 <p><img src="/2020/02/11/Java8开发的4个小技巧/OptionalParamWarning.png" alt="OptionalParamWarning.png"></p>
 <p>要尽早在Optional出现的地方对它进行处理。IntelliJ IDEA会阻止Optional出现在你代码的各个地方，所以记住一定要在Optional出现的地方就对他进行处理。</p>
@@ -606,6 +606,9 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = Arrays.asList(<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>);</span><br><span class="line"><span class="keyword">for</span>(String str : list) &#123;    </span><br><span class="line">	System.out.println(str);</span><br><span class="line">&#125;</span><br><span class="line">list.forEach((e) -&gt; System.out.println(e));</span><br></pre></td></tr></table></figure>
 <h4 id="3、流操作"><a href="#3、流操作" class="headerlink" title="3、流操作"></a>3、流操作</h4><p>下面是流查询list集合中等于 <code>&quot;a&quot;</code>的数量。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list.stream().filter((e) -&gt; <span class="string">"a"</span>.equals(e)).count();</span><br></pre></td></tr></table></figure>
+<hr>
+<p>原文：<a href="https://dzone.com/articles/java-8-top-tips" target="_blank" rel="noopener">https://dzone.com/articles/java-8-top-tips</a></p>
+
       
     </div>
 
@@ -989,7 +992,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   

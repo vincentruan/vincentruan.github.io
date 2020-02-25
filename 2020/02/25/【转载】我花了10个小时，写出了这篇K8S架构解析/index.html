@@ -121,13 +121,13 @@
 
 
 
-  <meta name="description" content="原文转载自51CTO技术栈，崔皓，我花了10个小时，写出了这篇K8S架构解析  互联网技术飞速发展的今天，为了承载请求的高并发和业务的多样性，微服务的架构成了各个公司的标配。  每个微服务通过 Docker 进行发布，随着业务的发展，系统中遍布着各种各样的容器。于是，容器的资源调度，部署运行，扩容缩容就是我们要面临的问题。 基于 Kubernetes 作为容器集群的管理平台被广泛应用，今天我们一起">
+  <meta name="description" content="互联网技术飞速发展的今天，为了承载请求的高并发和业务的多样性，微服务的架构成了各个公司的标配。  每个微服务通过 Docker 进行发布，随着业务的发展，系统中遍布着各种各样的容器。于是，容器的资源调度，部署运行，扩容缩容就是我们要面临的问题。 基于 Kubernetes 作为容器集群的管理平台被广泛应用，今天我们一起来看看 Kubernetes 的架构中有那些常用的组件以及运行原理。">
 <meta name="keywords" content="微服务,架构,k8s">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【转载】我花了10个小时，写出了这篇K8S架构解析">
 <meta property="og:url" content="https://vincentruan.github.io/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/index.html">
 <meta property="og:site_name" content="星辰大海">
-<meta property="og:description" content="原文转载自51CTO技术栈，崔皓，我花了10个小时，写出了这篇K8S架构解析  互联网技术飞速发展的今天，为了承载请求的高并发和业务的多样性，微服务的架构成了各个公司的标配。  每个微服务通过 Docker 进行发布，随着业务的发展，系统中遍布着各种各样的容器。于是，容器的资源调度，部署运行，扩容缩容就是我们要面临的问题。 基于 Kubernetes 作为容器集群的管理平台被广泛应用，今天我们一起">
+<meta property="og:description" content="互联网技术飞速发展的今天，为了承载请求的高并发和业务的多样性，微服务的架构成了各个公司的标配。  每个微服务通过 Docker 进行发布，随着业务的发展，系统中遍布着各种各样的容器。于是，容器的资源调度，部署运行，扩容缩容就是我们要面临的问题。 基于 Kubernetes 作为容器集群的管理平台被广泛应用，今天我们一起来看看 Kubernetes 的架构中有那些常用的组件以及运行原理。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612508509.webp">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612580738.webp">
@@ -147,10 +147,10 @@
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582613324973.webp">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582613344698.webp">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612449248.webp">
-<meta property="og:updated_time" content="2020-02-25T07:53:58.107Z">
+<meta property="og:updated_time" content="2020-02-25T15:09:15.057Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【转载】我花了10个小时，写出了这篇K8S架构解析">
-<meta name="twitter:description" content="原文转载自51CTO技术栈，崔皓，我花了10个小时，写出了这篇K8S架构解析  互联网技术飞速发展的今天，为了承载请求的高并发和业务的多样性，微服务的架构成了各个公司的标配。  每个微服务通过 Docker 进行发布，随着业务的发展，系统中遍布着各种各样的容器。于是，容器的资源调度，部署运行，扩容缩容就是我们要面临的问题。 基于 Kubernetes 作为容器集群的管理平台被广泛应用，今天我们一起">
+<meta name="twitter:description" content="互联网技术飞速发展的今天，为了承载请求的高并发和业务的多样性，微服务的架构成了各个公司的标配。  每个微服务通过 Docker 进行发布，随着业务的发展，系统中遍布着各种各样的容器。于是，容器的资源调度，部署运行，扩容缩容就是我们要面临的问题。 基于 Kubernetes 作为容器集群的管理平台被广泛应用，今天我们一起来看看 Kubernetes 的架构中有那些常用的组件以及运行原理。">
 <meta name="twitter:image" content="https://vincentruan.github.io/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612508509.webp">
 
 
@@ -422,7 +422,7 @@
                 
               
 
-              <time title="创建时间：2020-02-25 15:40:31 / 修改时间：15:53:58" itemprop="dateCreated datePublished" datetime="2020-02-25T15:40:31+08:00">2020-02-25</time>
+              <time title="创建时间：2020-02-25 15:40:31 / 修改时间：23:09:15" itemprop="dateCreated datePublished" datetime="2020-02-25T15:40:31+08:00">2020-02-25</time>
             
 
             
@@ -506,20 +506,56 @@
       
 
       
-        <p>原文转载自51CTO技术栈，崔皓，我花了10个小时，<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&amp;mid=2655827885&amp;idx=1&amp;sn=47feb253e0aa012023d6f421572a04b3&amp;chksm=bd74fa7a8a03736c08e43b4e7082c3763c0e64491e7b7ef3ddd9f3756cfa5e536730f8f022e8&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">写出了这篇K8S架构解析</a></p>
-<blockquote>
+        <blockquote>
 <p>互联网技术飞速发展的今天，为了承载请求的高并发和业务的多样性，微服务的架构成了各个公司的标配。</p>
 </blockquote>
 <p>每个微服务通过 Docker 进行发布，随着业务的发展，系统中遍布着各种各样的容器。于是，容器的资源调度，部署运行，扩容缩容就是我们要面临的问题。</p>
 <p>基于 Kubernetes 作为容器集群的管理平台被广泛应用，今天我们一起来看看 Kubernetes 的架构中有那些常用的组件以及运行原理。</p>
+<a id="more"></a>
 <h1 id="Kubernetes-架构概述"><a href="#Kubernetes-架构概述" class="headerlink" title="Kubernetes 架构概述"></a>Kubernetes 架构概述</h1><p>Kubernetes 是用来管理容器集群的平台。既然是管理集群，那么就存在被管理节点，针对每个 Kubernetes 集群都由一个 Master 负责管理和控制集群节点。</p>
 <p>我们通过 Master 对每个节点 Node 发送命令。简单来说，Master 就是管理者，Node 就是被管理者。</p>
 <p>Node 可以是一台机器或者一台虚拟机。在 Node 上面可以运行多个 Pod，Pod 是 Kubernetes 管理的最小单位，同时每个 Pod 可以包含多个容器（Docker）。</p>
 <p>通过下面的 Kubernetes 架构简图可以看到 Master 和 Node 之间的关系：</p>
 <p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612508509.webp" alt="img"></p>
-<center><i>Kubernetes 架构简图</i></center><br>通常我们都是通过 kubectl 对 Kubernetes 下命令的，它通过 APIServer 去调用各个进程来完成对 Node 的部署和控制。<br><br>APIServer 的核心功能是对核心对象（例如：Pod，Service，RC）的增删改查操作，同时也是集群内模块之间数据交换的枢纽。<br><br>它包括了常用的 API，访问（权限）控制，注册，信息存储（etcd）等功能。在它的下面我们可以看到 Scheduler，它将待调度的 Pod 绑定到 Node 上，并将绑定信息写入 etcd 中。<br><br>etcd 包含在 APIServer 中，用来存储资源信息。接下来就是 Controller Manager 了，如果说 Kubernetes 是一个自动化运行的系统，那么就需要有一套管理规则来控制这套系统。<br><br>Controller Manager 就是这个管理者，或者说是控制者。它包括 8 个 Controller，分别对应着副本，节点，资源，命名空间，服务等等。<br><br>紧接着，Scheduler 会把 Pod 调度到 Node 上，调度完以后就由 kubelet 来管理 Node 了。<br><br>kubelet 用于处理 Master 下发到 Node 的任务（即 Scheduler 的调度任务），同时管理 Pod 及 Pod 中的容器。<br><br>在完成资源调度以后，kubelet 进程也会在 APIServer 上注册 Node 信息，定期向 Master 汇报 Node 信息，并通过 cAdvisor 监控容器和节点资源。<br><br>由于，微服务的部署都是分布式的，所以对应的 Pod 以及容器的部署也是。为了能够方便地找到这些 Pod 或者容器，引入了 Service（kube-proxy）进程，它来负责反向代理和负载均衡的实施。<br><br>上面就是 Kubernetes 架构的简易说明，涉及到了一些核心概念以及简单的信息流动。<br><br>将一些功能收录到了 APIServer 中，这个简图比官网的图显得简单一些，主要是方便大家记忆。<br><br>后面我们会用一个简单的例子，带大家把 Kubernetes 的概念的由来做深入的了解。<br><br># 从一个例子开始<br><br>假设使用 Kubernetes 部署 Tomcat 和 MySQL 服务到两个 Node 上面。其中 Tomcat 服务生成两个实例也就是生成两个 Pod，用来对其做水平扩展。<br><br>MySQL 只部署一个实例，也就是一个 Pod。可以通过外网访问 Tomcat，而 Tomcat 可以在内网访问 MySQL。<br><br><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612580738.webp" alt="img"><br><br><center><i>例子示意图</i></center><br>这里我们假设 Kubernetes 和 Docker 的安装都已经完成，并且镜像文件都已经准备好了。重点看 Kubernetes 如何部署和管理容器。<br><br># kubectl 和 APIServer<br><br>既然我们要完成上面的例子，接下来就要部署两个应用。<br><br>首先，根据要部署的应用建立 Replication Controller（RC）。RC 是用来声明应用副本的个数，也就是 Pod 的个数。<br><br>按照上面的例子，Tomcat 的 RC 就是 2，MySQL 的 RC 就是 1。<br><br>由于 kubectl 作为用户接口向 Kubernetes 下发指令，那么指令是通过“.yaml”的配置文件编写的。<br><br>定义 ysql-rc.yaml 的配置文件来描述 MySQL 的 RC：<br><br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">V1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ReplicationController</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">mysql#RC的名称，全局唯一</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="string">replicas:1</span> <span class="comment">#Pod 副本的期待数量</span></span><br><span class="line"><span class="attr">selector :</span></span><br><span class="line"><span class="attr">app:</span> <span class="string">mysql</span></span><br><span class="line"> <span class="attr">template:</span> <span class="comment">#Pod模版，用这个模版来创建Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">labels:</span></span><br><span class="line"><span class="string">app:mysql#Pod副本的标签</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="string">containers:#容器定义部分</span></span><br><span class="line">     <span class="string">-name:mysql</span></span><br><span class="line"><span class="string">Image:mysql#容器对应的DockerImage</span></span><br><span class="line">      <span class="attr">Ports:</span></span><br><span class="line">      <span class="string">-containerPort:3306#容器应用监听的端口号</span></span><br><span class="line">      <span class="string">Env:#注入容器的环境变量</span></span><br><span class="line">      <span class="string">-name:MYSQL_ROOT_PASSWORD</span></span><br><span class="line">      <span class="string">Value:”123456”</span></span><br></pre></td></tr></table></figure><br><br>从上面的配置文件可以看出，需要对这个 RC 定义一个名字，以及期望的副本数，以及容器中的镜像文件。然后通过 kubectl 作为客户端的 cli 工具，执行这个配置文件。<br><br><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612852256.webp" alt="img"><br><br><center><i>通过 kubectl 执行 RC 配置文件</i></center><br>执行了上面的命令以后，Kubernetes 会帮助我们部署副本 MySQL 的 Pod 到 Node。<br><br>此时先不着急看结果，回到最开始的架构图，可以看到 kubectl 会向 Master 中的 APIServer 发起命令，看看 APIServer 的结构和信息的传递吧。<br><br><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612887167.png" alt="img"><br><br>Kubernetes API Server 通过一个名为 kube-apiserver 的进程提供服务，该进程运行在 Master 上。<br><br>可以通过 Master 的 8080 端口访问 kube-apiserver 进程，它提供 REST 服务。<br><br>因此可以通过命令行工具 kubectl 来与 Kubernetes APIServer 交互，它们之间的接口是 RESTful API。<br><br><strong>APIServer 的架构从上到下分为四层</strong>：<br><br>- <strong>API 层：</strong>主要以 REST 方式提供各种 API 接口，针对 Kubernetes 资源对象的 CRUD 和 Watch 等主要 API，还有健康检查、UI、日志、性能指标等运维监控相关的 API。<br>- <strong>访问控制层：</strong>负责身份鉴权，核准用户对资源的访问权限，设置访问逻辑（Admission Control）。<br>- <strong>注册表层：</strong>选择要访问的资源对象。PS：Kubernetes 把所有资源对象都保存在注册表（Registry）中，例如：Pod，Service，Deployment 等等。<br>- <strong>etcd 数据库：</strong>保存创建副本的信息。用来持久化 Kubernetes 资源对象的 Key-Value 数据库。<br><br><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612449162.webp" alt="img"><br><br><center><i>APIServer 分层架构图</i></center>
-
-<p>当 kubectl 用 Create 命令建立 Pod 时，是通过 APIServer 中的 API 层调用对应的 RESTAPI 方法。</p>
+<p><center><i>Kubernetes 架构简图</i></center><br>通常我们都是通过 kubectl 对 Kubernetes 下命令的，它通过 APIServer 去调用各个进程来完成对 Node 的部署和控制。</p>
+<p>APIServer 的核心功能是对核心对象（例如：Pod，Service，RC）的增删改查操作，同时也是集群内模块之间数据交换的枢纽。</p>
+<p>它包括了常用的 API，访问（权限）控制，注册，信息存储（etcd）等功能。在它的下面我们可以看到 Scheduler，它将待调度的 Pod 绑定到 Node 上，并将绑定信息写入 etcd 中。</p>
+<p>etcd 包含在 APIServer 中，用来存储资源信息。接下来就是 Controller Manager 了，如果说 Kubernetes 是一个自动化运行的系统，那么就需要有一套管理规则来控制这套系统。</p>
+<p>Controller Manager 就是这个管理者，或者说是控制者。它包括 8 个 Controller，分别对应着副本，节点，资源，命名空间，服务等等。</p>
+<p>紧接着，Scheduler 会把 Pod 调度到 Node 上，调度完以后就由 kubelet 来管理 Node 了。</p>
+<p>kubelet 用于处理 Master 下发到 Node 的任务（即 Scheduler 的调度任务），同时管理 Pod 及 Pod 中的容器。</p>
+<p>在完成资源调度以后，kubelet 进程也会在 APIServer 上注册 Node 信息，定期向 Master 汇报 Node 信息，并通过 cAdvisor 监控容器和节点资源。</p>
+<p>由于，微服务的部署都是分布式的，所以对应的 Pod 以及容器的部署也是。为了能够方便地找到这些 Pod 或者容器，引入了 Service（kube-proxy）进程，它来负责反向代理和负载均衡的实施。</p>
+<p>上面就是 Kubernetes 架构的简易说明，涉及到了一些核心概念以及简单的信息流动。</p>
+<p>将一些功能收录到了 APIServer 中，这个简图比官网的图显得简单一些，主要是方便大家记忆。</p>
+<p>后面我们会用一个简单的例子，带大家把 Kubernetes 的概念的由来做深入的了解。</p>
+<h1 id="从一个例子开始"><a href="#从一个例子开始" class="headerlink" title="从一个例子开始"></a>从一个例子开始</h1><p>假设使用 Kubernetes 部署 Tomcat 和 MySQL 服务到两个 Node 上面。其中 Tomcat 服务生成两个实例也就是生成两个 Pod，用来对其做水平扩展。</p>
+<p>MySQL 只部署一个实例，也就是一个 Pod。可以通过外网访问 Tomcat，而 Tomcat 可以在内网访问 MySQL。</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612580738.webp" alt="img"></p>
+<p><center><i>例子示意图</i></center><br>这里我们假设 Kubernetes 和 Docker 的安装都已经完成，并且镜像文件都已经准备好了。重点看 Kubernetes 如何部署和管理容器。</p>
+<h1 id="kubectl-和-APIServer"><a href="#kubectl-和-APIServer" class="headerlink" title="kubectl 和 APIServer"></a>kubectl 和 APIServer</h1><p>既然我们要完成上面的例子，接下来就要部署两个应用。</p>
+<p>首先，根据要部署的应用建立 Replication Controller（RC）。RC 是用来声明应用副本的个数，也就是 Pod 的个数。</p>
+<p>按照上面的例子，Tomcat 的 RC 就是 2，MySQL 的 RC 就是 1。</p>
+<p>由于 kubectl 作为用户接口向 Kubernetes 下发指令，那么指令是通过“.yaml”的配置文件编写的。</p>
+<p>定义 ysql-rc.yaml 的配置文件来描述 MySQL 的 RC：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">V1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ReplicationController</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">mysql#RC的名称，全局唯一</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="string">replicas:1</span> <span class="comment">#Pod 副本的期待数量</span></span><br><span class="line"><span class="attr">selector :</span></span><br><span class="line"><span class="attr">app:</span> <span class="string">mysql</span></span><br><span class="line"> <span class="attr">template:</span> <span class="comment">#Pod模版，用这个模版来创建Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">labels:</span></span><br><span class="line"><span class="string">app:mysql#Pod副本的标签</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="string">containers:#容器定义部分</span></span><br><span class="line">     <span class="string">-name:mysql</span></span><br><span class="line"><span class="string">Image:mysql#容器对应的DockerImage</span></span><br><span class="line">      <span class="attr">Ports:</span></span><br><span class="line">      <span class="string">-containerPort:3306#容器应用监听的端口号</span></span><br><span class="line">      <span class="string">Env:#注入容器的环境变量</span></span><br><span class="line">      <span class="string">-name:MYSQL_ROOT_PASSWORD</span></span><br><span class="line">      <span class="string">Value:”123456”</span></span><br></pre></td></tr></table></figure>
+<p>从上面的配置文件可以看出，需要对这个 RC 定义一个名字，以及期望的副本数，以及容器中的镜像文件。然后通过 kubectl 作为客户端的 cli 工具，执行这个配置文件。</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612852256.webp" alt="img"></p>
+<p><center><i>通过 kubectl 执行 RC 配置文件</i></center><br>执行了上面的命令以后，Kubernetes 会帮助我们部署副本 MySQL 的 Pod 到 Node。</p>
+<p>此时先不着急看结果，回到最开始的架构图，可以看到 kubectl 会向 Master 中的 APIServer 发起命令，看看 APIServer 的结构和信息的传递吧。</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612887167.png" alt="img"></p>
+<p>Kubernetes API Server 通过一个名为 kube-apiserver 的进程提供服务，该进程运行在 Master 上。</p>
+<p>可以通过 Master 的 8080 端口访问 kube-apiserver 进程，它提供 REST 服务。</p>
+<p>因此可以通过命令行工具 kubectl 来与 Kubernetes APIServer 交互，它们之间的接口是 RESTful API。</p>
+<p><strong>APIServer 的架构从上到下分为四层</strong>：</p>
+<ul>
+<li><strong>API 层：</strong>主要以 REST 方式提供各种 API 接口，针对 Kubernetes 资源对象的 CRUD 和 Watch 等主要 API，还有健康检查、UI、日志、性能指标等运维监控相关的 API。</li>
+<li><strong>访问控制层：</strong>负责身份鉴权，核准用户对资源的访问权限，设置访问逻辑（Admission Control）。</li>
+<li><strong>注册表层：</strong>选择要访问的资源对象。PS：Kubernetes 把所有资源对象都保存在注册表（Registry）中，例如：Pod，Service，Deployment 等等。</li>
+<li><strong>etcd 数据库：</strong>保存创建副本的信息。用来持久化 Kubernetes 资源对象的 Key-Value 数据库。</li>
+</ul>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612449162.webp" alt="img"></p>
+<p><center><i>APIServer 分层架构图</i></center><br>当 kubectl 用 Create 命令建立 Pod 时，是通过 APIServer 中的 API 层调用对应的 RESTAPI 方法。</p>
 <p>之后会进入权限控制层，通过 Authentication 获取调用者身份，Authorization 获取权限信息。</p>
 <p>AdmissionControl 中可配置权限认证插件，通过插件来检查请求约束。例如：启动容器之前需要下载镜像，或者检查具备某命名空间的资源。</p>
 <p>还记得 mysql-rc.yaml 中配置需要生成的 Pod 的个数为 1。到了 Registry 层会从 CoreRegistry 资源中取出 1 个 Pod 作为要创建的 Kubernetes 资源对象。</p>
@@ -636,6 +672,9 @@
 <p>APIServer 和 Controller Manager，Scheduler 以及 kubelete 之间通过 List-Watch 方式通信（事件发送与监听）。</p>
 <p>Controller Manager 通过 etcd 获取需要创建资源的副本数，交由 Scheduler 进行策略分析。</p>
 <p>最后 kubelet 负责最终的 Pod 创建和容器加载。部署好容器以后，通过 Service 进行访问，通过 cAdvisor 监控资源。</p>
+<blockquote>
+<p>原文转载自51CTO技术栈，崔皓，<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&amp;mid=2655827885&amp;idx=1&amp;sn=47feb253e0aa012023d6f421572a04b3&amp;chksm=bd74fa7a8a03736c08e43b4e7082c3763c0e64491e7b7ef3ddd9f3756cfa5e536730f8f022e8&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">我花了10个小时，写出了这篇K8S架构解析</a></p>
+</blockquote>
 
       
     </div>
@@ -992,7 +1031,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes-架构概述"><span class="nav-number">1.</span> <span class="nav-text">Kubernetes 架构概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Controller-Manager，Scheduler-和-kubelet"><span class="nav-number">2.</span> <span class="nav-text">Controller Manager，Scheduler 和 kubelet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Controller-Manager"><span class="nav-number">3.</span> <span class="nav-text">Controller Manager</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scheduler-与-kubelet"><span class="nav-number">4.</span> <span class="nav-text">Scheduler 与 kubelet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Service-和-kubelet"><span class="nav-number">5.</span> <span class="nav-text">Service 和 kubelet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes-架构概述"><span class="nav-number">1.</span> <span class="nav-text">Kubernetes 架构概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从一个例子开始"><span class="nav-number">2.</span> <span class="nav-text">从一个例子开始</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#kubectl-和-APIServer"><span class="nav-number">3.</span> <span class="nav-text">kubectl 和 APIServer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Controller-Manager，Scheduler-和-kubelet"><span class="nav-number">4.</span> <span class="nav-text">Controller Manager，Scheduler 和 kubelet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Controller-Manager"><span class="nav-number">5.</span> <span class="nav-text">Controller Manager</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scheduler-与-kubelet"><span class="nav-number">6.</span> <span class="nav-text">Scheduler 与 kubelet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Service-和-kubelet"><span class="nav-number">7.</span> <span class="nav-text">Service 和 kubelet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
@@ -1024,7 +1063,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   

@@ -121,13 +121,13 @@
 
 
 
-  <meta name="description" content="memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。   文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。 1. 综述  读一个软件的源码，首先要弄懂软件是用作干什么的，那memcached和re">
+  <meta name="description" content="memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。   文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。">
 <meta name="keywords" content="redis,memcached">
 <meta property="og:type" content="article">
 <meta property="og:title" content="memcached与redis实现的对比">
 <meta property="og:url" content="https://vincentruan.github.io/2019/12/29/memcached与redis实现的对比/index.html">
 <meta property="og:site_name" content="星辰大海">
-<meta property="og:description" content="memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。   文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。 1. 综述  读一个软件的源码，首先要弄懂软件是用作干什么的，那memcached和re">
+<meta property="og:description" content="memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。   文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://vincentruan.github.io/2019/12/29/memcached与redis实现的对比/0.6910520100500435.png">
 <meta property="og:image" content="https://vincentruan.github.io/2019/12/29/memcached与redis实现的对比/0.6555308480747044.png">
@@ -138,10 +138,10 @@
 <meta property="og:image" content="https://vincentruan.github.io/2019/12/29/memcached与redis实现的对比/0.19187591481022537.png">
 <meta property="og:image" content="https://vincentruan.github.io/2019/12/29/memcached与redis实现的对比/0.5668123732320964.png">
 <meta property="og:image" content="https://vincentruan.github.io/2019/12/29/memcached与redis实现的对比/0.5104974769055843.png">
-<meta property="og:updated_time" content="2020-02-17T02:40:44.790Z">
+<meta property="og:updated_time" content="2020-02-25T15:09:15.054Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="memcached与redis实现的对比">
-<meta name="twitter:description" content="memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。   文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。 1. 综述  读一个软件的源码，首先要弄懂软件是用作干什么的，那memcached和re">
+<meta name="twitter:description" content="memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。   文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。">
 <meta name="twitter:image" content="https://vincentruan.github.io/2019/12/29/memcached与redis实现的对比/0.6910520100500435.png">
 
 
@@ -430,7 +430,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -511,6 +511,7 @@
       
         <p>  memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。</p>
 <p>  文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。</p>
+<a id="more"></a>
 <h1 id="1-综述"><a href="#1-综述" class="headerlink" title="1. 综述"></a>1. 综述</h1><p>  读一个软件的源码，首先要弄懂软件是用作干什么的，那memcached和redis是干啥的？众所周知，数据一般会放在数据库中，但是查询数据会相对比较慢，特别是用户很多时，频繁的查询，需要耗费大量的时间。怎么办呢？数据放在哪里查询快？那肯定是内存中。memcached和redis就是将数据存储在内存中，按照key-value的方式查询，可以大幅度提高效率。所以一般它们都用做缓存服务器，缓存常用的数据，需要查询的时候，直接从它们那儿获取，减少查询数据库的次数，提高查询效率。</p>
 <h1 id="2-服务方式"><a href="#2-服务方式" class="headerlink" title="2. 服务方式"></a>2. 服务方式</h1><p>memcached和redis怎么提供服务呢？它们是独立的进程，需要的话，还可以让他们变成daemon进程，所以我们的用户进程要使用memcached和redis的服务的话，就需要进程间通信了。考虑到用户进程和memcached和redis不一定在同一台机器上，所以还需要支持网络间通信。因此，memcached和redis自己本身就是网络服务器，用户进程通过与他们通过网络来传输数据，显然最简单和最常用的就是使用tcp连接了。另外，memcached和redis都支持udp协议。而且当用户进程和memcached和redis在同一机器时，还可以使用unix域套接字通信。</p>
 <h1 id="3-事件模型"><a href="#3-事件模型" class="headerlink" title="3. 事件模型"></a>3. 事件模型</h1><p>下面开始讲他们具体是怎么实现的了。首先来看一下它们的事件模型。</p>
@@ -973,7 +974,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   

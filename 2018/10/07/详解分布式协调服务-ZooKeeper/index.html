@@ -121,13 +121,13 @@
 
 
 
-  <meta name="description" content="作者 | Draveness 本文作者 Draveness，文章转载自 https://draveness.me/zookeeper-chubby， 对其内容进行过编辑。 这篇文章主要会介绍 Zookeeper 的实现原理以及常见的应用 在 2006 年，Google 发表了一篇名为 The Chubby lock service for loosely-coupled distributed s">
+  <meta name="description" content="这篇文章主要会介绍 Zookeeper 的实现原理以及常见的应用 在 2006 年，Google 发表了一篇名为 The Chubby lock service for loosely-coupled distributed systems 的论文，其中描述了一个分布式锁服务 Chubby 的设计理念和实现原理；作为 Google 内部的一个基础服务，虽然 Chubby 与 GFS、Bigtabl">
 <meta name="keywords" content="zookeeper,分布式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="详解分布式协调服务 ZooKeeper">
 <meta property="og:url" content="https://vincentruan.github.io/2018/10/07/详解分布式协调服务-ZooKeeper/index.html">
 <meta property="og:site_name" content="星辰大海">
-<meta property="og:description" content="作者 | Draveness 本文作者 Draveness，文章转载自 https://draveness.me/zookeeper-chubby， 对其内容进行过编辑。 这篇文章主要会介绍 Zookeeper 的实现原理以及常见的应用 在 2006 年，Google 发表了一篇名为 The Chubby lock service for loosely-coupled distributed s">
+<meta property="og:description" content="这篇文章主要会介绍 Zookeeper 的实现原理以及常见的应用 在 2006 年，Google 发表了一篇名为 The Chubby lock service for loosely-coupled distributed systems 的论文，其中描述了一个分布式锁服务 Chubby 的设计理念和实现原理；作为 Google 内部的一个基础服务，虽然 Chubby 与 GFS、Bigtabl">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://vincentruan.github.io/2018/10/07/详解分布式协调服务-ZooKeeper/FE4VibF0SjfNC55Nwr7XreFBdYW0Q4icTg30dtZEX41yMutAaHrOdtng3gZrnXVS6ib5nUAGWphPdibZibF0xASOWWQ.png">
 <meta property="og:image" content="https://vincentruan.github.io/2018/10/07/详解分布式协调服务-ZooKeeper/FE4VibF0SjfNC55Nwr7XreFBdYW0Q4icTgsCvAvp0ZAfSaibY0AYOrm0lnwgTVc1kibuLHZkZImojibaia0r4Vfw7Fcg.png">
@@ -147,10 +147,10 @@
 <meta property="og:image" content="https://vincentruan.github.io/2018/10/07/详解分布式协调服务-ZooKeeper/FE4VibF0SjfNC55Nwr7XreFBdYW0Q4icTgf97vCKocKsSdxkFHv6dSkVVBib7FBptgKSk3iaZw2GnPB9JILiarMttsg.png">
 <meta property="og:image" content="https://vincentruan.github.io/2018/10/07/详解分布式协调服务-ZooKeeper/FE4VibF0SjfNC55Nwr7XreFBdYW0Q4icTgZTwRH2NybwfgpMTD8gOUAT2k6NAG2MAE3UEpJTLic29Zu6HO1iac7dsA.png">
 <meta property="og:image" content="https://vincentruan.github.io/2018/10/07/详解分布式协调服务-ZooKeeper/FE4VibF0SjfNC55Nwr7XreFBdYW0Q4icTgicZX3XWkhCibYLhs7bo1XoibRfNoS05Rrhk76Yowaw8RMlv3X0MXA5BfA.png">
-<meta property="og:updated_time" content="2020-02-17T02:40:44.899Z">
+<meta property="og:updated_time" content="2020-02-25T15:09:15.072Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="详解分布式协调服务 ZooKeeper">
-<meta name="twitter:description" content="作者 | Draveness 本文作者 Draveness，文章转载自 https://draveness.me/zookeeper-chubby， 对其内容进行过编辑。 这篇文章主要会介绍 Zookeeper 的实现原理以及常见的应用 在 2006 年，Google 发表了一篇名为 The Chubby lock service for loosely-coupled distributed s">
+<meta name="twitter:description" content="这篇文章主要会介绍 Zookeeper 的实现原理以及常见的应用 在 2006 年，Google 发表了一篇名为 The Chubby lock service for loosely-coupled distributed systems 的论文，其中描述了一个分布式锁服务 Chubby 的设计理念和实现原理；作为 Google 内部的一个基础服务，虽然 Chubby 与 GFS、Bigtabl">
 <meta name="twitter:image" content="https://vincentruan.github.io/2018/10/07/详解分布式协调服务-ZooKeeper/FE4VibF0SjfNC55Nwr7XreFBdYW0Q4icTg30dtZEX41yMutAaHrOdtng3gZrnXVS6ib5nUAGWphPdibZibF0xASOWWQ.png">
 
 
@@ -439,7 +439,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -518,12 +518,11 @@
       
 
       
-        <p><code>作者 | Draveness</code></p>
-<p><code>本文作者 Draveness，文章转载自 https://draveness.me/zookeeper-chubby， 对其内容进行过编辑。</code></p>
-<p><code>这篇文章主要会介绍 Zookeeper 的实现原理以及常见的应用</code></p>
+        <p><code>这篇文章主要会介绍 Zookeeper 的实现原理以及常见的应用</code></p>
 <p>在 2006 年，Google 发表了一篇名为 The Chubby lock service for loosely-coupled distributed systems 的论文，其中描述了一个分布式锁服务 Chubby 的设计理念和实现原理；作为 Google 内部的一个基础服务，虽然 Chubby 与 GFS、Bigtable 和 MapReduce 相比并没有那么大的名气，不过它在 Google 内部也是非常重要的基础设施。</p>
 <p><img src="/2018/10/07/详解分布式协调服务-ZooKeeper/FE4VibF0SjfNC55Nwr7XreFBdYW0Q4icTg30dtZEX41yMutAaHrOdtng3gZrnXVS6ib5nUAGWphPdibZibF0xASOWWQ.png" alt="img"></p>
 <p>相比于名不见经传的 Chubby，作者相信 Zookeeper 更被广大开发者所熟知，作为非常出名的分布式协调服务，Zookeeper 有非常多的应用，包括发布订阅、命名服务、分数是协调和分布式锁，这篇文章主要会介绍 Zookeeper 的实现原理以及常见的应用，但是在具体介绍 Zookeeper 的功能和原理之前，我们会简单介绍一下分布式锁服务 Chubby 以及它与 Zookeeper 之间的异同。</p>
+<a id="more"></a>
 <h1 id="Chubby"><a href="#Chubby" class="headerlink" title="Chubby"></a>Chubby</h1><p>作为分布式锁服务，Chubby 的目的就是允许多个客户端对它们的行为进行同步，同时也能够解决客户端的环境相关信息的分发和粗粒度的同步问题，GFS 和 Bigtable 都使用了 Chubby 以解决主节点的选举等问题。在网络上你很难找到关于 Chubby 的相关资料，我们只能从 The Chubby lock service for loosely-coupled distributed systems 一文中窥见它的一些设计思路、技术架构等信息。</p>
 <p>虽然 Chubby 和 Zookeeper 有着比较相似的功能，但是它们的设计理念却非常不同，Chubby 在论文的摘要中写道：</p>
 <blockquote>
@@ -628,6 +627,9 @@
 <p>作为分布式协调服务，Zookeeper 的应用场景非常广泛，不仅能够用于服务配置的下发、命名服务、协调分布式事务以及分布式锁，还能够用来实现微服务治理中的服务注册以及发现等功能，这些其实都源于 Zookeeper 能够提供高可用的分布式协调服务，能够为客户端提供分布式一致性的支持，在后面的文章中作者也会介绍其他用于分布式协调的服务。</p>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://zookeeper.apache.org/doc/r3.4.4/recipes.html" target="_blank" rel="noopener">https://zookeeper.apache.org/doc/r3.4.4/recipes.html</a></p>
 <p><a href="https://static.googleusercontent.com/media/research.google.com/en//archive/chubby-osdi06.pdf" target="_blank" rel="noopener">https://static.googleusercontent.com/media/research.google.com/en//archive/chubby-osdi06.pdf</a></p>
+<blockquote>
+<p>本文作者 Draveness，文章转载自 <a href="https://draveness.me/zookeeper-chubby" target="_blank" rel="noopener">https://draveness.me/zookeeper-chubby</a> , 对其内容进行过编辑。</p>
+</blockquote>
 
       
     </div>
@@ -1014,7 +1016,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   

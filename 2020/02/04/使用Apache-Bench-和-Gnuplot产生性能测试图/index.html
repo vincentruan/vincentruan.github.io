@@ -132,7 +132,7 @@
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/04/使用Apache-Bench-和-Gnuplot产生性能测试图/image-20200204213258370.png">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/04/使用Apache-Bench-和-Gnuplot产生性能测试图/image-20200204213452892.png">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/04/使用Apache-Bench-和-Gnuplot产生性能测试图/image-20200204213604555.png">
-<meta property="og:updated_time" content="2020-02-17T02:40:44.861Z">
+<meta property="og:updated_time" content="2020-02-25T15:09:15.062Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Apache Bench和Gnuplot产生性能测试图">
 <meta name="twitter:description" content="Apache Beach (ab)是Apache自带的一个性能测试工具，专门用来测试网站的性能， 不仅限于Apache web服务器。 它可以同时模拟多个并发请求，测试Web服务器的最大承载压力，同时也可以根据Apache Bench提供的测试结果对服务器性能参数进行调整。它可以记录测试数据，其它工具比如Gnuplot可以利用测试数据进行分析。它也可以提供一个summary，可以直观显示当前测试的">
@@ -424,7 +424,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -505,6 +505,7 @@
       
         <p><a href="http://httpd.apache.org/docs/2.2/programs/ab.html" target="_blank" rel="noopener">Apache Beach</a> (ab)是Apache自带的一个性能测试工具，专门用来测试网站的性能， 不仅限于Apache web服务器。</p>
 <p>它可以同时模拟多个并发请求，测试Web服务器的最大承载压力，同时也可以根据Apache Bench提供的测试结果对服务器性能参数进行调整。它可以记录测试数据，其它工具比如Gnuplot可以利用测试数据进行分析。它也可以提供一个summary，可以直观显示当前测试的web服务器的性能。</p>
+<a id="more"></a>
 <h2 id="安装ab"><a href="#安装ab" class="headerlink" title="安装ab"></a>安装ab</h2><p>  ab是Apache httpd的一部分。不同的发行版提供了不同的安装方法。<br>  比如在笔者使用的redhat 6.4上可以查看此工具在哪个包里：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#yum provides /usr/bin/ab</span></span><br><span class="line">......</span><br><span class="line">httpd-tools-2.2.15-30.el6.centos.x86_64 : Tools <span class="keyword">for</span> use with the Apache HTTP</span><br><span class="line">                                        : Server</span><br><span class="line">Repo        : updates</span><br><span class="line">Matched from:</span><br><span class="line">Filename    : /usr/bin/ab</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
 <p>它被打包在httpd-tools包里，安装httpd-tools:</p>
@@ -916,7 +917,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   

@@ -121,13 +121,13 @@
 
 
 
-  <meta name="description" content="转载自美团技术团队，原文地址，在原文基础上有修改. 前言Java提供了种类丰富的锁，每种锁因其特性的不同，在适当的场景下能够展现出非常高的效率。本文旨在对锁相关源码（本文中的源码来自JDK 8和Netty 3.10.6）、使用场景进行举例，为读者介绍主流锁的知识点，以及不同的锁的适用场景。 JAVA主流锁Java中往往是按照是否含有某一特性来定义锁，我们通过特性将锁进行分组归类，再使用对比的方式进">
+  <meta name="description" content="前言Java提供了种类丰富的锁，每种锁因其特性的不同，在适当的场景下能够展现出非常高的效率。本文旨在对锁相关源码（本文中的源码来自JDK 8和Netty 3.10.6）、使用场景进行举例，为读者介绍主流锁的知识点，以及不同的锁的适用场景。">
 <meta name="keywords" content="JAVA,并发">
 <meta property="og:type" content="article">
 <meta property="og:title" content="不可不说的Java锁事">
 <meta property="og:url" content="https://vincentruan.github.io/2020/02/12/不可不说的Java锁事/index.html">
 <meta property="og:site_name" content="星辰大海">
-<meta property="og:description" content="转载自美团技术团队，原文地址，在原文基础上有修改. 前言Java提供了种类丰富的锁，每种锁因其特性的不同，在适当的场景下能够展现出非常高的效率。本文旨在对锁相关源码（本文中的源码来自JDK 8和Netty 3.10.6）、使用场景进行举例，为读者介绍主流锁的知识点，以及不同的锁的适用场景。 JAVA主流锁Java中往往是按照是否含有某一特性来定义锁，我们通过特性将锁进行分组归类，再使用对比的方式进">
+<meta property="og:description" content="前言Java提供了种类丰富的锁，每种锁因其特性的不同，在适当的场景下能够展现出非常高的效率。本文旨在对锁相关源码（本文中的源码来自JDK 8和Netty 3.10.6）、使用场景进行举例，为读者介绍主流锁的知识点，以及不同的锁的适用场景。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/12/不可不说的Java锁事/7f749fc8.png">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/12/不可不说的Java锁事/c8703cd9.png">
@@ -149,10 +149,10 @@
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/12/不可不说的Java锁事/image-20200213203315752.png">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/12/不可不说的Java锁事/image-20200213203511263.png">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/12/不可不说的Java锁事/image-20200213204318608.png">
-<meta property="og:updated_time" content="2020-02-17T02:40:44.799Z">
+<meta property="og:updated_time" content="2020-02-25T15:09:15.060Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="不可不说的Java锁事">
-<meta name="twitter:description" content="转载自美团技术团队，原文地址，在原文基础上有修改. 前言Java提供了种类丰富的锁，每种锁因其特性的不同，在适当的场景下能够展现出非常高的效率。本文旨在对锁相关源码（本文中的源码来自JDK 8和Netty 3.10.6）、使用场景进行举例，为读者介绍主流锁的知识点，以及不同的锁的适用场景。 JAVA主流锁Java中往往是按照是否含有某一特性来定义锁，我们通过特性将锁进行分组归类，再使用对比的方式进">
+<meta name="twitter:description" content="前言Java提供了种类丰富的锁，每种锁因其特性的不同，在适当的场景下能够展现出非常高的效率。本文旨在对锁相关源码（本文中的源码来自JDK 8和Netty 3.10.6）、使用场景进行举例，为读者介绍主流锁的知识点，以及不同的锁的适用场景。">
 <meta name="twitter:image" content="https://vincentruan.github.io/2020/02/12/不可不说的Java锁事/7f749fc8.png">
 
 
@@ -441,7 +441,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -520,8 +520,8 @@
       
 
       
-        <p>转载自美团技术团队，<a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">原文地址</a>，在原文基础上有修改.</p>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Java提供了种类丰富的锁，每种锁因其特性的不同，在适当的场景下能够展现出非常高的效率。本文旨在对锁相关源码（本文中的源码来自JDK 8和Netty 3.10.6）、使用场景进行举例，为读者介绍主流锁的知识点，以及不同的锁的适用场景。</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Java提供了种类丰富的锁，每种锁因其特性的不同，在适当的场景下能够展现出非常高的效率。本文旨在对锁相关源码（本文中的源码来自JDK 8和Netty 3.10.6）、使用场景进行举例，为读者介绍主流锁的知识点，以及不同的锁的适用场景。</p>
+<a id="more"></a>
 <h1 id="JAVA主流锁"><a href="#JAVA主流锁" class="headerlink" title="JAVA主流锁"></a>JAVA主流锁</h1><p>Java中往往是按照是否含有某一特性来定义锁，我们通过特性将锁进行分组归类，再使用对比的方式进行介绍，帮助大家更快捷的理解相关知识。下面给出本文内容的总体分类目录：</p>
 <p><img src="/2020/02/12/不可不说的Java锁事/7f749fc8.png" alt="img"></p>
 <h2 id="1-乐观锁-VS-悲观锁"><a href="#1-乐观锁-VS-悲观锁" class="headerlink" title="1. 乐观锁 VS 悲观锁"></a>1. 乐观锁 VS 悲观锁</h2><p>乐观锁与悲观锁是一种广义上的概念，体现了看待线程同步的不同角度。在Java和数据库中都有此概念对应的实际应用。</p>
@@ -777,6 +777,9 @@
 <li><a href="https://my.oschina.net/adan1/blog/158107" target="_blank" rel="noopener">Java多线程（十）之ReentrantReadWriteLock深入分析</a></li>
 <li><a href="https://mrdear.cn/2018/06/23/java/java--readwritelock" target="_blank" rel="noopener">Java–读写锁的实现原理</a></li>
 </ol>
+<blockquote>
+<p>转载自美团技术团队，<a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">原文地址</a>，在原文基础上有修改.</p>
+</blockquote>
 
       
     </div>
@@ -1163,7 +1166,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   

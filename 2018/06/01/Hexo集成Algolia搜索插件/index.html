@@ -121,23 +121,23 @@
 
 
 
-  <meta name="description" content="本文转载自Hexo集成Algolia搜索插件 前言个人博客自从2016年10月21日搭建以来，迄今为止已经有49 篇日志了。虽然不是很多篇文章，但是搜索站内的内容已经力不从心了。 搜索了网上很多关于“Hexo 站内搜索”的内容，发现大部分都是使用Swiftype，但是发现Swiftype 搜索只有15 天的免费，之后就需要开始收费了。 因为只是为自己的个人博客 使用站内搜索，所以希望找一个类似与S">
+  <meta name="description" content="前言个人博客自从2016年10月21日搭建以来，迄今为止已经有49 篇日志了。虽然不是很多篇文章，但是搜索站内的内容已经力不从心了。 搜索了网上很多关于“Hexo 站内搜索”的内容，发现大部分都是使用Swiftype，但是发现Swiftype 搜索只有15 天的免费，之后就需要开始收费了。 因为只是为自己的个人博客 使用站内搜索，所以希望找一个类似与Swiftype 的，但是免费的站内搜索。最后找">
 <meta name="keywords" content="Hexo,Algolia">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hexo集成Algolia搜索插件">
 <meta property="og:url" content="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/index.html">
 <meta property="og:site_name" content="星辰大海">
-<meta property="og:description" content="本文转载自Hexo集成Algolia搜索插件 前言个人博客自从2016年10月21日搭建以来，迄今为止已经有49 篇日志了。虽然不是很多篇文章，但是搜索站内的内容已经力不从心了。 搜索了网上很多关于“Hexo 站内搜索”的内容，发现大部分都是使用Swiftype，但是发现Swiftype 搜索只有15 天的免费，之后就需要开始收费了。 因为只是为自己的个人博客 使用站内搜索，所以希望找一个类似与S">
+<meta property="og:description" content="前言个人博客自从2016年10月21日搭建以来，迄今为止已经有49 篇日志了。虽然不是很多篇文章，但是搜索站内的内容已经力不从心了。 搜索了网上很多关于“Hexo 站内搜索”的内容，发现大部分都是使用Swiftype，但是发现Swiftype 搜索只有15 天的免费，之后就需要开始收费了。 因为只是为自己的个人博客 使用站内搜索，所以希望找一个类似与Swiftype 的，但是免费的站内搜索。最后找">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/algolia_login.jpg">
 <meta property="og:image" content="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/algolia_explorer.jpg">
 <meta property="og:image" content="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/algolia_newindex.jpg">
 <meta property="og:image" content="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/algolia_apikeys.jpg">
 <meta property="og:image" content="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/algolia_hexo_algolia.jpg">
-<meta property="og:updated_time" content="2018-06-01T15:17:31.107Z">
+<meta property="og:updated_time" content="2020-02-25T15:09:15.035Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo集成Algolia搜索插件">
-<meta name="twitter:description" content="本文转载自Hexo集成Algolia搜索插件 前言个人博客自从2016年10月21日搭建以来，迄今为止已经有49 篇日志了。虽然不是很多篇文章，但是搜索站内的内容已经力不从心了。 搜索了网上很多关于“Hexo 站内搜索”的内容，发现大部分都是使用Swiftype，但是发现Swiftype 搜索只有15 天的免费，之后就需要开始收费了。 因为只是为自己的个人博客 使用站内搜索，所以希望找一个类似与S">
+<meta name="twitter:description" content="前言个人博客自从2016年10月21日搭建以来，迄今为止已经有49 篇日志了。虽然不是很多篇文章，但是搜索站内的内容已经力不从心了。 搜索了网上很多关于“Hexo 站内搜索”的内容，发现大部分都是使用Swiftype，但是发现Swiftype 搜索只有15 天的免费，之后就需要开始收费了。 因为只是为自己的个人博客 使用站内搜索，所以希望找一个类似与Swiftype 的，但是免费的站内搜索。最后找">
 <meta name="twitter:image" content="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/algolia_login.jpg">
 
 
@@ -409,12 +409,24 @@
                 
               
 
-              <time title="创建时间：2018-06-01 23:14:36 / 修改时间：23:17:31" itemprop="dateCreated datePublished" datetime="2018-06-01T23:14:36+08:00">2018-06-01</time>
+              <time title="创建时间：2018-06-01 23:14:36" itemprop="dateCreated datePublished" datetime="2018-06-01T23:14:36+08:00">2018-06-01</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -493,10 +505,10 @@
       
 
       
-        <p><strong><em>本文转载自</em></strong><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/" target="_blank" rel="noopener">Hexo集成Algolia搜索插件</a></p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>个人博客自从2016年10月21日搭建以来，迄今为止已经有49 篇日志了。虽然不是很多篇文章，但是搜索站内的内容已经力不从心了。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>个人博客自从2016年10月21日搭建以来，迄今为止已经有49 篇日志了。虽然不是很多篇文章，但是搜索站内的内容已经力不从心了。</p>
 <p>搜索了网上很多关于“Hexo 站内搜索”的内容，发现大部分都是使用<a href="https://swiftype.com/" target="_blank" rel="noopener">Swiftype</a>，但是发现Swiftype 搜索只有15 天的免费，之后就需要开始收费了。</p>
 <p>因为只是为自己的<a href="https://jobbym.github.io/" target="_blank" rel="noopener">个人博客 </a>使用站内搜索，所以希望找一个类似与Swiftype 的，但是<strong>免费的</strong>站内搜索。最后找了Algolia 这个免费版本替代。</p>
+<a id="more"></a>
 <p>下面简单说下搭建过程：</p>
 <h2 id="搭建过程"><a href="#搭建过程" class="headerlink" title="搭建过程"></a>搭建过程</h2><h3 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h3><p>如果你的Next 版本为5.1.0 之后，可以使用Algolia。如果不是，请先升级到5.1.0 版本之后</p>
 <h3 id="一个Algolia-帐号"><a href="#一个Algolia-帐号" class="headerlink" title="一个Algolia 帐号"></a>一个Algolia 帐号</h3><p><a href="https://www.algolia.com/users/sign_in" target="_blank" rel="noopener">官网地址</a> 使用GitHub 或Google 帐号登录。<br><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_login.jpg" target="_blank" rel="noopener"><img src="/2018/06/01/Hexo集成Algolia搜索插件/algolia_login.jpg" alt="img"></a></p>
@@ -521,6 +533,8 @@
 <li><a href="https://github.com/iissnan/hexo-theme-next/wiki/Swiftype%E7%AB%99%E5%86%85%E6%90%9C%E7%B4%A2" target="_blank" rel="noopener">Swiftype站内搜索</a></li>
 <li><a href="http://theme-next.iissnan.com/third-party-services.html" target="_blank" rel="noopener">Next 第三方服务集成</a></li>
 </ol>
+<hr>
+<p><strong><em>本文转载自</em></strong><a href="http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/" target="_blank" rel="noopener">Hexo集成Algolia搜索插件</a></p>
 
       
     </div>
@@ -907,7 +921,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   

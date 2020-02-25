@@ -131,7 +131,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/04/大规模网站架构的缓存机制和几何分形学/image-20200204181000405.png">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/04/大规模网站架构的缓存机制和几何分形学/image-20200204195827800.png">
-<meta property="og:updated_time" content="2020-02-17T02:40:44.883Z">
+<meta property="og:updated_time" content="2020-02-25T15:09:15.066Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="大规模网站架构的缓存机制和几何分形学">
 <meta name="twitter:description" content="缓存机制在我们的实际研发工作中，被极其广泛地应用，通过这些缓存机制来提升系统交互的效率。简单的总结来说，就是在两个环节或者系统之间，会引入一个cache/buffer做为提升整体效率的角色。 而 有趣的是，这种缓存机制令人惊奇并且优美的遵循着“几何分形”的规律，也就是几何分形学中的“自相似性”：从整体上看遵循某种组成规律或者特性，同时从每 一个局部看，仍然遵循某种组成的规律或者特性。我们的这些系统">
@@ -423,7 +423,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -505,6 +505,7 @@
         <p>缓存机制在我们的实际研发工作中，被极其广泛地应用，通过这些缓存机制来提升系统交互的效率。简单的总结来说，就是在两个环节或者系统之间，会引入一个cache/buffer做为提升整体效率的角色。</p>
 <p>而 有趣的是，这种缓存机制令人惊奇并且优美的遵循着“几何分形”的规律，也就是几何分形学中的“自相似性”：从整体上看遵循某种组成规律或者特性，同时从每 一个局部看，仍然遵循某种组成的规律或者特性。我们的这些系统，从整体上看遵循了缓存机制，每一个组成的局部也遵循缓存机制。</p>
 <p>等同类比的一个概念，我们常常说的“空间换时间”，牺牲一部分空间代价，来换取整体效率的提升。</p>
+<a id="more"></a>
 <pre class="mermaid">graph LR
 A[A] ==> B(Cache) ==> C[B]
 C[B] ==> B(Cache) ==> A[A]</pre>
@@ -1055,7 +1056,7 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   

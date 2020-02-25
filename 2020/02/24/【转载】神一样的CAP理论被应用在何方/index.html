@@ -121,13 +121,13 @@
 
 
 
-  <meta name="description" content="转载自陈于喆 - 神一样的CAP理论被应用在何方，原文地址https://juejin.im/post/5d720e86f265da03cc08de74  对于开发或设计分布式系统的架构师工程师来说，CAP是必须要掌握的理论。  （but：这个文章的重点并不是讨论CAP理论和细节，重点是说说CAP在微服务中的开发怎么起到一个指引作用，会通过几个微服务开发的例子说说明，尽量的去贴近开发）  CAP">
+  <meta name="description" content="对于开发或设计分布式系统的架构师工程师来说，CAP是必须要掌握的理论。  （but：这个文章的重点并不是讨论CAP理论和细节，重点是说说CAP在微服务中的开发怎么起到一个指引作用，会通过几个微服务开发的例子说说明，尽量的去贴近开发）  CAP定理又被成为布鲁尔定理，是加州大学计算机科学家埃里克·布鲁尔提出来的猜想，后来被证明成为分布式计算领域公认的定理。不过布鲁尔在出来CAP的时候并没有对CAP三">
 <meta name="keywords" content="CAP,架构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【转载】神一样的CAP理论被应用在何方">
 <meta property="og:url" content="https://vincentruan.github.io/2020/02/24/【转载】神一样的CAP理论被应用在何方/index.html">
 <meta property="og:site_name" content="星辰大海">
-<meta property="og:description" content="转载自陈于喆 - 神一样的CAP理论被应用在何方，原文地址https://juejin.im/post/5d720e86f265da03cc08de74  对于开发或设计分布式系统的架构师工程师来说，CAP是必须要掌握的理论。  （but：这个文章的重点并不是讨论CAP理论和细节，重点是说说CAP在微服务中的开发怎么起到一个指引作用，会通过几个微服务开发的例子说说明，尽量的去贴近开发）  CAP">
+<meta property="og:description" content="对于开发或设计分布式系统的架构师工程师来说，CAP是必须要掌握的理论。  （but：这个文章的重点并不是讨论CAP理论和细节，重点是说说CAP在微服务中的开发怎么起到一个指引作用，会通过几个微服务开发的例子说说明，尽量的去贴近开发）  CAP定理又被成为布鲁尔定理，是加州大学计算机科学家埃里克·布鲁尔提出来的猜想，后来被证明成为分布式计算领域公认的定理。不过布鲁尔在出来CAP的时候并没有对CAP三">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d05888f809b3bc">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d05888f63920ec">
@@ -154,10 +154,10 @@
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588b056e080a">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588af130c763">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588b16477dcb">
-<meta property="og:updated_time" content="2020-02-25T09:10:46.374Z">
+<meta property="og:updated_time" content="2020-02-25T15:09:15.058Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【转载】神一样的CAP理论被应用在何方">
-<meta name="twitter:description" content="转载自陈于喆 - 神一样的CAP理论被应用在何方，原文地址https://juejin.im/post/5d720e86f265da03cc08de74  对于开发或设计分布式系统的架构师工程师来说，CAP是必须要掌握的理论。  （but：这个文章的重点并不是讨论CAP理论和细节，重点是说说CAP在微服务中的开发怎么起到一个指引作用，会通过几个微服务开发的例子说说明，尽量的去贴近开发）  CAP">
+<meta name="twitter:description" content="对于开发或设计分布式系统的架构师工程师来说，CAP是必须要掌握的理论。  （but：这个文章的重点并不是讨论CAP理论和细节，重点是说说CAP在微服务中的开发怎么起到一个指引作用，会通过几个微服务开发的例子说说明，尽量的去贴近开发）  CAP定理又被成为布鲁尔定理，是加州大学计算机科学家埃里克·布鲁尔提出来的猜想，后来被证明成为分布式计算领域公认的定理。不过布鲁尔在出来CAP的时候并没有对CAP三">
 <meta name="twitter:image" content="https://vincentruan.github.io/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d05888f809b3bc">
 
 
@@ -446,7 +446,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-25 17:10:46" itemprop="dateModified" datetime="2020-02-25T17:10:46+08:00">2020-02-25</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -525,10 +525,7 @@
       
 
       
-        <blockquote>
-<p>转载自陈于喆 - 神一样的CAP理论被应用在何方，原文地址<a href="https://juejin.im/post/5d720e86f265da03cc08de74" target="_blank" rel="noopener">https://juejin.im/post/5d720e86f265da03cc08de74</a></p>
-</blockquote>
-<p>对于开发或设计分布式系统的架构师工程师来说，CAP是必须要掌握的理论。</p>
+        <p>对于开发或设计分布式系统的架构师工程师来说，CAP是必须要掌握的理论。</p>
 <blockquote>
 <p>（but：这个文章的重点并不是讨论CAP理论和细节，重点是说说CAP在微服务中的开发怎么起到一个指引作用，会通过几个微服务开发的例子说说明，尽量的去贴近开发）</p>
 </blockquote>
@@ -714,6 +711,10 @@
 <p>RocketMQ的设置要结合业务场景，合理设置刷盘方式和主从复制方式，尤其是SYNC_FLUSH方式，由于频繁的触发写磁盘动作，会明显降低性能。通常情况下，应该把Master和Slave设置成ASYNC_FLUSH的刷盘方式，主从之间配置成SYNC_MASTER的复制方式，这样即使有一台机器出故障，仍然可以保证数据不丢。</p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在微服务的构建中，永远都逃离不了CAP理论，因为网络永远不稳定，硬件总会老化，软件会可能出现bug，所以分区容错性在微服务中是躲不过的命题，可以这么说，只要是分布式，只要是集群都面临着AP或者CP的选择，但你很贪心的时候，既要一致性又要可用性，那只能对一致性作出一点妥协，也就是引入了BASE理论，在业务允许的情况下实现最终一致性。</p>
 <p>究竟是选AP还是选CP，真的在于对业务的了解，例如金钱，库存相关会优先考虑CP模型，例如社区发帖相关可以优先选择AP模型，这个说白了其实基于对业务的了解是一个选择和妥协的过程。</p>
+<hr>
+<blockquote>
+<p>转载自陈于喆 - 神一样的CAP理论被应用在何方，原文地址<br><a href="https://juejin.im/post/5d720e86f265da03cc08de74" target="_blank" rel="noopener">https://juejin.im/post/5d720e86f265da03cc08de74</a></p>
+</blockquote>
 
       
     </div>
@@ -1100,7 +1101,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   

@@ -424,7 +424,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -483,7 +483,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">26 分钟</span>
+                <span title="阅读时长">25 分钟</span>
               
             </div>
           
@@ -504,14 +504,7 @@
 
       
         
-          
-          日常的操作中，增删改查都会使用什么类型的锁？其实这个问题，可以分为两个方面，一方面是读，一方面是写。
-01 读（select）  我们先来看读的部分。读的操作，其实分为两种，分别是一致性读和锁定读，
-  这里我们温习一下，一致性读其实就是利用事务的MVCC机制，来读取一份数据的快照，所以有的书上也称之为快照读，一致性读是不加锁的，其他的事务是可以对表中的数据记录进行改动的。一般情况下，常见的读，例如：
-select * from table；
-select * from table left join table2;
-  这种操作，在RU，RC，RR隔离级别下都是采用一直性读，不加锁的操作。这
-          ...
+          <p>日常的操作中，增删改查都会使用什么类型的锁？其实这个问题，可以分为两个方面，一方面是读，一方面是写。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/02/12/MySQL增删改查都会用到什么锁/#more" rel="contents">
@@ -633,7 +626,7 @@ select * from table left join table2;
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-24 14:36:58" itemprop="dateModified" datetime="2020-02-24T14:36:58+08:00">2020-02-24</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -713,20 +706,7 @@ select * from table left join table2;
 
       
         
-          
-          服务异常的处理流程
-CPU负载说明针对应用程序，我们通常关注的是内核CPU调度器功能和性能。
-线程的状态分析主要是分析线程的时间用在什么地方，而线程状态的分类一般分为：
-a. on-CPU：执行中，执行中的时间通常又分为用户态时间user和系统态时间sys。 b. off-CPU：等待下一轮上CPU，或者等待I/O、锁、换页等等，其状态可以细分为可执行、匿名换页、睡眠、锁、空闲等状态。
-如果大量时间花在CPU上，对CPU的剖析能够迅速解释原因；如果系统时间大量处于off-cpu状态，定位问题就会费时很多。但是仍然需要清楚一些概念：
-
-处理器
-核
-硬件线程
-CPU内存缓存
-时钟频率
-每指令周期数
-          ...
+          <h1 id="服务异常的处理流程"><a href="#服务异常的处理流程" class="headerlink" title="服务异常的处理流程"></a>服务异常的处理流程</h1><p><img src="/2020/02/12/JAVA实用的服务异常处理指南/0ce47abcae0d474bb5bf9ebc993e6ad3.jpeg" alt="img"></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/02/12/JAVA实用的服务异常处理指南/#more" rel="contents">
@@ -848,7 +828,7 @@ CPU内存缓存
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-21 11:03:52" itemprop="dateModified" datetime="2020-02-21T11:03:52+08:00">2020-02-21</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -893,7 +873,7 @@ CPU内存缓存
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">29k</span>
+                <span title="本文字数">30k</span>
               
 
               
@@ -928,10 +908,7 @@ CPU内存缓存
 
       
         
-          
-          操作系统概念大部分操作系统提供了特定的基础概念和抽象，例如进程、地址空间、文件等，它们是需要理解的核心内容。下面我们会简要介绍一些基本概念，为了说明这些概念，我们会不时的从 UNIX 中提出示例，相同的示例也会存在于其他系统中，我们后面会进行介绍。
-进程操作系统一个很关键的概念就是 进程(Process)。进程的本质就是操作系统执行的一个程序。与每个进程相关的是地址空间(address space)，这是从某个最小值的存储位置(通常是零)到某个最大值的存储位置的列表。在这个地址空间中，进程可以进行读写操作。地址空间中存放有可执行程序，程序所需要的数据和它的栈。与每个进程相关的还有资源集，通常包
-          ...
+          <h2 id="操作系统概念"><a href="#操作系统概念" class="headerlink" title="操作系统概念"></a>操作系统概念</h2><p>大部分操作系统提供了特定的基础概念和抽象，例如进程、地址空间、文件等，它们是需要理解的核心内容。下面我们会简要介绍一些基本概念，为了说明这些概念，我们会不时的从 <code>UNIX</code> 中提出示例，相同的示例也会存在于其他系统中，我们后面会进行介绍。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/02/11/操作系统基础概念简述/#more" rel="contents">
@@ -1267,7 +1244,7 @@ LinkedBlo
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-24 15:31:01" itemprop="dateModified" datetime="2020-02-24T15:31:01+08:00">2020-02-24</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -1347,12 +1324,8 @@ LinkedBlo
 
       
         
-          
-          原文：https://dzone.com/articles/java-8-top-tips
-OptionalOptional是一个评价过低的特性，它可以显著的降低代码抛出NullPointerException的可能。它在边界代码(你正在使用的API或者你发布的API)中特别有用。
-但是对于它的不适当的使用和设计很容易使一个小的变动影响到很多的类，或者降低代码的可阅读性。这里有一些如何更加高效使用Optional的建议。
-Optional应该仅仅用在返回类型中不要用在参数或者域中。阅读这篇博文可以看到如何正确使用Optional进行编码。幸运的是，IntelliJ IDEA可以打开inspec
-          ...
+          <h1 id="Optional"><a href="#Optional" class="headerlink" title="Optional"></a>Optional</h1><p>Optional是一个评价过低的特性，它可以显著的降低代码抛出NullPointerException的可能。它在边界代码(你正在使用的API或者你发布的API)中特别有用。</p>
+<p>但是对于它的不适当的使用和设计很容易使一个小的变动影响到很多的类，或者降低代码的可阅读性。这里有一些如何更加高效使用Optional的建议。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/02/11/Java8开发的4个小技巧/#more" rel="contents">
@@ -1474,7 +1447,7 @@ Optional应该仅仅用在返回类型中不要用在参数或者域中。阅读
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -1554,14 +1527,8 @@ Optional应该仅仅用在返回类型中不要用在参数或者域中。阅读
 
       
         
-          
-          以下内容为入门级介绍，意在对老技术作较全的总结而不是较深的研究。主要参考《构建高性能Web站点》一书。
-什么是服务器并发处理能力一台服务器在单位时间里能处理的请求越多，服务器的能力越高，也就是服务器并发处理能力越强
-有什么方法衡量服务器并发处理能力1. 吞吐率吞吐率，单位时间里服务器处理的最大请求数，单位req/s
-从服务器角度，实际并发用户数的可以理解为服务器当前维护的代表不同用户的文件描述符总数，也就是并发连接数。
-服务器一般会限制同时服务的最多用户数，比如apache的MaxClents参数。
-这里再深入一下，对于服务器来说，服务器希望支持高吞吐率，对于用户来说，用户只希望等待最少的时间
-          ...
+          <p>以下内容为入门级介绍，意在对老技术作较全的总结而不是较深的研究。主要参考《构建高性能Web站点》一书。</p>
+<h2 id="什么是服务器并发处理能力"><a href="#什么是服务器并发处理能力" class="headerlink" title="什么是服务器并发处理能力"></a>什么是服务器并发处理能力</h2><p>一台服务器在单位时间里能处理的请求越多，服务器的能力越高，也就是服务器并发处理能力越强</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/02/11/如何提高服务器的并发处理能力/#more" rel="contents">
@@ -1683,7 +1650,7 @@ Optional应该仅仅用在返回类型中不要用在参数或者域中。阅读
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-24 21:34:27" itemprop="dateModified" datetime="2020-02-24T21:34:27+08:00">2020-02-24</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -1728,7 +1695,7 @@ Optional应该仅仅用在返回类型中不要用在参数或者域中。阅读
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">125k</span>
+                <span title="本文字数">124k</span>
               
 
               
@@ -1742,7 +1709,7 @@ Optional应该仅仅用在返回类型中不要用在参数或者域中。阅读
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">1:54</span>
+                <span title="阅读时长">1:53</span>
               
             </div>
           
@@ -1763,12 +1730,7 @@ Optional应该仅仅用在返回类型中不要用在参数或者域中。阅读
 
       
         
-          
-          概念模型节点在具体的工程项目中，一个节点往往是一个操作系统上的进程。在本文的模型中，认为节点是一个完整的、不可分的整体，如果某个程序进程实际上由若干相对独立部分构成，则在模型中可以将一个进程划分为多个节点。
-异常
-机器宕机：机器宕机是最常见的异常之一。在大型集群中每日宕机发生的概率为千分之一左右，在实践中，一台宕机的机器恢复的时间通常认为是24 小时，一般需要人工介入重启机器。
-网络异常：消息丢失，两片节点之间彼此完全无法通信，即出现了“网络分化”；消息乱序，有一定的概率不是按照发送时的顺序依次到达目的节点，考虑使用序列号等机制处理网络消息的乱序问题，使得无效的、过期的网络消息不影响系统的正确
-          ...
+          <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a><strong>概念</strong></h2><h3 id="模型"><a href="#模型" class="headerlink" title="模型"></a><strong>模型</strong></h3><h4 id="节点"><a href="#节点" class="headerlink" title="节点"></a><strong>节点</strong></h4><p>在具体的工程项目中，一个节点往往是一个操作系统上的进程。在本文的模型中，认为节点是一个完整的、不可分的整体，如果某个程序进程实际上由若干相对独立部分构成，则在模型中可以将一个进程划分为多个节点。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/02/06/分布式基础要点/#more" rel="contents">
@@ -1890,7 +1852,7 @@ Optional应该仅仅用在返回类型中不要用在参数或者域中。阅读
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -1970,20 +1932,8 @@ Optional应该仅仅用在返回类型中不要用在参数或者域中。阅读
 
       
         
-          
-          以下文章来源于Java建设者 ，作者cxuan
-HTTP 内容协商什么是内容协商在 HTTP 中，内容协商是一种用于在同一 URL 上提供资源的不同表示形式的机制。内容协商机制是指客户端和服务器端就响应的资源内容进行交涉，然后提供给客户端最为适合的资源。内容协商会以响应资源的语言、字符集、编码方式等作为判断的标准。
-
-内容协商的种类内容协商主要有以下3种类型：
-
-服务器驱动协商（Server-driven Negotiation）
-
-这种协商方式是由服务器端进行内容协商。服务器端会根据请求首部字段进行自动处理
-
-客户端驱动协商（Agent-driven Negotiation）
-
-这种协商方式
-          ...
+          <p>以下文章来源于Java建设者 ，作者cxuan</p>
+<h2 id="HTTP-内容协商"><a href="#HTTP-内容协商" class="headerlink" title="HTTP 内容协商"></a><strong>HTTP 内容协商</strong></h2><h3 id="什么是内容协商"><a href="#什么是内容协商" class="headerlink" title="什么是内容协商"></a><strong>什么是内容协商</strong></h3><p>在 HTTP 中，<code>内容协商</code>是一种用于在同一 URL 上提供资源的不同表示形式的机制。内容协商机制是指客户端和服务器端就响应的资源内容进行交涉，然后提供给客户端最为适合的资源。内容协商会以响应资源的语言、字符集、编码方式等作为判断的标准。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/02/06/HTTP协议要点/#more" rel="contents">
@@ -2364,7 +2314,7 @@ id&gt;文字]
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -2444,12 +2394,8 @@ id&gt;文字]
 
       
         
-          
-          Apache Beach (ab)是Apache自带的一个性能测试工具，专门用来测试网站的性能， 不仅限于Apache web服务器。
-它可以同时模拟多个并发请求，测试Web服务器的最大承载压力，同时也可以根据Apache Bench提供的测试结果对服务器性能参数进行调整。它可以记录测试数据，其它工具比如Gnuplot可以利用测试数据进行分析。它也可以提供一个summary，可以直观显示当前测试的web服务器的性能。
-安装ab  ab是Apache httpd的一部分。不同的发行版提供了不同的安装方法。  比如在笔者使用的redhat 6.4上可以查看此工具在哪个包里：
-12345678#yu
-          ...
+          <p><a href="http://httpd.apache.org/docs/2.2/programs/ab.html" target="_blank" rel="noopener">Apache Beach</a> (ab)是Apache自带的一个性能测试工具，专门用来测试网站的性能， 不仅限于Apache web服务器。</p>
+<p>它可以同时模拟多个并发请求，测试Web服务器的最大承载压力，同时也可以根据Apache Bench提供的测试结果对服务器性能参数进行调整。它可以记录测试数据，其它工具比如Gnuplot可以利用测试数据进行分析。它也可以提供一个summary，可以直观显示当前测试的web服务器的性能。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/02/04/使用Apache-Bench-和-Gnuplot产生性能测试图/#more" rel="contents">
@@ -2785,7 +2731,7 @@ id&gt;文字]
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   

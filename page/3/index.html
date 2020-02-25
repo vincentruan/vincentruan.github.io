@@ -424,7 +424,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -504,10 +504,7 @@
 
       
         
-          
-          使用Git时常用的命令有pull、commit、push等，貌似很简单。不过，有时你会遇到合并冲突的情况，Git这时会将冲突标记出来，需要你手工来解决。有时，你会不小心将代码提交到错误的分支上，并且又推送到了远程仓库。还有些时候，你需要切换到不同的分支，但Git却不让你这么做，因为还有未保存的修改。如果需要通过另一个分支的提交来为代码打补丁该怎么做呢？本文就将介绍12个Git高级命令，合理使用这些命令可以大大提升应用Git的效率。
-1. 使用rebase而非merge来拉取上游修改分支合并会被记录为一次合并提交，这种做法是很有意义的。比如说，可以通过这种方式来标识一个新特性被合并到了发布分支中
-          ...
+          <p>使用Git时常用的命令有pull、commit、push等，貌似很简单。不过，有时你会遇到合并冲突的情况，Git这时会将冲突标记出来，需要你手工来解决。有时，你会不小心将代码提交到错误的分支上，并且又推送到了远程仓库。还有些时候，你需要切换到不同的分支，但Git却不让你这么做，因为还有未保存的修改。如果需要通过另一个分支的提交来为代码打补丁该怎么做呢？本文就将介绍12个Git高级命令，合理使用这些命令可以大大提升应用Git的效率。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/02/04/12个Git高级命令/#more" rel="contents">
@@ -629,7 +626,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -709,12 +706,9 @@
 
       
         
-          
-          CentOS的yum源中没有git，只能自己编译安装，现在记录下编译安装的内容，留给自己备忘。
-确保已安装了依赖的包
-12345678yum install curlyum install curl-develyum install zlib-develyum install openssl-develyum install perlyum install cpioyum install expat-develyum install gettext-devel yum install perl-ExtUtils-CBuilder perl-ExtUtils-MakeMaker
-下载最新的git
-          ...
+          <p>CentOS的yum源中没有git，只能自己编译安装，现在记录下编译安装的内容，留给自己备忘。</p>
+<p>确保已安装了依赖的包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">yum install curl</span><br><span class="line">yum install curl-devel</span><br><span class="line">yum install zlib-devel</span><br><span class="line">yum install openssl-devel</span><br><span class="line">yum install perl</span><br><span class="line">yum install cpio</span><br><span class="line">yum install expat-devel</span><br><span class="line">yum install gettext-devel yum install perl-ExtUtils-CBuilder perl-ExtUtils-MakeMaker</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/02/04/在CentOS上安装Git/#more" rel="contents">
@@ -836,7 +830,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -916,13 +910,9 @@
 
       
         
-          
-          缓存机制在我们的实际研发工作中，被极其广泛地应用，通过这些缓存机制来提升系统交互的效率。简单的总结来说，就是在两个环节或者系统之间，会引入一个cache/buffer做为提升整体效率的角色。
-而 有趣的是，这种缓存机制令人惊奇并且优美的遵循着“几何分形”的规律，也就是几何分形学中的“自相似性”：从整体上看遵循某种组成规律或者特性，同时从每 一个局部看，仍然遵循某种组成的规律或者特性。我们的这些系统，从整体上看遵循了缓存机制，每一个组成的局部也遵循缓存机制。
-等同类比的一个概念，我们常常说的“空间换时间”，牺牲一部分空间代价，来换取整体效率的提升。
-graph LR
-A[A] ==> B(Cac
-          ...
+          <p>缓存机制在我们的实际研发工作中，被极其广泛地应用，通过这些缓存机制来提升系统交互的效率。简单的总结来说，就是在两个环节或者系统之间，会引入一个cache/buffer做为提升整体效率的角色。</p>
+<p>而 有趣的是，这种缓存机制令人惊奇并且优美的遵循着“几何分形”的规律，也就是几何分形学中的“自相似性”：从整体上看遵循某种组成规律或者特性，同时从每 一个局部看，仍然遵循某种组成的规律或者特性。我们的这些系统，从整体上看遵循了缓存机制，每一个组成的局部也遵循缓存机制。</p>
+<p>等同类比的一个概念，我们常常说的“空间换时间”，牺牲一部分空间代价，来换取整体效率的提升。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/02/04/大规模网站架构的缓存机制和几何分形学/#more" rel="contents">
@@ -1044,7 +1034,7 @@ A[A] ==> B(Cac
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -1124,23 +1114,12 @@ A[A] ==> B(Cac
 
       
         
-          
-          Electron概述
-
-GitHub 官网不翻墙太卡，本着能偷懒就偷懒，GayHub就够了，不用翻官网了
-中文文档
-W3C教程
-
-VUE概述
-
-GitHub
-VUE官网 官网资料齐全，中英文档都齐备，基本看完够搞个工程了
-
-Electron + Vue 联合使用安装Nodejs安装成功之后node -v，会显示版本，版本可以不用这么新，看心情安装。
-12$ node -vv12.14.0
-搭建Vue开发环境直接使用脚手架工具vue-cli，因为在国内的npm非常慢，所以需要重新设置npm镜像，设置为淘宝的镜像
-1npm config set registry https://registry.
-          ...
+          <h1 id="Electron概述"><a href="#Electron概述" class="headerlink" title="Electron概述"></a>Electron概述</h1><p><img src="/2020/01/31/electron-vue开发入门指南/68747470733a2f2f656c656374726f6e6a732e6f72672f696d616765732f656c656374726f6e2d6c6f676f2e737667.svg" alt="Electron Logo"></p>
+<ol>
+<li><a href="https://github.com/electron/electron" target="_blank" rel="noopener">GitHub</a> 官网不翻墙太卡，本着能偷懒就偷懒，GayHub就够了，不用翻官网了</li>
+<li><a href="https://github.com/electron/i18n/tree/master/content/zh-CN" target="_blank" rel="noopener">中文文档</a></li>
+<li><a href="https://www.w3cschool.cn/electronmanual/wcx31ql6.html" target="_blank" rel="noopener">W3C教程</a></li>
+</ol>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/01/31/electron-vue开发入门指南/#more" rel="contents">
@@ -1262,7 +1241,7 @@ Electron + Vue 联合使用安装Nodejs安装成功之后node -v，会显示版�
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-24 14:46:36" itemprop="dateModified" datetime="2020-02-24T14:46:36+08:00">2020-02-24</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -1342,19 +1321,16 @@ Electron + Vue 联合使用安装Nodejs安装成功之后node -v，会显示版�
 
       
         
-          
-          Java应用开发、维护中，有时候我们会碰到下面这些问题：
-
-OutOfMemoryError，内存不足
-内存泄露
-线程死锁
-锁争用（Lock Contention）
-Java进程消耗CPU过高
-……
-
-这些问题在日常开发、维护中可能被很多人忽视（比如有的人遇到上面的问题只是重启服务器或者调大内存，而不会深究问题根源），但能够理解并解决这些问题是Java程序员进阶的必备要求。本文将对一些常用的JVM性能调优监控工具进行介绍，希望能起抛砖引玉之用。
-一、jps(Java Virtual Machine Process Status Tool)   ： 基础工具jps主要用来输出JVM中运行的进程状
-          ...
+          <p>Java应用开发、维护中，有时候我们会碰到下面这些问题：</p>
+<ul>
+<li>OutOfMemoryError，内存不足</li>
+<li>内存泄露</li>
+<li>线程死锁</li>
+<li>锁争用（Lock Contention）</li>
+<li>Java进程消耗CPU过高</li>
+<li>……</li>
+</ul>
+<p>这些问题在日常开发、维护中可能被很多人忽视（比如有的人遇到上面的问题只是重启服务器或者调大内存，而不会深究问题根源），但能够理解并解决这些问题是Java程序员进阶的必备要求。本文将对一些常用的JVM性能调优监控工具进行介绍，希望能起抛砖引玉之用。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/01/27/JVM-性能调优监控工具-jps、jstack、jmap、jhat、jstat、hprof-使用详解/#more" rel="contents">
@@ -1476,7 +1452,7 @@ Java进程消耗CPU过高
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -1556,14 +1532,8 @@ Java进程消耗CPU过高
 
       
         
-          
-          概述netstat 是一个告诉我们系统中所有 tcp/udp/unix socket 连接状态的命令行工具。它会列出所有已经连接或者等待连接状态的连接。 该工具在识别某个应用监听哪个端口时特别有用，我们也能用它来判断某个应用是否正常的在监听某个端口。
-netstat 命令还能显示其它各种各样的网络相关信息，例如路由表， 网卡统计信息， 虚假连接以及多播成员等。
-1 - 检查所有的连接使用 a 选项可以列出系统中的所有连接，
-1$ netstat -a
-这会显示系统所有的 tcp、udp 以及 unix 连接。
-2 - 检查所有的 tcp/udp/unix socket 连接使用 t 选项只列出
-          ...
+          <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>netstat 是一个告诉我们系统中所有 tcp/udp/unix socket 连接状态的命令行工具。它会列出所有已经连接或者等待连接状态的连接。 该工具在识别某个应用监听哪个端口时特别有用，我们也能用它来判断某个应用是否正常的在监听某个端口。</p>
+<p>netstat 命令还能显示其它各种各样的网络相关信息，例如路由表， 网卡统计信息， 虚假连接以及多播成员等。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/01/27/Linux命令-netstat/#more" rel="contents">
@@ -1685,7 +1655,7 @@ netstat 命令还能显示其它各种各样的网络相关信息，例如路由
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -1765,11 +1735,8 @@ netstat 命令还能显示其它各种各样的网络相关信息，例如路由
 
       
         
-          
-            memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。
-  文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。
-1. 综述  读一个软件的源码，首先要弄懂软件是用作干什么的，那memcached和redis是干啥的？众所周知，数据一般会放在数据库中，但是查询数据会相对比较慢，特别是用户很多时，频繁的查询，需要耗费大量的时间。怎么办呢？数据放在哪里查询快？那肯定是内存中。memcached和redi
-          ...
+          <p>  memcached和redis，作为近些年最常用的缓存服务器，相信大家对它们再熟悉不过了。前两年还在学校时，我曾经读过它们的主要源码，如今写篇笔记从个人角度简单对比一下它们的实现方式，权当做复习，有理解错误之处，欢迎指正。</p>
+<p>  文中使用的架构类的图片大多来自于网络，有部分图与最新实现有出入，文中已经指出。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/12/29/memcached与redis实现的对比/#more" rel="contents">
@@ -1874,12 +1841,24 @@ netstat 命令还能显示其它各种各样的网络相关信息，例如路由
                 
               
 
-              <time title="创建时间：2019-12-22 17:05:18 / 修改时间：17:16:39" itemprop="dateCreated datePublished" datetime="2019-12-22T17:05:18+08:00">2019-12-22</time>
+              <time title="创建时间：2019-12-22 17:05:18" itemprop="dateCreated datePublished" datetime="2019-12-22T17:05:18+08:00">2019-12-22</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -1906,7 +1885,7 @@ netstat 命令还能显示其它各种各样的网络相关信息，例如路由
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">9.3k</span>
+                <span title="本文字数">9.4k</span>
               
 
               
@@ -1920,7 +1899,7 @@ netstat 命令还能显示其它各种各样的网络相关信息，例如路由
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">8 分钟</span>
+                <span title="阅读时长">9 分钟</span>
               
             </div>
           
@@ -1941,19 +1920,8 @@ netstat 命令还能显示其它各种各样的网络相关信息，例如路由
 
       
         
-          
-          本文转载自从零开始：史上最详尽V2Ray搭建图文教程，根据实际服务器配置做部分修改。
-一、服务端安装以下所有操作都是使用root用户（普通用户自行sudo）进行操作的，服务器centos7。
-1.安装wget
-如提示没有安装wget，在登录完成的窗口输入下面命令并回车进行wget安装：
-1yum -y install wget
-2.下载脚本
-安装完wget之后就可以进行下载安装v2ray的脚本了，输入如下命令并回车：
-1wget https://install.direct/go.sh
-3.安装unzip
-因为centos不支持apt-get，我们需要安装unzip，详见官方说明：
-1yum 
-          ...
+          <p>本文转载自从零开始：<a href="https://www.4spaces.org/digitalocean-build-v2ray-0-1/" target="_blank" rel="noopener">史上最详尽V2Ray搭建图文教程</a>，根据实际服务器配置做部分修改。</p>
+<h2 id="一、服务端安装"><a href="#一、服务端安装" class="headerlink" title="一、服务端安装"></a>一、服务端安装</h2><p>以下所有操作都是使用root用户（普通用户自行sudo）进行操作的，服务器centos7。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/12/22/转载-从零开始：史上最详尽V2Ray搭建图文教程/#more" rel="contents">
@@ -2075,7 +2043,7 @@ netstat 命令还能显示其它各种各样的网络相关信息，例如路由
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -2155,12 +2123,10 @@ netstat 命令还能显示其它各种各样的网络相关信息，例如路由
 
       
         
-          
-          作者 | Draveness
-本文作者 Draveness，文章转载自 https://draveness.me/zookeeper-chubby， 对其内容进行过编辑。
-这篇文章主要会介绍 Zookeeper 的实现原理以及常见的应用
-在 2006 年，Google 发表了一篇名为 The Chubby lock service for loosely-coupled distributed systems 的论文，其中描述了一个分布式锁服务 Chubby 的设计理念和实现原理；作为 Google 内部的一个基础服务，虽然 Chubby 与 GFS、Bigtable 和 MapReduce 
-          ...
+          <p><code>这篇文章主要会介绍 Zookeeper 的实现原理以及常见的应用</code></p>
+<p>在 2006 年，Google 发表了一篇名为 The Chubby lock service for loosely-coupled distributed systems 的论文，其中描述了一个分布式锁服务 Chubby 的设计理念和实现原理；作为 Google 内部的一个基础服务，虽然 Chubby 与 GFS、Bigtable 和 MapReduce 相比并没有那么大的名气，不过它在 Google 内部也是非常重要的基础设施。</p>
+<p><img src="/2018/10/07/详解分布式协调服务-ZooKeeper/FE4VibF0SjfNC55Nwr7XreFBdYW0Q4icTg30dtZEX41yMutAaHrOdtng3gZrnXVS6ib5nUAGWphPdibZibF0xASOWWQ.png" alt="img"></p>
+<p>相比于名不见经传的 Chubby，作者相信 Zookeeper 更被广大开发者所熟知，作为非常出名的分布式协调服务，Zookeeper 有非常多的应用，包括发布订阅、命名服务、分数是协调和分布式锁，这篇文章主要会介绍 Zookeeper 的实现原理以及常见的应用，但是在具体介绍 Zookeeper 的功能和原理之前，我们会简单介绍一下分布式锁服务 Chubby 以及它与 Zookeeper 之间的异同。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/10/07/详解分布式协调服务-ZooKeeper/#more" rel="contents">
@@ -2265,12 +2231,24 @@ netstat 命令还能显示其它各种各样的网络相关信息，例如路由
                 
               
 
-              <time title="创建时间：2018-07-13 22:58:47 / 修改时间：23:11:09" itemprop="dateCreated datePublished" datetime="2018-07-13T22:58:47+08:00">2018-07-13</time>
+              <time title="创建时间：2018-07-13 22:58:47" itemprop="dateCreated datePublished" datetime="2018-07-13T22:58:47+08:00">2018-07-13</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -2350,13 +2328,9 @@ netstat 命令还能显示其它各种各样的网络相关信息，例如路由
 
       
         
-          
-          前言本文讲述如何安装配置Shadowsocks Server，并支持通过代理方式（http/sock v4/5)连接因特网.
-
-这里主要阐述服务端通过proxy连接的解决方案，shadowsocks server直连网络的方式比较简单，网上这块资料也比较齐全，不做过多描述，
-ssserver代理安装配置安装Shadowsocks Server参考Install Shadowsocks Server on Windows，
-客户端的安装方式参考Shadowsocks Client安装, 这里主要解决服务端通过代理解决shadowsocks server无法直连网络的问题，客户端这块不做过多描述。
-          ...
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文讲述如何安装配置Shadowsocks Server，并支持通过代理方式（http/sock v4/5)连接因特网.</p>
+<p><img src="/2018/07/13/Shadowsocks服务器代理/1531388960253.png" alt="1531388960253"></p>
+<p>这里主要阐述服务端通过proxy连接的解决方案，shadowsocks server直连网络的方式比较简单，网上这块资料也比较齐全，不做过多描述</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/07/13/Shadowsocks服务器代理/#more" rel="contents">
@@ -2692,7 +2666,7 @@ ssserver代理安装配置安装Shadowsocks Server参考Install Shadowsocks Serv
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   

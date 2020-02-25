@@ -129,7 +129,7 @@
 <meta property="og:site_name" content="星辰大海">
 <meta property="og:description" content="CentOS的yum源中没有git，只能自己编译安装，现在记录下编译安装的内容，留给自己备忘。 确保已安装了依赖的包 12345678yum install curlyum install curl-develyum install zlib-develyum install openssl-develyum install perlyum install cpioyum install expa">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-02-17T02:40:44.883Z">
+<meta property="og:updated_time" content="2020-02-25T15:09:15.065Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在CentOS上安装Git">
 <meta name="twitter:description" content="CentOS的yum源中没有git，只能自己编译安装，现在记录下编译安装的内容，留给自己备忘。 确保已安装了依赖的包 12345678yum install curlyum install curl-develyum install zlib-develyum install openssl-develyum install perlyum install cpioyum install expa">
@@ -420,7 +420,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -502,6 +502,7 @@
         <p>CentOS的yum源中没有git，只能自己编译安装，现在记录下编译安装的内容，留给自己备忘。</p>
 <p>确保已安装了依赖的包</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">yum install curl</span><br><span class="line">yum install curl-devel</span><br><span class="line">yum install zlib-devel</span><br><span class="line">yum install openssl-devel</span><br><span class="line">yum install perl</span><br><span class="line">yum install cpio</span><br><span class="line">yum install expat-devel</span><br><span class="line">yum install gettext-devel yum install perl-ExtUtils-CBuilder perl-ExtUtils-MakeMaker</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 <p>下载最新的git包</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wget http://www.codemonkey.org.uk/projects/git-snapshots/git/git-latest.tar.gz</span><br><span class="line">tar xzvf git-latest.tar.gz</span><br><span class="line"><span class="built_in">cd</span> git-2011-11-30 ＃你的目录可能不是这个</span><br><span class="line">autoconf</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
 <p>检查下安装的版本，大功告成</p>
@@ -866,7 +867,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   

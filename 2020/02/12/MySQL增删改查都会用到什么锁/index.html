@@ -121,13 +121,13 @@
 
 
 
-  <meta name="description" content="日常的操作中，增删改查都会使用什么类型的锁？其实这个问题，可以分为两个方面，一方面是读，一方面是写。 01 读（select）  我们先来看读的部分。读的操作，其实分为两种，分别是一致性读和锁定读，   这里我们温习一下，一致性读其实就是利用事务的MVCC机制，来读取一份数据的快照，所以有的书上也称之为快照读，一致性读是不加锁的，其他的事务是可以对表中的数据记录进行改动的。一般情况下，常见的读，例">
+  <meta name="description" content="日常的操作中，增删改查都会使用什么类型的锁？其实这个问题，可以分为两个方面，一方面是读，一方面是写。">
 <meta name="keywords" content="MySQL,锁">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL增删改查都会用到什么锁?">
 <meta property="og:url" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/index.html">
 <meta property="og:site_name" content="星辰大海">
-<meta property="og:description" content="日常的操作中，增删改查都会使用什么类型的锁？其实这个问题，可以分为两个方面，一方面是读，一方面是写。 01 读（select）  我们先来看读的部分。读的操作，其实分为两种，分别是一致性读和锁定读，   这里我们温习一下，一致性读其实就是利用事务的MVCC机制，来读取一份数据的快照，所以有的书上也称之为快照读，一致性读是不加锁的，其他的事务是可以对表中的数据记录进行改动的。一般情况下，常见的读，例">
+<meta property="og:description" content="日常的操作中，增删改查都会使用什么类型的锁？其实这个问题，可以分为两个方面，一方面是读，一方面是写。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212152912203.png">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212162043235.png">
@@ -153,10 +153,10 @@
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155728846.png">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493477920.webp">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155627181.png">
-<meta property="og:updated_time" content="2020-02-17T02:40:44.708Z">
+<meta property="og:updated_time" content="2020-02-25T15:09:15.048Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL增删改查都会用到什么锁?">
-<meta name="twitter:description" content="日常的操作中，增删改查都会使用什么类型的锁？其实这个问题，可以分为两个方面，一方面是读，一方面是写。 01 读（select）  我们先来看读的部分。读的操作，其实分为两种，分别是一致性读和锁定读，   这里我们温习一下，一致性读其实就是利用事务的MVCC机制，来读取一份数据的快照，所以有的书上也称之为快照读，一致性读是不加锁的，其他的事务是可以对表中的数据记录进行改动的。一般情况下，常见的读，例">
+<meta name="twitter:description" content="日常的操作中，增删改查都会使用什么类型的锁？其实这个问题，可以分为两个方面，一方面是读，一方面是写。">
 <meta name="twitter:image" content="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212152912203.png">
 
 
@@ -445,7 +445,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -504,7 +504,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">26 分钟</span>
+                <span title="阅读时长">25 分钟</span>
               
             </div>
           
@@ -525,7 +525,8 @@
 
       
         <p>日常的操作中，增删改查都会使用什么类型的锁？其实这个问题，可以分为两个方面，一方面是读，一方面是写。</p>
-<h1 id="01-读（select）"><a href="#01-读（select）" class="headerlink" title="01 读（select）"></a>01 读（select）</h1><p>  我们先来看读的部分。读的操作，其实分为两种，分别是<strong>一致性读</strong>和<strong>锁定读</strong>，</p>
+<a id="more"></a>
+<h1 id="读（select）"><a href="#读（select）" class="headerlink" title="读（select）"></a>读（select）</h1><p>  我们先来看读的部分。读的操作，其实分为两种，分别是<strong>一致性读</strong>和<strong>锁定读</strong>，</p>
 <p>  这里我们温习一下，一致性读其实就是利用事务的MVCC机制，来读取一份数据的快照，所以有的书上也称之为快照读，一致性读是不加锁的，其他的事务是可以对表中的数据记录进行改动的。一般情况下，常见的读，例如：</p>
 <p>select * from table；</p>
 <p>select * from table left join table2;</p>
@@ -537,7 +538,7 @@
 <p>1、在Serializable这种事务的隔离级别下，普通的select操作会升级为select…in share mode；的模式。</p>
 <p>2、在唯一索引上使用唯一的查询条件，会使用记录锁，而不会封锁记录之间的间隔，即不会使用间隙锁。</p>
 <p>3、其他类型的索引使用范围的查询条件或者唯一的查询条件，innodb会自动锁定被扫描的范围，避免索引范围区间内插入新的记录。这块儿可能比较模糊，文章最后面给出各种类型下的加锁测试结果。</p>
-<h1 id="02-写（update、delete、insert）"><a href="#02-写（update、delete、insert）" class="headerlink" title="02 写（update、delete、insert）"></a>02 写（update、delete、insert）</h1><h2 id="关于delete"><a href="#关于delete" class="headerlink" title="关于delete"></a>关于delete</h2><p>  对一条数据做delete的过程实际上是要先在索引的B+树上获取该记录的位置，然后再这个记录所在的位置加X锁，也就是排它锁。</p>
+<h1 id="写（update、delete、insert）"><a href="#写（update、delete、insert）" class="headerlink" title="写（update、delete、insert）"></a>写（update、delete、insert）</h1><h2 id="关于delete"><a href="#关于delete" class="headerlink" title="关于delete"></a>关于delete</h2><p>  对一条数据做delete的过程实际上是要先在索引的B+树上获取该记录的位置，然后再这个记录所在的位置加X锁，也就是排它锁。</p>
 <p>  如果对某个范围内的数据做delete操作，则会在索引B+树上对范围内符合查询条件的记录以及记录之前的区间加next-key锁(本质是记录锁和间隙锁的组合，后面的文章会讲到)。  </p>
 <p>   加完锁之后，再进行delete操作。这个delete操作的本质，其实是先将delete的标识为标识为1，而不是真正进行删除，如果下次这块空间可以复用，则innodb会直接进行复用。</p>
 <p>   更多详情请见：Innodb数据页简介</p>
@@ -647,43 +648,7 @@
 <p>上面两种存储引擎在处理多进程数据操作的时候是如何表现的，就是我们接下来要讨论的问题。</p>
 <p>为了让整个描述更加清晰，我们将表级锁和行级锁以及 MyISAM，InnoDB 存储引擎，就形成了一个 2*2 的象限。</p>
 <p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478029.webp" alt="img"></p>
-<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图*</center>
-
-<p>由于 MyISAM 存储引擎不支持行级锁，实际上后面讨论的问题会围绕三个象限的讨论展开。</p>
-<p>从内容上来看，InnoDB 作为使用最多的存储引擎遇到的问题和值得注意的地方较多，也是本文的重点。</p>
-<p>MyISAM 存储引擎和表级锁</p>
-<p>首先，来看第一象限的内容：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212160055676.png" alt="image-20200212160055676"></p>
-<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图-第一象限*</center>
-
-<p>MyISAM 存储引擎支持表级锁，并且支持两种锁模式：</p>
-<ul>
-<li><strong>对 MyISAM 表的读操作（共享锁），</strong>不会阻塞其他进程对同一表的读请求，但会阻塞对其的写请求。当读锁释放后，才会执行其他进程的写操作。</li>
-<li><strong>对 MyISAM 表的写操作（排他锁），</strong>会阻塞其他进程对同一表的读写操作，当该锁释放后，才会执行其他进程的读写操作。</li>
-</ul>
-<h3 id="MyISAM-优化建议"><a href="#MyISAM-优化建议" class="headerlink" title="MyISAM 优化建议"></a>MyISAM 优化建议</h3><p>在使用 MyISAM 存储引擎时。执行 SQL 语句，会自动为 SELECT 语句加上共享锁，为 UDI（更新，删除，插入）操作加上排他锁。</p>
-<p>由于这个特性在多进程并发插入同一张表的时候，就会因为排他锁而进行等待。</p>
-<p>因此可以通过配置 concurrent_insert 系统变量，来控制其并发的插入行为。</p>
-<p><strong>①concurrent_insert=0 时，</strong>不允许并发插入。</p>
-<p><strong>②concurrent_insert=1 时，</strong>如果 MyISAM 表中没有空洞（即表中没有被删除的行），允许一个进程读表时，另一个进程向表的尾部插入记录（MySQL 默认设置）。</p>
-<blockquote>
-<p>注：空洞是行记录被删除以后，只是被标记为“已删除”其存储空间没有被回收，也就是说没有被物理删除。由另外一个进程，异步对这个数据进行删除。</p>
-<p>因为空间长度问题，删除以后的物理空间不能被新的记录所使用，从而形成了空洞。</p>
-</blockquote>
-<p><strong>③concurrent_insert=2 时，</strong>无论 MyISAM 表中有没有空洞，都允许在表尾并发插入记录。</p>
-<p>如果在数据插入的时候，没有并发删除操作的话，可以尝试把 concurrent_insert 设置为 1。</p>
-<p>反之，在数据插入的时候有删除操作且量较大时，也就是会产生“空洞”的时候，就需要把 concurrent_insert 设置为 2。</p>
-<p>另外，当一个进程请求某个 MyISAM 表的读锁，另一个进程也请求同一表的写锁。</p>
-<p>即使读请求先到达，写请求后到达，写请求也会插到读请求之前。因为 MySQL 的默认设置认为，写请求比读请求重要。</p>
-<p>我们可以通过 low_priority_updates 来调节读写行为的优先级：</p>
-<ul>
-<li>数据库以读为主时，要优先保证查询性能时，可通过 low_priority_updates=1 设置读优先级高于写优先级。</li>
-<li>数据库以写为主时，则不用设置 low_priority_updates 参数。</li>
-</ul>
-<h3 id="InnoDB-存储引擎和表级锁"><a href="#InnoDB-存储引擎和表级锁" class="headerlink" title="InnoDB 存储引擎和表级锁"></a>InnoDB 存储引擎和表级锁</h3><p>再来看看第二象限的内容：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493477955.webp" alt="img"></p>
-<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图-第二象限*</center>
-
+<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图<em></em></center><br>由于 MyISAM 存储引擎不支持行级锁，实际上后面讨论的问题会围绕三个象限的讨论展开。<br><br>从内容上来看，InnoDB 作为使用最多的存储引擎遇到的问题和值得注意的地方较多，也是本文的重点。<br><br>MyISAM 存储引擎和表级锁<br><br><br><br>首先，来看第一象限的内容：<br><br><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212160055676.png" alt="image-20200212160055676"><br><br><center>2*2 表行锁，MyISAM，InnoDB 示意图-第一象限<em></em></center><br>MyISAM 存储引擎支持表级锁，并且支持两种锁模式：<br><br>- <strong>对 MyISAM 表的读操作（共享锁），</strong>不会阻塞其他进程对同一表的读请求，但会阻塞对其的写请求。当读锁释放后，才会执行其他进程的写操作。<br>- <strong>对 MyISAM 表的写操作（排他锁），</strong>会阻塞其他进程对同一表的读写操作，当该锁释放后，才会执行其他进程的读写操作。<br><br>### MyISAM 优化建议<br><br>在使用 MyISAM 存储引擎时。执行 SQL 语句，会自动为 SELECT 语句加上共享锁，为 UDI（更新，删除，插入）操作加上排他锁。<br><br>由于这个特性在多进程并发插入同一张表的时候，就会因为排他锁而进行等待。<br><br>因此可以通过配置 concurrent_insert 系统变量，来控制其并发的插入行为。<br><br><strong>①concurrent_insert=0 时，</strong>不允许并发插入。<br><br><strong>②concurrent_insert=1 时，</strong>如果 MyISAM 表中没有空洞（即表中没有被删除的行），允许一个进程读表时，另一个进程向表的尾部插入记录（MySQL 默认设置）。<br><br>&gt; 注：空洞是行记录被删除以后，只是被标记为“已删除”其存储空间没有被回收，也就是说没有被物理删除。由另外一个进程，异步对这个数据进行删除。<br>&gt;<br>&gt; 因为空间长度问题，删除以后的物理空间不能被新的记录所使用，从而形成了空洞。<br><br><br><br><strong>③concurrent_insert=2 时，</strong>无论 MyISAM 表中有没有空洞，都允许在表尾并发插入记录。<br><br><br><br>如果在数据插入的时候，没有并发删除操作的话，可以尝试把 concurrent_insert 设置为 1。<br><br>反之，在数据插入的时候有删除操作且量较大时，也就是会产生“空洞”的时候，就需要把 concurrent_insert 设置为 2。<br><br>另外，当一个进程请求某个 MyISAM 表的读锁，另一个进程也请求同一表的写锁。<br><br>即使读请求先到达，写请求后到达，写请求也会插到读请求之前。因为 MySQL 的默认设置认为，写请求比读请求重要。<br><br>我们可以通过 low_priority_updates 来调节读写行为的优先级：<br><br>- 数据库以读为主时，要优先保证查询性能时，可通过 low_priority_updates=1 设置读优先级高于写优先级。<br>- 数据库以写为主时，则不用设置 low_priority_updates 参数。<br><br>### InnoDB 存储引擎和表级锁<br><br>再来看看第二象限的内容：<br><br><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493477955.webp" alt="img"><br><br><center>2*2 表行锁，MyISAM，InnoDB 示意图-第二象限*</center>
 
 
 <p>InnoDB 存储引擎表锁。当没有对数据表中的索引数据进行查询时，会执行表锁操作。</p>
@@ -699,12 +664,7 @@
 <p><strong>InnoDB表锁的实现方式：</strong>假设有一个表 test2，有两个字段分别是 id 和 name。</p>
 <p>没有设置主键同时也没有设置任何索引（index）如下：</p>
 <p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478033.webp" alt="img"></p>
-<center><em>InnoDB 表锁实现方式图</em></center>
-
-<h3 id="InnoDB-存储引擎和行级锁"><a href="#InnoDB-存储引擎和行级锁" class="headerlink" title="InnoDB 存储引擎和行级锁"></a>InnoDB 存储引擎和行级锁</h3><p>第四象限我们使用的比较多，讨论的内容也相对多些：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478031.webp" alt="img"></p>
-<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图-第四象限*</center>
-
+<center><em>InnoDB 表锁实现方式图</em></center><br>### InnoDB 存储引擎和行级锁<br><br>第四象限我们使用的比较多，讨论的内容也相对多些：<br><br><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478031.webp" alt="img"><br><br><center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图-第四象限*</center>
 
 
 <p>InnoDB 存储引擎行锁，当数据查询时针对索引数据进行时，会使用行级锁。</p>
@@ -718,12 +678,10 @@
 <center><em>InnoDB 行锁实现方式图</em></center>
 
 
-
 <p>在高并发的情况下，多个事务同时请求更新数据，由于资源被占用等待事务增多。</p>
 <p>如此，会造成性能问题，可以通过 innodb_lock_wait_timeout 来解决。innodb_lock_wait_timeout 是事务等待获取资源的最长时间，单位为秒。如果超过时间还未分配到资源，则会返回应用失败。</p>
 <h3 id="四种锁的兼容情况"><a href="#四种锁的兼容情况" class="headerlink" title="四种锁的兼容情况"></a>四种锁的兼容情况</h3><p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155859778.png" alt="image-20200212155859778"></p>
 <center><em>共享锁，排他锁，意向共享锁，意向排他锁兼容图例</em></center>
-
 
 
 <p>如果一个事务请求的锁模式与当前的锁兼容， InnoDB 就将请求的锁授予该事务；反之， 如果两者不兼容，该事务就要等待锁释放。</p>
@@ -741,11 +699,9 @@
 <center><em>间隙锁图</em></center>
 
 
-
 <h4 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a><strong>死锁</strong></h4><p>两个事务都需要获得对方持有的排他锁才能继续完成任务，这种互相等待对方释放资源的情况就是死锁。</p>
 <p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478014.webp" alt="img"></p>
 <center><em>死锁图</em></center>
-
 
 
 <p><strong>检测死锁：</strong>InnoDB 存储引擎能检测到死锁的循环依赖并立即返回一个错误。</p>
@@ -787,45 +743,10 @@
 <center><em>脏读例子</em></center>
 
 
-
 <p><strong>不可重复读（non-repeatable read），</strong>在事务范围内，多次查询某条记录，每次得到不同的结果。</p>
 <p>第一个事务中的两次读取数据之间，由于第二个事务的修改，第一个事务两次读到的数据可能不一样。</p>
 <p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155748878.png" alt="image-20200212155748878"></p>
-<center><em>不可重复读例子</em></center>
-
-<p><strong>幻读（phantom read），</strong>是事务非独立执行时发生的一种现象。</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155718409.png" alt="image-20200212155718409"></p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155728846.png" alt="image-20200212155728846"></p>
-<center><em>幻读的例子</em></center>
-
-<p>在同一时间点，数据库允许多个并发事务，同时对数据进行读写操作，会造成数据不一致性。</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493477920.webp" alt="img"></p>
-<center><em>四种隔离级别，解决事务并发问题对照图</em></center>
-
-<p>隔离性就是用来防止这种数据不一致的。事务隔离根据级别不同，从低到高包括：</p>
-<ul>
-<li><p><strong>读未提交（read uncommitted）：</strong>它是最低的事务隔离级别，一个事务还没提交时，它做的变更就能被别的事务看到。有脏读的可能性。</p>
-</li>
-<li><p><strong>读提交（read committed）：</strong>保证一个事物提交后才能被另外一个事务读取。另外一个事务不能读取该事物未提交的数据。可避免脏读的发生，但是可能会造成不可重复读。</p>
-</li>
-<li><p><strong>可重复读（repeatable read MySQL 默认方式）：</strong>多次读取同一范围的数据会返回第一次查询的快照，即使其他事务对该数据做了更新修改。事务在执行期间看到的数据前后必须是一致的。</p>
-</li>
-<li><p><strong>串行化（serializable）：</strong>是最可靠的事务隔离级别。“写”会加“排他锁”，“读”会加“共享锁”。</p>
-<p>当出现读写锁冲突的时候，后访问的事务必须等前一个事务执行完成，所以事务执行是串行的。可避免脏读、不可重复读、幻读。</p>
-</li>
-</ul>
-<h3 id="InnoDB-优化建议"><a href="#InnoDB-优化建议" class="headerlink" title="InnoDB 优化建议"></a>InnoDB 优化建议</h3><p>从锁机制的实现方面来说，InnoDB 的行级锁带来的性能损耗可能比表级锁要高一点，但在并发方面的处理能力远远优于 MyISAM 的表级锁。这也是大多数公司的 MySQL 都是使用 InnoDB 模式的原因。</p>
-<p>但是，InnoDB 也有脆弱的一面，下面提出几个优化建议供大家参考：</p>
-<ul>
-<li>尽可能让数据检索通过索引完成，避免 InnoDB 因为无法通过索引加行锁，而导致升级为表锁的情况。换句话说就是，多用行锁，少用表锁。</li>
-<li>加索引的时候尽量准确，避免造成不必要的锁定影响其他查询。</li>
-<li>尽量减少给予范围的数据检索（间隙锁），避免因为间隙锁带来的影响，锁定了不该锁定的记录。</li>
-<li>尽量控制事务的大小，减少锁定的资源量和锁定时间。</li>
-<li>尽量使用较低级别的事务隔离，减少 MySQL 因为事务隔离带来的成本。</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155627181.png" alt="image-20200212155627181"></p>
-<center><em>MySQL 数据库锁的思维导图</em></center>
-
+<center><em>不可重复读例子</em></center><br><strong>幻读（phantom read），</strong>是事务非独立执行时发生的一种现象。<br><br><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155718409.png" alt="image-20200212155718409"><br><br><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155728846.png" alt="image-20200212155728846"><br><br><center><em>幻读的例子</em></center><br>在同一时间点，数据库允许多个并发事务，同时对数据进行读写操作，会造成数据不一致性。<br><br><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493477920.webp" alt="img"><br><br><center><em>四种隔离级别，解决事务并发问题对照图</em></center><br>隔离性就是用来防止这种数据不一致的。事务隔离根据级别不同，从低到高包括：<br><br>- <strong>读未提交（read uncommitted）：</strong>它是最低的事务隔离级别，一个事务还没提交时，它做的变更就能被别的事务看到。有脏读的可能性。<br><br>- <strong>读提交（read committed）：</strong>保证一个事物提交后才能被另外一个事务读取。另外一个事务不能读取该事物未提交的数据。可避免脏读的发生，但是可能会造成不可重复读。<br><br>- <strong>可重复读（repeatable read MySQL 默认方式）：</strong>多次读取同一范围的数据会返回第一次查询的快照，即使其他事务对该数据做了更新修改。事务在执行期间看到的数据前后必须是一致的。<br><br>- <strong>串行化（serializable）：</strong>是最可靠的事务隔离级别。“写”会加“排他锁”，“读”会加“共享锁”。<br><br>  当出现读写锁冲突的时候，后访问的事务必须等前一个事务执行完成，所以事务执行是串行的。可避免脏读、不可重复读、幻读。<br><br>### InnoDB 优化建议<br><br>从锁机制的实现方面来说，InnoDB 的行级锁带来的性能损耗可能比表级锁要高一点，但在并发方面的处理能力远远优于 MyISAM 的表级锁。这也是大多数公司的 MySQL 都是使用 InnoDB 模式的原因。<br><br>但是，InnoDB 也有脆弱的一面，下面提出几个优化建议供大家参考：<br><br>- 尽可能让数据检索通过索引完成，避免 InnoDB 因为无法通过索引加行锁，而导致升级为表锁的情况。换句话说就是，多用行锁，少用表锁。<br>- 加索引的时候尽量准确，避免造成不必要的锁定影响其他查询。<br>- 尽量减少给予范围的数据检索（间隙锁），避免因为间隙锁带来的影响，锁定了不该锁定的记录。<br>- 尽量控制事务的大小，减少锁定的资源量和锁定时间。<br>- 尽量使用较低级别的事务隔离，减少 MySQL 因为事务隔离带来的成本。<br><br>### 总结<br><br><br><br><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155627181.png" alt="image-20200212155627181"><br><br><center><em>MySQL 数据库锁的思维导图</em></center>
 
 
 <p>MySQL 的锁主要分为表级锁和行级锁。MyISAM 引擎使用的是表级锁，针对表级的共享锁和排他锁，可以通过 concurrent_insert 和 low_priority_updates 参数来优化。</p>
@@ -1186,7 +1107,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#01-读（select）"><span class="nav-number">1.</span> <span class="nav-text">01 读（select）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#02-写（update、delete、insert）"><span class="nav-number">2.</span> <span class="nav-text">02 写（update、delete、insert）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于delete"><span class="nav-number">2.1.</span> <span class="nav-text">关于delete</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于update"><span class="nav-number">2.2.</span> <span class="nav-text">关于update</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于insert"><span class="nav-number">2.3.</span> <span class="nav-text">关于insert</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附录"><span class="nav-number">3.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于MySQL锁的两个知识点"><span class="nav-number">3.1.</span> <span class="nav-text">关于MySQL锁的两个知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL快照读和当前读"><span class="nav-number">3.1.1.</span> <span class="nav-text">MySQL快照读和当前读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于死锁"><span class="nav-number">3.1.2.</span> <span class="nav-text">关于死锁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Innodb数据页简介"><span class="nav-number">3.2.</span> <span class="nav-text">Innodb数据页简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL锁优化"><span class="nav-number">3.3.</span> <span class="nav-text">MySQL锁优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL-锁分类"><span class="nav-number">3.3.1.</span> <span class="nav-text">MySQL 锁分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM-优化建议"><span class="nav-number">3.3.2.</span> <span class="nav-text">MyISAM 优化建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InnoDB-存储引擎和表级锁"><span class="nav-number">3.3.3.</span> <span class="nav-text">InnoDB 存储引擎和表级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InnoDB-存储引擎和行级锁"><span class="nav-number">3.3.4.</span> <span class="nav-text">InnoDB 存储引擎和行级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四种锁的兼容情况"><span class="nav-number">3.3.5.</span> <span class="nav-text">四种锁的兼容情况</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#间隙锁"><span class="nav-number">3.3.5.1.</span> <span class="nav-text">间隙锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#死锁"><span class="nav-number">3.3.5.2.</span> <span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MySQL-锁定情况的查询"><span class="nav-number">3.3.5.3.</span> <span class="nav-text">MySQL 锁定情况的查询</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InnoDB-优化建议"><span class="nav-number">3.3.6.</span> <span class="nav-text">InnoDB 优化建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.3.7.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#读（select）"><span class="nav-number">1.</span> <span class="nav-text">读（select）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#写（update、delete、insert）"><span class="nav-number">2.</span> <span class="nav-text">写（update、delete、insert）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于delete"><span class="nav-number">2.1.</span> <span class="nav-text">关于delete</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于update"><span class="nav-number">2.2.</span> <span class="nav-text">关于update</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于insert"><span class="nav-number">2.3.</span> <span class="nav-text">关于insert</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附录"><span class="nav-number">3.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于MySQL锁的两个知识点"><span class="nav-number">3.1.</span> <span class="nav-text">关于MySQL锁的两个知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL快照读和当前读"><span class="nav-number">3.1.1.</span> <span class="nav-text">MySQL快照读和当前读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于死锁"><span class="nav-number">3.1.2.</span> <span class="nav-text">关于死锁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Innodb数据页简介"><span class="nav-number">3.2.</span> <span class="nav-text">Innodb数据页简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL锁优化"><span class="nav-number">3.3.</span> <span class="nav-text">MySQL锁优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL-锁分类"><span class="nav-number">3.3.1.</span> <span class="nav-text">MySQL 锁分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四种锁的兼容情况"><span class="nav-number">3.3.2.</span> <span class="nav-text">四种锁的兼容情况</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#间隙锁"><span class="nav-number">3.3.2.1.</span> <span class="nav-text">间隙锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#死锁"><span class="nav-number">3.3.2.2.</span> <span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MySQL-锁定情况的查询"><span class="nav-number">3.3.2.3.</span> <span class="nav-text">MySQL 锁定情况的查询</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -1218,7 +1139,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   

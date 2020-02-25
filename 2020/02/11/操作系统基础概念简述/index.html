@@ -121,13 +121,13 @@
 
 
 
-  <meta name="description" content="操作系统概念大部分操作系统提供了特定的基础概念和抽象，例如进程、地址空间、文件等，它们是需要理解的核心内容。下面我们会简要介绍一些基本概念，为了说明这些概念，我们会不时的从 UNIX 中提出示例，相同的示例也会存在于其他系统中，我们后面会进行介绍。 进程操作系统一个很关键的概念就是 进程(Process)。进程的本质就是操作系统执行的一个程序。与每个进程相关的是地址空间(address space">
+  <meta name="description" content="操作系统概念大部分操作系统提供了特定的基础概念和抽象，例如进程、地址空间、文件等，它们是需要理解的核心内容。下面我们会简要介绍一些基本概念，为了说明这些概念，我们会不时的从 UNIX 中提出示例，相同的示例也会存在于其他系统中，我们后面会进行介绍。">
 <meta name="keywords" content="操作系统">
 <meta property="og:type" content="article">
 <meta property="og:title" content="操作系统基础概念简述">
 <meta property="og:url" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/index.html">
 <meta property="og:site_name" content="星辰大海">
-<meta property="og:description" content="操作系统概念大部分操作系统提供了特定的基础概念和抽象，例如进程、地址空间、文件等，它们是需要理解的核心内容。下面我们会简要介绍一些基本概念，为了说明这些概念，我们会不时的从 UNIX 中提出示例，相同的示例也会存在于其他系统中，我们后面会进行介绍。 进程操作系统一个很关键的概念就是 进程(Process)。进程的本质就是操作系统执行的一个程序。与每个进程相关的是地址空间(address space">
+<meta property="og:description" content="操作系统概念大部分操作系统提供了特定的基础概念和抽象，例如进程、地址空间、文件等，它们是需要理解的核心内容。下面我们会简要介绍一些基本概念，为了说明这些概念，我们会不时的从 UNIX 中提出示例，相同的示例也会存在于其他系统中，我们后面会进行介绍。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDExNDgwNDc2MS05Mjg5OTEzMTUucG5n.jpg">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDExNTY0MjkzNS0zMTEyNDY1NDQucG5n.jpg">
@@ -140,10 +140,10 @@
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDEyMzM1NjcxNy0yMTA5NjEwMTMyLnBuZw.jpg">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDEyMzQxNDIwMi0xNDMxMTgzMzcyLnBuZw.jpg">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDEyMzQyMjgzNC0xNTk3MjAxOTcucG5n.jpg">
-<meta property="og:updated_time" content="2020-02-21T03:03:52.519Z">
+<meta property="og:updated_time" content="2020-02-25T15:09:15.069Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="操作系统基础概念简述">
-<meta name="twitter:description" content="操作系统概念大部分操作系统提供了特定的基础概念和抽象，例如进程、地址空间、文件等，它们是需要理解的核心内容。下面我们会简要介绍一些基本概念，为了说明这些概念，我们会不时的从 UNIX 中提出示例，相同的示例也会存在于其他系统中，我们后面会进行介绍。 进程操作系统一个很关键的概念就是 进程(Process)。进程的本质就是操作系统执行的一个程序。与每个进程相关的是地址空间(address space">
+<meta name="twitter:description" content="操作系统概念大部分操作系统提供了特定的基础概念和抽象，例如进程、地址空间、文件等，它们是需要理解的核心内容。下面我们会简要介绍一些基本概念，为了说明这些概念，我们会不时的从 UNIX 中提出示例，相同的示例也会存在于其他系统中，我们后面会进行介绍。">
 <meta name="twitter:image" content="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/aHR0cHM6Ly9pbWcyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTUxNTExMS8yMDIwMDIvMTUxNTExMS0yMDIwMDIxMDExNDgwNDc2MS05Mjg5OTEzMTUucG5n.jpg">
 
 
@@ -432,7 +432,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-21 11:03:52" itemprop="dateModified" datetime="2020-02-21T11:03:52+08:00">2020-02-21</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -477,7 +477,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">29k</span>
+                <span title="本文字数">30k</span>
               
 
               
@@ -512,6 +512,7 @@
 
       
         <h2 id="操作系统概念"><a href="#操作系统概念" class="headerlink" title="操作系统概念"></a>操作系统概念</h2><p>大部分操作系统提供了特定的基础概念和抽象，例如进程、地址空间、文件等，它们是需要理解的核心内容。下面我们会简要介绍一些基本概念，为了说明这些概念，我们会不时的从 <code>UNIX</code> 中提出示例，相同的示例也会存在于其他系统中，我们后面会进行介绍。</p>
+<a id="more"></a>
 <h3 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h3><p>操作系统一个很关键的概念就是 <code>进程(Process)</code>。进程的本质就是操作系统执行的一个程序。与每个进程相关的是<code>地址空间(address space)</code>，这是从某个最小值的存储位置(通常是零)到某个最大值的存储位置的列表。在这个地址空间中，进程可以进行读写操作。地址空间中存放有可执行程序，程序所需要的数据和它的栈。与每个进程相关的还有资源集，通常包括<code>寄存器(registers)</code>（寄存器一般包括<code>程序计数器(program counter)</code>和<code>堆栈指针(stack pointer)</code>）、打开文件的清单、突发的报警、有关的进程清单和其他需要执行程序的信息。你可以把进程看作是容纳运行一个程序所有信息的一个容器。</p>
 <p>对进程建立一种直观感觉的方式是考虑建立一种多程序的系统。考虑下面这种情况：用户启动一个视频编辑程序，指示它按照某种格式转换视频，然后再去浏览网页。同时，一个检查电子邮件的后台进程被唤醒并开始运行，这样，我们目前就会有三个活动进程：视频编辑器、Web 浏览器和电子邮件接收程序。操作系统周期性的挂起一个进程然后启动运行另一个进程，这可能是由于过去一两秒钟程序用完了 CPU 分配的时间片，而 CPU 转而运行另外的程序。</p>
 <p>像这样暂时中断进程后，下次应用程序在此启动时，必须要恢复到与中断时刻相同的状态，这在我们用户看起来是习以为常的事情，但是操作系统内部却做了巨大的事情。<strong>这就像和足球比赛一样，一场完美精彩的比赛是可以忽略裁判的存在的</strong>。这也意味着在挂起时该进程的所有信息都要被保存下来。例如，进程可能打开了多个文件进行读取。与每个文件相关联的是提供当前位置的指针（即下一个需要读取的字节或记录的编号）。当进程被挂起时，必须要保存这些指针，以便在重新启动进程后执行的 <code>read</code>调用将能够正确的读取数据。在许多操作系统中，与一个进程有关的所有信息，除了该进程自身地址空间的内容以外，均存放在操作系统的一张表中，称为 <code>进程表(process table)</code>，进程表是数组或者链表结构，当前存在每个进程都要占据其中的一项。</p>
@@ -936,6 +937,9 @@
 <li><a href="http://faculty.cs.niu.edu/~hutchins/csci360/hchnotes/psw.htm" target="_blank" rel="noopener">http://faculty.cs.niu.edu/~hutchins/csci360/hchnotes/psw.htm</a></li>
 <li><a href="https://www.computerhope.com/jargon/c/clockcyc.htm" target="_blank" rel="noopener">https://www.computerhope.com/jargon/c/clockcyc.htm</a></li>
 </ol>
+<blockquote>
+<p>转载自<a href="https://blog.csdn.net/qq_36894974/article/details/104246844" target="_blank" rel="noopener">这些操作系统的概念，保你没听过！</a> 作者：cxuann</p>
+</blockquote>
 
       
     </div>
@@ -1320,7 +1324,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   

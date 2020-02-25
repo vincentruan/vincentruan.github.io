@@ -129,7 +129,7 @@
 <meta property="og:site_name" content="星辰大海">
 <meta property="og:description" content="使用Git时常用的命令有pull、commit、push等，貌似很简单。不过，有时你会遇到合并冲突的情况，Git这时会将冲突标记出来，需要你手工来解决。有时，你会不小心将代码提交到错误的分支上，并且又推送到了远程仓库。还有些时候，你需要切换到不同的分支，但Git却不让你这么做，因为还有未保存的修改。如果需要通过另一个分支的提交来为代码打补丁该怎么做呢？本文就将介绍12个Git高级命令，合理使用这些">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-02-17T02:40:44.563Z">
+<meta property="og:updated_time" content="2020-02-25T15:09:15.002Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="12个Git高级命令">
 <meta name="twitter:description" content="使用Git时常用的命令有pull、commit、push等，貌似很简单。不过，有时你会遇到合并冲突的情况，Git这时会将冲突标记出来，需要你手工来解决。有时，你会不小心将代码提交到错误的分支上，并且又推送到了远程仓库。还有些时候，你需要切换到不同的分支，但Git却不让你这么做，因为还有未保存的修改。如果需要通过另一个分支的提交来为代码打补丁该怎么做呢？本文就将介绍12个Git高级命令，合理使用这些">
@@ -420,7 +420,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -500,6 +500,7 @@
 
       
         <p>使用Git时常用的命令有pull、commit、push等，貌似很简单。不过，有时你会遇到合并冲突的情况，Git这时会将冲突标记出来，需要你手工来解决。有时，你会不小心将代码提交到错误的分支上，并且又推送到了远程仓库。还有些时候，你需要切换到不同的分支，但Git却不让你这么做，因为还有未保存的修改。如果需要通过另一个分支的提交来为代码打补丁该怎么做呢？本文就将介绍12个Git高级命令，合理使用这些命令可以大大提升应用Git的效率。</p>
+<a id="more"></a>
 <h2 id="1-使用rebase而非merge来拉取上游修改"><a href="#1-使用rebase而非merge来拉取上游修改" class="headerlink" title="1. 使用rebase而非merge来拉取上游修改"></a><strong>1. 使用rebase而非merge来拉取上游修改</strong></h2><p>分支合并会被记录为一次合并提交，这种做法是很有意义的。比如说，可以通过这种方式来标识一个新特性被合并到了发布分支中。不过，当多个团队成员工作在一个项目中并使用常规的git pull来同步分支时，提交时间线就会被不必要的合并提交所污染。更好的做法则是使用git rebase将一个feature分支变基到master分支：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout feature</span><br><span class="line">$ git rebase master</span><br></pre></td></tr></table></figure>
 <p>这么做会将整个feature分支移动到master分支的起点，它会合并master分支上所有新的提交。不过，相比于使用合并提交来说，变基会通过在原来的分支中为每次提交创建全新提交来重写项目历史。变基的主要好处在于你会得到一个更加整洁的项目历史。此外，这里还有关于变基的陷阱的一些讨论。</p>
@@ -923,7 +924,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   

@@ -121,19 +121,19 @@
 
 
 
-  <meta name="description" content="前言本文讲述如何安装配置Shadowsocks Server，并支持通过代理方式（http/sock v4/5)连接因特网.  这里主要阐述服务端通过proxy连接的解决方案，shadowsocks server直连网络的方式比较简单，网上这块资料也比较齐全，不做过多描述， ssserver代理安装配置安装Shadowsocks Server参考Install Shadowsocks Server">
+  <meta name="description" content="前言本文讲述如何安装配置Shadowsocks Server，并支持通过代理方式（http/sock v4/5)连接因特网.  这里主要阐述服务端通过proxy连接的解决方案，shadowsocks server直连网络的方式比较简单，网上这块资料也比较齐全，不做过多描述">
 <meta name="keywords" content="Shadowsocks">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Shadowsocks服务器代理">
 <meta property="og:url" content="https://vincentruan.github.io/2018/07/13/Shadowsocks服务器代理/index.html">
 <meta property="og:site_name" content="星辰大海">
-<meta property="og:description" content="前言本文讲述如何安装配置Shadowsocks Server，并支持通过代理方式（http/sock v4/5)连接因特网.  这里主要阐述服务端通过proxy连接的解决方案，shadowsocks server直连网络的方式比较简单，网上这块资料也比较齐全，不做过多描述， ssserver代理安装配置安装Shadowsocks Server参考Install Shadowsocks Server">
+<meta property="og:description" content="前言本文讲述如何安装配置Shadowsocks Server，并支持通过代理方式（http/sock v4/5)连接因特网.  这里主要阐述服务端通过proxy连接的解决方案，shadowsocks server直连网络的方式比较简单，网上这块资料也比较齐全，不做过多描述">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://vincentruan.github.io/2018/07/13/Shadowsocks服务器代理/1531388960253.png">
-<meta property="og:updated_time" content="2018-07-13T15:11:09.791Z">
+<meta property="og:updated_time" content="2020-02-25T15:09:15.049Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shadowsocks服务器代理">
-<meta name="twitter:description" content="前言本文讲述如何安装配置Shadowsocks Server，并支持通过代理方式（http/sock v4/5)连接因特网.  这里主要阐述服务端通过proxy连接的解决方案，shadowsocks server直连网络的方式比较简单，网上这块资料也比较齐全，不做过多描述， ssserver代理安装配置安装Shadowsocks Server参考Install Shadowsocks Server">
+<meta name="twitter:description" content="前言本文讲述如何安装配置Shadowsocks Server，并支持通过代理方式（http/sock v4/5)连接因特网.  这里主要阐述服务端通过proxy连接的解决方案，shadowsocks server直连网络的方式比较简单，网上这块资料也比较齐全，不做过多描述">
 <meta name="twitter:image" content="https://vincentruan.github.io/2018/07/13/Shadowsocks服务器代理/1531388960253.png">
 
 
@@ -405,12 +405,24 @@
                 
               
 
-              <time title="创建时间：2018-07-13 22:58:47 / 修改时间：23:11:09" itemprop="dateCreated datePublished" datetime="2018-07-13T22:58:47+08:00">2018-07-13</time>
+              <time title="创建时间：2018-07-13 22:58:47" itemprop="dateCreated datePublished" datetime="2018-07-13T22:58:47+08:00">2018-07-13</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -491,7 +503,8 @@
       
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文讲述如何安装配置Shadowsocks Server，并支持通过代理方式（http/sock v4/5)连接因特网.</p>
 <p><img src="/2018/07/13/Shadowsocks服务器代理/1531388960253.png" alt="1531388960253"></p>
-<p>这里主要阐述服务端通过proxy连接的解决方案，shadowsocks server直连网络的方式比较简单，网上这块资料也比较齐全，不做过多描述，</p>
+<p>这里主要阐述服务端通过proxy连接的解决方案，shadowsocks server直连网络的方式比较简单，网上这块资料也比较齐全，不做过多描述</p>
+<a id="more"></a>
 <h2 id="ssserver代理安装配置"><a href="#ssserver代理安装配置" class="headerlink" title="ssserver代理安装配置"></a>ssserver代理安装配置</h2><h3 id="安装Shadowsocks-Server"><a href="#安装Shadowsocks-Server" class="headerlink" title="安装Shadowsocks Server"></a>安装Shadowsocks Server</h3><p>参考<a href="https://github.com/shadowsocks/shadowsocks/wiki/Install-Shadowsocks-Server-on-Windows" target="_blank" rel="noopener">Install Shadowsocks Server on Windows</a>，</p>
 <p>客户端的安装方式参考<a href="https://github.com/shadowsocks/shadowsocks/wiki/Ports-and-Clients#windows" target="_blank" rel="noopener">Shadowsocks Client安装</a>, 这里主要解决服务端通过代理解决shadowsocks server无法直连网络的问题，客户端这块不做过多描述。</p>
 <h3 id="更新代理脚本"><a href="#更新代理脚本" class="headerlink" title="更新代理脚本"></a>更新代理脚本</h3><p>​    这个问题的解决方案来自github的一个issue <a href="https://github.com/shadowsocks/shadowsocks/issues/771" target="_blank" rel="noopener">通过猴子补丁的方式给ss添加了一个前置代理的功能</a></p>
@@ -943,7 +956,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   

@@ -134,7 +134,7 @@
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zookeeper_get_lock_flow.png">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zk_epoch.png">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zookeeper_elect_master.png">
-<meta property="og:updated_time" content="2020-02-21T03:42:47.283Z">
+<meta property="og:updated_time" content="2020-02-25T15:09:15.055Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="zookeeper入门摘要">
 <meta name="twitter:description" content="1.ZooKeeper是什么？ZooKeeper是一个分布式的，开放源码的分布式应用程序协调服务，是Google的Chubby一个开源的实现，它是集群的管理者，监视着集群中各个节点的状态根据节点提交的反馈进行下一步合理操作。最终，将简单易用的接口和性能高效、功能稳定的系统提供给用户。 客户端的读请求可以被集群中的任意一台机器处理，如果读请求在节点上注册了监听器，这个监听器也是由所连接的zookee">
@@ -426,7 +426,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-21 11:42:47" itemprop="dateModified" datetime="2020-02-21T11:42:47+08:00">2020-02-21</time>
+                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
               
             
           </span>
@@ -508,6 +508,7 @@
         <h2 id="1-ZooKeeper是什么？"><a href="#1-ZooKeeper是什么？" class="headerlink" title="1.ZooKeeper是什么？"></a>1.ZooKeeper是什么？</h2><p>ZooKeeper是一个分布式的，开放源码的分布式应用程序协调服务，是Google的Chubby一个开源的实现，它是集群的管理者，监视着集群中各个节点的状态根据节点提交的反馈进行下一步合理操作。最终，将简单易用的接口和性能高效、功能稳定的系统提供给用户。</p>
 <p>客户端的读请求可以被集群中的任意一台机器处理，如果读请求在节点上注册了监听器，这个监听器也是由所连接的zookeeper机器来处理。对于写请求，这些请求会同时发给其他zookeeper机器并且达成一致后，请求才会返回成功。因此，随着zookeeper的集群机器增多，读请求的吞吐会提高但是写请求的吞吐会下降。</p>
 <p>有序性是zookeeper中非常重要的一个特性，所有的更新都是全局有序的，每个更新都有一个唯一的时间戳，这个时间戳称为zxid（Zookeeper Transaction Id）。而读请求只会相对于更新有序，也就是读请求的返回结果中会带有这个zookeeper最新的zxid。</p>
+<a id="more"></a>
 <h2 id="2-ZooKeeper提供了什么？"><a href="#2-ZooKeeper提供了什么？" class="headerlink" title="2.ZooKeeper提供了什么？"></a>2.ZooKeeper提供了什么？</h2><p>1、文件系统</p>
 <p>2、通知机制</p>
 <h2 id="3-Zookeeper文件系统"><a href="#3-Zookeeper文件系统" class="headerlink" title="3.Zookeeper文件系统"></a>3.Zookeeper文件系统</h2><p>Zookeeper提供一个多层级的节点命名空间（节点称为znode）。与文件系统不同的是，这些节点都可以设置关联的数据，而文件系统中只有文件节点可以存放数据而目录节点不行。Zookeeper为了保证高吞吐和低延迟，在内存中维护了这个树状的目录结构，这种特性使得Zookeeper不能用于存放大量的数据，每个节点的存放数据上限为1M。</p>
@@ -983,7 +984,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">383k</span>
+    <span title="站点总字数">384k</span>
   
 
   
