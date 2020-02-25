@@ -31,7 +31,7 @@
     
     
   <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
-  <link href="/lib/pace/pace-theme-mac-osx.min.css?v=1.0.2" rel="stylesheet">
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
 
 
 
@@ -58,6 +58,10 @@
 
 
 
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -96,7 +100,7 @@
     scheme: 'Muse',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: false,
+    fancybox: true,
     fastclick: false,
     lazyload: false,
     tabs: true,
@@ -133,6 +137,8 @@
 <meta name="twitter:image" content="https://vincentruan.github.io/2018/07/13/Shadowsocks服务器代理/1531388960253.png">
 
 
+
+  <link rel="alternate" href="/atom.xml" title="星辰大海" type="application/atom+xml">
 
 
 
@@ -187,7 +193,7 @@
 
 </head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -197,7 +203,7 @@
   <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -352,20 +358,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/07/13/Shadowsocks服务器代理/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -421,7 +427,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/developer-tools/" itemprop="url" rel="index"><span itemprop="name">developer tools</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/developer-tools/" itemprop="url" rel="index"><span itemprop="name">developer tools</span></a></span>
 
                 
                 
@@ -438,6 +444,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">9.4k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">9 分钟</span>
+              
+            </div>
           
 
           
@@ -469,9 +503,9 @@
 <p>配置部分：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># the proxy type. SOCKS5 SOCKS4 HTTP</span></span><br><span class="line">PROXY_TYPE = SOCKS5</span><br><span class="line">PROXY_ADDR = <span class="string">"127.0.0.1"</span></span><br><span class="line">PROXY_PORT = <span class="number">1080</span></span><br></pre></td></tr></table></figure>
 <p><strong>socket.py</strong> 文末部分，因为我选择 hook shadowsocks的代码，实际使用时在del module会报异常，因此将文末修改为</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hook shadowsocks's code remove the dns req</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">new_resolve</span><span class="params">(self,  hostname, callback)</span>:</span></span><br><span class="line">    callback((hostname, hostname), <span class="keyword">None</span>)</span><br><span class="line"></span><br><span class="line">modules_list = [<span class="string">"shadowsocks.common"</span>, <span class="string">"shadowsocks.shell"</span>]</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> modules_list:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">       <span class="keyword">del</span> sys.modules[x]</span><br><span class="line">    <span class="keyword">except</span> KeyError:</span><br><span class="line">       <span class="keyword">print</span> <span class="string">"Error: key"</span>, x, <span class="string">"not found"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> shadowsocks.asyncdns</span><br><span class="line">shadowsocks.asyncdns.DNSResolver.resolve = new_resolve</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hook shadowsocks's code remove the dns req</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">new_resolve</span><span class="params">(self,  hostname, callback)</span>:</span></span><br><span class="line">    callback((hostname, hostname), <span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line">modules_list = [<span class="string">"shadowsocks.common"</span>, <span class="string">"shadowsocks.shell"</span>]</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> modules_list:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">       <span class="keyword">del</span> sys.modules[x]</span><br><span class="line">    <span class="keyword">except</span> KeyError:</span><br><span class="line">       <span class="keyword">print</span> <span class="string">"Error: key"</span>, x, <span class="string">"not found"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> shadowsocks.asyncdns</span><br><span class="line">shadowsocks.asyncdns.DNSResolver.resolve = new_resolve</span><br></pre></td></tr></table></figure>
 <p>如果不想 hook shadowsocks的代码的话，把文件中末尾的代码删除即可，原文件代码末尾如下: </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hook shadowsocks's code remove the dns req</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">new_resolve</span><span class="params">(self,  hostname, callback)</span>:</span></span><br><span class="line">    callback((hostname, hostname), <span class="keyword">None</span>)</span><br><span class="line"></span><br><span class="line">modules_list = [<span class="string">"shadowsocks.common"</span>, <span class="string">"shadowsocks.shell"</span>]</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> modules_list:</span><br><span class="line">    <span class="keyword">del</span> sys.modules[x]</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> shadowsocks.asyncdns</span><br><span class="line">shadowsocks.asyncdns.DNSResolver.resolve = new_resolve</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hook shadowsocks's code remove the dns req</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">new_resolve</span><span class="params">(self,  hostname, callback)</span>:</span></span><br><span class="line">    callback((hostname, hostname), <span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line">modules_list = [<span class="string">"shadowsocks.common"</span>, <span class="string">"shadowsocks.shell"</span>]</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> modules_list:</span><br><span class="line">    <span class="keyword">del</span> sys.modules[x]</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> shadowsocks.asyncdns</span><br><span class="line">shadowsocks.asyncdns.DNSResolver.resolve = new_resolve</span><br></pre></td></tr></table></figure>
 <h3 id="ssserver配置"><a href="#ssserver配置" class="headerlink" title="ssserver配置"></a>ssserver配置</h3><p>参考<a href="https://github.com/shadowsocks/shadowsocks/wiki/Configuration-via-Config-File" target="_blank" rel="noopener">Configuration via Config File</a></p>
 <p>创建一个配置文件 <code>/etc/shadowsocks.json</code>. 示例如下:</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"server"</span>:<span class="string">"my_server_ip"</span>,</span><br><span class="line">    <span class="attr">"server_port"</span>:<span class="number">8388</span>,</span><br><span class="line">    <span class="attr">"local_address"</span>: <span class="string">"127.0.0.1"</span>,</span><br><span class="line">    <span class="attr">"local_port"</span>:<span class="number">1080</span>,</span><br><span class="line">    <span class="attr">"password"</span>:<span class="string">"mypassword"</span>,</span><br><span class="line">    <span class="attr">"timeout"</span>:<span class="number">300</span>,</span><br><span class="line">    <span class="attr">"method"</span>:<span class="string">"aes-256-cfb"</span>,</span><br><span class="line">    <span class="attr">"fast_open"</span>: <span class="literal">false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -545,7 +579,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Shadowsocks/" rel="tag"># Shadowsocks</a>
+            <a href="/tags/Shadowsocks/" rel="tag"><i class="fa fa-tag"></i> Shadowsocks</a>
           
         </div>
       
@@ -635,7 +669,9 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="vincent">
             
               <p class="site-author-name" itemprop="name">vincent</p>
               <p class="site-description motion-element" itemprop="description">The King is dead, long live the King!</p>
@@ -648,7 +684,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-count">41</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -814,7 +850,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">52</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">54</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -823,12 +863,24 @@
           
 
           
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
 
           
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
                   <a href="https://github.com/vincentruan" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:rzw0813@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
                   
                 </span>
               
@@ -886,7 +938,21 @@
   <span class="author" itemprop="copyrightHolder">vincent</span>
 
   
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">383k</span>
+  
 
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">5:49</span>
   
 </div>
 
@@ -958,6 +1024,8 @@
 
 
 
+  
+
 
 
   
@@ -987,6 +1055,11 @@
   
   
     <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
   
 
   

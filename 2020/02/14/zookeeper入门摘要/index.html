@@ -31,7 +31,7 @@
     
     
   <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
-  <link href="/lib/pace/pace-theme-mac-osx.min.css?v=1.0.2" rel="stylesheet">
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
 
 
 
@@ -58,6 +58,10 @@
 
 
 
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -96,7 +100,7 @@
     scheme: 'Muse',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: false,
+    fancybox: true,
     fastclick: false,
     lazyload: false,
     tabs: true,
@@ -137,6 +141,8 @@
 <meta name="twitter:image" content="https://vincentruan.github.io/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zk_dir_tree.png">
 
 
+
+  <link rel="alternate" href="/atom.xml" title="星辰大海" type="application/atom+xml">
 
 
 
@@ -191,7 +197,7 @@
 
 </head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -201,7 +207,7 @@
   <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -356,20 +362,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/14/zookeeper入门摘要/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -437,7 +443,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/架构设计/" itemprop="url" rel="index"><span itemprop="name">架构设计</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/架构设计/" itemprop="url" rel="index"><span itemprop="name">架构设计</span></a></span>
 
                 
                 
@@ -454,6 +460,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">11k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">10 分钟</span>
+              
+            </div>
           
 
           
@@ -481,7 +515,7 @@
 <h3 id="2、PERSISTENT-SEQUENTIAL-持久化顺序编号目录节点"><a href="#2、PERSISTENT-SEQUENTIAL-持久化顺序编号目录节点" class="headerlink" title="2、PERSISTENT_SEQUENTIAL-持久化顺序编号目录节点"></a>2、PERSISTENT_SEQUENTIAL-持久化顺序编号目录节点</h3><p>客户端与zookeeper断开连接后，该节点依旧存在，只是Zookeeper给该节点名称进行顺序编号</p>
 <h3 id="3、EPHEMERAL-临时目录节点"><a href="#3、EPHEMERAL-临时目录节点" class="headerlink" title="3、EPHEMERAL-临时目录节点"></a>3、EPHEMERAL-临时目录节点</h3><p>客户端与zookeeper断开连接后，该节点被删除</p>
 <h3 id="4、EPHEMERAL-SEQUENTIAL-临时顺序编号目录节点"><a href="#4、EPHEMERAL-SEQUENTIAL-临时顺序编号目录节点" class="headerlink" title="4、EPHEMERAL_SEQUENTIAL-临时顺序编号目录节点"></a>4、EPHEMERAL_SEQUENTIAL-临时顺序编号目录节点</h3><p>客户端与zookeeper断开连接后，该节点被删除，只是Zookeeper给该节点名称进行顺序编号</p>
-<p><img src="/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zk_dir_tree.png" alt=""></p>
+<p><img src="/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zk_dir_tree.png" alt></p>
 <h2 id="5-Zookeeper通知机制"><a href="#5-Zookeeper通知机制" class="headerlink" title="5.Zookeeper通知机制"></a>5.Zookeeper通知机制</h2><p>client端会对某个znode建立一个watcher事件，当该znode发生变化时，这些client会收到zk的通知，然后client可以根据znode变化来做出业务上的改变等。</p>
 <h2 id="6-Zookeeper做了什么？"><a href="#6-Zookeeper做了什么？" class="headerlink" title="6.Zookeeper做了什么？"></a>6.Zookeeper做了什么？</h2><p>1、命名服务</p>
 <p>2、配置管理</p>
@@ -526,7 +560,7 @@
 <p>（3）选举线程收到回复后，验证是否是自己发起的询问(验证zxid是否一致)，然后获取对方的id(myid)，并存储到当前询问对象列表中，最后获取对方提议的leader相关信息(id,zxid)，并将这些信息存储到当次选举的投票记录表中；</p>
 <p>（4）收到所有Server回复以后，就计算出zxid最大的那个Server，并将这个Server相关信息设置成下一次要投票的Server；</p>
 <p>（5）线程将当前zxid最大的Server设置为当前Server要推荐的Leader，如果此时获胜的Server获得n/2 + 1的Server票数，设置当前推荐的leader为获胜的Server，将根据获胜的Server相关信息设置自己的状态，否则，继续这个过程，直到leader被选举出来。通过流程分析我们可以得出：要使Leader获得多数Server的支持，则Server总数必须是奇数2n+1，且存活的Server的数目不得少于n+1. 每个Server启动后都会重复以上流程。在恢复模式下，如果是刚从崩溃状态恢复的或者刚启动的server还会从磁盘快照中恢复数据和会话信息，zk会记录事务日志并定期进行快照，方便在恢复时进行状态恢复。</p>
-<p><img src="/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zk_epoch.png" alt=""></p>
+<p><img src="/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zk_epoch.png" alt></p>
 <p>2、Zookeeper选主流程(basic paxos) fast paxos流程是在选举过程中，某Server首先向所有Server提议自己要成为leader，当其它Server收到提议以后，解决epoch和 zxid的冲突，并接受对方的提议，然后向对方发送接受提议完成的消息，重复这个流程，最后一定能选举出Leader。</p>
 <p><img src="/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zookeeper_elect_master.png" alt="img"></p>
 <h2 id="18-Zookeeper同步流程"><a href="#18-Zookeeper同步流程" class="headerlink" title="18.Zookeeper同步流程"></a>18.Zookeeper同步流程</h2><p>选完Leader以后，zk就进入状态同步过程。</p>
@@ -583,9 +617,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/zookeeper/" rel="tag"># zookeeper</a>
+            <a href="/tags/zookeeper/" rel="tag"><i class="fa fa-tag"></i> zookeeper</a>
           
-            <a href="/tags/分布式/" rel="tag"># 分布式</a>
+            <a href="/tags/分布式/" rel="tag"><i class="fa fa-tag"></i> 分布式</a>
           
         </div>
       
@@ -675,7 +709,9 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="vincent">
             
               <p class="site-author-name" itemprop="name">vincent</p>
               <p class="site-description motion-element" itemprop="description">The King is dead, long live the King!</p>
@@ -688,7 +724,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-count">41</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -854,7 +890,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">52</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">54</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -863,12 +903,24 @@
           
 
           
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
 
           
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
                   <a href="https://github.com/vincentruan" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:rzw0813@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
                   
                 </span>
               
@@ -926,7 +978,21 @@
   <span class="author" itemprop="copyrightHolder">vincent</span>
 
   
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">383k</span>
+  
 
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">5:49</span>
   
 </div>
 
@@ -998,6 +1064,8 @@
 
 
 
+  
+
 
 
   
@@ -1027,6 +1095,11 @@
   
   
     <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
   
 
   

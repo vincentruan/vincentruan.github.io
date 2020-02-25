@@ -31,7 +31,7 @@
     
     
   <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
-  <link href="/lib/pace/pace-theme-mac-osx.min.css?v=1.0.2" rel="stylesheet">
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
 
 
 
@@ -58,6 +58,10 @@
 
 
 
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -96,7 +100,7 @@
     scheme: 'Muse',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: false,
+    fancybox: true,
     fastclick: false,
     lazyload: false,
     tabs: true,
@@ -130,6 +134,8 @@
 <meta name="twitter:description" content="The King is dead, long live the King!">
 
 
+
+  <link rel="alternate" href="/atom.xml" title="星辰大海" type="application/atom+xml">
 
 
 
@@ -184,7 +190,7 @@
 
 </head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -195,7 +201,7 @@
   page-home">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -350,20 +356,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/24/【转载】神一样的CAP理论被应用在何方/">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -374,8 +380,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/02/24/【转载】神一样的CAP理论被应用在何方/" itemprop="url">
-                  【转载】神一样的CAP理论被应用在何方
+                <a class="post-title-link" href="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/" itemprop="url">
+                  【转载】多次尝试学习，终于搞懂了微服务架构
                 </a>
               
             
@@ -401,7 +407,7 @@
                 
               
 
-              <time title="创建时间：2020-02-24 21:39:19 / 修改时间：21:42:07" itemprop="dateCreated datePublished" datetime="2020-02-24T21:39:19+08:00">2020-02-24</time>
+              <time title="创建时间：2020-02-25 15:40:45 / 修改时间：15:53:58" itemprop="dateCreated datePublished" datetime="2020-02-25T15:40:45+08:00">2020-02-25</time>
             
 
             
@@ -423,7 +429,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/架构设计/" itemprop="url" rel="index"><span itemprop="name">架构设计</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/架构设计/" itemprop="url" rel="index"><span itemprop="name">架构设计</span></a></span>
 
                 
                 
@@ -440,6 +446,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">11k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">10 分钟</span>
+              
+            </div>
           
 
           
@@ -459,194 +493,151 @@
       
         
           
-            <blockquote>
-<p>转载自陈于喆 - 神一样的CAP理论被应用在何方，原文地址<a href="https://juejin.im/post/5d720e86f265da03cc08de74" target="_blank" rel="noopener">https://juejin.im/post/5d720e86f265da03cc08de74</a></p>
-</blockquote>
-<p>对于开发或设计分布式系统的架构师工程师来说，CAP是必须要掌握的理论。</p>
+            <p>原文转载自<a href="https://mp.weixin.qq.com/s/Pfs57ee6KpW342cKmJTGrw" target="_blank" rel="noopener">多次尝试学习，终于搞懂了微服务架构</a></p>
+<h1 id="什么是微服务"><a href="#什么是微服务" class="headerlink" title="什么是微服务?"></a>什么是微服务?</h1><p>微服务 Microservices 之父，马丁.福勒，对微服务大概的概述如下：</p>
+<p>就目前而言，对于微服务业界并没有一个统一的、标准的定义(While there is no precise definition of this architectural style ) 。</p>
+<p>但通常在其而言，微服务架构是一种架构模式或者说是一种架构风格，它提倡将单一应用程序划分成一组小的服务，每个服务运行独立的自己的进程中，服务之间互相协调、互相配合，为用户提供最终价值。</p>
+<p>服务之间采用轻量级的通信机制互相沟通(通常是基于 HTTP 的 RESTful API ) 。每个服务都围绕着具体业务进行构建，并且能够被独立地部署到生产环境、类生产环境等。</p>
+<p>另外，应尽量避免统一的、集中式的服务管理机制，对具体的一个服务而言，应根据业务上下文，选择合适的语言、工具对其进行构建，可以有一个非常轻量级的集中式管理来协调这些服务。可以使用不同的语言来编写服务，也可以使用不同的数据存储。</p>
+<p>根据马丁.福勒的描述，我总结了以下几点：</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/e242f34d8c87c66437d98b728f4a171d.jpg" alt="img"></p>
+<h2 id="小服务"><a href="#小服务" class="headerlink" title="小服务"></a>小服务</h2><p>小服务，没有特定的标准或者规范，但他在总体规范上一定是小的。</p>
+<h2 id="进程独立"><a href="#进程独立" class="headerlink" title="进程独立"></a>进程独立</h2><p>每一组服务都是独立运行的，可能我这个服务运行在 Tomcat 容器，而另一个服务运行在 Jetty 上。可以通过进程方式，不断的横向扩展整个服务。</p>
+<h2 id="通信"><a href="#通信" class="headerlink" title="通信"></a>通信</h2><p>过去的协议都是很重的，就像 ESB，就像 SOAP，轻通信，这意味着相比过去更智能更轻量的服务相互调用，就所谓 smart endpoints and dumb pipes。</p>
+<p>这些 Endpoint 都是解耦的，完成一个业务通信调用串起这些 Micro Service 就像是 Linux 系统中通过管道串起一系列命令业务。</p>
+<p>过去的业务，我们通常会考虑各种各样的依赖关系，考虑系统耦合带来的问题。微服务，可以让开发者更专注于业务的逻辑开发。</p>
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><p>不止业务要独立，部署也要独立。不过这也意味着，传统的开发流程会出现一定程度的改变，开发的适合也要有一定的运维职责。</p>
+<h2 id="管理"><a href="#管理" class="headerlink" title="管理"></a>管理</h2><p>传统的企业级 SOA 服务往往很大，不易于管理，耦合性高，团队开发成本比较大。</p>
+<p>微服务，可以让团队各思其政的选择技术实现，不同的 Service 可以根据各自的需要选择不同的技术栈来实现其业务逻辑。</p>
+<h1 id="微服务的利与弊"><a href="#微服务的利与弊" class="headerlink" title="微服务的利与弊"></a>微服务的利与弊</h1><p>为什么用微服务呢?因为好玩?不是的。下面是我从网络上找到说的比较全的优点：</p>
+<ul>
+<li>优点是每个服务足够内聚，足够小，代码容易理解这样能聚焦一个指定的业务功能或业务需求。</li>
+<li>开发简单、开发效率提高，一个服务可能就是专一的只干一件事。</li>
+<li>微服务能够被小团队单独开发，这个小团队是 2 到 5 人的开发人员组成。</li>
+<li>微服务是松耦合的，是有功能意义的服务，无论是在开发阶段或部署阶段都是独立的。</li>
+<li>微服务能使用不同的语言开发。</li>
+<li>易于和第三方集成，微服务允许容易且灵活的方式集成自动部署，通过持续集成工具，如 Jenkins，Hudson，bamboo。</li>
+<li>微服务易于被一个开发人员理解，修改和维护，这样小团队能够更关注自己的工作成果。无需通过合作才能体现价值。微服务允许你利用融合最新技术。</li>
+<li>微服务只是业务逻辑的代码，不会和 HTML，CSS 或其他界面组件混合。</li>
+<li>每个微服务都有自己的存储能力，可以有自己的数据库，也可以有统一数据库。</li>
+</ul>
+<p>总的来说，微服务的优势，就是在于，面对大的系统，可以有效的减少复杂程度，使服务架构的逻辑更清晰明了。</p>
+<p>但是这样也会带来很多问题，就譬如分布式环境下的数据一致性，测试的复杂性，运维的复杂性。</p>
+<h1 id="什么组织适合使用微服务"><a href="#什么组织适合使用微服务" class="headerlink" title="什么组织适合使用微服务?"></a>什么组织适合使用微服务?</h1><p>微服务带了种种优点，种种弊端，那么什么组织适合使用微服务?</p>
+<h2 id="墨菲定律-设计系统-和康威定律-系统划分"><a href="#墨菲定律-设计系统-和康威定律-系统划分" class="headerlink" title="墨菲定律(设计系统)和康威定律(系统划分)"></a>墨菲定律(设计系统)和康威定律(系统划分)</h2><p>康威定律，是一个五十多年前就被提出来的微服务概念。在康威的这篇文章中，最有名的一句话就是：</p>
 <blockquote>
-<p>（but：这个文章的重点并不是讨论CAP理论和细节，重点是说说CAP在微服务中的开发怎么起到一个指引作用，会通过几个微服务开发的例子说说明，尽量的去贴近开发）</p>
+<p>Organizations which design systems are constrained to produce designs which are copies of the communication structures of these organizations.</p>
+<p>-Melvin Conway(1967)</p>
 </blockquote>
-<p>CAP定理又被成为布鲁尔定理，是加州大学计算机科学家埃里克·布鲁尔提出来的猜想，后来被证明成为分布式计算领域公认的定理。不过布鲁尔在出来CAP的时候并没有对CAP三者（Consistency，Availability，Partition tolerance）进行详细的定义，所以在网上也出现了不少对CAP不同解读的声音。</p>
-<h3 id="CAP-定理"><a href="#CAP-定理" class="headerlink" title="CAP 定理"></a>CAP 定理</h3><p>CAP定理在发展中存在过两个版本，我们以第二个版本为准</p>
-<blockquote>
-<p>在一个分布式系统中（指互相连接并共享数据的节点集合）中，当涉及到读写操作时，只能保证一致性（Consistence）、可用性(Availability）、分区容错性（Partition Tolerance）三者中的两个，另外一个必须被牺牲。</p>
-</blockquote>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d05888f809b3bc" alt="image"></p>
-<p>这个版本的CAP理论在探讨分布式系统，更加强调两点是互联和共享数据，其实也是理清楚了第一个版本中三选二的一些缺陷，分布式系统不一定都存在互联和共享数据，例如memcached集群相互间就没有存在连接和共享数据，所以memcached集群这类的分布式系统并不在CAP理论讨论的范围，而想Mysql集群就是互联和数据共享复制，因此mysql集群式属于CAP理论讨论的对象。</p>
-<h4 id="一致性（Consistency）"><a href="#一致性（Consistency）" class="headerlink" title="一致性（Consistency）"></a>一致性（Consistency）</h4><p>一致性意思就是写操作之后进行读操作无论在哪个节点都需要返回写操作的值</p>
-<h4 id="可用性-Availability）"><a href="#可用性-Availability）" class="headerlink" title="可用性(Availability）"></a>可用性(Availability）</h4><p>非故障的节点在合理的时间内返回合理的响应</p>
-<h4 id="分区容错性-Partition-Tolerance"><a href="#分区容错性-Partition-Tolerance" class="headerlink" title="分区容错性(Partition Tolerance)"></a>分区容错性(Partition Tolerance)</h4><p>当网络出现分区后，系统依然能够继续旅行社职责</p>
-<p>在分布式的环境下，网络无法做到100%可靠，有可能出现故障，因此分区是一个必须的选项，如果选择了CA而放弃了P，若发生分区现象，为了保证C，系统需要禁止写入，此时就与A发生冲突，如果是为了保证A，则会出现正常的分区可以写入数据，有故障的分区不能写入数据，则与C就冲突了。因此分布式系统理论上不可能选择CA架构，而必须选择CP或AP架构。</p>
-<h4 id="分布式事务BASE理论"><a href="#分布式事务BASE理论" class="headerlink" title="分布式事务BASE理论"></a>分布式事务BASE理论</h4><p>BASE理论是对CAP的延伸和补充，是对CAP中的AP方案的一个补充，即使在选择AP方案的情况下，如何更好的最终达到C。</p>
-<p>BASE是基本可用，柔性状态，最终一致性三个短语的缩写，核心的思想是即使无法做到强一致性，但应用可以采用适合的方式达到最终一致性。</p>
-<h3 id="CAP在服务中实际的应用例子"><a href="#CAP在服务中实际的应用例子" class="headerlink" title="CAP在服务中实际的应用例子"></a>CAP在服务中实际的应用例子</h3><p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d05888f63920ec" alt="image"></p>
-<p>理解貌似讲多了，项目的CAP可以参考下李运华的《从零开始学架构》的书，里面的21，22章比较详细的描绘了CAP的理论细节和CAP的版本演化过程。</p>
-<p>这里着重的讲解的是神一样的CAP在我们的微服务中怎么去指导和应用起来，大概会举几个平时常见的例子</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d05888f5068452" alt="image"></p>
-<h3 id="服务注册中心，是选择AP还是选择CP-？"><a href="#服务注册中心，是选择AP还是选择CP-？" class="headerlink" title="服务注册中心，是选择AP还是选择CP ？"></a>服务注册中心，是选择AP还是选择CP ？</h3><h4 id="服务注册中心解决的问题"><a href="#服务注册中心解决的问题" class="headerlink" title="服务注册中心解决的问题"></a>服务注册中心解决的问题</h4><p>在讨论CAP之前先明确下服务注册中心主要是解决什么问题：一个是服务注册，一个是服务发现。</p>
+<p>中文直译大概的意思就是：设计系统的组织，其产生的设计等同于组织之内、组织之间的沟通结构。</p>
+<p>看看下面的图片，再想想 Apple 的产品、微软的产品设计，就能形象生动的理解这句话。</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/da1466451bb6c8b1c86be88beeeb20ec.jpg" alt="img"><br>感兴趣的各位可以研究一下!</p>
+<h2 id="架构演化"><a href="#架构演化" class="headerlink" title="架构演化"></a>架构演化</h2><p>架构是不断演化出来的，微服务也是这样，当从各大科技公司，规模大到一定程度，完全需要演化成更进一步管理的技术架构体系。</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/27b5dcef62fffede437262192a8d5049.jpg" alt="img"></p>
+<p>传统的团队，都是面向过程化的，产品想完了去找策划，策划完了找开发，接着顺着一步一步找。</p>
+<p>我们做技术都是为了产品的，一旦过程出来了什么问题，回溯寻找问题会非常耗时。</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/8e89430be81287e37febfb9daaa7c266.jpg-wh_600x-s_3329617205.jpg" alt="img"></p>
+<p>使用了微服务架构体系，团队组织方式需要转变成跨职能团队，即每个团队都有产品专家，策划专家，开发专家，运维专家，他们使用 API 方式发布他们的功能，而平台使用他们的功能发布产品。</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/2f8f923667a1cf85e4ea0a36142dd463.jpg-wh_600x-s_3077522574.jpg" alt="img"></p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/3fd3fa788ba4f3ded5c42e9812112632.jpg-wh_600x-s_3676732613.jpg" alt="img"></p>
+<h1 id="微服务技术架构体系"><a href="#微服务技术架构体系" class="headerlink" title="微服务技术架构体系"></a>微服务技术架构体系</h1><p>下面我分享一下大部分公司都使用的微服务技术架构体系：</p>
+<p><a href="https://s4.51cto.com/oss/201911/20/bdce530e4c713c192e33aacf560cf36b.jpg" target="_blank" rel="noopener"><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/bdce530e4c713c192e33aacf560cf36b.jpg" alt="img"></a></p>
+<h2 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h2><p>主流的服务发现，分为三种：</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/a7482fcd1ab956afac3925367032d166.jpg-wh_600x-s_699873961.jpg" alt="img"></p>
+<p>第一种，开发人员开发了程序以后，会找运维配一个域名，服务的话通过 DNS 就能找到我们对应的服务。</p>
+<p>缺点是，由于服务没有负载均衡功能，对负载均衡服务，可能会有相当大的性能问题。</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/648fcd0296d3e6e5ddb45a5d97bfc0b5.jpg-wh_600x-s_746651471.jpg" alt="img"></p>
+<p>第二种，是目前普遍的做法。可以参考 Zuul 网关，每一个服务都通过服务端内置的功能注册到注册中心，服务消费者不断轮询注册中心发现对应的服务，使用内置负载均衡调用服务。</p>
+<p>缺点是，对多语言环境不是很好，你需要单独给消费者的客户端开发服务发现和负载均衡功能。当然了，这个方法通常都是用在 Spring Cloud 上的。</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/65e07e662e2d302a734e43ab65ccb9ca.jpg-wh_600x-s_947263207.jpg" alt="img"></p>
+<p>第三种，是将客户端和负载均衡放在同一个主机，而不是同一个进程内。</p>
+<p>这种方法相对第一种第二种方法来说，改善了他们的缺点，但是会极大增加运维成本。</p>
+<h2 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h2><p>微服务的网关是什么?我们可以联系生活实际想一下。每一个大的公司，都会有一偏属于自己的建筑区，而这建筑区内，都有不少的门卫。如果有外来人员进入公司，会先和门卫打好招呼，才能进去。</p>
+<p>将生活实际联系到微服务上，就不难理解网关的意思了：</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/768eea8c5a33305f0fddc39f61153229.jpg-wh_600x-s_1831175765.jpg" alt="img"></p>
+<p>网关的作用如下：</p>
 <ul>
-<li>服务注册：实例将自身服务信息注册到注册中心，这部分信息包括服务的主机IP和服务的Port，以及暴露服务自身状态和访问协议信息等。</li>
-<li>服务发现：实例请求注册中心所依赖的服务信息，服务实例通过注册中心，获取到注册到其中的服务实例的信息，通过这些信息去请求它们提供的服务。</li>
+<li>反向路由：很多时候，公司不想让外部人员看到我们公司的内部，就需要网关来进行反向路由。即将外部请求转换成内部具体服务调用。</li>
+<li>安全认证：网络中会有很多恶意访问，譬如爬虫，譬如黑客攻击，网关维护安全功能。</li>
+<li>限流熔断：当请求很多服务不堪重负，会让我们的服务自动关闭，导致不能用服务。限流熔断可以有效的避免这类问题。</li>
+<li>日志监控：所有的外面的请求都会经过网关，这样我们就可以使用网关来记录日志信息。</li>
+<li>灰度发布，蓝绿部署。是指能够平滑过渡的一种发布方式。在其上可以进行 A/B testing。</li>
 </ul>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d05888feb8431b" alt="image"></p>
-<p>目前作为注册中心的一些组件大致有：dubbo的zookeeper，springcloud的eureka，consul，rocketMq的nameServer，hdfs的nameNode。目前微服务主流是dubbo和springcloud，使用最多是zookeeper和eureka，我们就来看看应该根据CAP理论应该怎么去选择注册中心。（springcloud也可以用zk，不过不是主流不讨论）。</p>
-<h4 id="zookeeper选择CP"><a href="#zookeeper选择CP" class="headerlink" title="zookeeper选择CP"></a>zookeeper选择CP</h4><p>zookeep保证CP，即任何时刻对zookeeper的访问请求能得到一致性的数据结果，同时系统对网络分割具备容错性，但是它不能保证每次服务的可用性。从实际情况来分析，在使用zookeeper获取服务列表时，如果zk正在选举或者zk集群中半数以上的机器不可用，那么将无法获取数据。所以说，zk不能保证服务可用性。</p>
-<h4 id="eureka选择AP"><a href="#eureka选择AP" class="headerlink" title="eureka选择AP"></a>eureka选择AP</h4><p>eureka保证AP，eureka在设计时优先保证可用性，每一个节点都是平等的，一部分节点挂掉不会影响到正常节点的工作，不会出现类似zk的选举leader的过程，客户端发现向某个节点注册或连接失败，会自动切换到其他的节点，只要有一台eureka存在，就可以保证整个服务处在可用状态，只不过有可能这个服务上的信息并不是最新的信息。</p>
-<h4 id="zookeeper和eureka的数据一致性问题"><a href="#zookeeper和eureka的数据一致性问题" class="headerlink" title="zookeeper和eureka的数据一致性问题"></a>zookeeper和eureka的数据一致性问题</h4><p>先要明确一点，eureka的创建初心就是为一个注册中心，但是zk更多是作为分布式协调服务的存在，只不过因为它的特性被dubbo赋予了注册中心，它的职责更多是保证数据（配置数据，状态数据）在管辖下的所有服务之间保持一致，所有这个就不难理解为何zk被设计成CP而不是AP，zk最核心的算法ZAB，就是为了解决分布式系统下数据在多个服务之间一致同步的问题。</p>
-<p>更深层的原因，zookeeper是按照CP原则构建，也就是说它必须保持每一个节点的数据都保持一致，如果zookeeper下节点断开或者集群中出现网络分割（例如交换机的子网间不能互访），那么zk会将它们从自己的管理范围中剔除，外界不能访问这些节点，即使这些节点是健康的可以提供正常的服务，所以导致这些节点请求都会丢失。</p>
-<p>而eureka则完全没有这方面的顾虑，它的节点都是相对独立，不需要考虑数据一致性的问题，这个应该是eureka的诞生就是为了注册中心而设计，相对zk来说剔除了leader节点选取和事务日志极致，这样更有利于维护和保证eureka在运行的健壮性。</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d05888fc2f78b3" alt="image"></p>
-<p>再来看看，数据不一致性在注册服务中中会给eureka带来什么问题，无非就是某一个节点被注册的服务多，某个节点注册的服务少，在某一个瞬间可能导致某些ip节点被调用数少，某些ip节点调用数少的问题。也有可能存在一些本应该被删除而没被删除的脏数据。</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d05888f75401e9" alt="image"></p>
-<h4 id="小结：服务注册应该选择AP还是CP"><a href="#小结：服务注册应该选择AP还是CP" class="headerlink" title="小结：服务注册应该选择AP还是CP"></a>小结：服务注册应该选择AP还是CP</h4><p>对于服务注册来说，针对同一个服务，即使注册中心的不同节点保存的服务注册信息不相同，也并不会造成灾难性的后果，对于服务消费者来说，能消费才是最重要的，就算拿到的数据不是最新的数据，消费者本身也可以进行尝试失败重试。总比为了追求数据的一致性而获取不到实例信息整个服务不可用要好。</p>
-<p>所以，对于服务注册来说，可用性比数据一致性更加的重要，选择AP。</p>
-<h3 id="分布式锁，是选择AP还是选择CP-？"><a href="#分布式锁，是选择AP还是选择CP-？" class="headerlink" title="分布式锁，是选择AP还是选择CP ？"></a>分布式锁，是选择AP还是选择CP ？</h3><p>这里实现分布式锁的方式选取了三种：</p>
+<p>即让一部分用户继续用产品特性 A，一部分用户开始用产品特性 B，如果用户对 B 没有什么反对意见，那么逐步扩大范围，把所有用户都迁移到 B 上面来。</p>
+<p>开源网关 Zuul 架构：</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/226237b2fb8ff757a643e67ec682df71.jpg" alt="img"></p>
+<p>Zuul 网关核心其实是一个 Servlet，所有请求都会经过 Zuul Servlet 传到 ZuulFilter Runner，然后分发到三种过滤器。</p>
+<p>先说说架构图左半部分，分别是使用 Groovy 实现的前置路由过滤器，路由过滤器，后置路由过滤器。</p>
+<p>一般请求都会先经过前置路由过滤器处理，一般的自定义 Java 封装逻辑也会在这里实现。</p>
+<p>路由过滤器，实现的是找到对应的微服务进行调用。调用完了，响应回来，会经过后置路由过滤器，通过后置路由过滤器我们可以封装日志审计的处理。</p>
+<p>可以说 Zuul 网关最大的特色就是它的三层过滤器。架构图右半部分，是 Zuul 网关设计的自定义过滤器加载机制。</p>
+<p>网关内部会有生产者消费者模型，自动的将过滤器脚本发布到 Zuul 网关读取加载运行。</p>
+<h2 id="配置中心"><a href="#配置中心" class="headerlink" title="配置中心"></a>配置中心</h2><p>以前，开发人员把配置文件放在开发文件里面，这样会有很多隐患。譬如，配置规范不同，无法追溯配置人员。</p>
+<p>一旦需要大规模改动配置，改动时间会很长，无法追溯配置人员，从而影响整个产品，后果是我们承担不起的。</p>
+<p>因此就有配置中心这个喽!现在的开源中心有百度配置中心 Disconf，Spring Cloud Config，Apollo。</p>
+<p>今天重点说说现在应用质量不错的配置中心，携程开源的阿波罗(Apollo)：</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/cd598d47c727b134a2ca198e41c50462.jpg-wh_600x-s_1032512502.jpg" alt="img"></p>
+<p>Apollo 的配置中心规模比较大，本地应用会有响应的配置中心客户端，可以定时同步配置中心里的配置。如果配置中心怠机，会使用缓存来进行配置。</p>
+<h2 id="通讯方式"><a href="#通讯方式" class="headerlink" title="通讯方式"></a>通讯方式</h2><p>关于通讯方式，一般市面也就是两种远程调用方式，我整理了一个表格：</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/b2119c2e7c9bce882b42c644c1fdeca8.jpg-wh_600x-s_1516237122.jpg" alt="img"></p>
+<h2 id="监控预警"><a href="#监控预警" class="headerlink" title="监控预警"></a>监控预警</h2><p>监控预警对于微服务很重要，一个可靠的监控预警体系对微服务运行至关重要。</p>
+<p>一般监控分为如下层次：</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/002cbe53dc2f67ae16350acbcb8f7dd7.jpg" alt="img"></p>
+<p>从基础设施到用户端，层层有监控，全方位，多角度，每一个层面都很重要。</p>
+<p>总体来说，微服务可分为 5 个监控点：</p>
 <ul>
-<li>基于数据库实现分布式锁</li>
-<li>基于redis实现分布式锁</li>
-<li>基于zookeeper实现分布式锁</li>
+<li>日志监控</li>
+<li>Metrics 监控</li>
+<li>健康检查</li>
+<li>调用链检查</li>
+<li>告警系统</li>
 </ul>
-<h4 id="基于数据库实现分布式锁"><a href="#基于数据库实现分布式锁" class="headerlink" title="基于数据库实现分布式锁"></a>基于数据库实现分布式锁</h4><p>构建表结构</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588a12368882" alt="image"></p>
-<p>利用表的 UNIQUE KEY <code>idx_lock</code> (<code>method_lock</code>) 作为唯一主键，当进行上锁时进行insert动作，数据库成功录入则以为上锁成功，当数据库报出 Duplicate entry 则表示无法获取该锁。</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588a11076d99" alt="image"></p>
-<p>不过这种方式对于单主却无法自动切换主从的mysql来说，基本就无法现实P分区容错性，（Mysql自动主从切换在目前并没有十分完美的解决方案）。可以说这种方式强依赖于数据库的可用性，数据库写操作是一个单点，一旦数据库挂掉，就导致锁的不可用。这种方式基本不在CAP的一个讨论范围。</p>
-<h4 id="基于redis实现分布式锁"><a href="#基于redis实现分布式锁" class="headerlink" title="基于redis实现分布式锁"></a>基于redis实现分布式锁</h4><p>redis单线程串行处理天然就是解决串行化问题，用来解决分布式锁是再适合不过。</p>
-<p>实现方式：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">setnx key value Expire_time</span><br><span class="line">获取到锁 返回 1 ， 获取失败 返回 0</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
-<p>为了解决数据库锁的无主从切换的问题，可以选择redis集群，或者是 sentinel 哨兵模式，实现主从故障转移，当master节点出现故障，哨兵会从slave中选取节点，重新变成新的master节点。</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d05889f092fb7f" alt="image"></p>
-<p>哨兵模式故障转移是由sentinel集群进行监控判断，当maser出现异常即复制中止，重新推选新slave成为master，sentinel在重新进行选举并不在意主从数据是否复制完毕具备一致性。</p>
-<p>所以redis的复制模式是属于AP的模式。保证可用性，在主从复制中“主”有数据，但是可能“从”还没有数据，这个时候，一旦主挂掉或者网络抖动等各种原因，可能会切换到“从”节点，这个时候可能会导致两个业务县城同时获取得两把锁</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d05889f24be477" alt="image"></p>
-<p>这个过程如下：</p>
-<ol>
-<li>业务线程-1 向主节点请求锁</li>
-<li>业务线程-1 获取锁</li>
-<li>业务线程-1 获取到锁并开始执行业务</li>
-<li>这个时候redis刚生成的锁在主从之间还未进行同步</li>
-<li>redis这时候主节点挂掉了</li>
-<li>redis的从节点升级为主节点</li>
-<li>业务线程-2 想新的主节点请求锁</li>
-<li>业务线程-2 获取到新的主节点返回的锁</li>
-<li>业务线程-2 获取到锁开始执行业务</li>
-<li>这个时候 业务线程-1 和 业务线程-2 同时在执行任务</li>
-</ol>
-<p>上述的问题其实并不是redis的缺陷，只是redis采用了AP模型，它本身无法确保我们对一致性的要求。redis官方推荐redlock算法来保证，问题是redlock至少需要三个redis主从实例来实现，维护成本比较高，相当于redlock使用三个redis集群实现了自己的另一套一致性算法，比较繁琐，在业界也使用得比较少。</p>
-<h5 id="能否使用redis作为分布式锁？"><a href="#能否使用redis作为分布式锁？" class="headerlink" title="能否使用redis作为分布式锁？"></a>能否使用redis作为分布式锁？</h5><p>能不能使用redis作为分布式锁，这个本身就不是redis的问题，还是取决于业务场景，我们先要自己确认我们的场景是适合 AP 还是 CP ， 如果在社交发帖等场景下，我们并没有非常强的事务一致性问题，redis提供给我们高性能的AP模型是非常适合的，但如果是交易类型，对数据一致性非常敏感的场景，我们可能要寻在一种更加适合的 CP 模型</p>
-<h4 id="基于zookeeper实现分布式锁"><a href="#基于zookeeper实现分布式锁" class="headerlink" title="基于zookeeper实现分布式锁"></a>基于zookeeper实现分布式锁</h4><p>刚刚也分析过，redis其实无法确保数据的一致性，先来看zookeeper是否合适作为我们需要的分布式锁，首先zk的模式是CP模型，也就是说，当zk锁提供给我们进行访问的时候，在zk集群中能确保这把锁在zk的每一个节点都存在。</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d05889f6a5ce1c" alt="image"></p>
-<p>（这个实际上是zk的leader通过二阶段提交写请求来保证的，这个也是zk的集群规模大了的一个瓶颈点）</p>
-<h5 id="zk锁实现的原理"><a href="#zk锁实现的原理" class="headerlink" title="zk锁实现的原理"></a>zk锁实现的原理</h5><p>说zk的锁问题之前先看看zookeeper中几个特性，这几个特性构建了zk的一把分布式锁</p>
-<p><strong>特性：</strong></p>
-<ul>
-<li>有序节点</li>
+<h3 id="监控架构"><a href="#监控架构" class="headerlink" title="监控架构"></a>监控架构</h3><p>下面的图是大部分公司的一种监控架构图。每一个服务都有一个 Agent，Agent 收集到关键信息，会传到一些 MQ 中，为了解耦。</p>
+<p>同时将日志传入 ELK，将 Metrics 传入 InfluxDB 时间序列库。而像 Nagios，可以定期向 Agent 发起信息检查微服务。</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/9b8b3cb7cf0e2ac69578caefc5f1d9a3.jpg" alt="img"></p>
+<h3 id="调用链监控-APM"><a href="#调用链监控-APM" class="headerlink" title="调用链监控 APM"></a>调用链监控 APM</h3><p>很多公司都有调用链监控，就譬如阿里有鹰眼监控，点评的 Cat，大部分调用链监控(没错，我指的 Zipkin)架构是这样的：</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/286dfb2abc5d0b52436469a52e543232.jpg" alt="img"></p>
+<p>当请求进入 Web 容器的时候，会经过创建 Tracer，连接 Spans(模拟潜在的分布式工作的延迟，该模块还包含在系统网络间传递跟踪上下文信息的工具包，如通过 HTTP Headers)。</p>
+<p>Spans 有一个上下文，其中包含 Tracer 标识符，将其放在表示分布式操作的树的正确位置。</p>
+<p>当我们把图中的各种 Span 放到后端的时候，我们的服务调用链会动态的生成调用链。</p>
+<p>下面是一些市场上用的比较多的调用链监控对比：</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/d8e4aaf560ea57e869d4aebd08f1fe8b.jpg-wh_600x-s_3497886967.jpg" alt="img"></p>
+<h3 id="熔断、隔离、限流、降级"><a href="#熔断、隔离、限流、降级" class="headerlink" title="熔断、隔离、限流、降级"></a>熔断、隔离、限流、降级</h3><p>面对巨大的突发流量下，大型公司一般会采用一系列的熔断(系统自动将服务关闭防止让出现的问题最大化)、隔离(将服务和服务隔离，防止一个服务挂了其他服务不能访问)、限流(单位时间内之允许一定数量用户访问)、降级(当整个微服务架构整体的负载超出了预设的上限阈值或即将到来的流量预计将会超过预设的阈值时，为了保证重要或基本的服务能正常运行，我们可以将一些不重要或不紧急的服务或任务进行服务的延迟使用或暂停使用)措施。</p>
+<p>下面介绍一下 Hystrix 的运行流程：</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/5b7f9f765608935b6ab292657d7acaa6.jpg-wh_600x-s_499345865.jpg" alt="img"></p>
+<p>每一个微服务调用时，都会使用 Hystrix 的 Command 方式(上图的左上角那个)，然后使用 Command 同步的，或者是响应式的，或者是异步的，判断电路是否熔断(顺着图从左往右看)，如果断路则走降级 Fallback。</p>
+<p>如果这个线闭合着，但是线程资源没了，队列满了，则走限流措施(看图的第 5 步)。</p>
+<p>如果走完了，执行成功了，则走 run() 方法，获取 Response，但是这个过程如果出错了，则继续走降级 Fallback。</p>
+<p>同时，看图最上面有一个后缀是 Health 的，这是一个计算整个链路是否健康的组件，每一步操作都被它记录着。</p>
+<h1 id="容器与服务编排引擎"><a href="#容器与服务编排引擎" class="headerlink" title="容器与服务编排引擎"></a>容器与服务编排引擎</h1><p>从物理机到虚拟机，从虚拟机到容器;从物理集群到 OpenStack，OpenStack 到 Kubernetes;科技不断的变化，我们的认知也没刷新。</p>
+<p>我们从容器开始说起，它首先是一个相对独立的运行环境，在这一点有点类似于虚拟机，但是不像虚拟机那样彻底。</p>
+<p>虚拟机会将虚拟硬件、内核(即操作系统)以及用户空间打包在新虚拟机当中，虚拟机能够利用“虚拟机管理程序”运行在物理设备之上。</p>
+<p>虚拟机依赖于 Hypervisor，其通常被安装在“裸金属”系统硬件之上，这导致 Hypervisor 在某些方面被认为是一种操作系统。</p>
+<p>一旦 Hypervisor 安装完成， 就可以从系统可用计算资源当中分配虚拟机实例了，每台虚拟机都能够获得唯一的操作系统和负载(应用程序)。</p>
+<p>简言之，虚拟机先需要虚拟一个物理环境，然后构建一个完整的操作系统，再搭建一层 Runtime，然后供应用程序运行。</p>
+<p>对于容器环境来说，不需要安装主机操作系统，直接将容器层(比如 LXC 或 Libcontainer)安装在主机操作系统(通常是 Linux 变种)之上。</p>
+<p>在安装完容器层之后，就可以从系统可用计算资源当中分配容器实例了，并且企业应用可以被部署在容器当中。</p>
+<p>但是，每个容器化应用都会共享相同的操作系统(单个主机操作系统)。容器可以看成一个装好了一组特定应用的虚拟机，它直接利用了宿主机的内核，抽象层比虚拟机更少，更加轻量化，启动速度极快。</p>
+<p>相比于虚拟机，容器拥有更高的资源使用效率，因为它并不需要为每个应用分配单独的操作系统——实例规模更小、创建和迁移速度也更快。这意味着相比于虚拟机，单个操作系统能够承载更多的容器。</p>
+<p>云提供商十分热衷于容器技术，因为在相同的硬件设备当中，可以部署数量更多的容器实例。</p>
+<p>此外，容器易于迁移，但是只能被迁移到具有兼容操作系统内核的其他服务器当中，这样就会给迁移选择带来限制。</p>
+<p>因为容器不像虚拟机那样同样对内核或者虚拟硬件进行打包，所以每套容器都拥有自己的隔离化用户空间，从而使得多套容器能够运行在同一主机系统之上。</p>
+<p>我们可以看到全部操作系统层级的架构都可实现跨容器共享，惟一需要独立构建的就是二进制文件与库。</p>
+<p>正因为如此，容器才拥有极为出色的轻量化特性。我们最常用的容器是 Docker。</p>
+<h2 id="容器编排"><a href="#容器编排" class="headerlink" title="容器编排"></a>容器编排</h2><p>过去虚拟机可以通过云平台 OpenStack 管理虚拟化，容器时代如何管理容器呢?这就要看看容器编排引擎了。</p>
+<p>Apache Mesos：Mesos 是基于 Master，Slave 架构，框架决定如何利用资源，Master 负责管理机器，Slave 会定期的将机器情况报告给 Master，Master 再将信息给框架。Master 是高可用的，因为 ZK，也有 Leader 的存在。</p>
+<p>下面是架构图：</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/f42d01026d05b86c3218871af63ac4a8.jpg" alt="img"></p>
+<p>Kubernetes：Kubernetes 是最近十分火热的开源容器编排引擎，具体可以参考前几天分享的一篇文章《我花了10个小时，写出了这篇K8S架构解析》</p>
+<p><img src="/2020/02/25/【转载】多次尝试学习，终于搞懂了微服务架构/3e364b0e4be082fb50b51b793db18863.jpg-wh_600x-s_3201520885.jpg" alt="img"></p>
+<p>Kubernetes 设计理念和功能其实就是一个类似 Linux 的分层架构，先说说每一个 Kubernetes 节点内部，kubelet 管理全局全局 pod，而每一个 pod 承载着一个或多个容器，kube-proxy 负责网络代理和负载均衡。</p>
+<p>Kubernetes 节点外部，则是对应的控制管理服务器，负责统一管理各个节点调度分配与运行。</p>
+<h2 id="服务网格化"><a href="#服务网格化" class="headerlink" title="服务网格化"></a>服务网格化</h2><p>关于服务网络化，后面会更加深入的为大家进行讲解。</p>
+<h1 id="资料与文献"><a href="#资料与文献" class="headerlink" title="资料与文献"></a>资料与文献</h1><ul>
+<li>马丁.福勒对微服务的描述</li>
+<li>微服务架构的理论基础 - 康威定律</li>
+<li>调用链选型之Zipkin，Pinpoint，SkyWalking，CAT</li>
 </ul>
-<blockquote>
-<p>当在一个父目录下如 /lock 下创建 有序节点，节点会按照严格的先后顺序创建出自节点 lock000001,lock000002,lock0000003,以此类推，有序节点能严格保证各个自节点按照排序命名生成。</p>
-</blockquote>
-<ul>
-<li>临时节点</li>
-</ul>
-<blockquote>
-<p>客户端建立了一个临时节点，在客户端的会话结束或会话超时，zookepper会自动删除该解ID那。</p>
-</blockquote>
-<ul>
-<li>事件监听</li>
-</ul>
-<blockquote>
-<p>在读取数据时，我们可以对节点设置监听，当节点的数据发生变化（1 节点创建 2 节点删除 3 节点数据变成 4 自节点变成）时，zookeeper会通知客户端。</p>
-</blockquote>
-<p>结合这几个特点，来看下zk是怎么组合分布式锁。</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588a51620561" alt="image"></p>
-<ol>
-<li>业务线程-1 业务线程-2 分别向zk的/lock目录下，申请创建有序的临时节点</li>
-<li>业务线程-1 抢到/lock0001 的文件，也就是在整个目录下最小序的节点，也就是线程-1获取到了锁</li>
-<li>业务线程-2 只能抢到/lock0002的文件，并不是最小序的节点，线程2未能获取锁</li>
-<li>业务线程-1 与 lock0001 建立了连接，并维持了心跳，维持的心跳也就是这把锁的租期</li>
-<li>当业务线程-1 完成了业务，将释放掉与zk的连接，也就是释放了这把锁</li>
-</ol>
-<h5 id="zk分布式锁的代码实现"><a href="#zk分布式锁的代码实现" class="headerlink" title="zk分布式锁的代码实现"></a>zk分布式锁的代码实现</h5><p>zk官方提供的客户端并不支持分布式锁的直接实现，我们需要自己写代码去利用zk的这几个特性去进行实现。</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588a68844a5a" alt="image"></p>
-<h4 id="小结：究竟该用CP还是AP的分布式锁"><a href="#小结：究竟该用CP还是AP的分布式锁" class="headerlink" title="小结：究竟该用CP还是AP的分布式锁"></a>小结：究竟该用CP还是AP的分布式锁</h4><p>首先得了解清楚我们使用分布式锁的场景，为何使用分布式锁，用它来帮我们解决什么问题，先聊场景后聊分布式锁的技术选型。</p>
-<p>无论是redis，zk，例如redis的AP模型会限制很多使用场景，但它却拥有了几者中最高的性能，zookeeper的分布式锁要比redis可靠很多，但他繁琐的实现机制导致了它的性能不如redis，而且zk会随着集群的扩大而性能更加下降。</p>
-<p>简单来说，先了解业务场景，后进行技术选型。</p>
-<h3 id="分布式事务，是怎么从ACID解脱，投身CAP-BASE"><a href="#分布式事务，是怎么从ACID解脱，投身CAP-BASE" class="headerlink" title="分布式事务，是怎么从ACID解脱，投身CAP/BASE"></a>分布式事务，是怎么从ACID解脱，投身CAP/BASE</h3><p>如果说到事务，ACID是传统数据库常用的设计理念，追求强一致性模型，关系数据库的ACID模型拥有高一致性+可用性，所以很难进行分区，所以在微服务中ACID已经是无法支持，我们还是回到CAP去寻求解决方案，不过根据上面的讨论，CAP定理中，要么只能CP，要么只能AP，如果我们追求数据的一致性而忽略可用性这个在微服务中肯定是行不通的，如果我们追求可用性而忽略一致性，那么在一些重要的数据（例如支付，金额）肯定出现漏洞百出，这个也是无法接受。所以我们既要一致性，也要可用性。</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588a859246f5" alt="image"></p>
-<p>都要是无法实现的，但我们能不能在一致性上作出一些妥协，不追求强一致性，转而追求最终一致性，所以引入BASE理论，在分布式事务中，BASE最重要是为CAP提出了最终一致性的解决方案，BASE强调牺牲高一致性，从而获取肯用性，数据允许在一段时间内不一致，只要保证最终一致性就可以了。</p>
-<h4 id="实现最终一致性"><a href="#实现最终一致性" class="headerlink" title="实现最终一致性"></a>实现最终一致性</h4><p><strong>弱一致性</strong>：系统不能保证后续访问返回更新的值。需要在一些条件满足之后，更新的值才能返回。从更新操作开始，到系统保证任何观察者总是看到更新的值的这期间被称为不一致窗口。</p>
-<p><strong>最终一致性</strong>：这是弱一致性的特殊形式；存储系统保证如果没有对某个对象的新更新操作，最终所有的访问将返回这个对象的最后更新的值。</p>
-<h4 id="BASE模型"><a href="#BASE模型" class="headerlink" title="BASE模型"></a>BASE模型</h4><p>BASE模型是传统ACID模型的反面，不同与ACID，BASE强调牺牲高一致性，从而获得可用性，数据允许在一段时间内的不一致，只要保证最终一致就可以了。</p>
-<p>BASE模型反ACID模型，完全不同ACID模型，牺牲高一致性，获得可用性或可靠性： Basically Available基本可用。支持分区失败(e.g. sharding碎片划分数据库) Soft state软状态 状态可以有一段时间不同步，异步。 Eventually consistent最终一致，最终数据是一致的就可以了，而不是时时一致。</p>
-<h4 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h4><p>在分布式系统中，要实现分布式事务，无外乎几种解决方案。方案各有不同，不过其实都是遵循BASE理论，是最终一致性模型。</p>
-<ul>
-<li>两阶段提交（2PC）</li>
-<li>补偿事务（TCC）</li>
-<li>本地消息表</li>
-<li>MQ事务消息</li>
-</ul>
-<h4 id="两阶段提交（2PC）"><a href="#两阶段提交（2PC）" class="headerlink" title="两阶段提交（2PC）"></a>两阶段提交（2PC）</h4><p>其实还有一个数据库的XA事务，不过目前在真正的互联网中实际的应用基本很少，两阶段提交就是使用XA原理。</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588a87ee0c96" alt="image"></p>
-<p>在 XA 协议中分为两阶段：</p>
-<ol>
-<li>事务管理器要求每个涉及到事务的数据库预提交(precommit)此操作，并反映是否可以提交。</li>
-<li>事务协调器要求每个数据库提交数据，或者回滚数据。</li>
-</ol>
-<p>说一下，为何在互联网的系统中没被改造过的两阶段提交基本很少被业界应用，最最大的缺点就是同步阻塞问题，在资源准备就绪之后，资源管理器中的资源就一直处于阻塞，直到提交完成之后，才进行资源释放。这个在互联网高并发大数据的今天，两阶段的提交是不能满足现在互联网的发展。</p>
-<p>还有就是两阶段提交协议虽然为分布式数据强一致性所设计，但仍然存在数据不一致性的可能，例如：</p>
-<p>比如在第二阶段中，假设协调者发出了事务 Commit 的通知，但是因为网络问题该通知仅被一部分参与者所收到并执行了 Commit 操作，其余的参与者则因为没有收到通知一直处于阻塞状态，这时候就产生了数据的不一致性。</p>
-<h4 id="补偿事务（TCC）"><a href="#补偿事务（TCC）" class="headerlink" title="补偿事务（TCC）"></a>补偿事务（TCC）</h4><p>TCC是服务化的两阶段变成模型，每个业务服务都必须实现 try，confirm，calcel三个方法，这三个方式可以对应到SQL事务中Lock，Commit，Rollback。</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588aa354cd70" alt="image"></p>
-<p>相比两阶段提交，TCC解决了几个问题</p>
-<p>同步阻塞，引入了超时机制，超时后进行补偿，并不会像两阶段提交锁定了整个资源，将资源转换为业务逻辑形式，粒度变小。 因为有了补偿机制，可以由业务活动管理器进行控制，保证数据一致性。</p>
-<p>1). try阶段</p>
-<p>try只是一个初步的操作，进行初步的确认，它的主要职责是完成所有业务的检查，预留业务资源</p>
-<p>2). confirm阶段</p>
-<p>confirm是在try阶段检查执行完毕后，继续执行的确认操作，必须满足幂等性操作，如果confirm中执行失败，会有事务协调器触发不断的执行，直到满足为止</p>
-<p>3). cancel是取消执行，在try没通过并释放掉try阶段预留的资源，也必须满足幂等性，跟confirm一样有可能被不断执行</p>
-<p>一个下订单，生成订单扣库存的例子：</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588aa9cf1fed" alt="image"></p>
-<p>接下来看看，我们的下单扣减库存的流程怎么加入TCC</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588ab8cd2a20" alt="image"></p>
-<p>在try的时候，会让库存服务预留n个库存给这个订单使用，让订单服务产生一个“未确认”订单，同时产生这两个预留的资源， 在confirm的时候，会使用在try预留的资源，在TCC事务机制中认为，如果在try阶段能正常预留的资源，那么在confirm一定能完整的提交</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588ab8c51652" alt="image"></p>
-<p>在try的时候，有任务一方为执行失败，则会执行cancel的接口操作，将在try阶段预留的资源进行释放。</p>
-<p>这个并不是重点要论tcc事务是怎么实现，重点还是讨论分布式事务在CAP+BASE理论的应用。实现可以参考：<a href="https://github.com/changmingxie/tcc-transaction" target="_blank" rel="noopener">github.com/changmingxi…</a></p>
-<h4 id="本地消息表"><a href="#本地消息表" class="headerlink" title="本地消息表"></a>本地消息表</h4><p>本地消息表这个方案最初是 eBay 提出的，eBay 的完整方案 <a href="https://queue.acm.org/detail.cfm?id=1394128。" target="_blank" rel="noopener">queue.acm.org/detail.cfm?…</a></p>
-<p>本地消息表这种实现方式应该是业界使用最多的，其核心思想是将分布式事务拆分成本地事务进行处理。</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588acde414a6" alt="image"></p>
-<p>对于本地消息队列来说，核心就是将大事务转变为小事务，还是用上面下订单扣库存的例子说说明</p>
-<ol>
-<li>当我们去创建订单的时候，我们新增一个本地消息表，把创建订单和扣减库存写入到本地消息表，放在同一个事务（依靠数据库本地事务保证一致性）</li>
-<li>配置一个定时任务去轮训这个本地事务表，扫描这个本地事务表，把没有发送出去的消息，发送给库存服务，当库存服务收到消息后，会进行减库存，并写入服务器的事务表，更新事务表的状态。</li>
-<li>库存服务器通过定时任务或直接通知订单服务，订单服务在本地消息表更新状态。</li>
-</ol>
-<p>这里须注意的是，对于一些扫描发送未成功的任务，会进行重新发送，所以必须保证接口的幂等性。</p>
-<p>本地消息队列是BASE理论，是最终一致性模型，适用对一致性要求不高的情况。</p>
-<h4 id="MQ事务"><a href="#MQ事务" class="headerlink" title="MQ事务"></a>MQ事务</h4><p>RocketMq在4.3版本已经正式宣布支持分布式事务，在选择Rokcetmq做分布式事务请务必选择4.3以上的版本。</p>
-<p>RocketMQ中实现了分布式事务，实际上是对本地消息表的一个封装，将本地消息表移动到了MQ内部。</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588ae2844970" alt="image"></p>
-<p>事务消息作为一种异步确保型事务， 将两个事务分支通过 MQ 进行异步解耦，RocketMQ 事务消息的设计流程同样借鉴了两阶段提交理论，整体交互流程如下图所示：</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588aeba679cf" alt="image"></p>
-<p>MQ事务是对本地消息表的一层封装，将本地消息表移动到了MQ内部，所以也是基于BASE理论，是最终一致性模式，对强一致性要求不那么高的事务适用，同时MQ事务将整个流程异步化了，也非常适合在高并发情况下使用。</p>
-<h3 id="RocketMQ选择异步-同步刷盘，异步-同步复制，背后的CP和AP思考"><a href="#RocketMQ选择异步-同步刷盘，异步-同步复制，背后的CP和AP思考" class="headerlink" title="RocketMQ选择异步/同步刷盘，异步/同步复制，背后的CP和AP思考"></a>RocketMQ选择异步/同步刷盘，异步/同步复制，背后的CP和AP思考</h3><p>虽然同步刷盘/异步刷盘，同步/异步复制，并没有对cAP直接的应用，但在配置的过程中也一样涉及到可用性和一致性的考虑</p>
-<h4 id="同步刷盘-异步刷盘"><a href="#同步刷盘-异步刷盘" class="headerlink" title="同步刷盘/异步刷盘"></a>同步刷盘/异步刷盘</h4><p>RocketMQ的消息是可以做到持久化的，数据会持久化到磁盘，RocketMQ为了提高性能，尽可能保证磁盘的顺序写入，消息在Producer写入RocketMq的时候，有两种写入磁盘方式：</p>
-<ol>
-<li>异步刷盘： 消息快速写入到内存的pagecache，就立马返回写成功状态，当内存的消息累计到一定程度的时候，会触发统一的写磁盘操作。这种方式可以保证大吞吐量，但也存在着消息可能未存入磁盘丢失的风险。</li>
-<li>同步刷盘： 消息快速写入内存的pagecahe，立刻通知刷盘线程进行刷盘，等待刷盘完成之后，唤醒等待的线程，返回消息写成功的状态。</li>
-</ol>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588b056e080a" alt="image"></p>
-<h4 id="同步复制-异步复制"><a href="#同步复制-异步复制" class="headerlink" title="同步复制/异步复制"></a>同步复制/异步复制</h4><p>一个broker组有Master和Slave，消息需要从Master复制到Slave上，所以有同步和异步两种复制方式。</p>
-<ol>
-<li>同步复制： 是等Master和Slave均写成功后才反馈给客户端写成功状态。</li>
-<li>异步复制： 是只要Master写成功即可反馈给客户端写成功状态。</li>
-</ol>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588af130c763" alt="image"></p>
-<p>异步复制的优点是可以提高响应速度，但牺牲了一致性 ，一般实现该类协议的算法需要增加额外的补偿机制。同步复制的优点是可以保证一致性(一般通过两阶段提交协议)，但是开销较大，可用性不好(参见CAP定理)，带来了更多的冲突和死锁等问题。值得一提的是Lazy+Primary/Copy的复制协议在实际生产环境中是非常实用的。</p>
-<p><img src="/2020/02/24/【转载】神一样的CAP理论被应用在何方/16d0588b16477dcb" alt="image"></p>
-<p>RocketMQ的设置要结合业务场景，合理设置刷盘方式和主从复制方式，尤其是SYNC_FLUSH方式，由于频繁的触发写磁盘动作，会明显降低性能。通常情况下，应该把Master和Slave设置成ASYNC_FLUSH的刷盘方式，主从之间配置成SYNC_MASTER的复制方式，这样即使有一台机器出故障，仍然可以保证数据不丢。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在微服务的构建中，永远都逃离不了CAP理论，因为网络永远不稳定，硬件总会老化，软件会可能出现bug，所以分区容错性在微服务中是躲不过的命题，可以这么说，只要是分布式，只要是集群都面临着AP或者CP的选择，但你很贪心的时候，既要一致性又要可用性，那只能对一致性作出一点妥协，也就是引入了BASE理论，在业务允许的情况下实现最终一致性。</p>
-<p>究竟是选AP还是选CP，真的在于对业务的了解，例如金钱，库存相关会优先考虑CP模型，例如社区发帖相关可以优先选择AP模型，这个说白了其实基于对业务的了解是一个选择和妥协的过程。</p>
 
           
         
@@ -695,20 +686,544 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vincent">
+      <meta itemprop="description" content="The King is dead, long live the King!">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/" itemprop="url">
+                  【转载】我花了10个小时，写出了这篇K8S架构解析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-25 15:40:31 / 修改时间：15:53:58" itemprop="dateCreated datePublished" datetime="2020-02-25T15:40:31+08:00">2020-02-25</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/架构设计/" itemprop="url" rel="index"><span itemprop="name">架构设计</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">21k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">19 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>原文转载自51CTO技术栈，崔皓，我花了10个小时，<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&amp;mid=2655827885&amp;idx=1&amp;sn=47feb253e0aa012023d6f421572a04b3&amp;chksm=bd74fa7a8a03736c08e43b4e7082c3763c0e64491e7b7ef3ddd9f3756cfa5e536730f8f022e8&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">写出了这篇K8S架构解析</a></p>
+<blockquote>
+<p>互联网技术飞速发展的今天，为了承载请求的高并发和业务的多样性，微服务的架构成了各个公司的标配。</p>
+</blockquote>
+<p>每个微服务通过 Docker 进行发布，随着业务的发展，系统中遍布着各种各样的容器。于是，容器的资源调度，部署运行，扩容缩容就是我们要面临的问题。</p>
+<p>基于 Kubernetes 作为容器集群的管理平台被广泛应用，今天我们一起来看看 Kubernetes 的架构中有那些常用的组件以及运行原理。</p>
+<h1 id="Kubernetes-架构概述"><a href="#Kubernetes-架构概述" class="headerlink" title="Kubernetes 架构概述"></a>Kubernetes 架构概述</h1><p>Kubernetes 是用来管理容器集群的平台。既然是管理集群，那么就存在被管理节点，针对每个 Kubernetes 集群都由一个 Master 负责管理和控制集群节点。</p>
+<p>我们通过 Master 对每个节点 Node 发送命令。简单来说，Master 就是管理者，Node 就是被管理者。</p>
+<p>Node 可以是一台机器或者一台虚拟机。在 Node 上面可以运行多个 Pod，Pod 是 Kubernetes 管理的最小单位，同时每个 Pod 可以包含多个容器（Docker）。</p>
+<p>通过下面的 Kubernetes 架构简图可以看到 Master 和 Node 之间的关系：</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612508509.webp" alt="img"></p>
+<center><i>Kubernetes 架构简图</i></center><br>通常我们都是通过 kubectl 对 Kubernetes 下命令的，它通过 APIServer 去调用各个进程来完成对 Node 的部署和控制。<br><br>APIServer 的核心功能是对核心对象（例如：Pod，Service，RC）的增删改查操作，同时也是集群内模块之间数据交换的枢纽。<br><br>它包括了常用的 API，访问（权限）控制，注册，信息存储（etcd）等功能。在它的下面我们可以看到 Scheduler，它将待调度的 Pod 绑定到 Node 上，并将绑定信息写入 etcd 中。<br><br>etcd 包含在 APIServer 中，用来存储资源信息。接下来就是 Controller Manager 了，如果说 Kubernetes 是一个自动化运行的系统，那么就需要有一套管理规则来控制这套系统。<br><br>Controller Manager 就是这个管理者，或者说是控制者。它包括 8 个 Controller，分别对应着副本，节点，资源，命名空间，服务等等。<br><br>紧接着，Scheduler 会把 Pod 调度到 Node 上，调度完以后就由 kubelet 来管理 Node 了。<br><br>kubelet 用于处理 Master 下发到 Node 的任务（即 Scheduler 的调度任务），同时管理 Pod 及 Pod 中的容器。<br><br>在完成资源调度以后，kubelet 进程也会在 APIServer 上注册 Node 信息，定期向 Master 汇报 Node 信息，并通过 cAdvisor 监控容器和节点资源。<br><br>由于，微服务的部署都是分布式的，所以对应的 Pod 以及容器的部署也是。为了能够方便地找到这些 Pod 或者容器，引入了 Service（kube-proxy）进程，它来负责反向代理和负载均衡的实施。<br><br>上面就是 Kubernetes 架构的简易说明，涉及到了一些核心概念以及简单的信息流动。<br><br>将一些功能收录到了 APIServer 中，这个简图比官网的图显得简单一些，主要是方便大家记忆。<br><br>后面我们会用一个简单的例子，带大家把 Kubernetes 的概念的由来做深入的了解。<br><br># 从一个例子开始<br><br>假设使用 Kubernetes 部署 Tomcat 和 MySQL 服务到两个 Node 上面。其中 Tomcat 服务生成两个实例也就是生成两个 Pod，用来对其做水平扩展。<br><br>MySQL 只部署一个实例，也就是一个 Pod。可以通过外网访问 Tomcat，而 Tomcat 可以在内网访问 MySQL。<br><br><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612580738.webp" alt="img"><br><br><center><i>例子示意图</i></center><br>这里我们假设 Kubernetes 和 Docker 的安装都已经完成，并且镜像文件都已经准备好了。重点看 Kubernetes 如何部署和管理容器。<br><br># kubectl 和 APIServer<br><br>既然我们要完成上面的例子，接下来就要部署两个应用。<br><br>首先，根据要部署的应用建立 Replication Controller（RC）。RC 是用来声明应用副本的个数，也就是 Pod 的个数。<br><br>按照上面的例子，Tomcat 的 RC 就是 2，MySQL 的 RC 就是 1。<br><br>由于 kubectl 作为用户接口向 Kubernetes 下发指令，那么指令是通过“.yaml”的配置文件编写的。<br><br>定义 ysql-rc.yaml 的配置文件来描述 MySQL 的 RC：<br><br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">V1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ReplicationController</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">mysql#RC的名称，全局唯一</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="string">replicas:1</span> <span class="comment">#Pod 副本的期待数量</span></span><br><span class="line"><span class="attr">selector :</span></span><br><span class="line"><span class="attr">app:</span> <span class="string">mysql</span></span><br><span class="line"> <span class="attr">template:</span> <span class="comment">#Pod模版，用这个模版来创建Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">labels:</span></span><br><span class="line"><span class="string">app:mysql#Pod副本的标签</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="string">containers:#容器定义部分</span></span><br><span class="line">     <span class="string">-name:mysql</span></span><br><span class="line"><span class="string">Image:mysql#容器对应的DockerImage</span></span><br><span class="line">      <span class="attr">Ports:</span></span><br><span class="line">      <span class="string">-containerPort:3306#容器应用监听的端口号</span></span><br><span class="line">      <span class="string">Env:#注入容器的环境变量</span></span><br><span class="line">      <span class="string">-name:MYSQL_ROOT_PASSWORD</span></span><br><span class="line">      <span class="string">Value:”123456”</span></span><br></pre></td></tr></table></figure><br><br>从上面的配置文件可以看出，需要对这个 RC 定义一个名字，以及期望的副本数，以及容器中的镜像文件。然后通过 kubectl 作为客户端的 cli 工具，执行这个配置文件。<br><br><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612852256.webp" alt="img"><br><br><center><i>通过 kubectl 执行 RC 配置文件</i></center><br>执行了上面的命令以后，Kubernetes 会帮助我们部署副本 MySQL 的 Pod 到 Node。<br><br>此时先不着急看结果，回到最开始的架构图，可以看到 kubectl 会向 Master 中的 APIServer 发起命令，看看 APIServer 的结构和信息的传递吧。<br><br><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612887167.png" alt="img"><br><br>Kubernetes API Server 通过一个名为 kube-apiserver 的进程提供服务，该进程运行在 Master 上。<br><br>可以通过 Master 的 8080 端口访问 kube-apiserver 进程，它提供 REST 服务。<br><br>因此可以通过命令行工具 kubectl 来与 Kubernetes APIServer 交互，它们之间的接口是 RESTful API。<br><br><strong>APIServer 的架构从上到下分为四层</strong>：<br><br>- <strong>API 层：</strong>主要以 REST 方式提供各种 API 接口，针对 Kubernetes 资源对象的 CRUD 和 Watch 等主要 API，还有健康检查、UI、日志、性能指标等运维监控相关的 API。<br>- <strong>访问控制层：</strong>负责身份鉴权，核准用户对资源的访问权限，设置访问逻辑（Admission Control）。<br>- <strong>注册表层：</strong>选择要访问的资源对象。PS：Kubernetes 把所有资源对象都保存在注册表（Registry）中，例如：Pod，Service，Deployment 等等。<br>- <strong>etcd 数据库：</strong>保存创建副本的信息。用来持久化 Kubernetes 资源对象的 Key-Value 数据库。<br><br><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612449162.webp" alt="img"><br><br><center><i>APIServer 分层架构图</i></center>
+
+<p>当 kubectl 用 Create 命令建立 Pod 时，是通过 APIServer 中的 API 层调用对应的 RESTAPI 方法。</p>
+<p>之后会进入权限控制层，通过 Authentication 获取调用者身份，Authorization 获取权限信息。</p>
+<p>AdmissionControl 中可配置权限认证插件，通过插件来检查请求约束。例如：启动容器之前需要下载镜像，或者检查具备某命名空间的资源。</p>
+<p>还记得 mysql-rc.yaml 中配置需要生成的 Pod 的个数为 1。到了 Registry 层会从 CoreRegistry 资源中取出 1 个 Pod 作为要创建的 Kubernetes 资源对象。</p>
+<p>然后将 Node，Pod 和 Container 信息保存在 etcd 中去。这里的 etcd 可以是一个集群，由于里面保存集群中各个 Node/Pod/Container 的信息，所以必要时需要备份，或者保证其可靠性。</p>
+<h1 id="Controller-Manager，Scheduler-和-kubelet"><a href="#Controller-Manager，Scheduler-和-kubelet" class="headerlink" title="Controller Manager，Scheduler 和 kubelet"></a>Controller Manager，Scheduler 和 kubelet</h1><p>前面通过 kubectl 根据配置文件，向 APIServer 发送命令，在 Node 上面建立 Pod 和 Container。</p>
+<p>在 APIServer，经过 API 调用，权限控制，调用资源和存储资源的过程。实际上还没有真正开始部署应用。</p>
+<p>这里需要 Controller Manager，Scheduler 和 kubelet 的协助才能完成整个部署过程。</p>
+<p>在介绍他们协同工作之前，要介绍一下在 Kubernetes 中的监听接口。从上面的操作知道，所有部署的信息都会写到 etcd 中保存。</p>
+<p>实际上 etcd 在存储部署信息的时候，会发送 Create 事件给 APIServer，而 APIServer 会通过监听（Watch）etcd 发过来的事件。其他组件也会监听（Watch）APIServer 发出来的事件。</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612994188.webp" alt="img"></p>
+<p><strong>Kubernetes 就是用这种 List-Watch 的机制保持数据同步的，如上图</strong>：</p>
+<ul>
+<li><p>这里有三个 List-Watch，分别是 kube-controller-manager（运行在Master），kube-scheduler（运行在 Master），kublete（运行在 Node）。他们在进程已启动就会监听（Watch）APIServer 发出来的事件。</p>
+</li>
+<li><p>kubectl 通过命令行，在 APIServer 上建立一个 Pod 副本。</p>
+</li>
+<li><p>这个部署请求被记录到 etcd 中，存储起来。</p>
+</li>
+<li><p>当 etcd 接受创建 Pod 信息以后，会发送一个 Create 事件给 APIServer。</p>
+</li>
+<li><p>由于 Kubecontrollermanager 一直在监听 APIServer 中的事件。此时 APIServer 接受到了 Create 事件，又会发送给 Kubecontrollermanager。</p>
+</li>
+<li><p>Kubecontrollermanager 在接到 Create 事件以后，调用其中的 Replication Controller 来保证 Node 上面需要创建的副本数量。</p>
+<p>上面的例子 MySQL 应用是 1 个副本，Tomcat 应用是两个副本。一旦副本数量少于 RC 中定义的数量，Replication Controller 会自动创建副本。总之它是保证副本数量的 Controller。PS：扩容缩容的担当。</p>
+</li>
+<li><p>在 Controller Manager 创建 Pod 副本以后，APIServer 会在 etcd 中记录这个 Pod 的详细信息。例如在 Pod 的副本数，Container 的内容是什么。</p>
+</li>
+<li><p>同样的 etcd 会将创建 Pod 的信息通过事件发送给 APIServer。</p>
+</li>
+<li><p>由于 Scheduler 在监听（Watch）APIServer，并且它在系统中起到了“承上启下”的作用，“承上”是指它负责接收创建的 Pod 事件，为其安排 Node；“启下”是指安置工作完成后，Node 上的 kubelet 服务进程接管后继工作，负责 Pod 生命周期中的“下半生”。</p>
+<p>换句话说，Scheduler 的作用是将待调度的 Pod 按照调度算法和策略绑定到集群中 Node 上，并将绑定信息写入 etcd 中。</p>
+</li>
+<li><p>Scheduler 调度完毕以后会更新 Pod 的信息，此时的信息更加丰富了。除了知道 Pod 的副本数量，副本内容。还知道部署到哪个 Node 上面了。</p>
+</li>
+<li><p>同样，将上面的 Pod 信息更新到 etcd 中，保存起来。</p>
+</li>
+<li><p>etcd 将更新成功的事件发送给 APIServer。</p>
+</li>
+<li><p>注意这里的 kubelet 是在 Node 上面运行的进程，它也通过 List-Watch 的方式监听（Watch）APIServer 发送的 Pod 更新的事件。实际上，在第 9 步的时候创建 Pod 的工作就已经完成了。</p>
+<p>为什么 kubelete 还要一直监听呢？原因很简单，假设这个时候 kubectl 发命令，需要把原来的 MySQL 的 1 个 RC 副本扩充成 2 个。那么这个流程又会触发一遍。</p>
+<p>作为 Node 的管理者 kubelet 也会根据最新的 Pod 的部署情况调整 Node 端的资源。</p>
+<p>又或者 MySQL 应用的 RC 个数没有发生变化，但是其中的镜像文件升级了，kubelet 也会自动获取最新的镜像文件并且加载。</p>
+</li>
+</ul>
+<p>通过上面 List-Watch 的介绍大家发现了，除了之前引入的 kubectl 和 APIServer 以外又引入了 Controller Manager，Scheduler 和 kubelet。</p>
+<p>这里给大家介绍一下他们的作用和原理：</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582613048027.png" alt="img"></p>
+<p><center><i>聚焦 Scheduler，Controller Manager，kubelet</i></center></p>
+<h1 id="Controller-Manager"><a href="#Controller-Manager" class="headerlink" title="Controller Manager"></a>Controller Manager</h1><p>Kubernetes 需要管理集群中的不同资源，所以针对不同的资源要建立不同的 Controller。</p>
+<p>每个 Controller 通过监听机制获取 APIServer 中的事件（消息），它们通过 API Server 提供的（List-Watch）接口监控集群中的资源，并且调整资源的状态。</p>
+<p>可以把它想象成一个尽职的管理者，随时管理和调整资源。比如 MySQL 所在的 Node 意外宕机了，Controller Manager 中的 Node Controller 会及时发现故障，并执行修复流程。</p>
+<p>在部署了成百上千微服务的系统中，这个功能极大地协助了运维人员。从此可以看出，Controller Manager 是 Kubernetes 资源的管理者，是运维自动化的核心。</p>
+<p>它分为 8 个 Controller，上面我们介绍了 Replication Controller，这里我们把其他几个都列出来，就不展开描述了。</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640.jpg" alt="img"></p>
+<p><center><i>Controller Manager 中不同的 Controller 负责对不同资源的监控和管理</i></center></p>
+<h1 id="Scheduler-与-kubelet"><a href="#Scheduler-与-kubelet" class="headerlink" title="Scheduler 与 kubelet"></a>Scheduler 与 kubelet</h1><p>Scheduler 的作用是，将待调度的 Pod 按照算法和策略绑定到 Node 上，同时将信息保存在 etcd 中。</p>
+<p>如果把 Scheduler 比作调度室，那么这三件事就是它需要关注的，待调度的 Pod、可用的 Node，调度算法和策略。</p>
+<p>简单地说，就是通过调度算法/策略把 Pod 放到合适的 Node 中去。此时 Node 上的 kubelet 通过 APIServer 监听到 Scheduler 产生的 Pod 绑定事件，然后通过 Pod 的描述装载镜像文件，并且启动容器。</p>
+<p>也就是说 Scheduler 负责思考，Pod 放在哪个 Node，然后将决策告诉 kubelet，kubelet 完成 Pod 在 Node 的加载工作。</p>
+<p>说白了，Scheduler 是 boss，kubelet 是干活的工人，他们都通过 APIServer 进行信息交换。</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582613129697.webp" alt="img"></p>
+<p><center><i>Scheduler 与 kubelet 协同工作图</i></center></p>
+<h1 id="Service-和-kubelet"><a href="#Service-和-kubelet" class="headerlink" title="Service 和 kubelet"></a>Service 和 kubelet</h1><p>经历上面一系列的过程，终于将 Pod 和容器部署到 Node 上了。</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612449201.webp" alt="img"></p>
+<p><center><i>MySQL 部署成功</i></center><br>作为部署在 Kubernetes 中，Pod 如何访问其他的 Pod 呢？答案是通过 Kubernetes 的 Service 机制。</p>
+<p>在 Kubernetes 中的 Service 定义了一个服务的访问入口地址（IP+Port）。Pod 中的应用通过这个地址访问一个或者一组 Pod 副本。</p>
+<p>Service 与后端 Pod 副本集群之间是通过 Label Selector 来实现连接的。Service 所访问的这一组 Pod 都会有同样的 Label，通过这样的方法知道这些 Pod 属于同一个组。</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612449202.webp" alt="img"></p>
+<p><center><i>Pod 通过 Service 访问其他 Pod</i></center><br>写 MySQL 服务的配置文件（mysql-svc.yaml）如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion :</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span> <span class="comment">#说明创建资源对象的类型是Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">mysql#Service全局唯一名称</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">prots:</span></span><br><span class="line"><span class="string">-port:</span> <span class="number">3306</span><span class="comment">#Service的服务端口号</span></span><br><span class="line"> <span class="string">selector:#Service对应的Pod标签，用来给Pod分类</span></span><br><span class="line">   <span class="attr">app:</span> <span class="string">mysql</span></span><br></pre></td></tr></table></figure>
+<p>按照惯例运行 kubectl，创建 Service：</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612449203.webp" alt="img"></p>
+<p>再用 getsvc 命令检查 Service 信息：</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582613228838.webp" alt="img"></p>
+<p>这里的 Cluster-IP 169.169.253.143 是由 Kubernetes 自动分配的。当一个 Pod 需要访问其他的 Pod 的时候就需要通过 Service 的 Cluster-IP 和 Port。</p>
+<p>也就是说 Cluster-IP 和 Port 是 Kubernetes 集群的内部地址，是提供给集群内的 Pod 之间访问使用的，外部系统是无法通过这个 Cluster-IP 来访问 Kubernetes 中的应用的。</p>
+<p>上面提到的 Service 只是一个概念，而真正将 Service 落实的是 kube-proxy。</p>
+<p>只有理解了 kube-proxy 的原理和机制，我们才能真正理解 Service 背后的实现逻辑。</p>
+<p>在 Kubernetes 集群的每个 Node 上都会运行一个 kube-proxy 服务进程，我们可以把这个进程看作 Service 的负载均衡器，其核心功能是将到 Service 的请求转发到后端的多个 Pod 上。</p>
+<p>此外，Service 的 Cluster-IP 与 NodePort 是 kube-proxy 服务通过 iptables 的 NAT 转换实现的。kube-proxy 在运行过程中动态创建与 Service 相关的 iptables 规则。</p>
+<p>由于 iptables 机制针对的是本地的 kube-proxy 端口，所以在每个 Node 上都要运行 kube-proxy 组件。</p>
+<p>因此在 Kubernetes 集群内部，可以在任意 Node 上发起对 Service 的访问请求。</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582613246411.webp" alt="img"></p>
+<p><center><i>集群内部通过 kube-proxy（Service）访问其他 Pod</i></center><br>正如 MySQL 服务，可以被 Kubernetes 内部的 Tomcat 调用，那么 Tomcat 如何被 Kubernetes 外部调用？</p>
+<p>先生成配置文件，myweb-rc.yaml 看看：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">V1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ReplicationController</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">myweb#RC的名称，全局唯一</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="string">replicas:2#Pod</span> <span class="string">副本的期待数量，这里的数量是2，需要建立两个Tomcat的副本</span></span><br><span class="line"><span class="attr">selector :</span></span><br><span class="line"><span class="attr">app:</span> <span class="string">myweb</span></span><br><span class="line"> <span class="attr">template:</span> <span class="comment">#Pod模版，用这个模版来创建Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">labels:</span></span><br><span class="line"><span class="string">app:myweb#Pod副本的标签</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="attr">containers:</span> <span class="comment">#容器定义部分</span></span><br><span class="line">     <span class="string">-name:mysql</span></span><br><span class="line"><span class="string">Image:kubeguide/tomcat-app:v1#容器对应的DockerImage</span></span><br><span class="line">      <span class="attr">Ports:</span></span><br><span class="line">      <span class="string">-containerPort:8080#容器应用监听的端口号</span></span><br></pre></td></tr></table></figure>
+<p>在 kubectl 中使用 Create 建立 myweb 副本。</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582613310553.webp" alt="img"></p>
+<p>副本创建完毕以后，创建对应的服务配置文件 myweb-svc.yaml。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion :</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span> <span class="comment">#说明创建资源对象的类型是Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">myweb#Service全局唯一名称</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">prots:</span></span><br><span class="line"><span class="string">-port:</span> <span class="number">8080</span><span class="comment">#Service的服务端口号</span></span><br><span class="line"><span class="attr">nodePort:</span> <span class="number">30001</span><span class="comment">#这个就是外网访问Kubernetes内部应用的端口。</span></span><br><span class="line"> <span class="attr">selector:</span> <span class="comment">#Service对应的Pod标签，用来给Pod分类</span></span><br><span class="line">   <span class="attr">app:</span> <span class="string">myweb</span></span><br></pre></td></tr></table></figure>
+<p>同样在 kubectl 中运行 Create 命令，建立 Service 资源。</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582613324973.webp" alt="img"></p>
+<p>从上面的配置文件可以看出，Tomcat 的 Service 中多了一个 nodePort 的配置，值为 30001。</p>
+<p>也就是说外网通过 30001 这个端口加上 NodeIP 就可以访问 Tomcat 了。</p>
+<p>运行命令之后，得到一个提示，大致意思是“如果你要将服务暴露给外网使用，你需要设置防火墙规则让 30001 端口能够通行。”</p>
+<p>由于 Cluster-IP 是一个虚拟的 IP，仅供 Kubernetes 内部的 Pod 之间的通信。</p>
+<p>Node 作为一个物理节点，因此需要使用 Node-IP 和 nodePort 的组合来从 Kubernetes 外面访问内部的应用。</p>
+<p>如果按照上面的配置，部署了两个 Tomcat 应用，当外网访问时选择那个 Pod 呢？这里需要通过 Kubernetes 之外的负载均衡器来实现的。</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582613344698.webp" alt="img"></p>
+<p><center><i>Kubernetes 之外的负载均衡器</i></center><br>可以通过 Kubernetes 的 LoadBlancerService 组件来协助实现。通过云平台申请创建负载均衡器，向外暴露服务。</p>
+<p>目前 LoadBlancerService 组件支持的云平台比较完善，比如国外的 GCE、DigitalOcean，国内的阿里云，私有云 OpenStack 等等。</p>
+<p>从用法上只要把 Service 的 type=NodePort 改为 type=LoadBalancer，Kubernetes 就会自动创建一个对应的 Load Balancer 实例并返回它的 IP 地址供外部客户端使用。</p>
+<p>至此，MySQL（RC 1）和 Tomcat（RC 2）已经在 Kubernetes 部署了。并在 Kubernetes 内部 Pod 之间是可以互相访问的，在外网也可以访问到 Kubernetes 内部的 Pod。</p>
+<p><img src="/2020/02/25/【转载】我花了10个小时，写出了这篇K8S架构解析/640-1582612449248.webp" alt="img"></p>
+<p><center><i>Pod 在 Kubernetes 内互相访问，外网访问 Pod</i></center><br>另外，作为资源监控 Kubernetes 在每个 Node 和容器上都运行了 cAdvisor。它是用来分析资源使用率和性能的工具，支持 Docker 容器。</p>
+<p>kubelet 通过 cAdvisor 获取其所在 Node 及容器（Docker）的数据。cAdvisor 自动采集 CPU、内存、文件系统和网络使用的统计信息。</p>
+<p>kubelet 作为 Node 的管理者，把 cAdvisor 采集上来的数据通过 RESTAPI 的形式暴露给 Kubernetes 的其他资源，让他们知道 Node/Pod 中的资源使用情况。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>由于微服务的迅猛发展，Kubernetes 作为微服务治理平台被广泛应用。由于其发展时间长，包含服务功能多我们无法一一列出。</p>
+<p>因此，从一个简单的创建应用副本的例子入手，介绍了各个重要组件的概念和基本原理。</p>
+<p>Kubernetes 是用来管理容器集群的，Master 作为管理者，包括 APIServer，Scheduler，Controller Manager。</p>
+<p>Node作为副本部署的载体，包含多个 Pod，每个 Pod 又包含多个容器（container）。用户通过 kubectl 给 Master 中的 APIServer 下部署命令。</p>
+<p>命令主体是以“.yaml”结尾的配置文件，包含副本的类型，副本个数，名称，端口，模版等信息。</p>
+<p>APIServer 接受到请求以后，会分别进行以下操作：权限验证（包括特殊控制），取出需要创建的资源，保存副本信息到etcd。</p>
+<p>APIServer 和 Controller Manager，Scheduler 以及 kubelete 之间通过 List-Watch 方式通信（事件发送与监听）。</p>
+<p>Controller Manager 通过 etcd 获取需要创建资源的副本数，交由 Scheduler 进行策略分析。</p>
+<p>最后 kubelet 负责最终的 Pod 创建和容器加载。部署好容器以后，通过 Service 进行访问，通过 cAdvisor 监控资源。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/24/【转载】神一样的CAP理论被应用在何方/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vincent">
+      <meta itemprop="description" content="The King is dead, long live the King!">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/24/【转载】神一样的CAP理论被应用在何方/" itemprop="url">
+                  【转载】神一样的CAP理论被应用在何方
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-24 21:39:19" itemprop="dateCreated datePublished" datetime="2020-02-24T21:39:19+08:00">2020-02-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-25 17:10:46" itemprop="dateModified" datetime="2020-02-25T17:10:46+08:00">2020-02-25</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/架构设计/" itemprop="url" rel="index"><span itemprop="name">架构设计</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">16k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">15 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>转载自陈于喆 - 神一样的CAP理论被应用在何方，原文地址<a href="https://juejin.im/post/5d720e86f265da03cc08de74" target="_blank" rel="noopener">https://juejin.im/post/5d720e86f265da03cc08de74</a></p>
+</blockquote>
+<p>对于开发或设计分布式系统的架构师工程师来说，CAP是必须要掌握的理论。</p>
+<blockquote>
+<p>（but：这个文章的重点并不是讨论CAP理论和细节，重点是说说CAP在微服务中的开发怎么起到一个指引作用，会通过几个微服务开发的例子说说明，尽量的去贴近开发）</p>
+</blockquote>
+<p>CAP定理又被成为布鲁尔定理，是加州大学计算机科学家埃里克·布鲁尔提出来的猜想，后来被证明成为分布式计算领域公认的定理。不过布鲁尔在出来CAP的时候并没有对CAP三者（Consistency，Availability，Partition tolerance）进行详细的定义，所以在网上也出现了不少对CAP不同解读的声音。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/02/24/【转载】神一样的CAP理论被应用在何方/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/24/30张图带你彻底理解红黑树/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -768,7 +1283,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/算法/" itemprop="url" rel="index"><span itemprop="name">算法</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/算法/" itemprop="url" rel="index"><span itemprop="name">算法</span></a></span>
 
                 
                 
@@ -785,6 +1300,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">16k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">14 分钟</span>
+              
+            </div>
           
 
           
@@ -905,20 +1448,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/24/译-StackOverflow-你没见过的七个最好的Java答案/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -978,7 +1521,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
 
                 
                 
@@ -995,6 +1538,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">9.1k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">8 分钟</span>
+              
+            </div>
           
 
           
@@ -1093,20 +1664,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/24/Java性能优化和JVM-GC（垃圾回收机制）详解/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -1166,7 +1737,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
 
                 
                 
@@ -1183,6 +1754,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">18k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">16 分钟</span>
+              
+            </div>
           
 
           
@@ -1515,20 +2114,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/14/zookeeper入门摘要/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -1600,7 +2199,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/架构设计/" itemprop="url" rel="index"><span itemprop="name">架构设计</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/架构设计/" itemprop="url" rel="index"><span itemprop="name">架构设计</span></a></span>
 
                 
                 
@@ -1617,6 +2216,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">11k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">10 分钟</span>
+              
+            </div>
           
 
           
@@ -1646,7 +2273,7 @@
 <h3 id="2、PERSISTENT-SEQUENTIAL-持久化顺序编号目录节点"><a href="#2、PERSISTENT-SEQUENTIAL-持久化顺序编号目录节点" class="headerlink" title="2、PERSISTENT_SEQUENTIAL-持久化顺序编号目录节点"></a>2、PERSISTENT_SEQUENTIAL-持久化顺序编号目录节点</h3><p>客户端与zookeeper断开连接后，该节点依旧存在，只是Zookeeper给该节点名称进行顺序编号</p>
 <h3 id="3、EPHEMERAL-临时目录节点"><a href="#3、EPHEMERAL-临时目录节点" class="headerlink" title="3、EPHEMERAL-临时目录节点"></a>3、EPHEMERAL-临时目录节点</h3><p>客户端与zookeeper断开连接后，该节点被删除</p>
 <h3 id="4、EPHEMERAL-SEQUENTIAL-临时顺序编号目录节点"><a href="#4、EPHEMERAL-SEQUENTIAL-临时顺序编号目录节点" class="headerlink" title="4、EPHEMERAL_SEQUENTIAL-临时顺序编号目录节点"></a>4、EPHEMERAL_SEQUENTIAL-临时顺序编号目录节点</h3><p>客户端与zookeeper断开连接后，该节点被删除，只是Zookeeper给该节点名称进行顺序编号</p>
-<p><img src="/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zk_dir_tree.png" alt=""></p>
+<p><img src="/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zk_dir_tree.png" alt></p>
 <h2 id="5-Zookeeper通知机制"><a href="#5-Zookeeper通知机制" class="headerlink" title="5.Zookeeper通知机制"></a>5.Zookeeper通知机制</h2><p>client端会对某个znode建立一个watcher事件，当该znode发生变化时，这些client会收到zk的通知，然后client可以根据znode变化来做出业务上的改变等。</p>
 <h2 id="6-Zookeeper做了什么？"><a href="#6-Zookeeper做了什么？" class="headerlink" title="6.Zookeeper做了什么？"></a>6.Zookeeper做了什么？</h2><p>1、命名服务</p>
 <p>2、配置管理</p>
@@ -1691,7 +2318,7 @@
 <p>（3）选举线程收到回复后，验证是否是自己发起的询问(验证zxid是否一致)，然后获取对方的id(myid)，并存储到当前询问对象列表中，最后获取对方提议的leader相关信息(id,zxid)，并将这些信息存储到当次选举的投票记录表中；</p>
 <p>（4）收到所有Server回复以后，就计算出zxid最大的那个Server，并将这个Server相关信息设置成下一次要投票的Server；</p>
 <p>（5）线程将当前zxid最大的Server设置为当前Server要推荐的Leader，如果此时获胜的Server获得n/2 + 1的Server票数，设置当前推荐的leader为获胜的Server，将根据获胜的Server相关信息设置自己的状态，否则，继续这个过程，直到leader被选举出来。通过流程分析我们可以得出：要使Leader获得多数Server的支持，则Server总数必须是奇数2n+1，且存活的Server的数目不得少于n+1. 每个Server启动后都会重复以上流程。在恢复模式下，如果是刚从崩溃状态恢复的或者刚启动的server还会从磁盘快照中恢复数据和会话信息，zk会记录事务日志并定期进行快照，方便在恢复时进行状态恢复。</p>
-<p><img src="/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zk_epoch.png" alt=""></p>
+<p><img src="/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zk_epoch.png" alt></p>
 <p>2、Zookeeper选主流程(basic paxos) fast paxos流程是在选举过程中，某Server首先向所有Server提议自己要成为leader，当其它Server收到提议以后，解决epoch和 zxid的冲突，并接受对方的提议，然后向对方发送接受提议完成的消息，重复这个流程，最后一定能选举出Leader。</p>
 <p><img src="/2020/02/14/zookeeper入门摘要/zookeeper入门摘要-zookeeper_elect_master.png" alt="img"></p>
 <h2 id="18-Zookeeper同步流程"><a href="#18-Zookeeper同步流程" class="headerlink" title="18.Zookeeper同步流程"></a>18.Zookeeper同步流程</h2><p>选完Leader以后，zk就进入状态同步过程。</p>
@@ -1776,20 +2403,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/12/MyBatis中的九种设计模式/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -1861,7 +2488,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a></span>
 
                 
                 
@@ -1878,6 +2505,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">50k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">46 分钟</span>
+              
+            </div>
           
 
           
@@ -1953,7 +2608,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MapperProxyFactory</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Class&lt;T&gt; mapperInterface;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;Method, MapperMethod&gt; methodCache = <span class="keyword">new</span> ConcurrentHashMap&lt;Method, MapperMethod&gt;();</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">MapperProxyFactory</span><span class="params">(Class&lt;T&gt; mapperInterface)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.mapperInterface = mapperInterface;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Class&lt;T&gt; <span class="title">getMapperInterface</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mapperInterface;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Map&lt;Method, MapperMethod&gt; <span class="title">getMethodCache</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> methodCache;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">protected</span> T <span class="title">newInstance</span><span class="params">(MapperProxy&lt;T&gt; mapperProxy)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), <span class="keyword">new</span> Class[] &#123; mapperInterface &#125;, mapperProxy);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> T <span class="title">newInstance</span><span class="params">(SqlSession sqlSession)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> MapperProxy&lt;T&gt; mapperProxy = <span class="keyword">new</span> MapperProxy&lt;T&gt;(sqlSession, mapperInterface, methodCache);</span><br><span class="line">    <span class="keyword">return</span> newInstance(mapperProxy);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在这里，先通过T newInstance(SqlSession sqlSession)方法会得到一个MapperProxy对象，然后调用T newInstance(MapperProxy mapperProxy)生成代理对象然后返回。</p>
 <p>而查看MapperProxy的代码，可以看到如下内容：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MapperProxy</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">InvocationHandler</span>, <span class="title">Serializable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (Object.class.equals(method.getDeclaringClass())) &#123;</span><br><span class="line">        <span class="keyword">return</span> method.invoke(<span class="keyword">this</span>, args);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isDefaultMethod(method)) &#123;</span><br><span class="line">        <span class="keyword">return</span> invokeDefaultMethod(proxy, method, args);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">      <span class="keyword">throw</span> ExceptionUtil.unwrapThrowable(t);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">final</span> MapperMethod mapperMethod = cachedMapperMethod(method);</span><br><span class="line">    <span class="keyword">return</span> mapperMethod.execute(sqlSession, args);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MapperProxy</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">InvocationHandler</span>, <span class="title">Serializable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (Object<span class="class">.<span class="keyword">class</span>.<span class="title">equals</span>(<span class="title">method</span>.<span class="title">getDeclaringClass</span>())) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> method.invoke(<span class="keyword">this</span>, args);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isDefaultMethod(method)) &#123;</span><br><span class="line">        <span class="keyword">return</span> invokeDefaultMethod(proxy, method, args);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">      <span class="keyword">throw</span> ExceptionUtil.unwrapThrowable(t);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">final</span> MapperMethod mapperMethod = cachedMapperMethod(method);</span><br><span class="line">    <span class="keyword">return</span> mapperMethod.execute(sqlSession, args);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>非常典型的，该MapperProxy类实现了InvocationHandler接口，并且实现了该接口的invoke方法。</p>
 <p>通过这种方式，我们只需要编写Mapper.java接口类，当真正执行一个Mapper接口的时候，就会转发给MapperProxy.invoke方法，而该方法则会调用后续的sqlSession.cud&gt;executor.execute&gt;prepareStatement等一系列方法，完成SQL的执行和返回。</p>
 <h3 id="5、组合模式"><a href="#5、组合模式" class="headerlink" title="5、组合模式"></a>5、组合模式</h3><p><strong>组合模式组合多个对象形成树形结构以表示“整体-部分”的结构层次。</strong></p>
@@ -1994,7 +2649,7 @@
 <p>该接口定义了Mybatis直接使用的日志方法，而Log接口具体由谁来实现呢？Mybatis提供了多种日志框架的实现，这些实现都匹配这个Log接口所定义的接口方法，最终实现了所有外部日志框架到Mybatis日志包的适配：</p>
 <p><img src="/2020/02/12/MyBatis中的九种设计模式/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6L0JhcTVsWXBJdzdYamp6RzRiVmNyTkJBUFB0Qks5SnM5MGljdWVqRTZ2STlteExJWXNYbXdlY3hXN2ljdEFQVzB0R0hIcXl2V29oeUFacG81NFBNTlJsVEEvNjQw.jpg" alt="img"></p>
 <p>比如对于Log4jImpl的实现来说，该实现持有了org.apache.log4j.Logger的实例，然后所有的日志方法，均委托该实例来实现。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Log4jImpl</span> <span class="keyword">implements</span> <span class="title">Log</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String FQCN = Log4jImpl.class.getName();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Logger log;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Log4jImpl</span><span class="params">(String clazz)</span> </span>&#123;</span><br><span class="line">    log = Logger.getLogger(clazz);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isDebugEnabled</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> log.isDebugEnabled();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isTraceEnabled</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> log.isTraceEnabled();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">error</span><span class="params">(String s, Throwable e)</span> </span>&#123;</span><br><span class="line">    log.log(FQCN, Level.ERROR, s, e);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">error</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    log.log(FQCN, Level.ERROR, s, <span class="keyword">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">debug</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    log.log(FQCN, Level.DEBUG, s, <span class="keyword">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">trace</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    log.log(FQCN, Level.TRACE, s, <span class="keyword">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">warn</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    log.log(FQCN, Level.WARN, s, <span class="keyword">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Log4jImpl</span> <span class="keyword">implements</span> <span class="title">Log</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String FQCN = Log4jImpl<span class="class">.<span class="keyword">class</span>.<span class="title">getName</span>()</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Logger log;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Log4jImpl</span><span class="params">(String clazz)</span> </span>&#123;</span><br><span class="line">    log = Logger.getLogger(clazz);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isDebugEnabled</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> log.isDebugEnabled();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isTraceEnabled</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> log.isTraceEnabled();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">error</span><span class="params">(String s, Throwable e)</span> </span>&#123;</span><br><span class="line">    log.log(FQCN, Level.ERROR, s, e);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">error</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    log.log(FQCN, Level.ERROR, s, <span class="keyword">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">debug</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    log.log(FQCN, Level.DEBUG, s, <span class="keyword">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">trace</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    log.log(FQCN, Level.TRACE, s, <span class="keyword">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">warn</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    log.log(FQCN, Level.WARN, s, <span class="keyword">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="8、装饰者模式"><a href="#8、装饰者模式" class="headerlink" title="8、装饰者模式"></a>8、装饰者模式</h3><p>装饰模式(Decorator Pattern) ：动态地给一个对象增加一些额外的职责(Responsibility)，就增加对象功能来说，装饰模式比生成子类实现更为灵活。其别名也可以称为包装器(Wrapper)，与适配器模式的别名相同，但它们适用于不同的场合。根据翻译的不同，装饰模式也有人称之为“油漆工模式”，它是一种对象结构型模式。</p>
 <p><img src="/2020/02/12/MyBatis中的九种设计模式/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6L0JhcTVsWXBJdzdYamp6RzRiVmNyTkJBUFB0Qks5SnM5blNSVHlwQWdhZnZPWDhUb0t4blhzRlFaNDBXTWoxNXRjMERvZm1IcEhvQUxpYVRpYXlWVVJGWHcvNjQw.jpg" alt="img"></p>
 <p>在mybatis中，缓存的功能由根接口Cache（org.apache.ibatis.cache.Cache）定义。整个体系采用装饰器设计模式，数据存储和缓存的基本功能由PerpetualCache（org.apache.ibatis.cache.impl.PerpetualCache）永久缓存实现，然后通过一系列的装饰器来对PerpetualCache永久缓存进行缓存策略等方便的控制。如下图：</p>
@@ -2088,20 +2743,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/12/不可不说的Java锁事/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -2173,7 +2828,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a></span>
 
                 
                 
@@ -2190,6 +2845,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">95k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">1:26</span>
+              
+            </div>
           
 
           
@@ -2235,7 +2918,7 @@
 </ul>
 <p>当且仅当 V 的值等于 A 时，CAS通过原子方式用新值B来更新V的值（“比较+更新”整体是一个原子操作），否则不会执行任何操作。一般情况下，“更新”是一个不断重试的操作。</p>
 <p>之前提到java.util.concurrent包中的原子类，就是通过CAS来实现了乐观锁，那么我们进入原子类AtomicInteger的源码，看一下AtomicInteger的定义：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AtomicInteger</span> <span class="keyword">extends</span> <span class="title">Number</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">6214790243416807050L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// setup to use Unsafe.compareAndSwapInt for updates</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Unsafe unsafe = Unsafe.getUnsafe();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> valueOffset;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            valueOffset = unsafe.objectFieldOffset</span><br><span class="line">                (AtomicInteger.class.getDeclaredField(<span class="string">"value"</span>));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception ex) &#123; <span class="keyword">throw</span> <span class="keyword">new</span> Error(ex); &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">int</span> value;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AtomicInteger</span> <span class="keyword">extends</span> <span class="title">Number</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">6214790243416807050L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// setup to use Unsafe.compareAndSwapInt for updates</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Unsafe unsafe = Unsafe.getUnsafe();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> valueOffset;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            valueOffset = unsafe.objectFieldOffset</span><br><span class="line">                (AtomicInteger.class.getDeclaredField("value"));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception ex) &#123; <span class="keyword">throw</span> <span class="keyword">new</span> Error(ex); &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">int</span> value;</span><br></pre></td></tr></table></figure>
 <p>根据定义我们可以看出各属性的作用：</p>
 <ul>
 <li>unsafe： 获取并操作内存的数据。</li>
@@ -2514,20 +3197,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/12/从ReentrantLock的实现看AQS的原理及应用/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -2599,7 +3282,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a></span>
 
                 
                 
@@ -2616,6 +3299,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">84k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">1:16</span>
+              
+            </div>
           
 
           
@@ -2865,7 +3576,7 @@
 <li>将New中Node的Prev指针指向Pred。</li>
 <li>通过compareAndSetTail方法，完成尾节点的设置。这个方法主要是对tailOffset和Expect进行比较，如果tailOffset的Node和Expect的Node地址是相同的，那么设置Tail的值为Update的值。</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// java.util.concurrent.locks.AbstractQueuedSynchronizer</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		stateOffset = unsafe.objectFieldOffset(AbstractQueuedSynchronizer.class.getDeclaredField(<span class="string">"state"</span>));</span><br><span class="line">		headOffset = unsafe.objectFieldOffset(AbstractQueuedSynchronizer.class.getDeclaredField(<span class="string">"head"</span>));</span><br><span class="line">		tailOffset = unsafe.objectFieldOffset(AbstractQueuedSynchronizer.class.getDeclaredField(<span class="string">"tail"</span>));</span><br><span class="line">		waitStatusOffset = unsafe.objectFieldOffset(Node.class.getDeclaredField(<span class="string">"waitStatus"</span>));</span><br><span class="line">		nextOffset = unsafe.objectFieldOffset(Node.class.getDeclaredField(<span class="string">"next"</span>));</span><br><span class="line">	&#125; <span class="keyword">catch</span> (Exception ex) &#123; </span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> Error(ex); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// java.util.concurrent.locks.AbstractQueuedSynchronizer</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		stateOffset = unsafe.objectFieldOffset(AbstractQueuedSynchronizer.class.getDeclaredField("state"));</span><br><span class="line">		headOffset = unsafe.objectFieldOffset(AbstractQueuedSynchronizer.class.getDeclaredField("head"));</span><br><span class="line">		tailOffset = unsafe.objectFieldOffset(AbstractQueuedSynchronizer.class.getDeclaredField("tail"));</span><br><span class="line">		waitStatusOffset = unsafe.objectFieldOffset(Node.class.getDeclaredField("waitStatus"));</span><br><span class="line">		nextOffset = unsafe.objectFieldOffset(Node.class.getDeclaredField("next"));</span><br><span class="line">	&#125; <span class="keyword">catch</span> (Exception ex) &#123; </span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> Error(ex); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>从AQS的静态代码块可以看出，都是获取一个对象的属性相对于该对象在内存当中的偏移量，这样我们就可以根据这个偏移量在对象内存当中找到这个属性。tailOffset指的是tail对应的偏移量，所以这个时候会将new出来的Node置为当前队列的尾节点。同时，由于是双向链表，也需要将前一个节点指向尾节点。</p>
 <ul>
 <li>如果Pred指针是Null（说明等待队列中没有元素），或者当前Pred指针和Tail指向的位置不同（说明被别的线程已经修改），就需要看一下Enq的方法。</li>
@@ -3071,1030 +3782,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="vincent">
-      <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="星辰大海">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/12/MySQL增删改查都会用到什么锁/" itemprop="url">
-                  MySQL增删改查都会用到什么锁?
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2020-02-12 15:11:11" itemprop="dateCreated datePublished" datetime="2020-02-12T15:11:11+08:00">2020-02-12</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>日常的操作中，增删改查都会使用什么类型的锁？其实这个问题，可以分为两个方面，一方面是读，一方面是写。</p>
-<h1 id="01-读（select）"><a href="#01-读（select）" class="headerlink" title="01 读（select）"></a>01 读（select）</h1><p>  我们先来看读的部分。读的操作，其实分为两种，分别是<strong>一致性读</strong>和<strong>锁定读</strong>，</p>
-<p>  这里我们温习一下，一致性读其实就是利用事务的MVCC机制，来读取一份数据的快照，所以有的书上也称之为快照读，一致性读是不加锁的，其他的事务是可以对表中的数据记录进行改动的。一般情况下，常见的读，例如：</p>
-<p>select * from table；</p>
-<p>select * from table left join table2;</p>
-<p>  这种操作，在RU，RC，RR隔离级别下都是采用一直性读，不加锁的操作。这种情况下，<strong>读的并发可以非常高。</strong></p>
-<p>  再来看看锁定读，如果我们的表当中有索引，我们想在读取记录的时候，获取某一条记录的锁，禁止别的事务对这条记录进行修改，那么我们可以使用下面的语句来对读取的记录加锁：</p>
-<p><strong>select … lock in share mode;</strong>加共享锁。(其他事务可读，不可写)</p>
-<p><strong>select … for update;</strong>加排它锁。(其他事务不可读，不可写)，这样，其他事务就不能对这条记录进行读取和更改了。</p>
-<p>关于读操作的是否加锁，还有以下几点需要注意： </p>
-<p>1、在Serializable这种事务的隔离级别下，普通的select操作会升级为select…in share mode；的模式。</p>
-<p>2、在唯一索引上使用唯一的查询条件，会使用记录锁，而不会封锁记录之间的间隔，即不会使用间隙锁。</p>
-<p>3、其他类型的索引使用范围的查询条件或者唯一的查询条件，innodb会自动锁定被扫描的范围，避免索引范围区间内插入新的记录。这块儿可能比较模糊，文章最后面给出各种类型下的加锁测试结果。</p>
-<h1 id="02-写（update、delete、insert）"><a href="#02-写（update、delete、insert）" class="headerlink" title="02 写（update、delete、insert）"></a>02 写（update、delete、insert）</h1><h2 id="关于delete"><a href="#关于delete" class="headerlink" title="关于delete"></a>关于delete</h2><p>  对一条数据做delete的过程实际上是要先在索引的B+树上获取该记录的位置，然后再这个记录所在的位置加X锁，也就是排它锁。</p>
-<p>  如果对某个范围内的数据做delete操作，则会在索引B+树上对范围内符合查询条件的记录以及记录之前的区间加next-key锁(本质是记录锁和间隙锁的组合，后面的文章会讲到)。  </p>
-<p>   加完锁之后，再进行delete操作。这个delete操作的本质，其实是先将delete的标识为标识为1，而不是真正进行删除，如果下次这块空间可以复用，则innodb会直接进行复用。</p>
-<p>   更多详情请见：Innodb数据页简介</p>
-<h2 id="关于update"><a href="#关于update" class="headerlink" title="关于update"></a>关于update</h2><p>  对一条记录做update的时候，我们知道，如果该要更新的列在更新前后的存储空间没有发生变化，则会直接在该记录上进行更新操作。而如果发生了存储空间的变化，则会现将这条记录彻底删除掉，然后再插入一条新的记录。</p>
-<p>  基本上分为一下三种情况：</p>
-<p>1、如果update操作没有更新索引键值并且没有导致存储空间变化，则会直接在索引B+树上使用X锁来锁定update的记录。</p>
-<p>2、如果update操作没有更新索引键值但却导致了数据的存储空间发生变化，则会现将这表数据记录删除掉，然后再插入一条新的记录，在这个过程中，先会获取索引B+树的X锁，然后insert过程会使用隐式锁来进行保护。</p>
-<p>3、如果update修改了某条记录的索引键值，则需要先进行delete，然后再进行一次insert，加锁的规则就和delete以及insert一样了。</p>
-<p>  这里有几点需要注意：</p>
-<p>1、如果在唯一索引上使用唯一的查询条件来进行update和delete操作，那么这个过程中只会对记录加锁。</p>
-<p>2、除了第一种情况之外，都会加排他的next-key锁，来锁定记录和记录之前的范围。</p>
-<p>3、如果update的是主键的记录，则对应的普通索引的记录也会被隐式加锁，这是因为innodb中的普通索引会存储主键的值，检索普通索引本质上要进行回表操作，二次扫描聚集索引。</p>
-<h2 id="关于insert"><a href="#关于insert" class="headerlink" title="关于insert"></a>关于insert</h2><p>  insert操作会用排它锁封锁被插入的索引记录，而不会封锁记录之前的范围。除此之外，会在插入区间加入插入意向锁</p>
-<p>  最后，今天我做了一点测试，测试的数据太多了，不方便整理，这里把测试结果放在这里，大家可以看看，和自己设想的情况一样不一样：</p>
-<p>（注意：所有测试均在RR隔离级别下，RC隔离级别下只有记录锁，没有间隙锁，相对比较简单，大家可以自行研究）</p>
-<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个空的记录，例如id=6的记录，表中只有id=5和id=9的值，那么会话2中<strong>不能</strong>插入id=6、7、8的值，因为这个间隙已经被锁定。其中，<strong>id可以是主键或者唯一索引。</strong></p>
-<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个存在记录，例如id=5的记录，表中有id=5的值，那么会话2中<strong>可以</strong>插入id=4、6、7、8的值，间隙没有锁定。其中，<strong>id可以是主键或者唯一索引。</strong></p>
-<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个范围记录，例如id&lt;6的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入id=6、7、8的值，间隙被锁定。其中，<strong>id可以是主键或者唯一索引。</strong></p>
-<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个范围记录，例如id&gt;6 and id &lt;11的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入id=6、7、8的值以及id大于9的所有值，间隙被锁定。其中，<strong>id可以是主键或者唯一索引</strong>。</p>
-<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个空的记录，例如id=6的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入id=5、6、7、8的值，间隙被锁定。但是可以插入9的值，其中，<strong>id是普通索引。</strong></p>
-<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个存在记录，例如id=5的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入id=4、6、7、8的值，但是可以插入9的值。间隙被锁定。其中，<strong>id是普通索引。</strong></p>
-<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个范围记录，例如id&lt;6的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入id=4、6、7、8的值，但是可以插入9的值，间隙被锁定。其中，<strong>id是普通索引**</strong>。**</p>
-<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个范围记录，例如id&gt;6 and id&lt;11的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入<strong>所有值的记录，所有**</strong>间隙被锁定，类似全表锁<strong>。其中，</strong>id是普通索引<strong>**。</strong></p>
-<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><h2 id="关于MySQL锁的两个知识点"><a href="#关于MySQL锁的两个知识点" class="headerlink" title="关于MySQL锁的两个知识点"></a>关于MySQL锁的两个知识点</h2><h3 id="MySQL快照读和当前读"><a href="#MySQL快照读和当前读" class="headerlink" title="MySQL快照读和当前读"></a>MySQL快照读和当前读</h3><p>  当我们对数据库中的表进行select、update、delete以及insert的时候，innodb存储引擎会根据操作类型的不同来给这些操作添加具体的锁。</p>
-<p>  在MySQL中，读操作可以分成两类：<strong>快照读</strong> (snapshot read)与<strong>当前读</strong> (current read)。快照读，读取的是记录的可见版本 (有可能是历史版本)，不用加锁。当前读，读取的是记录的最新版本，并且，当前读返回的记录，都会加上锁，保证其他事务不会再并发修改这条记录。</p>
-<p>这里我们首先给出快照读和当前读的例子：</p>
-<p>快照读：简单的select操作，属于快照读，不加锁。(当然，也有例外，下面会分析)</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> <span class="keyword">id</span>&gt;<span class="number">10</span>;</span><br></pre></td></tr></table></figure>
-<p>当前读：特殊的读操作，插入/更新/删除操作，属于当前读，需要加锁。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select * from table where id&gt;10 lock in share mode;</span><br><span class="line">select * from table where id&gt;10 for update;</span><br><span class="line">insert into table values (…);</span><br><span class="line">update table set id=11 where id=10;</span><br><span class="line">delete from table where id&gt;10;</span><br></pre></td></tr></table></figure>
-<p>读取之后，需要保证其他并发事务不能修改当前记录，对读取记录加锁。其中，除了第一条语句明确指出了lock in share mode之外，也就是对读取记录加S锁 (共享锁)外，其他的操作，都加的是X锁 (排它锁)。</p>
-<p>这里我们给出一个update操作过程中，mysql server和innodb存储引擎进行交互的过程如下：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212152912203.png" alt="image-20200212152912203"></p>
-<p>从上图中，我们可以看出一个update操作的具体流程。当update SQL被发给MySQL后，MySQL Server会根据where条件，读取第一条满足条件的记录，然后InnoDB引擎会将第一条记录返回，并加锁 (current read)。待MySQL Server收到这条加锁的记录之后，会再发起一个update请求，更新这条记录。一条记录操作完成，再读取下一条记录，直至没有满足条件的记录为止。因此，update操作内部，就包含了一个当前读。同理，delete操作也一样。insert操作会稍微有些不同，简单来说，就是insert操作可能会触发Unique Key的冲突检查，也会进行一个当前读。</p>
-<h3 id="关于死锁"><a href="#关于死锁" class="headerlink" title="关于死锁"></a>关于死锁</h3><blockquote>
-<p> 死锁是指两个或者两个以上的事务在执行的过程中，因争夺资源而造成的一种互相等待的现象。若无外力作用，这两个事务将保持等待状态，无法推进下去。很明显，这是我们不想看到的。</p>
-</blockquote>
-<p>  从上面的概念可以看出，死锁的关键点在于互相等待，如果我们要解决死锁的问题，就要从“等待”这个关键词上面入手，如果我们将等待都转化为回滚操作，并且事务都重新开始，这种方法无疑可以避免死锁问题的产生。但是会导致数据库并发性能的降低，这样的问题也是我们无法接受的。</p>
-<p>  为了解决这一问题，我们采用一种超时的方法进行折中进行处理，超时是指当两个事务互相等待时，当某一方的等待时间超过一个阈值，我们将它进行回滚，这样，另一个事务就能够继续进行，在innodb存储引擎中，我们使用参数innodb_lock_wait_timeout来设置超时时间，这个参数如下：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show variables like "innodb_lock_wait_timeout";</span><br><span class="line">+<span class="comment">--------------------------+-------+</span></span><br><span class="line">| Variable_name            | Value |</span><br><span class="line">+<span class="comment">--------------------------+-------+</span></span><br><span class="line">| innodb_lock_wait_timeout | 50    |</span><br><span class="line">+<span class="comment">--------------------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span>, <span class="number">1</span> <span class="keyword">warning</span> (<span class="number">0.11</span> sec)</span><br></pre></td></tr></table></figure>
-<p>  为了加深印象，我们模拟一个死锁的现象，让大家感受一下。</p>
-<p>  首先，要模拟死锁，程序必须并发运行，串行的方法是无法模拟死锁的，这里我们采用两个连接会话进行模拟：</p>
-<p><strong>会话A</strong></p>
-<p><strong>我们先开启事务，然后锁定id=3的行；</strong></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from t;</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">| id | age |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">|  1 |   5 |</span><br><span class="line">|  2 |   4 |</span><br><span class="line">|  3 |   3 |</span><br><span class="line">|  4 |   2 |</span><br><span class="line">|  5 |   1 |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">5 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">begin</span>;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t where id=3 for update;</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">| id | age |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">|  3 |   3 |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.02</span> sec)</span><br></pre></td></tr></table></figure>
-<p><strong>会话B</strong></p>
-<p><strong>在会话B上锁定id=2的行</strong></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; begin</span><br><span class="line">    -&gt; ;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line">mysql&gt; select * from t where id=2 for update;</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">| id | age |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">|  2 |   4 |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
-<p><strong>会话A</strong></p>
-<p><strong>我们在会话A上获取id=2的记录的锁，发现无法获取，产生了等待：</strong></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from t where id=2 for update;</span><br><span class="line">##产生等待</span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
-<p><strong>会话B</strong></p>
-<p>在会话A进行等待的过程中，我们在会话B上面获取id=3的记录的锁，我们发现了两个变化：</p>
-<p>第一、会话B上输出了死锁的提示信息，如下；</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from t where id=3 for update;</span><br><span class="line">ERROR 1213 (40001): Deadlock found when trying to get <span class="keyword">lock</span>; try restarting traction</span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
-<p>第二、会话A上输出了id=2的记录，也就是A会话得到了特定的资源，但是产生了9s的延迟，如下；</p>
-<p><strong>会话A</strong></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from t where id=2 for update;</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">| id | age |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">|  2 |   4 |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">9.04</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
-<p>  在上述操作中，会话B抛出了1213这个错误状态码，它代表事务发生了死锁，死锁的原因是会话A和B的资源进行了相互等待，但是此时我们发现会话B中抛出死锁提示信息之后会话A中立即得到了记录为2的这个资源，这其实是因为会话B中的事务发生了回滚，否则的话，会话A中的事务是不可能得到相应的资源的。</p>
-<p>  这里又不得不提innodb的一个特性，那就是它会回滚死锁情况下的一个事务，因此当我们在程序中捕获了一个1213的错误，其实不需要我们手动进行回滚。</p>
-<h2 id="Innodb数据页简介"><a href="#Innodb数据页简介" class="headerlink" title="Innodb数据页简介"></a>Innodb数据页简介</h2><p>  页是内存和磁盘交互的基本单位，它的大小一般是16KB，可以被分为如下几个部分：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212162043235.png" alt="image-20200212162043235"></p>
-<p>  上次的文章里面，我们对这几个部分大概做了介绍，今天我们说说上面数据页的蓝色部分。</p>
-<p>  该部分保存的是数据页中真正的数据记录，也就是用户存储的记录。当我们一开始生成页的时候，其实并没有蓝色的Record部分，而是随着我们不断给数据库中插入记录，才逐渐从Free Space中划分出来的空间。用示意图来描述就是：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216093.webp" alt="img"></p>
-<p> 如果Free Space中的数据页被分配完了，则去申请新的数据页。</p>
-<p>为了方便理解，我们现在创建一个表进行演示：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">test</span>(</span><br><span class="line">    -&gt;     c1 <span class="built_in">INT</span>,</span><br><span class="line">    -&gt;     c2 <span class="built_in">INT</span>,</span><br><span class="line">    -&gt;     c3 <span class="built_in">VARCHAR</span>(<span class="number">1000</span>),</span><br><span class="line">    -&gt;     PRIMARY <span class="keyword">KEY</span> (c1)</span><br><span class="line">    -&gt; ) <span class="keyword">engine</span>=<span class="keyword">innodb</span> <span class="keyword">charset</span>=utf8;</span><br><span class="line">Query OK, 0 rows affected (0.03 sec)</span><br></pre></td></tr></table></figure>
-<p>现在我们给这个表里面插入几条数据：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">test</span> <span class="keyword">values</span></span><br><span class="line">(<span class="number">1</span>,<span class="number">2</span>,<span class="string">'a'</span>),</span><br><span class="line">(<span class="number">2</span>,<span class="number">3</span>,<span class="string">'bb'</span>),</span><br><span class="line">(<span class="number">3</span>,<span class="number">4</span>,<span class="string">'ccc'</span>),</span><br><span class="line">(<span class="number">4</span>,<span class="number">5</span>,<span class="string">'dddd'</span>);</span><br></pre></td></tr></table></figure>
-<p>我们可以把上面的数据页结构简单表示如下：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640.webp" alt="img"></p>
-<p>  我们可以看到，每条记录由三个部分构成，分别是记录头、记录数据以及其他信息，其中记录头里面包含很多字段来表示该条记录的信息，这些字段我们会逐渐进行讲解。目前4条记录都已经插入到record部分了，在实际过程中这四条记录是通过链表的方式进行连接的，如下：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640.png" alt="img"></p>
-<p>  在第一张图的数据页中，蓝色部分还有一部分是infimum和supermun，它们是两条伪记录，它们分别是这个数据页中”指定的”最大的记录和最小的记录。它们的作用是作为当前数据页内数据链表的首末两端。这样，数据页中的数据就可以被我们排列成下面的样子：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216124.webp" alt="img"></p>
-<p>  我们已经可以看到，我们的主键按照从大到小的顺序形成了一个链表，链表的首末位置分别是两条伪记录。</p>
-<p>  当我们对数据记录中id=2的一条记录进行删除时，实际上，在数据记录链表里面发生的变化如下：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216095.webp" alt="img"></p>
-<p>  可以看出，实际上并没有删除那条记录，而是通过将头信息中的delete标识位改为1、偏移量改为0来实现的，也就是说，这条记录所占用的空间并没有还给Free Space，当下一次插入id=2的记录的时候，这块空间还可以接着使用。</p>
-<p>  在这个过程中，我们加入了record_type字段，这两条伪记录和正常记录的区别之处在于数据记录的头信息里面的record_type字段，最小记录的record_type为2，最大记录的record为3，正常记录的record_type为0，record_type为1的记录，稍后我们会进行解释。</p>
-<p>  到现在为止，我们已经知道了头信息中的3个字段，分别是next_record和record_type以及delete字段，next_record保存的是下一条数据记录的真是数据的偏移量，record_type代表的是数据记录的类型，delete标示的是该字段是否被删除。除此之外，我们还需要知道记录头信息里面的另外一个字段n_owned，这个字段保存的是改组内一共有多少个数据记录，在上述删除的操作中，最大记录中该字段的变化过程如下：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216096.webp" alt="img"></p>
-<p>  关于这个初始值为何是5，后续的文章中我们会说明。至此，我们已经了解到，一个数据页，大概可以描述成如下形式：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216136.webp" alt="img"></p>
-<h2 id="MySQL锁优化"><a href="#MySQL锁优化" class="headerlink" title="MySQL锁优化"></a>MySQL锁优化</h2><h3 id="MySQL-锁分类"><a href="#MySQL-锁分类" class="headerlink" title="MySQL 锁分类"></a>MySQL 锁分类</h3><p>当多个事务或者进程访问同一个资源的时候，为了保证数据的一致性，就需要用到锁机制。</p>
-<p>从锁定资源的角度来看，MySQL 中的锁分为：</p>
-<ul>
-<li><strong>表级锁</strong></li>
-<li><strong>行级锁</strong></li>
-<li><strong>页面锁</strong></li>
-</ul>
-<p><strong>表级锁：</strong>对整张表加锁。开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高，并发度最低。 </p>
-<p><strong>行级锁：</strong>对某行记录加锁。开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低，并发度也最高。</p>
-<p><strong>页面锁：</strong>开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。</p>
-<p>在实际开发过程中，主要会使用到表级锁和行级锁两种。既然锁是针对资源的，那么这些资源就是数据，在 MySQL 提供插件式存储引擎对数据进行存储。</p>
-<p>插件式存储引擎的好处是，开发人员可以根据需要选择适合的存储引擎。</p>
-<p>在众多的存储引擎中，有两种引擎被比较多的使用，他们分别是：</p>
-<ul>
-<li><p><strong>MyISAM 存储引擎，</strong>它不支持事务、表锁设计，支持全文索引，主要面向一些在线分析处理（OLAP）数据库应用。说白了主要就是查询数据，对数据的插入，更新操作比较少。</p>
-</li>
-<li><p><strong>InnoDB 存储引擎，</strong>它支持事务，其设计目标主要面向在线事务处理（OLTP）的应用。</p>
-<p>其特点是行锁设计、支持外键，并支持类似于 Oracle 的非锁定读，即默认读取操作不会产生锁。</p>
-<p>简单来说，就是对数据的插入，更新操作比较多。从 MySQL 数据库 5.5.8 版本开始，InnoDB 存储引擎是默认的存储引擎。</p>
-</li>
-</ul>
-<p>上面两种存储引擎在处理多进程数据操作的时候是如何表现的，就是我们接下来要讨论的问题。</p>
-<p>为了让整个描述更加清晰，我们将表级锁和行级锁以及 MyISAM，InnoDB 存储引擎，就形成了一个 2*2 的象限。</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478029.webp" alt="img"></p>
-<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图*</center>
-
-<p>由于 MyISAM 存储引擎不支持行级锁，实际上后面讨论的问题会围绕三个象限的讨论展开。</p>
-<p>从内容上来看，InnoDB 作为使用最多的存储引擎遇到的问题和值得注意的地方较多，也是本文的重点。</p>
-<p>MyISAM 存储引擎和表级锁</p>
-<p>首先，来看第一象限的内容：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212160055676.png" alt="image-20200212160055676"></p>
-<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图-第一象限*</center>
-
-<p>MyISAM 存储引擎支持表级锁，并且支持两种锁模式：</p>
-<ul>
-<li><strong>对 MyISAM 表的读操作（共享锁），</strong>不会阻塞其他进程对同一表的读请求，但会阻塞对其的写请求。当读锁释放后，才会执行其他进程的写操作。</li>
-<li><strong>对 MyISAM 表的写操作（排他锁），</strong>会阻塞其他进程对同一表的读写操作，当该锁释放后，才会执行其他进程的读写操作。</li>
-</ul>
-<h3 id="MyISAM-优化建议"><a href="#MyISAM-优化建议" class="headerlink" title="MyISAM 优化建议"></a>MyISAM 优化建议</h3><p>在使用 MyISAM 存储引擎时。执行 SQL 语句，会自动为 SELECT 语句加上共享锁，为 UDI（更新，删除，插入）操作加上排他锁。</p>
-<p>由于这个特性在多进程并发插入同一张表的时候，就会因为排他锁而进行等待。</p>
-<p>因此可以通过配置 concurrent_insert 系统变量，来控制其并发的插入行为。</p>
-<p><strong>①concurrent_insert=0 时，</strong>不允许并发插入。</p>
-<p><strong>②concurrent_insert=1 时，</strong>如果 MyISAM 表中没有空洞（即表中没有被删除的行），允许一个进程读表时，另一个进程向表的尾部插入记录（MySQL 默认设置）。</p>
-<blockquote>
-<p>注：空洞是行记录被删除以后，只是被标记为“已删除”其存储空间没有被回收，也就是说没有被物理删除。由另外一个进程，异步对这个数据进行删除。</p>
-<p>因为空间长度问题，删除以后的物理空间不能被新的记录所使用，从而形成了空洞。</p>
-</blockquote>
-<p><strong>③concurrent_insert=2 时，</strong>无论 MyISAM 表中有没有空洞，都允许在表尾并发插入记录。</p>
-<p>如果在数据插入的时候，没有并发删除操作的话，可以尝试把 concurrent_insert 设置为 1。</p>
-<p>反之，在数据插入的时候有删除操作且量较大时，也就是会产生“空洞”的时候，就需要把 concurrent_insert 设置为 2。</p>
-<p>另外，当一个进程请求某个 MyISAM 表的读锁，另一个进程也请求同一表的写锁。</p>
-<p>即使读请求先到达，写请求后到达，写请求也会插到读请求之前。因为 MySQL 的默认设置认为，写请求比读请求重要。</p>
-<p>我们可以通过 low_priority_updates 来调节读写行为的优先级：</p>
-<ul>
-<li>数据库以读为主时，要优先保证查询性能时，可通过 low_priority_updates=1 设置读优先级高于写优先级。</li>
-<li>数据库以写为主时，则不用设置 low_priority_updates 参数。</li>
-</ul>
-<h3 id="InnoDB-存储引擎和表级锁"><a href="#InnoDB-存储引擎和表级锁" class="headerlink" title="InnoDB 存储引擎和表级锁"></a>InnoDB 存储引擎和表级锁</h3><p>再来看看第二象限的内容：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493477955.webp" alt="img"></p>
-<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图-第二象限*</center>
-
-
-
-<p>InnoDB 存储引擎表锁。当没有对数据表中的索引数据进行查询时，会执行表锁操作。</p>
-<p>上面是 InnoDB 实现行锁，同时它也可以实现表锁。其方式就是意向锁（Intention Locks）。</p>
-<p>这里介绍两种意向锁：</p>
-<ul>
-<li><strong>意向共享锁（IS）：</strong>事务打算给数据行加行共享锁，事务在给一个数据行加共享锁前，必须先取得该表的 IS 锁。</li>
-<li><strong>意向排他锁（IX）：</strong>事务打算给数据行加行排他锁，事务在给一个数据行加排他锁前，必须先取得该表的 IX 锁。</li>
-</ul>
-<blockquote>
-<p>注：意向共享锁和意向排他锁是数据库主动加的，不需要我们手动处理。对于 UPDATE、DELETE 和 INSERT 语句，InnoDB 会自动给数据集加排他锁。</p>
-</blockquote>
-<p><strong>InnoDB表锁的实现方式：</strong>假设有一个表 test2，有两个字段分别是 id 和 name。</p>
-<p>没有设置主键同时也没有设置任何索引（index）如下：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478033.webp" alt="img"></p>
-<center><em>InnoDB 表锁实现方式图</em></center>
-
-<h3 id="InnoDB-存储引擎和行级锁"><a href="#InnoDB-存储引擎和行级锁" class="headerlink" title="InnoDB 存储引擎和行级锁"></a>InnoDB 存储引擎和行级锁</h3><p>第四象限我们使用的比较多，讨论的内容也相对多些：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478031.webp" alt="img"></p>
-<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图-第四象限*</center>
-
-
-
-<p>InnoDB 存储引擎行锁，当数据查询时针对索引数据进行时，会使用行级锁。</p>
-<p><strong>共享锁（S）：</strong>当一个事务读取一条记录的时候，不会阻塞其他事务对同一记录的读请求，但会阻塞对其的写请求。当读锁释放后，才会执行其他事务的写操作。</p>
-<p>例如：select … lock in share mode</p>
-<p><strong>排他锁（X）：</strong>当一个事务对一条记录进行写操作时，会阻塞其他事务对同一表的读写操作，当该锁释放后，才会执行其他事务的读写操作。</p>
-<p>例如：select … for update</p>
-<p><strong>行锁的实现方式：</strong>假设有一个表 test1，有两个字段分别是 id 和 name。</p>
-<p>id 作为主键同时也是 table 的索引（index）如下：</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155919536.png" alt="image-20200212155919536"></p>
-<center><em>InnoDB 行锁实现方式图</em></center>
-
-
-
-<p>在高并发的情况下，多个事务同时请求更新数据，由于资源被占用等待事务增多。</p>
-<p>如此，会造成性能问题，可以通过 innodb_lock_wait_timeout 来解决。innodb_lock_wait_timeout 是事务等待获取资源的最长时间，单位为秒。如果超过时间还未分配到资源，则会返回应用失败。</p>
-<h3 id="四种锁的兼容情况"><a href="#四种锁的兼容情况" class="headerlink" title="四种锁的兼容情况"></a>四种锁的兼容情况</h3><p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155859778.png" alt="image-20200212155859778"></p>
-<center><em>共享锁，排他锁，意向共享锁，意向排他锁兼容图例</em></center>
-
-
-
-<p>如果一个事务请求的锁模式与当前的锁兼容， InnoDB 就将请求的锁授予该事务；反之， 如果两者不兼容，该事务就要等待锁释放。</p>
-<h4 id="间隙锁"><a href="#间隙锁" class="headerlink" title="间隙锁"></a><strong>间隙锁</strong></h4><p>前面谈到行锁是针对一条记录进行加锁。当对一个范围内的记录加锁的时候，我们称之为间隙锁。</p>
-<p>当使用范围条件索引数据时，InnoDB 会对符合条件的数据索引项加锁。对于键值在条件范围内但并不存在的记录，叫做“间隙（GAP)”，InnoDB 也会对这个“间隙”加锁，这就是间隙锁。间隙锁和行锁合称（Next-Key锁）。</p>
-<p>如果表中只有 11 条记录，其 id 的值分别是 1,2,…,10，11 下面的 SQL：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Select</span> * <span class="keyword">from</span> table_gapwhere <span class="keyword">id</span> &gt; <span class="number">10</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure>
-<p>这是一个范围条件的检索，InnoDB 不仅会对符合条件的 id 值为 10 的记录加锁，会对 id 大于 10 的“间隙”加锁，即使大于 10 的记录不存在，例如 12，13。</p>
-<p><strong>InnoDB 使用间隙锁的目的：</strong></p>
-<ul>
-<li>一方面是为了防止幻读。对于上例，如果不使用间隙锁，其他事务插入了 id 大于 10 的任何记录，本事务再次执行 select 语句，就会发生幻读。</li>
-<li>另一方面，也是为了满足恢复和复制的需要。</li>
-</ul>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478032.webp" alt="img"></p>
-<center><em>间隙锁图</em></center>
-
-
-
-<h4 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a><strong>死锁</strong></h4><p>两个事务都需要获得对方持有的排他锁才能继续完成任务，这种互相等待对方释放资源的情况就是死锁。</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478014.webp" alt="img"></p>
-<center><em>死锁图</em></center>
-
-
-
-<p><strong>检测死锁：</strong>InnoDB 存储引擎能检测到死锁的循环依赖并立即返回一个错误。</p>
-<p><strong>死锁恢复：</strong>死锁发生以后，只有部分或完全回滚其中一个事务，才能打破死锁。</p>
-<p>InnoDB 方法是，将持有最少行级排他锁的事务回滚。在应用程序设计时必须考虑处理死锁，多数情况下重新执行因死锁回滚的事务即可。</p>
-<p><strong>避免死锁：</strong></p>
-<ul>
-<li><p>在事务开始时，如果有记录要修改，先使用 SELECT… FOR UPDATE 语句获取锁，即使这些修改语句是在后面执行。 </p>
-</li>
-<li><p>在事务中，如果要更新记录，直接申请排他锁。而不是查询时申请共享锁、更新时再申请排他锁。</p>
-<p>这样做会导致，当申请排他锁时，其他事务可能已经获得了相同记录的共享锁，从而造成锁冲突，甚至死锁。</p>
-<p>简单来说，如果你要更新记录要做两步操作，第一步查询，第二步更新。就不要第一步上共享锁，第二部上排他锁了，直接在第一步就上排他锁，抢占先机。</p>
-</li>
-<li><p>如果事务需要锁定多个表，那么尽量按照相同的顺序使用加锁语句，可以降低产生死锁的机会。</p>
-</li>
-<li><p>通过 SELECT … LOCK INSHARE MODE（共享锁）获取行的读锁后，如果当前事务再需要对该记录进行更新操作，则很有可能造成死锁。所以，如果要对行记录进行修改，直接上排他锁。</p>
-</li>
-<li><p>改变事务隔离级别（事务隔离级别在后面详细说明）。</p>
-</li>
-</ul>
-<h4 id="MySQL-锁定情况的查询"><a href="#MySQL-锁定情况的查询" class="headerlink" title="MySQL 锁定情况的查询"></a><strong>MySQL 锁定情况的查询</strong></h4><p>在实际开发中无法避免数据被锁的问题，那么我们可以通过哪些手段来查询锁呢？</p>
-<p>表级锁可以通过两个变量的查询：</p>
-<ul>
-<li>Table_locks_immediate，产生表级锁的次数。</li>
-<li>Table_locks_waited，数显表级锁而等待的次数。</li>
-</ul>
-<p>行级锁可以通过下面几个变量查询：</p>
-<ul>
-<li>Innodb_row_lock_current_waits，当前正在等待锁定的数量。</li>
-<li>Innodb_row_lock_time（重要），从系统启动到现在锁定总时长。</li>
-<li>Innodb_row_lock_time_avg（重要），每次等待所花平均时间。</li>
-<li>Innodb_row_lock_time_max，从系统启动到现在等待最长的一次花费时间。</li>
-<li>Innodb_row_lock_waits（重要），从系统启动到现在总共等待的次数。</li>
-</ul>
-<p><strong>MySQL 事务隔离级别</strong></p>
-<p>前面讲的死锁是因为并发访问数据库造成。当多个事务同时访问数据库，做并发操作的时候会发生以下问题。</p>
-<p><strong>脏读（dirty read），</strong>一个事务在处理过程中，读取了另外一个事务未提交的数据。未提交的数据称之为脏数据。</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155822655.png" alt="image-20200212155822655"></p>
-<center><em>脏读例子</em></center>
-
-
-
-<p><strong>不可重复读（non-repeatable read），</strong>在事务范围内，多次查询某条记录，每次得到不同的结果。</p>
-<p>第一个事务中的两次读取数据之间，由于第二个事务的修改，第一个事务两次读到的数据可能不一样。</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155748878.png" alt="image-20200212155748878"></p>
-<center><em>不可重复读例子</em></center>
-
-<p><strong>幻读（phantom read），</strong>是事务非独立执行时发生的一种现象。</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155718409.png" alt="image-20200212155718409"></p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155728846.png" alt="image-20200212155728846"></p>
-<center><em>幻读的例子</em></center>
-
-<p>在同一时间点，数据库允许多个并发事务，同时对数据进行读写操作，会造成数据不一致性。</p>
-<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493477920.webp" alt="img"></p>
-<center><em>四种隔离级别，解决事务并发问题对照图</em></center>
-
-<p>隔离性就是用来防止这种数据不一致的。事务隔离根据级别不同，从低到高包括：</p>
-<ul>
-<li><p><strong>读未提交（read uncommitted）：</strong>它是最低的事务隔离级别，一个事务还没提交时，它做的变更就能被别的事务看到。有脏读的可能性。</p>
-</li>
-<li><p><strong>读提交（read committed）：</strong>保证一个事物提交后才能被另外一个事务读取。另外一个事务不能读取该事物未提交的数据。可避免脏读的发生，但是可能会造成不可重复读。</p>
-</li>
-<li><p><strong>可重复读（repeatable read MySQL 默认方式）：</strong>多次读取同一范围的数据会返回第一次查询的快照，即使其他事务对该数据做了更新修改。事务在执行期间看到的数据前后必须是一致的。</p>
-</li>
-<li><p><strong>串行化（serializable）：</strong>是最可靠的事务隔离级别。“写”会加“排他锁”，“读”会加“共享锁”。</p>
-<p>当出现读写锁冲突的时候，后访问的事务必须等前一个事务执行完成，所以事务执行是串行的。可避免脏读、不可重复读、幻读。</p>
-</li>
-</ul>
-<h3 id="InnoDB-优化建议"><a href="#InnoDB-优化建议" class="headerlink" title="InnoDB 优化建议"></a>InnoDB 优化建议</h3><p>从锁机制的实现方面来说，InnoDB 的行级锁带来的性能损耗可能比表级锁要高一点，但在并发方面的处理能力远远优于 MyISAM 的表级锁。这也是大多数公司的 MySQL 都是使用 InnoDB 模式的原因。</p>
-<p>但是，InnoDB 也有脆弱的一面，下面提出几个优化建议供大家参考：</p>
-<ul>
-<li>尽可能让数据检索通过索引完成，避免 InnoDB 因为无法通过索引加行锁，而导致升级为表锁的情况。换句话说就是，多用行锁，少用表锁。</li>
-<li>加索引的时候尽量准确，避免造成不必要的锁定影响其他查询。</li>
-<li>尽量减少给予范围的数据检索（间隙锁），避免因为间隙锁带来的影响，锁定了不该锁定的记录。</li>
-<li>尽量控制事务的大小，减少锁定的资源量和锁定时间。</li>
-<li>尽量使用较低级别的事务隔离，减少 MySQL 因为事务隔离带来的成本。</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155627181.png" alt="image-20200212155627181"></p>
-<center><em>MySQL 数据库锁的思维导图</em></center>
-
-
-
-<p>MySQL 的锁主要分为表级锁和行级锁。MyISAM 引擎使用的是表级锁，针对表级的共享锁和排他锁，可以通过 concurrent_insert 和 low_priority_updates 参数来优化。</p>
-<p>InnoDB 支持表锁和行锁，根据索引来判断如何选择。行锁有，行共享锁和行排他锁；表锁有，意向共享锁，意向排他锁，表锁是系统自己加上的；锁范围的是间隙锁。遇到死锁，我们如何检测，恢复以及如何避免。</p>
-<p>MySQL 有四个事务级别分别是，<strong><em>读未提交，读提交，可重复读，串行化</em></strong>。他们的隔离级别依次升高。</p>
-<p>通过隔离级别的设置，可以避免，脏读，不可重复读和幻读的情况。最后，对于使用比较多的 InnoDB 引擎，提出了一些优化建议。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/12/JAVA实用的服务异常处理指南/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="vincent">
-      <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="星辰大海">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/12/JAVA实用的服务异常处理指南/" itemprop="url">
-                  Linux实用的服务异常处理指南
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2020-02-12 10:49:31" itemprop="dateCreated datePublished" datetime="2020-02-12T10:49:31+08:00">2020-02-12</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-02-24 14:36:58" itemprop="dateModified" datetime="2020-02-24T14:36:58+08:00">2020-02-24</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="服务异常的处理流程"><a href="#服务异常的处理流程" class="headerlink" title="服务异常的处理流程"></a>服务异常的处理流程</h1><p><img src="/2020/02/12/JAVA实用的服务异常处理指南/0ce47abcae0d474bb5bf9ebc993e6ad3.jpeg" alt="img"></p>
-<h1 id="CPU负载"><a href="#CPU负载" class="headerlink" title="CPU负载"></a>CPU负载</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>针对应用程序，我们通常关注的是内核CPU调度器功能和性能。</p>
-<p>线程的状态分析主要是分析线程的时间用在什么地方，而线程状态的分类一般分为：</p>
-<p>a. on-CPU：执行中，执行中的时间通常又分为用户态时间user和系统态时间sys。<br> b. off-CPU：等待下一轮上CPU，或者等待I/O、锁、换页等等，其状态可以细分为可执行、匿名换页、睡眠、锁、空闲等状态。</p>
-<p>如果大量时间花在CPU上，对CPU的剖析能够迅速解释原因；如果系统时间大量处于off-cpu状态，定位问题就会费时很多。但是仍然需要清楚一些概念：</p>
-<ul>
-<li>处理器</li>
-<li>核</li>
-<li>硬件线程</li>
-<li>CPU内存缓存</li>
-<li>时钟频率</li>
-<li>每指令周期数CPI和每周期指令数IPC</li>
-<li>CPU指令</li>
-<li>使用率</li>
-<li>用户时间／内核时间</li>
-<li>调度器</li>
-<li>运行队列</li>
-<li>抢占</li>
-<li>多进程</li>
-<li>多线程</li>
-<li>字长</li>
-</ul>
-<h2 id="分析工具"><a href="#分析工具" class="headerlink" title="分析工具"></a>分析工具</h2><table>
-<thead>
-<tr>
-<th>工具</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>uptime</td>
-<td>平均负载</td>
-</tr>
-<tr>
-<td>vmstat</td>
-<td>包括系统范围的cpu平均负载</td>
-</tr>
-<tr>
-<td>mpstat</td>
-<td>查看所有cpu核信息</td>
-</tr>
-<tr>
-<td>top</td>
-<td>监控每个进程cpu用量</td>
-</tr>
-<tr>
-<td>sar -u</td>
-<td>查看cpu信息</td>
-</tr>
-<tr>
-<td>pidstat</td>
-<td>每个进程cpu用量分解</td>
-</tr>
-<tr>
-<td>perf</td>
-<td>cpu剖析和跟踪，性能计数分析</td>
-</tr>
-</tbody>
-</table>
-<p>说明:</p>
-<ul>
-<li>uptime,vmstat,mpstat,top,pidstat只能查询到cpu及负载的的使用情况。</li>
-<li>perf可以跟着到进程内部具体函数耗时情况，并且可以指定内核函数进行统计，指哪打哪。</li>
-</ul>
-<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//查看系统cpu使用情况</span><br><span class="line">top</span><br><span class="line"></span><br><span class="line">//查看所有cpu核信息</span><br><span class="line">mpstat -P ALL 1</span><br><span class="line"></span><br><span class="line">//查看cpu使用情况以及平均负载</span><br><span class="line">vmstat 1</span><br><span class="line"></span><br><span class="line">//进程cpu的统计信息</span><br><span class="line">pidstat -u 1 -p pid</span><br><span class="line"></span><br><span class="line">//跟踪进程内部函数级cpu使用情况</span><br><span class="line">perf top -p pid -e cpu-clock</span><br></pre></td></tr></table></figure>
-<h2 id="查看机器-cpu-的负载"><a href="#查看机器-cpu-的负载" class="headerlink" title="查看机器 cpu 的负载"></a>查看机器 cpu 的负载</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top -b -n 1 |grep java|awk <span class="string">'&#123;print "VIRT:"$5,"RES:"$6,"cpu:"$9"%","mem:"$10"%"&#125;'</span></span><br></pre></td></tr></table></figure>
-<h2 id="查找-cpu-占用率高的线程"><a href="#查找-cpu-占用率高的线程" class="headerlink" title="查找 cpu 占用率高的线程"></a>查找 cpu 占用率高的线程</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">top -p 25603 -H</span><br><span class="line"><span class="built_in">printf</span> 0x%x 25842</span><br><span class="line">jstack 25603 | grep 0x64f2</span><br><span class="line">cat /proc/interrupts</span><br></pre></td></tr></table></figure>
-<p>（1）CPU<br>（2）Memory<br>（3）IO<br>（4）Network</p>
-<p>可以从以下几个方面监控CPU的信息：<br>（1）中断；<br>（2）上下文切换；<br>（3）可运行队列；<br>（4）CPU 利用率</p>
-<h1 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h1><h2 id="说明-1"><a href="#说明-1" class="headerlink" title="说明"></a>说明</h2><p>内存是为提高效率而生，实际分析问题的时候，内存出现问题可能不只是影响性能，而是影响服务或者引起其他问题。同样对于内存有些概念需要清楚：</p>
-<ul>
-<li>主存</li>
-<li>虚拟内存</li>
-<li>常驻内存</li>
-<li>地址空间</li>
-<li>OOM</li>
-<li>页缓存</li>
-<li>缺页</li>
-<li>换页</li>
-<li>交换空间</li>
-<li>交换</li>
-<li>用户分配器libc、glibc、libmalloc和mtmalloc</li>
-<li>LINUX内核级SLUB分配器</li>
-</ul>
-<h2 id="分析工具-1"><a href="#分析工具-1" class="headerlink" title="分析工具"></a>分析工具</h2><table>
-<thead>
-<tr>
-<th>工具</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>free</td>
-<td>缓存容量统计信息</td>
-</tr>
-<tr>
-<td>vmstat</td>
-<td>虚拟内存统计信息</td>
-</tr>
-<tr>
-<td>top</td>
-<td>监视每个进程的内存使用情况</td>
-</tr>
-<tr>
-<td>pidstat</td>
-<td>显示活动进程的内存使用统计</td>
-</tr>
-<tr>
-<td>pmap</td>
-<td>查看进程的内存映像信息</td>
-</tr>
-<tr>
-<td>sar -r</td>
-<td>查看内存</td>
-</tr>
-<tr>
-<td>dtrace</td>
-<td>动态跟踪</td>
-</tr>
-<tr>
-<td>valgrind</td>
-<td>分析程序性能及程序中的内存泄露错误</td>
-</tr>
-</tbody>
-</table>
-<p><strong>说明</strong>：</p>
-<ul>
-<li>free,vmstat,top,pidstat,pmap只能统计内存信息以及进程的内存使用情况。</li>
-<li>valgrind可以分析内存泄漏问题。</li>
-<li>dtrace动态跟踪。需要对内核函数有很深入的了解，通过D语言编写脚本完成跟踪。</li>
-</ul>
-<h2 id="使用方式-1"><a href="#使用方式-1" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//查看系统内存使用情况</span><br><span class="line">free -m</span><br><span class="line"></span><br><span class="line">//虚拟内存统计信息</span><br><span class="line">vmstat 1</span><br><span class="line"></span><br><span class="line">//查看系统内存情况</span><br><span class="line">top</span><br><span class="line"></span><br><span class="line">//1s采集周期，获取内存的统计信息</span><br><span class="line">pidstat -p pid -r 1</span><br><span class="line"></span><br><span class="line">//查看进程的内存映像信息</span><br><span class="line">pmap -d pid</span><br><span class="line"></span><br><span class="line">//检测程序内存问题</span><br><span class="line">valgrind --tool=memcheck --leak-check=full --<span class="built_in">log</span>-file=./log.txt  ./程序名</span><br></pre></td></tr></table></figure>
-<h2 id="系统内存"><a href="#系统内存" class="headerlink" title="系统内存"></a>系统内存</h2><p>free 命令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@server ~]<span class="comment"># free</span></span><br><span class="line"></span><br><span class="line">             total       used       free     shared    buffers     cached</span><br><span class="line">Mem:       3266180    3250000      10000          0     201000    3002000</span><br><span class="line">-/+ buffers/cache:      47000    3213000</span><br><span class="line">Swap:      2048276      80160    1968116</span><br></pre></td></tr></table></figure></p>
-<p>这里的默认显示单位是kb。<br>各项指标解释</p>
-<ul>
-<li>total:总计物理内存的大小。</li>
-<li>used:已使用多大。</li>
-<li>free:可用有多少。</li>
-<li>Shared:多个进程共享的内存总额。</li>
-<li>buffers: 磁盘缓存的大小。</li>
-<li>cache:磁盘缓存的大小。</li>
-<li>-/+ buffers/cached): used:已使用多大，free:可用有多少。</li>
-<li>已用内存 = 系统used memory - buffers - cached<br>（47000 = 3250000-201000-3002000）</li>
-<li>可用内存 = 系统free memory + buffers + cached<br>（3213000 = 10000+201000+3002000）</li>
-</ul>
-<h3 id="什么是buffer-cache？"><a href="#什么是buffer-cache？" class="headerlink" title="什么是buffer/cache？"></a>什么是buffer/cache？</h3><ul>
-<li>buffer 指 Linux 内存的：Buffer cache，缓冲区缓</li>
-<li>cache 指 Linux内存中的：Page cache，页面缓存</li>
-</ul>
-<p><strong>page cache</strong><br>page cache 主要用来作为<strong>文件系统上的文件数据的缓存</strong>来用，尤其是针对当进程对文件有 read／write 操作的时候。如果你仔细想想的话，作为可以映射文件到内存的系统调用：mmap是不是很自然的也应该用到 page cache？在当前的系统实现里，page cache 也被作为其它文件类型的缓存设备来用，所以事实上 page cache 也负责了大部分的块设备文件的缓存工作。</p>
-<p><strong>buffer cache</strong><br>buffer cache 主要用来在<strong>系统对块设备进行读写</strong>的时候，对块进行数据缓存的系统来使用。这意味着某些对块的操作会使用 buffer cache 进行缓存，比如我们在格式化文件系统的时候。一般情况下两个缓存系统是一起配合使用的，比如当我们对一个文件进行写操作的时候，page cache 的内容会被改变，而 buffer cache 则可以用来将 page 标记为不同的缓冲区，并记录是哪一个缓冲区被修改了。这样，内核在后续执行脏数据的回写（writeback）时，就不用将整个 page 写回，而只需要写回修改的部分即可。</p>
-<p>在当前的内核中，page cache 是针对内存页的缓存，说白了就是，如果有内存是以page进行分配管理的，都可以使用page cache作为其缓存来管理使用。<br>当然，不是所有的内存都是以页（page）进行管理的，也有很多是针对块（block）进行管理的，这部分内存使用如果要用到 cache 功能，则都集中到buffer cache中来使用。（从这个角度出发，是不是buffer cache改名叫做block cache更好？）然而，也不是所有块（block）都有固定长度，系统上块的长度主要是根据所使用的块设备决定的，而页长度在X86上无论是32位还是64位都是4k。</p>
-<h3 id="系统如何回收cache？"><a href="#系统如何回收cache？" class="headerlink" title="系统如何回收cache？"></a>系统如何回收cache？</h3><p>Linux内核会在内存将要耗尽的时候，触发内存回收的工作，以便释放出内存给急需内存的进程使用。一般情况下，这个操作中主要的内存释放都来自于对buffer／cache的释放。尤其是被使用更多的cache空间。既然它主要用来做缓存，只是在内存够用的时候加快进程对文件的读写速度，那么在内存压力较大的情况下，当然有必要清空释放cache，作为free空间分给相关进程使用。所以一般情况下，我们认为buffer/cache空间可以被释放，这个理解是正确的。</p>
-<p>但是这种清缓存的工作也并不是没有成本。理解cache是干什么的就可以明白清缓存必须保证cache中的数据跟对应文件中的数据一致，才能对cache进行释放。所以伴随着cache清除的行为的，一般都是系统IO飙高。因为内核要对比cache中的数据和对应硬盘文件上的数据是否一致，如果不一致需要写回，之后才能回收。</p>
-<p>在系统中除了内存将被耗尽的时候可以清缓存以外，我们还可以人工触发缓存清除的操作。</p>
-<h2 id="进程内存"><a href="#进程内存" class="headerlink" title="进程内存"></a>进程内存</h2><h3 id="进程内存统计"><a href="#进程内存统计" class="headerlink" title="进程内存统计"></a>进程内存统计</h3><p>/proc/[pid]/status<br>通过/proc//status可以查看进程的内存使用情况，包括虚拟内存大小（VmSize），物理内存大小（VmRSS），数据段大小（VmData），栈的大小（VmStk），代码段的大小（VmExe），共享库的代码段大小（VmLib）等等。</p>
-<p>cat /proc/[pid]/status</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Name: gedit /*进程的程序名*/</span><br><span class="line">State: S (sleeping) /*进程的状态信息,具体参见http://blog.chinaunix.net/u2/73528/showart_1106510.html*/</span><br><span class="line">Tgid: 9744 /*线程组号*/</span><br><span class="line">Pid: 9744 /*进程pid*/</span><br><span class="line">PPid: 7672 /*父进程的pid*/</span><br><span class="line">TracerPid: 0 /*跟踪进程的pid*/</span><br><span class="line">VmPeak: 60184 kB /*进程地址空间的大小*/</span><br><span class="line">VmSize: 60180 kB /*进程虚拟地址空间的大小reserved_vm：进程在预留或特殊的内存间的物理页*/</span><br><span class="line">VmLck: 0 kB /*进程已经锁住的物理内存的大小.锁住的物理内存不能交换到硬盘*/</span><br><span class="line">VmHWM: 18020 kB /*文件内存映射和匿名内存映射的大小*/</span><br><span class="line">VmRSS: 18020 kB /*应用程序正在使用的物理内存的大小，就是用ps命令的参数rss的值 (rss)*/</span><br><span class="line">VmData: 12240 kB /*程序数据段的大小（所占虚拟内存的大小），存放初始化了的数据*/</span><br><span class="line">VmStk: 84 kB /*进程在用户态的栈的大小*/</span><br><span class="line">VmExe: 576 kB /*程序所拥有的可执行虚拟内存的大小,代码段,不包括任务使用的库 */</span><br><span class="line">VmLib: 21072 kB /*被映像到任务的虚拟内存空间的库的大小*/</span><br><span class="line">VmPTE: 56 kB /*该进程的所有页表的大小*/</span><br><span class="line">Threads: 1 /*共享使用该信号描述符的任务的个数*/</span><br></pre></td></tr></table></figure>
-<h3 id="JVM-内存分配"><a href="#JVM-内存分配" class="headerlink" title="JVM 内存分配"></a>JVM 内存分配</h3><p>java内存组成介绍：堆(Heap)和非堆(Non-heap)内存</p>
-<p>按照官方的说法：“Java 虚拟机具有一个堆，堆是运行时数据区域，所有类实例和数组的内存均从此处分配。堆是在 Java 虚拟机启动时创建的。”“在JVM中堆之外的内存称为非堆内存(Non-heap memory)”。可以看出JVM主要管理两种类型的内存：堆和非堆。</p>
-<p>简单来说堆就是Java代码可及的内存，是留给开发人员使用的；非堆就是JVM留给 自己用的，所以方法区、JVM内部处理或优化所需的内存(如JIT编译后的代码缓存)、每个类结构(如运行时常数池、字段和方法数据)以及方法和构造方法 的代码都在非堆内存中。</p>
-<ol>
-<li>JVM本身需要的内存，包括其加载的第三方库以及这些库分配的内存</li>
-<li>NIO的DirectBuffer是分配的native memory</li>
-<li>内存映射文件，包括JVM加载的一些JAR和第三方库，以及程序内部用到的。上面 pmap 输出的内容里，有一些静态文件所占用的大小不在Java的heap里，因此作为一个Web服务器，赶紧把静态文件从这个Web服务器中人移开吧，放到nginx或者CDN里去吧。</li>
-<li>JIT， JVM会将Class编译成native代码，这些内存也不会少，如果使用了Spring的AOP，CGLIB会生成更多的类，JIT的内存开销也会随之变大，而且Class本身JVM的GC会将其放到Perm Generation里去，很难被回收掉，面对这种情况，应该让JVM使用ConcurrentMarkSweep GC，并启用这个GC的相关参数允许将不使用的class从Perm Generation中移除， 参数配置： -XX:+UseConcMarkSweepGC -X:+CMSPermGenSweepingEnabled -X:+CMSClassUnloadingEnabled，如果不需要移除而Perm Generation空间不够，可以加大一点： -X:PermSize=256M -X:MaxPermSize=512M</li>
-<li>JNI，一些JNI接口调用的native库也会分配一些内存，如果遇到JNI库的内存泄露，可以使用valgrind等内存泄露工具来检测</li>
-<li>线程栈，每个线程都会有自己的栈空间，如果线程一多，这个的开销就很明显了</li>
-<li>jmap/jstack 采样，频繁的采样也会增加内存占用，如果你有服务器健康监控，记得这个频率别太高，否则健康监控变成致病监控了。</li>
-</ol>
-<h4 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h4><p>也称”永久代” 、“非堆”，它用于存储虚拟机加载的类信息、常量、静态变量、是各个线程共享的内存区域。默认最小值为16MB，最大值为64MB，可以通过-XX:PermSize 和 -XX:MaxPermSize 参数限制方法区的大小。</p>
-<p>运行时常量池：是方法区的一部分，Class文件中除了有类的版本、字段、方法、接口等描述信息外，还有一项信息是常量池，用于存放编译器生成的各种符号引用，这部分内容将在类加载后放到方法区的运行时常量池中。</p>
-<h4 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h4><p>描述的是java 方法执行的内存模型：每个方法被执行的时候 都会创建一个“栈帧”用于存储局部变量表(包括参数)、操作栈、方法出口等信息。每个方法被调用到执行完的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。声明周期与线程相同，是线程私有的。</p>
-<p>局部变量表存放了编译器可知的各种基本数据类型(boolean、byte、char、short、int、float、long、double)、对象引用(引用指针，并非对象本身)，其中64位长度的long和double类型的数据会占用2个局部变量的空间，其余数据类型只占1个。局部变量表所需的内存空间在编译期间完成分配，当进入一个方法时，这个方法需要在栈帧中分配多大的局部变量是完全确定的，在运行期间栈帧不会改变局部变量表的大小空间。</p>
-<h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><p>与虚拟机栈基本类似，区别在于虚拟机栈为虚拟机执行的java方法服务，而本地方法栈则是为Native方法服务。</p>
-<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4><p>也叫做java 堆、GC堆是java虚拟机所管理的内存中最大的一块内存区域，也是被各个线程共享的内存区域，在JVM启动时创建。该内存区域存放了对象实例及数组(所有new的对象)。其大小通过-Xms(最小值)和-Xmx(最大值)参数设置，-Xms为JVM启动时申请的最小内存，默认为操作系统物理内存的1/64但小于1G，-Xmx为JVM可申请的最大内存，默认为物理内存的1/4但小于1G，默认当空余堆内存小于40%时，JVM会增大Heap到-Xmx指定的大小，可通过-XX:MinHeapFreeRation=来指定这个比列；当空余堆内存大于70%时，JVM会减小heap的大小到-Xms指定的大小，可通过XX:MaxHeapFreeRation=来指定这个比列，对于运行系统，为避免在运行时频繁调整Heap的大小，通常-Xms与-Xmx的值设成一样。</p>
-<p>由于现在收集器都是采用分代收集算法，堆被划分为新生代和老年代。新生代主要存储新创建的对象和尚未进入老年代的对象。老年代存储经过多次新生代GC(Minor GC)任然存活的对象。</p>
-<h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4><p>是最小的一块内存区域，它的作用是当前线程所执行的字节码的行号指示器，在虚拟机的模型里，字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令，分支、循环、异常处理、线程恢复等基础功能都需要依赖计数器完成。</p>
-<h4 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h4><p>直接内存并不是虚拟机内存的一部分，也不是Java虚拟机规范中定义的内存区域。jdk1.4中新加入的NIO，引入了通道与缓冲区的IO方式，它可以调用Native方法直接分配堆外内存，这个堆外内存就是本机内存，不会影响到堆内存的大小。</p>
-<h2 id="JVM-内存分析"><a href="#JVM-内存分析" class="headerlink" title="JVM 内存分析"></a>JVM 内存分析</h2><h3 id="查看-JVM-堆内存情况"><a href="#查看-JVM-堆内存情况" class="headerlink" title="查看 JVM 堆内存情况"></a>查看 JVM 堆内存情况</h3><p>jmap -heap [pid]</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">[root@server ~]$ jmap -heap 837</span><br><span class="line">Attaching to process ID 837, please <span class="built_in">wait</span>...</span><br><span class="line">Debugger attached successfully.</span><br><span class="line">Server compiler detected.</span><br><span class="line">JVM version is 24.71-b01</span><br><span class="line"></span><br><span class="line">using thread-local object allocation.</span><br><span class="line">Parallel GC with 4 thread(s)//GC 方式</span><br><span class="line"></span><br><span class="line">Heap Configuration: //堆内存初始化配置</span><br><span class="line">   MinHeapFreeRatio = 0 //对应jvm启动参数-XX:MinHeapFreeRatio设置JVM堆最小空闲比率(default 40)</span><br><span class="line">   MaxHeapFreeRatio = 100 //对应jvm启动参数 -XX:MaxHeapFreeRatio设置JVM堆最大空闲比率(default 70)</span><br><span class="line">   MaxHeapSize      = 2082471936 (1986.0MB) //对应jvm启动参数-XX:MaxHeapSize=设置JVM堆的最大大小</span><br><span class="line">   NewSize          = 1310720 (1.25MB)//对应jvm启动参数-XX:NewSize=设置JVM堆的‘新生代’的默认大小</span><br><span class="line">   MaxNewSize       = 17592186044415 MB//对应jvm启动参数-XX:MaxNewSize=设置JVM堆的‘新生代’的最大大小</span><br><span class="line">   OldSize          = 5439488 (5.1875MB)//对应jvm启动参数-XX:OldSize=&lt;value&gt;:设置JVM堆的‘老生代’的大小</span><br><span class="line">   NewRatio         = 2 //对应jvm启动参数-XX:NewRatio=:‘新生代’和‘老生代’的大小比率</span><br><span class="line">   SurvivorRatio    = 8 //对应jvm启动参数-XX:SurvivorRatio=设置年轻代中Eden区与Survivor区的大小比值 </span><br><span class="line">   PermSize         = 21757952 (20.75MB)  //对应jvm启动参数-XX:PermSize=&lt;value&gt;:设置JVM堆的‘永生代’的初始大小</span><br><span class="line">   MaxPermSize      = 85983232 (82.0MB)//对应jvm启动参数-XX:MaxPermSize=&lt;value&gt;:设置JVM堆的‘永生代’的最大大小</span><br><span class="line">   G1HeapRegionSize = 0 (0.0MB)</span><br><span class="line"></span><br><span class="line">Heap Usage://堆内存使用情况</span><br><span class="line">PS Young Generation</span><br><span class="line">Eden Space://Eden区内存分布</span><br><span class="line">   capacity = 33030144 (31.5MB)//Eden区总容量</span><br><span class="line">   used     = 1524040 (1.4534378051757812MB)  //Eden区已使用</span><br><span class="line">   free     = 31506104 (30.04656219482422MB)  //Eden区剩余容量</span><br><span class="line">   4.614088270399305% used //Eden区使用比率</span><br><span class="line">From Space:  //其中一个Survivor区的内存分布</span><br><span class="line">   capacity = 5242880 (5.0MB)</span><br><span class="line">   used     = 0 (0.0MB)</span><br><span class="line">   free     = 5242880 (5.0MB)</span><br><span class="line">   0.0% used</span><br><span class="line">To Space:  //另一个Survivor区的内存分布</span><br><span class="line">   capacity = 5242880 (5.0MB)</span><br><span class="line">   used     = 0 (0.0MB)</span><br><span class="line">   free     = 5242880 (5.0MB)</span><br><span class="line">   0.0% used</span><br><span class="line">PS Old Generation //当前的Old区内存分布</span><br><span class="line">   capacity = 86507520 (82.5MB)</span><br><span class="line">   used     = 0 (0.0MB)</span><br><span class="line">   free     = 86507520 (82.5MB)</span><br><span class="line">   0.0% used</span><br><span class="line">PS Perm Generation//当前的 “永生代” 内存分布</span><br><span class="line">   capacity = 22020096 (21.0MB)</span><br><span class="line">   used     = 2496528 (2.3808746337890625MB)</span><br><span class="line">   free     = 19523568 (18.619125366210938MB)</span><br><span class="line">   11.337498256138392% used</span><br><span class="line"></span><br><span class="line">670 interned Strings occupying 43720 bytes.</span><br></pre></td></tr></table></figure>
-<p>关于这里的几个generation网上资料一大把就不细说了，这里算一下求和可以得知前者总共给Java环境分配了644M的内存，而ps输出的VSZ和RSS分别是7.4G和2.9G，这到底是怎么回事呢？<br>前面jmap输出的内容里，MaxHeapSize 是在命令行上配的，-Xmx4096m，这个java程序可以用到的最大堆内存。<br>VSZ是指已分配的线性空间大小，这个大小通常并不等于程序实际用到的内存大小，产生这个的可能性很多，比如内存映射，共享的动态库，或者向系统申请了更多的堆，都会扩展线性空间大小，要查看一个进程有哪些内存映射，可以使用 pmap 命令来查看：<br>pmap -x [pid]</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@server ~]$ pmap -x 837</span><br><span class="line">837:   java</span><br><span class="line">Address           Kbytes     RSS   Dirty Mode   Mapping</span><br><span class="line">0000000040000000      36       4       0 r-x--  java</span><br><span class="line">0000000040108000       8       8       8 rwx--  java</span><br><span class="line">00000000418c9000   13676   13676   13676 rwx--    [ anon ]</span><br><span class="line">00000006fae00000   83968   83968   83968 rwx--    [ anon ]</span><br><span class="line">0000000700000000  527168  451636  451636 rwx--    [ anon ]</span><br><span class="line">00000007202d0000  127040       0       0 -----    [ anon ]</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">00007f55ee124000       4       4       0 r-xs-  az.png</span><br><span class="line">00007fff017ff000       4       4       0 r-x--    [ anon ]</span><br><span class="line">ffffffffff600000       4       0       0 r-x--    [ anon ]</span><br><span class="line">----------------  ------  ------  ------</span><br><span class="line">total kB         7796020 3037264 3023928</span><br></pre></td></tr></table></figure>
-<p>这里可以看到很多anon，这些表示这块内存是由mmap分配的。</p>
-<p>RSZ是Resident Set Size，常驻内存大小，即进程实际占用的物理内存大小， 在现在这个例子当中，RSZ和实际堆内存占用差了2.3G，这2.3G的内存组成分别为：</p>
-<h3 id="查看-JVM-堆各个分区的内存情况"><a href="#查看-JVM-堆各个分区的内存情况" class="headerlink" title="查看 JVM 堆各个分区的内存情况"></a>查看 JVM 堆各个分区的内存情况</h3><p>jstat -gcutil [pid]</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@server ~]$ jstat -gcutil 837 1000 20</span><br><span class="line">  S0     S1     E      O      P     YGC     YGCT    FGC    FGCT     GCT   </span><br><span class="line">  0.00  80.43  24.62  87.44  98.29   7101  119.652    40   19.719  139.371</span><br><span class="line">  0.00  80.43  33.14  87.44  98.29   7101  119.652    40   19.719  139.371</span><br></pre></td></tr></table></figure>
-<h3 id="分析-JVM-堆内存中的对象"><a href="#分析-JVM-堆内存中的对象" class="headerlink" title="分析 JVM 堆内存中的对象"></a>分析 JVM 堆内存中的对象</h3><p><strong>查看存活的对象统计</strong><br>jmap -histo:live [pid]</p>
-<p><strong>dump 内存</strong><br>jmap -dump:format=b,file=heapDump [pid]</p>
-<p>然后用jhat命令可以参看<br>jhat -port 5000 heapDump<br>在浏览器中访问：<a href="http://localhost:5000/" target="_blank" rel="noopener">http://localhost:5000/</a> 查看详细信息</p>
-<h1 id="磁盘IO"><a href="#磁盘IO" class="headerlink" title="磁盘IO"></a>磁盘IO</h1><h2 id="说明-2"><a href="#说明-2" class="headerlink" title="说明"></a>说明</h2><p>磁盘通常是计算机最慢的子系统，也是最容易出现性能瓶颈的地方，因为磁盘离 CPU 距离最远而且 CPU 访问磁盘要涉及到机械操作，比如转轴、寻轨等。访问硬盘和访问内存之间的速度差别是以数量级来计算的，就像1天和1分钟的差别一样。要监测 IO 性能，有必要了解一下基本原理和 Linux 是如何处理硬盘和内存之间的 IO 的。</p>
-<p>在理解磁盘IO之前，同样我们需要理解一些概念，例如：</p>
-<ul>
-<li>文件系统</li>
-<li>VFS</li>
-<li>文件系统缓存</li>
-<li>页缓存page cache</li>
-<li>缓冲区高速缓存buffer cache</li>
-<li>目录缓存</li>
-<li>inode</li>
-<li>inode缓存</li>
-<li>noop调用策略</li>
-</ul>
-<h2 id="分析工具-2"><a href="#分析工具-2" class="headerlink" title="分析工具"></a>分析工具</h2><table>
-<thead>
-<tr>
-<th>工具</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>iostat</td>
-<td>磁盘详细统计信息</td>
-</tr>
-<tr>
-<td>iotop</td>
-<td>按进程查看磁盘IO的使用情况</td>
-</tr>
-<tr>
-<td>pidstat</td>
-<td>按进程查看磁盘IO的使用情况</td>
-</tr>
-<tr>
-<td>perf</td>
-<td>动态跟踪工具</td>
-</tr>
-</tbody>
-</table>
-<h2 id="使用方式-2"><a href="#使用方式-2" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//查看系统io信息</span><br><span class="line">iotop</span><br><span class="line"></span><br><span class="line">//统计io详细信息</span><br><span class="line">iostat -d -x -k 1 10</span><br><span class="line"></span><br><span class="line">//查看进程级io的信息</span><br><span class="line">pidstat -d 1 -p  pid</span><br><span class="line"></span><br><span class="line">//查看系统IO的请求，比如可以在发现系统IO异常时，可以使用该命令进行调查，就能指定到底是什么原因导致的IO异常</span><br><span class="line">perf record -e block:block_rq_issue -ag</span><br><span class="line">^C</span><br><span class="line">perf report</span><br></pre></td></tr></table></figure>
-<h1 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h1><h2 id="说明-3"><a href="#说明-3" class="headerlink" title="说明"></a>说明</h2><p>网络的监测是所有 Linux 子系统里面最复杂的，有太多的因素在里面，比如：延迟、阻塞、冲突、丢包等，更糟的是与 Linux 主机相连的路由器、交换机、无线信号都会影响到整体网络并且很难判断是因为 Linux 网络子系统的问题还是别的设备的问题，增加了监测和判断的复杂度。现在我们使用的所有网卡都称为自适应网卡，意思是说能根据网络上的不同网络设备导致的不同网络速度和工作模式进行自动调整。</p>
-<h2 id="分析工具-3"><a href="#分析工具-3" class="headerlink" title="分析工具"></a>分析工具</h2><table>
-<thead>
-<tr>
-<th>工具</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ping</td>
-<td>主要透过 ICMP 封包 来进行整个网络的状况报告</td>
-</tr>
-<tr>
-<td>traceroute</td>
-<td>用来检测发出数据包的主机到目标主机之间所经过的网关数量的工具</td>
-</tr>
-<tr>
-<td>netstat</td>
-<td>用于显示与IP、TCP、UDP和ICMP协议相关的统计数据，一般用于检验本机各端口的网络连接情况</td>
-</tr>
-<tr>
-<td>ss</td>
-<td>可以用来获取socket统计信息，而且比netstat更快速更高效</td>
-</tr>
-<tr>
-<td>host</td>
-<td>可以用来查出某个主机名的 IP,跟nslookup作用一样</td>
-</tr>
-<tr>
-<td>tcpdump</td>
-<td>是以包为单位进行输出的，阅读起来不是很方便</td>
-</tr>
-<tr>
-<td>tcpflow</td>
-<td>是面向tcp流的, 每个tcp传输会保存成一个文件,很方便的查看</td>
-</tr>
-<tr>
-<td>sar -n DEV</td>
-<td>网卡流量情况</td>
-</tr>
-<tr>
-<td>sar -n SOCK</td>
-<td>查询网络以及tcp，udp状态信息</td>
-</tr>
-</tbody>
-</table>
-<h2 id="使用方式-3"><a href="#使用方式-3" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">//显示网络统计信息</span><br><span class="line">netstat -s</span><br><span class="line"></span><br><span class="line">//显示当前UDP连接状况</span><br><span class="line">netstat -nu</span><br><span class="line"></span><br><span class="line">//显示UDP端口号的使用情况</span><br><span class="line">netstat -apu</span><br><span class="line"></span><br><span class="line">//统计机器中网络连接各个状态个数</span><br><span class="line">netstat -a | awk <span class="string">'/^tcp/ &#123;++S[$NF]&#125; END &#123;for(a in S) print a, S[a]&#125;'</span></span><br><span class="line"></span><br><span class="line">//显示TCP连接</span><br><span class="line">ss -t -a</span><br><span class="line"></span><br><span class="line">//显示sockets摘要信息</span><br><span class="line">ss -s</span><br><span class="line"></span><br><span class="line">//显示所有udp sockets</span><br><span class="line">ss -u -a</span><br><span class="line"></span><br><span class="line">//tcp,etcp状态</span><br><span class="line">sar -n TCP,ETCP 1</span><br><span class="line"></span><br><span class="line">//查看网络IO</span><br><span class="line">sar -n DEV 1</span><br><span class="line"></span><br><span class="line">//抓包以包为单位进行输出</span><br><span class="line">tcpdump -i eth1 host 192.168.1.1 and port 80 </span><br><span class="line"></span><br><span class="line">//抓包以流为单位显示数据内容</span><br><span class="line">tcpflow -cp host 192.168.1.1</span><br></pre></td></tr></table></figure>
-<h1 id="服务指标"><a href="#服务指标" class="headerlink" title="服务指标"></a>服务指标</h1><h2 id="响应时间-RT"><a href="#响应时间-RT" class="headerlink" title="响应时间(RT)"></a>响应时间(RT)</h2><p>响应时间是指系统对请求作出响应的时间。直观上看，这个指标与人对软件性能的主观感受是非常一致的，因为它完整地记录了整个计算机系统处理请求的时间。由于一个系统通常会提供许多功能，而不同功能的处理逻辑也千差万别，因而不同功能的响应时间也不尽相同，甚至同一功能在不同输入数据的情况下响应时间也不相同。所以，在讨论一个系统的响应时间时，人们通常是指该系统所有功能的平均时间或者所有功能的最大响应时间。当然，往往也需要对每个或每组功能讨论其平均响应时间和最大响应时间。</p>
-<p>对于单机的没有并发操作的应用系统而言，人们普遍认为响应时间是一个合理且准确的性能指标。需要指出的是，响应时间的绝对值并不能直接反映软件的性能的高低，软件性能的高低实际上取决于用户对该响应时间的接受程度。对于一个游戏软件来说，响应时间小于100毫秒应该是不错的，响应时间在1秒左右可能属于勉强可以接受，如果响应时间达到3秒就完全难以接受了。而对于编译系统来说，完整编译一个较大规模软件的源代码可能需要几十分钟甚至更长时间，但这些响应时间对于用户来说都是可以接受的。</p>
-<h2 id="吞吐量-Throughput"><a href="#吞吐量-Throughput" class="headerlink" title="吞吐量(Throughput)"></a>吞吐量(Throughput)</h2><p>吞吐量是指系统在单位时间内处理请求的数量。对于无并发的应用系统而言，吞吐量与响应时间成严格的反比关系，实际上此时吞吐量就是响应时间的倒数。前面已经说过，对于单用户的系统，响应时间（或者系统响应时间和应用延迟时间）可以很好地度量系统的性能，但对于并发系统，通常需要用吞吐量作为性能指标。</p>
-<p>对于一个多用户的系统，如果只有一个用户使用时系统的平均响应时间是t，当有你n个用户使用时，每个用户看到的响应时间通常并不是n×t，而往往比n×t小很多（当然，在某些特殊情况下也可能比n×t大，甚至大很多）。这是因为处理每个请求需要用到很多资源，由于每个请求的处理过程中有许多不走难以并发执行，这导致在具体的一个时间点，所占资源往往并不多。也就是说在处理单个请求时，在每个时间点都可能有许多资源被闲置，当处理多个请求时，如果资源配置合理，每个用户看到的平均响应时间并不随用户数的增加而线性增加。实际上，不同系统的平均响应时间随用户数增加而增长的速度也不大相同，这也是采用吞吐量来度量并发系统的性能的主要原因。一般而言，吞吐量是一个比较通用的指标，两个具有不同用户数和用户使用模式的系统，如果其最大吞吐量基本一致，则可以判断两个系统的处理能力基本一致。</p>
-<h2 id="并发用户数"><a href="#并发用户数" class="headerlink" title="并发用户数"></a>并发用户数</h2><p>并发用户数是指系统可以同时承载的正常使用系统功能的用户的数量。与吞吐量相比，并发用户数是一个更直观但也更笼统的性能指标。实际上，并发用户数是一个非常不准确的指标，因为用户不同的使用模式会导致不同用户在单位时间发出不同数量的请求。一网站系统为例，假设用户只有注册后才能使用，但注册用户并不是每时每刻都在使用该网站，因此具体一个时刻只有部分注册用户同时在线，在线用户就在浏览网站时会花很多时间阅读网站上的信息，因而具体一个时刻只有部分在线用户同时向系统发出请求。这样，对于网站系统我们会有三个关于用户数的统计数字：注册用户数、在线用户数和同时发请求用户数。由于注册用户可能长时间不登陆网站，使用注册用户数作为性能指标会造成很大的误差。而在线用户数和同事发请求用户数都可以作为性能指标。相比而言，以在线用户作为性能指标更直观些，而以同时发请求用户数作为性能指标更准确些。</p>
-<h2 id="QPS每秒查询率-Query-Per-Second"><a href="#QPS每秒查询率-Query-Per-Second" class="headerlink" title="QPS每秒查询率(Query Per Second)"></a>QPS每秒查询率(Query Per Second)</h2><p>每秒查询率QPS是对一个特定的查询服务器在规定时间内所处理流量多少的衡量标准，在因特网上，作为域名系统服务器的机器的性能经常用每秒查询率来衡量。对应fetches/sec，即每秒的响应请求数，也即是最大吞吐能力。</p>
-<p>从以上概念来看吞吐量和响应时间是衡量系统性能的重要指标，QPS虽然和吞吐量的计量单位不同，但应该是成正比的，任何一个指标都可以含量服务器的并行处理能力。当然Throughput更关心数据量，QPS更关心处理笔数。</p>
-<h2 id="CPU利用率"><a href="#CPU利用率" class="headerlink" title="CPU利用率"></a>CPU利用率</h2><p>CPU Load Average &lt; CPU个数 <em>核数</em> 0.7</p>
-<p><strong>Context Switch Rate</strong><br>就是Process（Thread）的切换，如果切换过多，会让CPU忙于切换，也会导致影响吞吐量。《高性能服务器架构 》这篇文章的第2节就是说的是这个问题的。究竟多少算合适？google了一大圈，没有一个确切的解释。Context Switch大体上由两个部分组成：中断和进程(包括线程)切换，一次中断（Interrupt）会引起一次切换，进程（线程）的创建、激活之类的也会引起一次切换。CS的值也和TPS（Transaction Per Second）相关的，假设每次调用会引起N次CS，那么就可以得出</p>
-<p>Context Switch Rate = Interrupt Rate + TPS* N</p>
-<p>CSR减掉IR，就是进程/线程的切换，假如主进程收到请求交给线程处理，线程处理完毕归还给主进程，这里就是2次切换。也可以用CSR、IR、TPS的值代入公式中，得出每次事物导致的切换数。因此，要降低CSR，就必须在每个TPS引起的切换上下功夫，只有N这个值降下去，CSR就能降低，理想情况下N=0，但是无论如何如果N &gt;= 4，则要好好检查检查。另外网上说的CSR&lt;5000，我认为标准不该如此单一。</p>
-<p>这三个指标在 LoadRunner 中可以监控到；另外，在 linux 中，也可以用 vmstat 查看r（Load Arerage），in（Interrupt）和cs（Context Switch）</p>
-<h1 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h1><ul>
-<li>uptime</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">uptime</span><br><span class="line">  08:21:34 up 36 min,  2 users,  load average: 0.00, 0.00, 0.00</span><br><span class="line"> </span><br><span class="line"><span class="comment">#当前服务器时间：    08:21:34</span></span><br><span class="line"><span class="comment">#当前服务器运行时长  36 min</span></span><br><span class="line"><span class="comment">#当前用户数          2 users</span></span><br><span class="line"><span class="comment">#当前的负载均衡      load average  0.00, 0.00, 0.00，分别取1min,5min,15min的均值</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>dmesg</p>
-<p>dmesg命令用于显示开机信息。</p>
-<p>kernel会将开机信息存储在ring buffer中。您若是开机时来不及查看信息，可利用dmesg来查看。开机信息亦保存在/var/log目录中，名称为dmesg的文件里。</p>
-<p><strong>语法</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dmesg [-cn][-s &lt;缓冲区大小&gt;]</span><br></pre></td></tr></table></figure>
-<p><strong>参数说明</strong>：</p>
-<ul>
-<li>-c 　显示信息后，清除ring buffer中的内容。</li>
-<li>-s&lt;缓冲区大小&gt; 　预设置为8196，刚好等于ring buffer的大小。</li>
-<li>-n 　设置记录信息的层级。</li>
-</ul>
-</li>
-<li><p>top<br>查看进程活动状态以及一些系统状况</p>
-</li>
-<li><p>vmstat<br>查看系统状态、硬件和系统信息等</p>
-</li>
-<li><p>iostat<br>查看CPU 负载，硬盘状况</p>
-</li>
-<li><p>sar<br>综合工具，查看系统状况</p>
-</li>
-<li><p>mpstat<br>查看多处理器状况</p>
-</li>
-<li><p>netstat<br>查看网络状况</p>
-</li>
-<li><p>iptraf<br>实时网络状况监测</p>
-</li>
-<li><p>tcpdump<br>抓取网络数据包，详细分析</p>
-</li>
-<li><p>mpstat<br>查看多处理器状况</p>
-</li>
-<li><p>tcptrace<br>数据包分析工具</p>
-</li>
-<li><p>netperf<br>网络带宽工具</p>
-</li>
-<li><p>dstat<br>综合工具，综合了 vmstat, iostat, ifstat, netstat 等多个信息</p>
-</li>
-</ul>
-<h1 id="系统负载"><a href="#系统负载" class="headerlink" title="系统负载"></a>系统负载</h1><h2 id="说明-4"><a href="#说明-4" class="headerlink" title="说明"></a>说明</h2><p>Load 就是对计算机干活多少的度量（WikiPedia：the system Load is a measure of the amount of work that a compute system is doing）简单的说是进程队列的长度。Load Average 就是一段时间（1分钟、5分钟、15分钟）内平均Load。</p>
-<h2 id="分析工具-4"><a href="#分析工具-4" class="headerlink" title="分析工具"></a>分析工具</h2><table>
-<thead>
-<tr>
-<th>工具</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>top</td>
-<td>查看系统负载情况</td>
-</tr>
-<tr>
-<td>uptime</td>
-<td>查看系统负载情况</td>
-</tr>
-<tr>
-<td>strace</td>
-<td>统计跟踪内核态信息</td>
-</tr>
-<tr>
-<td>vmstat</td>
-<td>查看负载情况</td>
-</tr>
-<tr>
-<td>dmesg</td>
-<td>查看内核日志信息</td>
-</tr>
-</tbody>
-</table>
-<h2 id="使用方式-4"><a href="#使用方式-4" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//查看负载情况</span></span><br><span class="line">uptime</span><br><span class="line"></span><br><span class="line">top</span><br><span class="line"></span><br><span class="line">vmstat</span><br><span class="line"></span><br><span class="line"><span class="comment">//统计系统调用耗时情况</span></span><br><span class="line">strace -<span class="built_in">c</span> -p pid</span><br><span class="line"></span><br><span class="line"><span class="comment">//跟踪指定的系统操作例如epoll_wait</span></span><br><span class="line">strace -<span class="type">T</span> -e epoll_wait -p pid</span><br><span class="line"></span><br><span class="line"><span class="comment">//查看内核日志信息</span></span><br><span class="line">dmesg</span><br></pre></td></tr></table></figure>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
-<li><a href="http://tmq.qq.com/2016/07/it-is-necessary-to-know-the-background-performance-test/" target="_blank" rel="noopener">http://tmq.qq.com/2016/07/it-is-necessary-to-know-the-background-performance-test/</a></li>
-<li><a href="https://www.ibm.com/developerworks/java/library/j-nativememory-linux/" target="_blank" rel="noopener">https://www.ibm.com/developerworks/java/library/j-nativememory-linux/</a></li>
-<li><a href="http://www.oracle.com/technetwork/java/javase/index-137495.html" target="_blank" rel="noopener">http://www.oracle.com/technetwork/java/javase/index-137495.html</a></li>
-<li><a href="http://www.hollischuang.com/archives/303" target="_blank" rel="noopener">http://www.hollischuang.com/archives/303</a></li>
-<li><a href="https://www.jianshu.com/p/0bbac570fa4c" target="_blank" rel="noopener">https://www.jianshu.com/p/0bbac570fa4c</a></li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -4124,7 +3816,9 @@
 
       <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="vincent">
             
               <p class="site-author-name" itemprop="name">vincent</p>
               <p class="site-description motion-element" itemprop="description">The King is dead, long live the King!</p>
@@ -4137,7 +3831,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-count">41</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -4303,7 +3997,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">52</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">54</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -4312,12 +4010,24 @@
           
 
           
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
 
           
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
                   <a href="https://github.com/vincentruan" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:rzw0813@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
                   
                 </span>
               
@@ -4359,7 +4069,21 @@
   <span class="author" itemprop="copyrightHolder">vincent</span>
 
   
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">383k</span>
+  
 
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">5:49</span>
   
 </div>
 
@@ -4431,6 +4155,8 @@
 
 
 
+  
+
 
 
   
@@ -4460,6 +4186,11 @@
   
   
     <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
   
 
   

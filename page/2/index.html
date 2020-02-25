@@ -31,7 +31,7 @@
     
     
   <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
-  <link href="/lib/pace/pace-theme-mac-osx.min.css?v=1.0.2" rel="stylesheet">
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
 
 
 
@@ -58,6 +58,10 @@
 
 
 
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -96,7 +100,7 @@
     scheme: 'Muse',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: false,
+    fancybox: true,
     fastclick: false,
     lazyload: false,
     tabs: true,
@@ -130,6 +134,8 @@
 <meta name="twitter:description" content="The King is dead, long live the King!">
 
 
+
+  <link rel="alternate" href="/atom.xml" title="星辰大海" type="application/atom+xml">
 
 
 
@@ -184,7 +190,7 @@
 
 </head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -195,7 +201,7 @@
   page-home">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -350,20 +356,1095 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/12/MySQL增删改查都会用到什么锁/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vincent">
+      <meta itemprop="description" content="The King is dead, long live the King!">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/12/MySQL增删改查都会用到什么锁/" itemprop="url">
+                  MySQL增删改查都会用到什么锁?
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-12 15:11:11" itemprop="dateCreated datePublished" datetime="2020-02-12T15:11:11+08:00">2020-02-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">28k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">26 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>日常的操作中，增删改查都会使用什么类型的锁？其实这个问题，可以分为两个方面，一方面是读，一方面是写。</p>
+<h1 id="01-读（select）"><a href="#01-读（select）" class="headerlink" title="01 读（select）"></a>01 读（select）</h1><p>  我们先来看读的部分。读的操作，其实分为两种，分别是<strong>一致性读</strong>和<strong>锁定读</strong>，</p>
+<p>  这里我们温习一下，一致性读其实就是利用事务的MVCC机制，来读取一份数据的快照，所以有的书上也称之为快照读，一致性读是不加锁的，其他的事务是可以对表中的数据记录进行改动的。一般情况下，常见的读，例如：</p>
+<p>select * from table；</p>
+<p>select * from table left join table2;</p>
+<p>  这种操作，在RU，RC，RR隔离级别下都是采用一直性读，不加锁的操作。这种情况下，<strong>读的并发可以非常高。</strong></p>
+<p>  再来看看锁定读，如果我们的表当中有索引，我们想在读取记录的时候，获取某一条记录的锁，禁止别的事务对这条记录进行修改，那么我们可以使用下面的语句来对读取的记录加锁：</p>
+<p><strong>select … lock in share mode;</strong>加共享锁。(其他事务可读，不可写)</p>
+<p><strong>select … for update;</strong>加排它锁。(其他事务不可读，不可写)，这样，其他事务就不能对这条记录进行读取和更改了。</p>
+<p>关于读操作的是否加锁，还有以下几点需要注意： </p>
+<p>1、在Serializable这种事务的隔离级别下，普通的select操作会升级为select…in share mode；的模式。</p>
+<p>2、在唯一索引上使用唯一的查询条件，会使用记录锁，而不会封锁记录之间的间隔，即不会使用间隙锁。</p>
+<p>3、其他类型的索引使用范围的查询条件或者唯一的查询条件，innodb会自动锁定被扫描的范围，避免索引范围区间内插入新的记录。这块儿可能比较模糊，文章最后面给出各种类型下的加锁测试结果。</p>
+<h1 id="02-写（update、delete、insert）"><a href="#02-写（update、delete、insert）" class="headerlink" title="02 写（update、delete、insert）"></a>02 写（update、delete、insert）</h1><h2 id="关于delete"><a href="#关于delete" class="headerlink" title="关于delete"></a>关于delete</h2><p>  对一条数据做delete的过程实际上是要先在索引的B+树上获取该记录的位置，然后再这个记录所在的位置加X锁，也就是排它锁。</p>
+<p>  如果对某个范围内的数据做delete操作，则会在索引B+树上对范围内符合查询条件的记录以及记录之前的区间加next-key锁(本质是记录锁和间隙锁的组合，后面的文章会讲到)。  </p>
+<p>   加完锁之后，再进行delete操作。这个delete操作的本质，其实是先将delete的标识为标识为1，而不是真正进行删除，如果下次这块空间可以复用，则innodb会直接进行复用。</p>
+<p>   更多详情请见：Innodb数据页简介</p>
+<h2 id="关于update"><a href="#关于update" class="headerlink" title="关于update"></a>关于update</h2><p>  对一条记录做update的时候，我们知道，如果该要更新的列在更新前后的存储空间没有发生变化，则会直接在该记录上进行更新操作。而如果发生了存储空间的变化，则会现将这条记录彻底删除掉，然后再插入一条新的记录。</p>
+<p>  基本上分为一下三种情况：</p>
+<p>1、如果update操作没有更新索引键值并且没有导致存储空间变化，则会直接在索引B+树上使用X锁来锁定update的记录。</p>
+<p>2、如果update操作没有更新索引键值但却导致了数据的存储空间发生变化，则会现将这表数据记录删除掉，然后再插入一条新的记录，在这个过程中，先会获取索引B+树的X锁，然后insert过程会使用隐式锁来进行保护。</p>
+<p>3、如果update修改了某条记录的索引键值，则需要先进行delete，然后再进行一次insert，加锁的规则就和delete以及insert一样了。</p>
+<p>  这里有几点需要注意：</p>
+<p>1、如果在唯一索引上使用唯一的查询条件来进行update和delete操作，那么这个过程中只会对记录加锁。</p>
+<p>2、除了第一种情况之外，都会加排他的next-key锁，来锁定记录和记录之前的范围。</p>
+<p>3、如果update的是主键的记录，则对应的普通索引的记录也会被隐式加锁，这是因为innodb中的普通索引会存储主键的值，检索普通索引本质上要进行回表操作，二次扫描聚集索引。</p>
+<h2 id="关于insert"><a href="#关于insert" class="headerlink" title="关于insert"></a>关于insert</h2><p>  insert操作会用排它锁封锁被插入的索引记录，而不会封锁记录之前的范围。除此之外，会在插入区间加入插入意向锁</p>
+<p>  最后，今天我做了一点测试，测试的数据太多了，不方便整理，这里把测试结果放在这里，大家可以看看，和自己设想的情况一样不一样：</p>
+<p>（注意：所有测试均在RR隔离级别下，RC隔离级别下只有记录锁，没有间隙锁，相对比较简单，大家可以自行研究）</p>
+<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个空的记录，例如id=6的记录，表中只有id=5和id=9的值，那么会话2中<strong>不能</strong>插入id=6、7、8的值，因为这个间隙已经被锁定。其中，<strong>id可以是主键或者唯一索引。</strong></p>
+<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个存在记录，例如id=5的记录，表中有id=5的值，那么会话2中<strong>可以</strong>插入id=4、6、7、8的值，间隙没有锁定。其中，<strong>id可以是主键或者唯一索引。</strong></p>
+<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个范围记录，例如id&lt;6的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入id=6、7、8的值，间隙被锁定。其中，<strong>id可以是主键或者唯一索引。</strong></p>
+<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个范围记录，例如id&gt;6 and id &lt;11的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入id=6、7、8的值以及id大于9的所有值，间隙被锁定。其中，<strong>id可以是主键或者唯一索引</strong>。</p>
+<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个空的记录，例如id=6的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入id=5、6、7、8的值，间隙被锁定。但是可以插入9的值，其中，<strong>id是普通索引。</strong></p>
+<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个存在记录，例如id=5的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入id=4、6、7、8的值，但是可以插入9的值。间隙被锁定。其中，<strong>id是普通索引。</strong></p>
+<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个范围记录，例如id&lt;6的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入id=4、6、7、8的值，但是可以插入9的值，间隙被锁定。其中，<strong>id是普通索引**</strong>。**</p>
+<p><strong>RR隔离级别下</strong>，如果会话1锁定了一个范围记录，例如id&gt;6 and id&lt;11的记录，表中有id=5的值和id=9的值，那么会话2中<strong>不能</strong>插入<strong>所有值的记录，所有**</strong>间隙被锁定，类似全表锁<strong>。其中，</strong>id是普通索引<strong>**。</strong></p>
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><h2 id="关于MySQL锁的两个知识点"><a href="#关于MySQL锁的两个知识点" class="headerlink" title="关于MySQL锁的两个知识点"></a>关于MySQL锁的两个知识点</h2><h3 id="MySQL快照读和当前读"><a href="#MySQL快照读和当前读" class="headerlink" title="MySQL快照读和当前读"></a>MySQL快照读和当前读</h3><p>  当我们对数据库中的表进行select、update、delete以及insert的时候，innodb存储引擎会根据操作类型的不同来给这些操作添加具体的锁。</p>
+<p>  在MySQL中，读操作可以分成两类：<strong>快照读</strong> (snapshot read)与<strong>当前读</strong> (current read)。快照读，读取的是记录的可见版本 (有可能是历史版本)，不用加锁。当前读，读取的是记录的最新版本，并且，当前读返回的记录，都会加上锁，保证其他事务不会再并发修改这条记录。</p>
+<p>这里我们首先给出快照读和当前读的例子：</p>
+<p>快照读：简单的select操作，属于快照读，不加锁。(当然，也有例外，下面会分析)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> <span class="keyword">id</span>&gt;<span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+<p>当前读：特殊的读操作，插入/更新/删除操作，属于当前读，需要加锁。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select * from table where id&gt;10 lock in share mode;</span><br><span class="line">select * from table where id&gt;10 for update;</span><br><span class="line">insert into table values (…);</span><br><span class="line">update table set id=11 where id=10;</span><br><span class="line">delete from table where id&gt;10;</span><br></pre></td></tr></table></figure>
+<p>读取之后，需要保证其他并发事务不能修改当前记录，对读取记录加锁。其中，除了第一条语句明确指出了lock in share mode之外，也就是对读取记录加S锁 (共享锁)外，其他的操作，都加的是X锁 (排它锁)。</p>
+<p>这里我们给出一个update操作过程中，mysql server和innodb存储引擎进行交互的过程如下：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212152912203.png" alt="image-20200212152912203"></p>
+<p>从上图中，我们可以看出一个update操作的具体流程。当update SQL被发给MySQL后，MySQL Server会根据where条件，读取第一条满足条件的记录，然后InnoDB引擎会将第一条记录返回，并加锁 (current read)。待MySQL Server收到这条加锁的记录之后，会再发起一个update请求，更新这条记录。一条记录操作完成，再读取下一条记录，直至没有满足条件的记录为止。因此，update操作内部，就包含了一个当前读。同理，delete操作也一样。insert操作会稍微有些不同，简单来说，就是insert操作可能会触发Unique Key的冲突检查，也会进行一个当前读。</p>
+<h3 id="关于死锁"><a href="#关于死锁" class="headerlink" title="关于死锁"></a>关于死锁</h3><blockquote>
+<p> 死锁是指两个或者两个以上的事务在执行的过程中，因争夺资源而造成的一种互相等待的现象。若无外力作用，这两个事务将保持等待状态，无法推进下去。很明显，这是我们不想看到的。</p>
+</blockquote>
+<p>  从上面的概念可以看出，死锁的关键点在于互相等待，如果我们要解决死锁的问题，就要从“等待”这个关键词上面入手，如果我们将等待都转化为回滚操作，并且事务都重新开始，这种方法无疑可以避免死锁问题的产生。但是会导致数据库并发性能的降低，这样的问题也是我们无法接受的。</p>
+<p>  为了解决这一问题，我们采用一种超时的方法进行折中进行处理，超时是指当两个事务互相等待时，当某一方的等待时间超过一个阈值，我们将它进行回滚，这样，另一个事务就能够继续进行，在innodb存储引擎中，我们使用参数innodb_lock_wait_timeout来设置超时时间，这个参数如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show variables like "innodb_lock_wait_timeout";</span><br><span class="line">+<span class="comment">--------------------------+-------+</span></span><br><span class="line">| Variable_name            | Value |</span><br><span class="line">+<span class="comment">--------------------------+-------+</span></span><br><span class="line">| innodb_lock_wait_timeout | 50    |</span><br><span class="line">+<span class="comment">--------------------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span>, <span class="number">1</span> <span class="keyword">warning</span> (<span class="number">0.11</span> sec)</span><br></pre></td></tr></table></figure>
+<p>  为了加深印象，我们模拟一个死锁的现象，让大家感受一下。</p>
+<p>  首先，要模拟死锁，程序必须并发运行，串行的方法是无法模拟死锁的，这里我们采用两个连接会话进行模拟：</p>
+<p><strong>会话A</strong></p>
+<p><strong>我们先开启事务，然后锁定id=3的行；</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from t;</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">| id | age |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">|  1 |   5 |</span><br><span class="line">|  2 |   4 |</span><br><span class="line">|  3 |   3 |</span><br><span class="line">|  4 |   2 |</span><br><span class="line">|  5 |   1 |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">5 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">begin</span>;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t where id=3 for update;</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">| id | age |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">|  3 |   3 |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.02</span> sec)</span><br></pre></td></tr></table></figure>
+<p><strong>会话B</strong></p>
+<p><strong>在会话B上锁定id=2的行</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; begin</span><br><span class="line">    -&gt; ;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line">mysql&gt; select * from t where id=2 for update;</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">| id | age |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">|  2 |   4 |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<p><strong>会话A</strong></p>
+<p><strong>我们在会话A上获取id=2的记录的锁，发现无法获取，产生了等待：</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from t where id=2 for update;</span><br><span class="line"><span class="comment">##产生等待</span></span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>会话B</strong></p>
+<p>在会话A进行等待的过程中，我们在会话B上面获取id=3的记录的锁，我们发现了两个变化：</p>
+<p>第一、会话B上输出了死锁的提示信息，如下；</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from t where id=3 for update;</span><br><span class="line">ERROR 1213 (40001): Deadlock found when trying to get <span class="keyword">lock</span>; try restarting traction</span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
+<p>第二、会话A上输出了id=2的记录，也就是A会话得到了特定的资源，但是产生了9s的延迟，如下；</p>
+<p><strong>会话A</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from t where id=2 for update;</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">| id | age |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">|  2 |   4 |</span><br><span class="line">+<span class="comment">----+-----+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">9.04</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
+<p>  在上述操作中，会话B抛出了1213这个错误状态码，它代表事务发生了死锁，死锁的原因是会话A和B的资源进行了相互等待，但是此时我们发现会话B中抛出死锁提示信息之后会话A中立即得到了记录为2的这个资源，这其实是因为会话B中的事务发生了回滚，否则的话，会话A中的事务是不可能得到相应的资源的。</p>
+<p>  这里又不得不提innodb的一个特性，那就是它会回滚死锁情况下的一个事务，因此当我们在程序中捕获了一个1213的错误，其实不需要我们手动进行回滚。</p>
+<h2 id="Innodb数据页简介"><a href="#Innodb数据页简介" class="headerlink" title="Innodb数据页简介"></a>Innodb数据页简介</h2><p>  页是内存和磁盘交互的基本单位，它的大小一般是16KB，可以被分为如下几个部分：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212162043235.png" alt="image-20200212162043235"></p>
+<p>  上次的文章里面，我们对这几个部分大概做了介绍，今天我们说说上面数据页的蓝色部分。</p>
+<p>  该部分保存的是数据页中真正的数据记录，也就是用户存储的记录。当我们一开始生成页的时候，其实并没有蓝色的Record部分，而是随着我们不断给数据库中插入记录，才逐渐从Free Space中划分出来的空间。用示意图来描述就是：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216093.webp" alt="img"></p>
+<p> 如果Free Space中的数据页被分配完了，则去申请新的数据页。</p>
+<p>为了方便理解，我们现在创建一个表进行演示：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">test</span>(</span><br><span class="line">    -&gt;     c1 <span class="built_in">INT</span>,</span><br><span class="line">    -&gt;     c2 <span class="built_in">INT</span>,</span><br><span class="line">    -&gt;     c3 <span class="built_in">VARCHAR</span>(<span class="number">1000</span>),</span><br><span class="line">    -&gt;     PRIMARY <span class="keyword">KEY</span> (c1)</span><br><span class="line">    -&gt; ) <span class="keyword">engine</span>=<span class="keyword">innodb</span> <span class="keyword">charset</span>=utf8;</span><br><span class="line">Query OK, 0 rows affected (0.03 sec)</span><br></pre></td></tr></table></figure>
+<p>现在我们给这个表里面插入几条数据：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">test</span> <span class="keyword">values</span></span><br><span class="line">(<span class="number">1</span>,<span class="number">2</span>,<span class="string">'a'</span>),</span><br><span class="line">(<span class="number">2</span>,<span class="number">3</span>,<span class="string">'bb'</span>),</span><br><span class="line">(<span class="number">3</span>,<span class="number">4</span>,<span class="string">'ccc'</span>),</span><br><span class="line">(<span class="number">4</span>,<span class="number">5</span>,<span class="string">'dddd'</span>);</span><br></pre></td></tr></table></figure>
+<p>我们可以把上面的数据页结构简单表示如下：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640.webp" alt="img"></p>
+<p>  我们可以看到，每条记录由三个部分构成，分别是记录头、记录数据以及其他信息，其中记录头里面包含很多字段来表示该条记录的信息，这些字段我们会逐渐进行讲解。目前4条记录都已经插入到record部分了，在实际过程中这四条记录是通过链表的方式进行连接的，如下：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640.png" alt="img"></p>
+<p>  在第一张图的数据页中，蓝色部分还有一部分是infimum和supermun，它们是两条伪记录，它们分别是这个数据页中”指定的”最大的记录和最小的记录。它们的作用是作为当前数据页内数据链表的首末两端。这样，数据页中的数据就可以被我们排列成下面的样子：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216124.webp" alt="img"></p>
+<p>  我们已经可以看到，我们的主键按照从大到小的顺序形成了一个链表，链表的首末位置分别是两条伪记录。</p>
+<p>  当我们对数据记录中id=2的一条记录进行删除时，实际上，在数据记录链表里面发生的变化如下：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216095.webp" alt="img"></p>
+<p>  可以看出，实际上并没有删除那条记录，而是通过将头信息中的delete标识位改为1、偏移量改为0来实现的，也就是说，这条记录所占用的空间并没有还给Free Space，当下一次插入id=2的记录的时候，这块空间还可以接着使用。</p>
+<p>  在这个过程中，我们加入了record_type字段，这两条伪记录和正常记录的区别之处在于数据记录的头信息里面的record_type字段，最小记录的record_type为2，最大记录的record为3，正常记录的record_type为0，record_type为1的记录，稍后我们会进行解释。</p>
+<p>  到现在为止，我们已经知道了头信息中的3个字段，分别是next_record和record_type以及delete字段，next_record保存的是下一条数据记录的真是数据的偏移量，record_type代表的是数据记录的类型，delete标示的是该字段是否被删除。除此之外，我们还需要知道记录头信息里面的另外一个字段n_owned，这个字段保存的是改组内一共有多少个数据记录，在上述删除的操作中，最大记录中该字段的变化过程如下：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216096.webp" alt="img"></p>
+<p>  关于这个初始值为何是5，后续的文章中我们会说明。至此，我们已经了解到，一个数据页，大概可以描述成如下形式：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493216136.webp" alt="img"></p>
+<h2 id="MySQL锁优化"><a href="#MySQL锁优化" class="headerlink" title="MySQL锁优化"></a>MySQL锁优化</h2><h3 id="MySQL-锁分类"><a href="#MySQL-锁分类" class="headerlink" title="MySQL 锁分类"></a>MySQL 锁分类</h3><p>当多个事务或者进程访问同一个资源的时候，为了保证数据的一致性，就需要用到锁机制。</p>
+<p>从锁定资源的角度来看，MySQL 中的锁分为：</p>
+<ul>
+<li><strong>表级锁</strong></li>
+<li><strong>行级锁</strong></li>
+<li><strong>页面锁</strong></li>
+</ul>
+<p><strong>表级锁：</strong>对整张表加锁。开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高，并发度最低。 </p>
+<p><strong>行级锁：</strong>对某行记录加锁。开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低，并发度也最高。</p>
+<p><strong>页面锁：</strong>开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。</p>
+<p>在实际开发过程中，主要会使用到表级锁和行级锁两种。既然锁是针对资源的，那么这些资源就是数据，在 MySQL 提供插件式存储引擎对数据进行存储。</p>
+<p>插件式存储引擎的好处是，开发人员可以根据需要选择适合的存储引擎。</p>
+<p>在众多的存储引擎中，有两种引擎被比较多的使用，他们分别是：</p>
+<ul>
+<li><p><strong>MyISAM 存储引擎，</strong>它不支持事务、表锁设计，支持全文索引，主要面向一些在线分析处理（OLAP）数据库应用。说白了主要就是查询数据，对数据的插入，更新操作比较少。</p>
+</li>
+<li><p><strong>InnoDB 存储引擎，</strong>它支持事务，其设计目标主要面向在线事务处理（OLTP）的应用。</p>
+<p>其特点是行锁设计、支持外键，并支持类似于 Oracle 的非锁定读，即默认读取操作不会产生锁。</p>
+<p>简单来说，就是对数据的插入，更新操作比较多。从 MySQL 数据库 5.5.8 版本开始，InnoDB 存储引擎是默认的存储引擎。</p>
+</li>
+</ul>
+<p>上面两种存储引擎在处理多进程数据操作的时候是如何表现的，就是我们接下来要讨论的问题。</p>
+<p>为了让整个描述更加清晰，我们将表级锁和行级锁以及 MyISAM，InnoDB 存储引擎，就形成了一个 2*2 的象限。</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478029.webp" alt="img"></p>
+<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图*</center>
+
+<p>由于 MyISAM 存储引擎不支持行级锁，实际上后面讨论的问题会围绕三个象限的讨论展开。</p>
+<p>从内容上来看，InnoDB 作为使用最多的存储引擎遇到的问题和值得注意的地方较多，也是本文的重点。</p>
+<p>MyISAM 存储引擎和表级锁</p>
+<p>首先，来看第一象限的内容：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212160055676.png" alt="image-20200212160055676"></p>
+<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图-第一象限*</center>
+
+<p>MyISAM 存储引擎支持表级锁，并且支持两种锁模式：</p>
+<ul>
+<li><strong>对 MyISAM 表的读操作（共享锁），</strong>不会阻塞其他进程对同一表的读请求，但会阻塞对其的写请求。当读锁释放后，才会执行其他进程的写操作。</li>
+<li><strong>对 MyISAM 表的写操作（排他锁），</strong>会阻塞其他进程对同一表的读写操作，当该锁释放后，才会执行其他进程的读写操作。</li>
+</ul>
+<h3 id="MyISAM-优化建议"><a href="#MyISAM-优化建议" class="headerlink" title="MyISAM 优化建议"></a>MyISAM 优化建议</h3><p>在使用 MyISAM 存储引擎时。执行 SQL 语句，会自动为 SELECT 语句加上共享锁，为 UDI（更新，删除，插入）操作加上排他锁。</p>
+<p>由于这个特性在多进程并发插入同一张表的时候，就会因为排他锁而进行等待。</p>
+<p>因此可以通过配置 concurrent_insert 系统变量，来控制其并发的插入行为。</p>
+<p><strong>①concurrent_insert=0 时，</strong>不允许并发插入。</p>
+<p><strong>②concurrent_insert=1 时，</strong>如果 MyISAM 表中没有空洞（即表中没有被删除的行），允许一个进程读表时，另一个进程向表的尾部插入记录（MySQL 默认设置）。</p>
+<blockquote>
+<p>注：空洞是行记录被删除以后，只是被标记为“已删除”其存储空间没有被回收，也就是说没有被物理删除。由另外一个进程，异步对这个数据进行删除。</p>
+<p>因为空间长度问题，删除以后的物理空间不能被新的记录所使用，从而形成了空洞。</p>
+</blockquote>
+<p><strong>③concurrent_insert=2 时，</strong>无论 MyISAM 表中有没有空洞，都允许在表尾并发插入记录。</p>
+<p>如果在数据插入的时候，没有并发删除操作的话，可以尝试把 concurrent_insert 设置为 1。</p>
+<p>反之，在数据插入的时候有删除操作且量较大时，也就是会产生“空洞”的时候，就需要把 concurrent_insert 设置为 2。</p>
+<p>另外，当一个进程请求某个 MyISAM 表的读锁，另一个进程也请求同一表的写锁。</p>
+<p>即使读请求先到达，写请求后到达，写请求也会插到读请求之前。因为 MySQL 的默认设置认为，写请求比读请求重要。</p>
+<p>我们可以通过 low_priority_updates 来调节读写行为的优先级：</p>
+<ul>
+<li>数据库以读为主时，要优先保证查询性能时，可通过 low_priority_updates=1 设置读优先级高于写优先级。</li>
+<li>数据库以写为主时，则不用设置 low_priority_updates 参数。</li>
+</ul>
+<h3 id="InnoDB-存储引擎和表级锁"><a href="#InnoDB-存储引擎和表级锁" class="headerlink" title="InnoDB 存储引擎和表级锁"></a>InnoDB 存储引擎和表级锁</h3><p>再来看看第二象限的内容：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493477955.webp" alt="img"></p>
+<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图-第二象限*</center>
+
+
+
+<p>InnoDB 存储引擎表锁。当没有对数据表中的索引数据进行查询时，会执行表锁操作。</p>
+<p>上面是 InnoDB 实现行锁，同时它也可以实现表锁。其方式就是意向锁（Intention Locks）。</p>
+<p>这里介绍两种意向锁：</p>
+<ul>
+<li><strong>意向共享锁（IS）：</strong>事务打算给数据行加行共享锁，事务在给一个数据行加共享锁前，必须先取得该表的 IS 锁。</li>
+<li><strong>意向排他锁（IX）：</strong>事务打算给数据行加行排他锁，事务在给一个数据行加排他锁前，必须先取得该表的 IX 锁。</li>
+</ul>
+<blockquote>
+<p>注：意向共享锁和意向排他锁是数据库主动加的，不需要我们手动处理。对于 UPDATE、DELETE 和 INSERT 语句，InnoDB 会自动给数据集加排他锁。</p>
+</blockquote>
+<p><strong>InnoDB表锁的实现方式：</strong>假设有一个表 test2，有两个字段分别是 id 和 name。</p>
+<p>没有设置主键同时也没有设置任何索引（index）如下：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478033.webp" alt="img"></p>
+<center><em>InnoDB 表锁实现方式图</em></center>
+
+<h3 id="InnoDB-存储引擎和行级锁"><a href="#InnoDB-存储引擎和行级锁" class="headerlink" title="InnoDB 存储引擎和行级锁"></a>InnoDB 存储引擎和行级锁</h3><p>第四象限我们使用的比较多，讨论的内容也相对多些：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478031.webp" alt="img"></p>
+<center><em>2\</em>2 表行锁，MyISAM，InnoDB 示意图-第四象限*</center>
+
+
+
+<p>InnoDB 存储引擎行锁，当数据查询时针对索引数据进行时，会使用行级锁。</p>
+<p><strong>共享锁（S）：</strong>当一个事务读取一条记录的时候，不会阻塞其他事务对同一记录的读请求，但会阻塞对其的写请求。当读锁释放后，才会执行其他事务的写操作。</p>
+<p>例如：select … lock in share mode</p>
+<p><strong>排他锁（X）：</strong>当一个事务对一条记录进行写操作时，会阻塞其他事务对同一表的读写操作，当该锁释放后，才会执行其他事务的读写操作。</p>
+<p>例如：select … for update</p>
+<p><strong>行锁的实现方式：</strong>假设有一个表 test1，有两个字段分别是 id 和 name。</p>
+<p>id 作为主键同时也是 table 的索引（index）如下：</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155919536.png" alt="image-20200212155919536"></p>
+<center><em>InnoDB 行锁实现方式图</em></center>
+
+
+
+<p>在高并发的情况下，多个事务同时请求更新数据，由于资源被占用等待事务增多。</p>
+<p>如此，会造成性能问题，可以通过 innodb_lock_wait_timeout 来解决。innodb_lock_wait_timeout 是事务等待获取资源的最长时间，单位为秒。如果超过时间还未分配到资源，则会返回应用失败。</p>
+<h3 id="四种锁的兼容情况"><a href="#四种锁的兼容情况" class="headerlink" title="四种锁的兼容情况"></a>四种锁的兼容情况</h3><p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155859778.png" alt="image-20200212155859778"></p>
+<center><em>共享锁，排他锁，意向共享锁，意向排他锁兼容图例</em></center>
+
+
+
+<p>如果一个事务请求的锁模式与当前的锁兼容， InnoDB 就将请求的锁授予该事务；反之， 如果两者不兼容，该事务就要等待锁释放。</p>
+<h4 id="间隙锁"><a href="#间隙锁" class="headerlink" title="间隙锁"></a><strong>间隙锁</strong></h4><p>前面谈到行锁是针对一条记录进行加锁。当对一个范围内的记录加锁的时候，我们称之为间隙锁。</p>
+<p>当使用范围条件索引数据时，InnoDB 会对符合条件的数据索引项加锁。对于键值在条件范围内但并不存在的记录，叫做“间隙（GAP)”，InnoDB 也会对这个“间隙”加锁，这就是间隙锁。间隙锁和行锁合称（Next-Key锁）。</p>
+<p>如果表中只有 11 条记录，其 id 的值分别是 1,2,…,10，11 下面的 SQL：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Select</span> * <span class="keyword">from</span> table_gapwhere <span class="keyword">id</span> &gt; <span class="number">10</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure>
+<p>这是一个范围条件的检索，InnoDB 不仅会对符合条件的 id 值为 10 的记录加锁，会对 id 大于 10 的“间隙”加锁，即使大于 10 的记录不存在，例如 12，13。</p>
+<p><strong>InnoDB 使用间隙锁的目的：</strong></p>
+<ul>
+<li>一方面是为了防止幻读。对于上例，如果不使用间隙锁，其他事务插入了 id 大于 10 的任何记录，本事务再次执行 select 语句，就会发生幻读。</li>
+<li>另一方面，也是为了满足恢复和复制的需要。</li>
+</ul>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478032.webp" alt="img"></p>
+<center><em>间隙锁图</em></center>
+
+
+
+<h4 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a><strong>死锁</strong></h4><p>两个事务都需要获得对方持有的排他锁才能继续完成任务，这种互相等待对方释放资源的情况就是死锁。</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493478014.webp" alt="img"></p>
+<center><em>死锁图</em></center>
+
+
+
+<p><strong>检测死锁：</strong>InnoDB 存储引擎能检测到死锁的循环依赖并立即返回一个错误。</p>
+<p><strong>死锁恢复：</strong>死锁发生以后，只有部分或完全回滚其中一个事务，才能打破死锁。</p>
+<p>InnoDB 方法是，将持有最少行级排他锁的事务回滚。在应用程序设计时必须考虑处理死锁，多数情况下重新执行因死锁回滚的事务即可。</p>
+<p><strong>避免死锁：</strong></p>
+<ul>
+<li><p>在事务开始时，如果有记录要修改，先使用 SELECT… FOR UPDATE 语句获取锁，即使这些修改语句是在后面执行。 </p>
+</li>
+<li><p>在事务中，如果要更新记录，直接申请排他锁。而不是查询时申请共享锁、更新时再申请排他锁。</p>
+<p>这样做会导致，当申请排他锁时，其他事务可能已经获得了相同记录的共享锁，从而造成锁冲突，甚至死锁。</p>
+<p>简单来说，如果你要更新记录要做两步操作，第一步查询，第二步更新。就不要第一步上共享锁，第二部上排他锁了，直接在第一步就上排他锁，抢占先机。</p>
+</li>
+<li><p>如果事务需要锁定多个表，那么尽量按照相同的顺序使用加锁语句，可以降低产生死锁的机会。</p>
+</li>
+<li><p>通过 SELECT … LOCK INSHARE MODE（共享锁）获取行的读锁后，如果当前事务再需要对该记录进行更新操作，则很有可能造成死锁。所以，如果要对行记录进行修改，直接上排他锁。</p>
+</li>
+<li><p>改变事务隔离级别（事务隔离级别在后面详细说明）。</p>
+</li>
+</ul>
+<h4 id="MySQL-锁定情况的查询"><a href="#MySQL-锁定情况的查询" class="headerlink" title="MySQL 锁定情况的查询"></a><strong>MySQL 锁定情况的查询</strong></h4><p>在实际开发中无法避免数据被锁的问题，那么我们可以通过哪些手段来查询锁呢？</p>
+<p>表级锁可以通过两个变量的查询：</p>
+<ul>
+<li>Table_locks_immediate，产生表级锁的次数。</li>
+<li>Table_locks_waited，数显表级锁而等待的次数。</li>
+</ul>
+<p>行级锁可以通过下面几个变量查询：</p>
+<ul>
+<li>Innodb_row_lock_current_waits，当前正在等待锁定的数量。</li>
+<li>Innodb_row_lock_time（重要），从系统启动到现在锁定总时长。</li>
+<li>Innodb_row_lock_time_avg（重要），每次等待所花平均时间。</li>
+<li>Innodb_row_lock_time_max，从系统启动到现在等待最长的一次花费时间。</li>
+<li>Innodb_row_lock_waits（重要），从系统启动到现在总共等待的次数。</li>
+</ul>
+<p><strong>MySQL 事务隔离级别</strong></p>
+<p>前面讲的死锁是因为并发访问数据库造成。当多个事务同时访问数据库，做并发操作的时候会发生以下问题。</p>
+<p><strong>脏读（dirty read），</strong>一个事务在处理过程中，读取了另外一个事务未提交的数据。未提交的数据称之为脏数据。</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155822655.png" alt="image-20200212155822655"></p>
+<center><em>脏读例子</em></center>
+
+
+
+<p><strong>不可重复读（non-repeatable read），</strong>在事务范围内，多次查询某条记录，每次得到不同的结果。</p>
+<p>第一个事务中的两次读取数据之间，由于第二个事务的修改，第一个事务两次读到的数据可能不一样。</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155748878.png" alt="image-20200212155748878"></p>
+<center><em>不可重复读例子</em></center>
+
+<p><strong>幻读（phantom read），</strong>是事务非独立执行时发生的一种现象。</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155718409.png" alt="image-20200212155718409"></p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155728846.png" alt="image-20200212155728846"></p>
+<center><em>幻读的例子</em></center>
+
+<p>在同一时间点，数据库允许多个并发事务，同时对数据进行读写操作，会造成数据不一致性。</p>
+<p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/640-1581493477920.webp" alt="img"></p>
+<center><em>四种隔离级别，解决事务并发问题对照图</em></center>
+
+<p>隔离性就是用来防止这种数据不一致的。事务隔离根据级别不同，从低到高包括：</p>
+<ul>
+<li><p><strong>读未提交（read uncommitted）：</strong>它是最低的事务隔离级别，一个事务还没提交时，它做的变更就能被别的事务看到。有脏读的可能性。</p>
+</li>
+<li><p><strong>读提交（read committed）：</strong>保证一个事物提交后才能被另外一个事务读取。另外一个事务不能读取该事物未提交的数据。可避免脏读的发生，但是可能会造成不可重复读。</p>
+</li>
+<li><p><strong>可重复读（repeatable read MySQL 默认方式）：</strong>多次读取同一范围的数据会返回第一次查询的快照，即使其他事务对该数据做了更新修改。事务在执行期间看到的数据前后必须是一致的。</p>
+</li>
+<li><p><strong>串行化（serializable）：</strong>是最可靠的事务隔离级别。“写”会加“排他锁”，“读”会加“共享锁”。</p>
+<p>当出现读写锁冲突的时候，后访问的事务必须等前一个事务执行完成，所以事务执行是串行的。可避免脏读、不可重复读、幻读。</p>
+</li>
+</ul>
+<h3 id="InnoDB-优化建议"><a href="#InnoDB-优化建议" class="headerlink" title="InnoDB 优化建议"></a>InnoDB 优化建议</h3><p>从锁机制的实现方面来说，InnoDB 的行级锁带来的性能损耗可能比表级锁要高一点，但在并发方面的处理能力远远优于 MyISAM 的表级锁。这也是大多数公司的 MySQL 都是使用 InnoDB 模式的原因。</p>
+<p>但是，InnoDB 也有脆弱的一面，下面提出几个优化建议供大家参考：</p>
+<ul>
+<li>尽可能让数据检索通过索引完成，避免 InnoDB 因为无法通过索引加行锁，而导致升级为表锁的情况。换句话说就是，多用行锁，少用表锁。</li>
+<li>加索引的时候尽量准确，避免造成不必要的锁定影响其他查询。</li>
+<li>尽量减少给予范围的数据检索（间隙锁），避免因为间隙锁带来的影响，锁定了不该锁定的记录。</li>
+<li>尽量控制事务的大小，减少锁定的资源量和锁定时间。</li>
+<li>尽量使用较低级别的事务隔离，减少 MySQL 因为事务隔离带来的成本。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><img src="/2020/02/12/MySQL增删改查都会用到什么锁/image-20200212155627181.png" alt="image-20200212155627181"></p>
+<center><em>MySQL 数据库锁的思维导图</em></center>
+
+
+
+<p>MySQL 的锁主要分为表级锁和行级锁。MyISAM 引擎使用的是表级锁，针对表级的共享锁和排他锁，可以通过 concurrent_insert 和 low_priority_updates 参数来优化。</p>
+<p>InnoDB 支持表锁和行锁，根据索引来判断如何选择。行锁有，行共享锁和行排他锁；表锁有，意向共享锁，意向排他锁，表锁是系统自己加上的；锁范围的是间隙锁。遇到死锁，我们如何检测，恢复以及如何避免。</p>
+<p>MySQL 有四个事务级别分别是，<strong><em>读未提交，读提交，可重复读，串行化</em></strong>。他们的隔离级别依次升高。</p>
+<p>通过隔离级别的设置，可以避免，脏读，不可重复读和幻读的情况。最后，对于使用比较多的 InnoDB 引擎，提出了一些优化建议。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/12/JAVA实用的服务异常处理指南/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vincent">
+      <meta itemprop="description" content="The King is dead, long live the King!">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/12/JAVA实用的服务异常处理指南/" itemprop="url">
+                  Linux实用的服务异常处理指南
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-12 10:49:31" itemprop="dateCreated datePublished" datetime="2020-02-12T10:49:31+08:00">2020-02-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-24 14:36:58" itemprop="dateModified" datetime="2020-02-24T14:36:58+08:00">2020-02-24</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">38k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">35 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="服务异常的处理流程"><a href="#服务异常的处理流程" class="headerlink" title="服务异常的处理流程"></a>服务异常的处理流程</h1><p><img src="/2020/02/12/JAVA实用的服务异常处理指南/0ce47abcae0d474bb5bf9ebc993e6ad3.jpeg" alt="img"></p>
+<h1 id="CPU负载"><a href="#CPU负载" class="headerlink" title="CPU负载"></a>CPU负载</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>针对应用程序，我们通常关注的是内核CPU调度器功能和性能。</p>
+<p>线程的状态分析主要是分析线程的时间用在什么地方，而线程状态的分类一般分为：</p>
+<p>a. on-CPU：执行中，执行中的时间通常又分为用户态时间user和系统态时间sys。<br> b. off-CPU：等待下一轮上CPU，或者等待I/O、锁、换页等等，其状态可以细分为可执行、匿名换页、睡眠、锁、空闲等状态。</p>
+<p>如果大量时间花在CPU上，对CPU的剖析能够迅速解释原因；如果系统时间大量处于off-cpu状态，定位问题就会费时很多。但是仍然需要清楚一些概念：</p>
+<ul>
+<li>处理器</li>
+<li>核</li>
+<li>硬件线程</li>
+<li>CPU内存缓存</li>
+<li>时钟频率</li>
+<li>每指令周期数CPI和每周期指令数IPC</li>
+<li>CPU指令</li>
+<li>使用率</li>
+<li>用户时间／内核时间</li>
+<li>调度器</li>
+<li>运行队列</li>
+<li>抢占</li>
+<li>多进程</li>
+<li>多线程</li>
+<li>字长</li>
+</ul>
+<h2 id="分析工具"><a href="#分析工具" class="headerlink" title="分析工具"></a>分析工具</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>uptime</td>
+<td>平均负载</td>
+</tr>
+<tr>
+<td>vmstat</td>
+<td>包括系统范围的cpu平均负载</td>
+</tr>
+<tr>
+<td>mpstat</td>
+<td>查看所有cpu核信息</td>
+</tr>
+<tr>
+<td>top</td>
+<td>监控每个进程cpu用量</td>
+</tr>
+<tr>
+<td>sar -u</td>
+<td>查看cpu信息</td>
+</tr>
+<tr>
+<td>pidstat</td>
+<td>每个进程cpu用量分解</td>
+</tr>
+<tr>
+<td>perf</td>
+<td>cpu剖析和跟踪，性能计数分析</td>
+</tr>
+</tbody>
+</table>
+<p>说明:</p>
+<ul>
+<li>uptime,vmstat,mpstat,top,pidstat只能查询到cpu及负载的的使用情况。</li>
+<li>perf可以跟着到进程内部具体函数耗时情况，并且可以指定内核函数进行统计，指哪打哪。</li>
+</ul>
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//查看系统cpu使用情况</span><br><span class="line">top</span><br><span class="line"></span><br><span class="line">//查看所有cpu核信息</span><br><span class="line">mpstat -P ALL 1</span><br><span class="line"></span><br><span class="line">//查看cpu使用情况以及平均负载</span><br><span class="line">vmstat 1</span><br><span class="line"></span><br><span class="line">//进程cpu的统计信息</span><br><span class="line">pidstat -u 1 -p pid</span><br><span class="line"></span><br><span class="line">//跟踪进程内部函数级cpu使用情况</span><br><span class="line">perf top -p pid -e cpu-clock</span><br></pre></td></tr></table></figure>
+<h2 id="查看机器-cpu-的负载"><a href="#查看机器-cpu-的负载" class="headerlink" title="查看机器 cpu 的负载"></a>查看机器 cpu 的负载</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top -b -n 1 |grep java|awk <span class="string">'&#123;print "VIRT:"$5,"RES:"$6,"cpu:"$9"%","mem:"$10"%"&#125;'</span></span><br></pre></td></tr></table></figure>
+<h2 id="查找-cpu-占用率高的线程"><a href="#查找-cpu-占用率高的线程" class="headerlink" title="查找 cpu 占用率高的线程"></a>查找 cpu 占用率高的线程</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">top -p 25603 -H</span><br><span class="line"><span class="built_in">printf</span> 0x%x 25842</span><br><span class="line">jstack 25603 | grep 0x64f2</span><br><span class="line">cat /proc/interrupts</span><br></pre></td></tr></table></figure>
+<p>（1）CPU<br>（2）Memory<br>（3）IO<br>（4）Network</p>
+<p>可以从以下几个方面监控CPU的信息：<br>（1）中断；<br>（2）上下文切换；<br>（3）可运行队列；<br>（4）CPU 利用率</p>
+<h1 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h1><h2 id="说明-1"><a href="#说明-1" class="headerlink" title="说明"></a>说明</h2><p>内存是为提高效率而生，实际分析问题的时候，内存出现问题可能不只是影响性能，而是影响服务或者引起其他问题。同样对于内存有些概念需要清楚：</p>
+<ul>
+<li>主存</li>
+<li>虚拟内存</li>
+<li>常驻内存</li>
+<li>地址空间</li>
+<li>OOM</li>
+<li>页缓存</li>
+<li>缺页</li>
+<li>换页</li>
+<li>交换空间</li>
+<li>交换</li>
+<li>用户分配器libc、glibc、libmalloc和mtmalloc</li>
+<li>LINUX内核级SLUB分配器</li>
+</ul>
+<h2 id="分析工具-1"><a href="#分析工具-1" class="headerlink" title="分析工具"></a>分析工具</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>free</td>
+<td>缓存容量统计信息</td>
+</tr>
+<tr>
+<td>vmstat</td>
+<td>虚拟内存统计信息</td>
+</tr>
+<tr>
+<td>top</td>
+<td>监视每个进程的内存使用情况</td>
+</tr>
+<tr>
+<td>pidstat</td>
+<td>显示活动进程的内存使用统计</td>
+</tr>
+<tr>
+<td>pmap</td>
+<td>查看进程的内存映像信息</td>
+</tr>
+<tr>
+<td>sar -r</td>
+<td>查看内存</td>
+</tr>
+<tr>
+<td>dtrace</td>
+<td>动态跟踪</td>
+</tr>
+<tr>
+<td>valgrind</td>
+<td>分析程序性能及程序中的内存泄露错误</td>
+</tr>
+</tbody>
+</table>
+<p><strong>说明</strong>：</p>
+<ul>
+<li>free,vmstat,top,pidstat,pmap只能统计内存信息以及进程的内存使用情况。</li>
+<li>valgrind可以分析内存泄漏问题。</li>
+<li>dtrace动态跟踪。需要对内核函数有很深入的了解，通过D语言编写脚本完成跟踪。</li>
+</ul>
+<h2 id="使用方式-1"><a href="#使用方式-1" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//查看系统内存使用情况</span><br><span class="line">free -m</span><br><span class="line"></span><br><span class="line">//虚拟内存统计信息</span><br><span class="line">vmstat 1</span><br><span class="line"></span><br><span class="line">//查看系统内存情况</span><br><span class="line">top</span><br><span class="line"></span><br><span class="line">//1s采集周期，获取内存的统计信息</span><br><span class="line">pidstat -p pid -r 1</span><br><span class="line"></span><br><span class="line">//查看进程的内存映像信息</span><br><span class="line">pmap -d pid</span><br><span class="line"></span><br><span class="line">//检测程序内存问题</span><br><span class="line">valgrind --tool=memcheck --leak-check=full --<span class="built_in">log</span>-file=./log.txt  ./程序名</span><br></pre></td></tr></table></figure>
+<h2 id="系统内存"><a href="#系统内存" class="headerlink" title="系统内存"></a>系统内存</h2><p>free 命令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@server ~]<span class="comment"># free</span></span><br><span class="line"></span><br><span class="line">             total       used       free     shared    buffers     cached</span><br><span class="line">Mem:       3266180    3250000      10000          0     201000    3002000</span><br><span class="line">-/+ buffers/cache:      47000    3213000</span><br><span class="line">Swap:      2048276      80160    1968116</span><br></pre></td></tr></table></figure></p>
+<p>这里的默认显示单位是kb。<br>各项指标解释</p>
+<ul>
+<li>total:总计物理内存的大小。</li>
+<li>used:已使用多大。</li>
+<li>free:可用有多少。</li>
+<li>Shared:多个进程共享的内存总额。</li>
+<li>buffers: 磁盘缓存的大小。</li>
+<li>cache:磁盘缓存的大小。</li>
+<li>-/+ buffers/cached): used:已使用多大，free:可用有多少。</li>
+<li>已用内存 = 系统used memory - buffers - cached<br>（47000 = 3250000-201000-3002000）</li>
+<li>可用内存 = 系统free memory + buffers + cached<br>（3213000 = 10000+201000+3002000）</li>
+</ul>
+<h3 id="什么是buffer-cache？"><a href="#什么是buffer-cache？" class="headerlink" title="什么是buffer/cache？"></a>什么是buffer/cache？</h3><ul>
+<li>buffer 指 Linux 内存的：Buffer cache，缓冲区缓</li>
+<li>cache 指 Linux内存中的：Page cache，页面缓存</li>
+</ul>
+<p><strong>page cache</strong><br>page cache 主要用来作为<strong>文件系统上的文件数据的缓存</strong>来用，尤其是针对当进程对文件有 read／write 操作的时候。如果你仔细想想的话，作为可以映射文件到内存的系统调用：mmap是不是很自然的也应该用到 page cache？在当前的系统实现里，page cache 也被作为其它文件类型的缓存设备来用，所以事实上 page cache 也负责了大部分的块设备文件的缓存工作。</p>
+<p><strong>buffer cache</strong><br>buffer cache 主要用来在<strong>系统对块设备进行读写</strong>的时候，对块进行数据缓存的系统来使用。这意味着某些对块的操作会使用 buffer cache 进行缓存，比如我们在格式化文件系统的时候。一般情况下两个缓存系统是一起配合使用的，比如当我们对一个文件进行写操作的时候，page cache 的内容会被改变，而 buffer cache 则可以用来将 page 标记为不同的缓冲区，并记录是哪一个缓冲区被修改了。这样，内核在后续执行脏数据的回写（writeback）时，就不用将整个 page 写回，而只需要写回修改的部分即可。</p>
+<p>在当前的内核中，page cache 是针对内存页的缓存，说白了就是，如果有内存是以page进行分配管理的，都可以使用page cache作为其缓存来管理使用。<br>当然，不是所有的内存都是以页（page）进行管理的，也有很多是针对块（block）进行管理的，这部分内存使用如果要用到 cache 功能，则都集中到buffer cache中来使用。（从这个角度出发，是不是buffer cache改名叫做block cache更好？）然而，也不是所有块（block）都有固定长度，系统上块的长度主要是根据所使用的块设备决定的，而页长度在X86上无论是32位还是64位都是4k。</p>
+<h3 id="系统如何回收cache？"><a href="#系统如何回收cache？" class="headerlink" title="系统如何回收cache？"></a>系统如何回收cache？</h3><p>Linux内核会在内存将要耗尽的时候，触发内存回收的工作，以便释放出内存给急需内存的进程使用。一般情况下，这个操作中主要的内存释放都来自于对buffer／cache的释放。尤其是被使用更多的cache空间。既然它主要用来做缓存，只是在内存够用的时候加快进程对文件的读写速度，那么在内存压力较大的情况下，当然有必要清空释放cache，作为free空间分给相关进程使用。所以一般情况下，我们认为buffer/cache空间可以被释放，这个理解是正确的。</p>
+<p>但是这种清缓存的工作也并不是没有成本。理解cache是干什么的就可以明白清缓存必须保证cache中的数据跟对应文件中的数据一致，才能对cache进行释放。所以伴随着cache清除的行为的，一般都是系统IO飙高。因为内核要对比cache中的数据和对应硬盘文件上的数据是否一致，如果不一致需要写回，之后才能回收。</p>
+<p>在系统中除了内存将被耗尽的时候可以清缓存以外，我们还可以人工触发缓存清除的操作。</p>
+<h2 id="进程内存"><a href="#进程内存" class="headerlink" title="进程内存"></a>进程内存</h2><h3 id="进程内存统计"><a href="#进程内存统计" class="headerlink" title="进程内存统计"></a>进程内存统计</h3><p>/proc/[pid]/status<br>通过/proc//status可以查看进程的内存使用情况，包括虚拟内存大小（VmSize），物理内存大小（VmRSS），数据段大小（VmData），栈的大小（VmStk），代码段的大小（VmExe），共享库的代码段大小（VmLib）等等。</p>
+<p>cat /proc/[pid]/status</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Name</span>: <span class="string">gedit /*进程的程序名*/</span></span><br><span class="line"><span class="attr">State</span>: <span class="string">S (sleeping) /*进程的状态信息,具体参见http://blog.chinaunix.net/u2/73528/showart_1106510.html*/</span></span><br><span class="line"><span class="attr">Tgid</span>: <span class="string">9744 /*线程组号*/</span></span><br><span class="line"><span class="attr">Pid</span>: <span class="string">9744 /*进程pid*/</span></span><br><span class="line"><span class="attr">PPid</span>: <span class="string">7672 /*父进程的pid*/</span></span><br><span class="line"><span class="attr">TracerPid</span>: <span class="string">0 /*跟踪进程的pid*/</span></span><br><span class="line"><span class="attr">VmPeak</span>: <span class="string">60184 kB /*进程地址空间的大小*/</span></span><br><span class="line"><span class="attr">VmSize</span>: <span class="string">60180 kB /*进程虚拟地址空间的大小reserved_vm：进程在预留或特殊的内存间的物理页*/</span></span><br><span class="line"><span class="attr">VmLck</span>: <span class="string">0 kB /*进程已经锁住的物理内存的大小.锁住的物理内存不能交换到硬盘*/</span></span><br><span class="line"><span class="attr">VmHWM</span>: <span class="string">18020 kB /*文件内存映射和匿名内存映射的大小*/</span></span><br><span class="line"><span class="attr">VmRSS</span>: <span class="string">18020 kB /*应用程序正在使用的物理内存的大小，就是用ps命令的参数rss的值 (rss)*/</span></span><br><span class="line"><span class="attr">VmData</span>: <span class="string">12240 kB /*程序数据段的大小（所占虚拟内存的大小），存放初始化了的数据*/</span></span><br><span class="line"><span class="attr">VmStk</span>: <span class="string">84 kB /*进程在用户态的栈的大小*/</span></span><br><span class="line"><span class="attr">VmExe</span>: <span class="string">576 kB /*程序所拥有的可执行虚拟内存的大小,代码段,不包括任务使用的库 */</span></span><br><span class="line"><span class="attr">VmLib</span>: <span class="string">21072 kB /*被映像到任务的虚拟内存空间的库的大小*/</span></span><br><span class="line"><span class="attr">VmPTE</span>: <span class="string">56 kB /*该进程的所有页表的大小*/</span></span><br><span class="line"><span class="attr">Threads</span>: <span class="string">1 /*共享使用该信号描述符的任务的个数*/</span></span><br></pre></td></tr></table></figure>
+<h3 id="JVM-内存分配"><a href="#JVM-内存分配" class="headerlink" title="JVM 内存分配"></a>JVM 内存分配</h3><p>java内存组成介绍：堆(Heap)和非堆(Non-heap)内存</p>
+<p>按照官方的说法：“Java 虚拟机具有一个堆，堆是运行时数据区域，所有类实例和数组的内存均从此处分配。堆是在 Java 虚拟机启动时创建的。”“在JVM中堆之外的内存称为非堆内存(Non-heap memory)”。可以看出JVM主要管理两种类型的内存：堆和非堆。</p>
+<p>简单来说堆就是Java代码可及的内存，是留给开发人员使用的；非堆就是JVM留给 自己用的，所以方法区、JVM内部处理或优化所需的内存(如JIT编译后的代码缓存)、每个类结构(如运行时常数池、字段和方法数据)以及方法和构造方法 的代码都在非堆内存中。</p>
+<ol>
+<li>JVM本身需要的内存，包括其加载的第三方库以及这些库分配的内存</li>
+<li>NIO的DirectBuffer是分配的native memory</li>
+<li>内存映射文件，包括JVM加载的一些JAR和第三方库，以及程序内部用到的。上面 pmap 输出的内容里，有一些静态文件所占用的大小不在Java的heap里，因此作为一个Web服务器，赶紧把静态文件从这个Web服务器中人移开吧，放到nginx或者CDN里去吧。</li>
+<li>JIT， JVM会将Class编译成native代码，这些内存也不会少，如果使用了Spring的AOP，CGLIB会生成更多的类，JIT的内存开销也会随之变大，而且Class本身JVM的GC会将其放到Perm Generation里去，很难被回收掉，面对这种情况，应该让JVM使用ConcurrentMarkSweep GC，并启用这个GC的相关参数允许将不使用的class从Perm Generation中移除， 参数配置： -XX:+UseConcMarkSweepGC -X:+CMSPermGenSweepingEnabled -X:+CMSClassUnloadingEnabled，如果不需要移除而Perm Generation空间不够，可以加大一点： -X:PermSize=256M -X:MaxPermSize=512M</li>
+<li>JNI，一些JNI接口调用的native库也会分配一些内存，如果遇到JNI库的内存泄露，可以使用valgrind等内存泄露工具来检测</li>
+<li>线程栈，每个线程都会有自己的栈空间，如果线程一多，这个的开销就很明显了</li>
+<li>jmap/jstack 采样，频繁的采样也会增加内存占用，如果你有服务器健康监控，记得这个频率别太高，否则健康监控变成致病监控了。</li>
+</ol>
+<h4 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h4><p>也称”永久代” 、“非堆”，它用于存储虚拟机加载的类信息、常量、静态变量、是各个线程共享的内存区域。默认最小值为16MB，最大值为64MB，可以通过-XX:PermSize 和 -XX:MaxPermSize 参数限制方法区的大小。</p>
+<p>运行时常量池：是方法区的一部分，Class文件中除了有类的版本、字段、方法、接口等描述信息外，还有一项信息是常量池，用于存放编译器生成的各种符号引用，这部分内容将在类加载后放到方法区的运行时常量池中。</p>
+<h4 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h4><p>描述的是java 方法执行的内存模型：每个方法被执行的时候 都会创建一个“栈帧”用于存储局部变量表(包括参数)、操作栈、方法出口等信息。每个方法被调用到执行完的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。声明周期与线程相同，是线程私有的。</p>
+<p>局部变量表存放了编译器可知的各种基本数据类型(boolean、byte、char、short、int、float、long、double)、对象引用(引用指针，并非对象本身)，其中64位长度的long和double类型的数据会占用2个局部变量的空间，其余数据类型只占1个。局部变量表所需的内存空间在编译期间完成分配，当进入一个方法时，这个方法需要在栈帧中分配多大的局部变量是完全确定的，在运行期间栈帧不会改变局部变量表的大小空间。</p>
+<h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><p>与虚拟机栈基本类似，区别在于虚拟机栈为虚拟机执行的java方法服务，而本地方法栈则是为Native方法服务。</p>
+<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4><p>也叫做java 堆、GC堆是java虚拟机所管理的内存中最大的一块内存区域，也是被各个线程共享的内存区域，在JVM启动时创建。该内存区域存放了对象实例及数组(所有new的对象)。其大小通过-Xms(最小值)和-Xmx(最大值)参数设置，-Xms为JVM启动时申请的最小内存，默认为操作系统物理内存的1/64但小于1G，-Xmx为JVM可申请的最大内存，默认为物理内存的1/4但小于1G，默认当空余堆内存小于40%时，JVM会增大Heap到-Xmx指定的大小，可通过-XX:MinHeapFreeRation=来指定这个比列；当空余堆内存大于70%时，JVM会减小heap的大小到-Xms指定的大小，可通过XX:MaxHeapFreeRation=来指定这个比列，对于运行系统，为避免在运行时频繁调整Heap的大小，通常-Xms与-Xmx的值设成一样。</p>
+<p>由于现在收集器都是采用分代收集算法，堆被划分为新生代和老年代。新生代主要存储新创建的对象和尚未进入老年代的对象。老年代存储经过多次新生代GC(Minor GC)任然存活的对象。</p>
+<h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4><p>是最小的一块内存区域，它的作用是当前线程所执行的字节码的行号指示器，在虚拟机的模型里，字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令，分支、循环、异常处理、线程恢复等基础功能都需要依赖计数器完成。</p>
+<h4 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h4><p>直接内存并不是虚拟机内存的一部分，也不是Java虚拟机规范中定义的内存区域。jdk1.4中新加入的NIO，引入了通道与缓冲区的IO方式，它可以调用Native方法直接分配堆外内存，这个堆外内存就是本机内存，不会影响到堆内存的大小。</p>
+<h2 id="JVM-内存分析"><a href="#JVM-内存分析" class="headerlink" title="JVM 内存分析"></a>JVM 内存分析</h2><h3 id="查看-JVM-堆内存情况"><a href="#查看-JVM-堆内存情况" class="headerlink" title="查看 JVM 堆内存情况"></a>查看 JVM 堆内存情况</h3><p>jmap -heap [pid]</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">[root@server ~]$ jmap -heap 837</span><br><span class="line">Attaching to process ID 837, please <span class="built_in">wait</span>...</span><br><span class="line">Debugger attached successfully.</span><br><span class="line">Server compiler detected.</span><br><span class="line">JVM version is 24.71-b01</span><br><span class="line"></span><br><span class="line">using thread-local object allocation.</span><br><span class="line">Parallel GC with 4 thread(s)//GC 方式</span><br><span class="line"></span><br><span class="line">Heap Configuration: //堆内存初始化配置</span><br><span class="line">   MinHeapFreeRatio = 0 //对应jvm启动参数-XX:MinHeapFreeRatio设置JVM堆最小空闲比率(default 40)</span><br><span class="line">   MaxHeapFreeRatio = 100 //对应jvm启动参数 -XX:MaxHeapFreeRatio设置JVM堆最大空闲比率(default 70)</span><br><span class="line">   MaxHeapSize      = 2082471936 (1986.0MB) //对应jvm启动参数-XX:MaxHeapSize=设置JVM堆的最大大小</span><br><span class="line">   NewSize          = 1310720 (1.25MB)//对应jvm启动参数-XX:NewSize=设置JVM堆的‘新生代’的默认大小</span><br><span class="line">   MaxNewSize       = 17592186044415 MB//对应jvm启动参数-XX:MaxNewSize=设置JVM堆的‘新生代’的最大大小</span><br><span class="line">   OldSize          = 5439488 (5.1875MB)//对应jvm启动参数-XX:OldSize=&lt;value&gt;:设置JVM堆的‘老生代’的大小</span><br><span class="line">   NewRatio         = 2 //对应jvm启动参数-XX:NewRatio=:‘新生代’和‘老生代’的大小比率</span><br><span class="line">   SurvivorRatio    = 8 //对应jvm启动参数-XX:SurvivorRatio=设置年轻代中Eden区与Survivor区的大小比值 </span><br><span class="line">   PermSize         = 21757952 (20.75MB)  //对应jvm启动参数-XX:PermSize=&lt;value&gt;:设置JVM堆的‘永生代’的初始大小</span><br><span class="line">   MaxPermSize      = 85983232 (82.0MB)//对应jvm启动参数-XX:MaxPermSize=&lt;value&gt;:设置JVM堆的‘永生代’的最大大小</span><br><span class="line">   G1HeapRegionSize = 0 (0.0MB)</span><br><span class="line"></span><br><span class="line">Heap Usage://堆内存使用情况</span><br><span class="line">PS Young Generation</span><br><span class="line">Eden Space://Eden区内存分布</span><br><span class="line">   capacity = 33030144 (31.5MB)//Eden区总容量</span><br><span class="line">   used     = 1524040 (1.4534378051757812MB)  //Eden区已使用</span><br><span class="line">   free     = 31506104 (30.04656219482422MB)  //Eden区剩余容量</span><br><span class="line">   4.614088270399305% used //Eden区使用比率</span><br><span class="line">From Space:  //其中一个Survivor区的内存分布</span><br><span class="line">   capacity = 5242880 (5.0MB)</span><br><span class="line">   used     = 0 (0.0MB)</span><br><span class="line">   free     = 5242880 (5.0MB)</span><br><span class="line">   0.0% used</span><br><span class="line">To Space:  //另一个Survivor区的内存分布</span><br><span class="line">   capacity = 5242880 (5.0MB)</span><br><span class="line">   used     = 0 (0.0MB)</span><br><span class="line">   free     = 5242880 (5.0MB)</span><br><span class="line">   0.0% used</span><br><span class="line">PS Old Generation //当前的Old区内存分布</span><br><span class="line">   capacity = 86507520 (82.5MB)</span><br><span class="line">   used     = 0 (0.0MB)</span><br><span class="line">   free     = 86507520 (82.5MB)</span><br><span class="line">   0.0% used</span><br><span class="line">PS Perm Generation//当前的 “永生代” 内存分布</span><br><span class="line">   capacity = 22020096 (21.0MB)</span><br><span class="line">   used     = 2496528 (2.3808746337890625MB)</span><br><span class="line">   free     = 19523568 (18.619125366210938MB)</span><br><span class="line">   11.337498256138392% used</span><br><span class="line"></span><br><span class="line">670 interned Strings occupying 43720 bytes.</span><br></pre></td></tr></table></figure>
+<p>关于这里的几个generation网上资料一大把就不细说了，这里算一下求和可以得知前者总共给Java环境分配了644M的内存，而ps输出的VSZ和RSS分别是7.4G和2.9G，这到底是怎么回事呢？<br>前面jmap输出的内容里，MaxHeapSize 是在命令行上配的，-Xmx4096m，这个java程序可以用到的最大堆内存。<br>VSZ是指已分配的线性空间大小，这个大小通常并不等于程序实际用到的内存大小，产生这个的可能性很多，比如内存映射，共享的动态库，或者向系统申请了更多的堆，都会扩展线性空间大小，要查看一个进程有哪些内存映射，可以使用 pmap 命令来查看：<br>pmap -x [pid]</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@server ~]$ pmap -x 837</span><br><span class="line">837:   java</span><br><span class="line">Address           Kbytes     RSS   Dirty Mode   Mapping</span><br><span class="line">0000000040000000      36       4       0 r-x--  java</span><br><span class="line">0000000040108000       8       8       8 rwx--  java</span><br><span class="line">00000000418c9000   13676   13676   13676 rwx--    [ anon ]</span><br><span class="line">00000006fae00000   83968   83968   83968 rwx--    [ anon ]</span><br><span class="line">0000000700000000  527168  451636  451636 rwx--    [ anon ]</span><br><span class="line">00000007202d0000  127040       0       0 -----    [ anon ]</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">00007f55ee124000       4       4       0 r-xs-  az.png</span><br><span class="line">00007fff017ff000       4       4       0 r-x--    [ anon ]</span><br><span class="line">ffffffffff600000       4       0       0 r-x--    [ anon ]</span><br><span class="line">----------------  ------  ------  ------</span><br><span class="line">total kB         7796020 3037264 3023928</span><br></pre></td></tr></table></figure>
+<p>这里可以看到很多anon，这些表示这块内存是由mmap分配的。</p>
+<p>RSZ是Resident Set Size，常驻内存大小，即进程实际占用的物理内存大小， 在现在这个例子当中，RSZ和实际堆内存占用差了2.3G，这2.3G的内存组成分别为：</p>
+<h3 id="查看-JVM-堆各个分区的内存情况"><a href="#查看-JVM-堆各个分区的内存情况" class="headerlink" title="查看 JVM 堆各个分区的内存情况"></a>查看 JVM 堆各个分区的内存情况</h3><p>jstat -gcutil [pid]</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@server ~]$ jstat -gcutil 837 1000 20</span><br><span class="line">  S0     S1     E      O      P     YGC     YGCT    FGC    FGCT     GCT   </span><br><span class="line">  0.00  80.43  24.62  87.44  98.29   7101  119.652    40   19.719  139.371</span><br><span class="line">  0.00  80.43  33.14  87.44  98.29   7101  119.652    40   19.719  139.371</span><br></pre></td></tr></table></figure>
+<h3 id="分析-JVM-堆内存中的对象"><a href="#分析-JVM-堆内存中的对象" class="headerlink" title="分析 JVM 堆内存中的对象"></a>分析 JVM 堆内存中的对象</h3><p><strong>查看存活的对象统计</strong><br>jmap -histo:live [pid]</p>
+<p><strong>dump 内存</strong><br>jmap -dump:format=b,file=heapDump [pid]</p>
+<p>然后用jhat命令可以参看<br>jhat -port 5000 heapDump<br>在浏览器中访问：<a href="http://localhost:5000/" target="_blank" rel="noopener">http://localhost:5000/</a> 查看详细信息</p>
+<h1 id="磁盘IO"><a href="#磁盘IO" class="headerlink" title="磁盘IO"></a>磁盘IO</h1><h2 id="说明-2"><a href="#说明-2" class="headerlink" title="说明"></a>说明</h2><p>磁盘通常是计算机最慢的子系统，也是最容易出现性能瓶颈的地方，因为磁盘离 CPU 距离最远而且 CPU 访问磁盘要涉及到机械操作，比如转轴、寻轨等。访问硬盘和访问内存之间的速度差别是以数量级来计算的，就像1天和1分钟的差别一样。要监测 IO 性能，有必要了解一下基本原理和 Linux 是如何处理硬盘和内存之间的 IO 的。</p>
+<p>在理解磁盘IO之前，同样我们需要理解一些概念，例如：</p>
+<ul>
+<li>文件系统</li>
+<li>VFS</li>
+<li>文件系统缓存</li>
+<li>页缓存page cache</li>
+<li>缓冲区高速缓存buffer cache</li>
+<li>目录缓存</li>
+<li>inode</li>
+<li>inode缓存</li>
+<li>noop调用策略</li>
+</ul>
+<h2 id="分析工具-2"><a href="#分析工具-2" class="headerlink" title="分析工具"></a>分析工具</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>iostat</td>
+<td>磁盘详细统计信息</td>
+</tr>
+<tr>
+<td>iotop</td>
+<td>按进程查看磁盘IO的使用情况</td>
+</tr>
+<tr>
+<td>pidstat</td>
+<td>按进程查看磁盘IO的使用情况</td>
+</tr>
+<tr>
+<td>perf</td>
+<td>动态跟踪工具</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用方式-2"><a href="#使用方式-2" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//查看系统io信息</span><br><span class="line">iotop</span><br><span class="line"></span><br><span class="line">//统计io详细信息</span><br><span class="line">iostat -d -x -k 1 10</span><br><span class="line"></span><br><span class="line">//查看进程级io的信息</span><br><span class="line">pidstat -d 1 -p  pid</span><br><span class="line"></span><br><span class="line">//查看系统IO的请求，比如可以在发现系统IO异常时，可以使用该命令进行调查，就能指定到底是什么原因导致的IO异常</span><br><span class="line">perf record -e block:block_rq_issue -ag</span><br><span class="line">^C</span><br><span class="line">perf report</span><br></pre></td></tr></table></figure>
+<h1 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h1><h2 id="说明-3"><a href="#说明-3" class="headerlink" title="说明"></a>说明</h2><p>网络的监测是所有 Linux 子系统里面最复杂的，有太多的因素在里面，比如：延迟、阻塞、冲突、丢包等，更糟的是与 Linux 主机相连的路由器、交换机、无线信号都会影响到整体网络并且很难判断是因为 Linux 网络子系统的问题还是别的设备的问题，增加了监测和判断的复杂度。现在我们使用的所有网卡都称为自适应网卡，意思是说能根据网络上的不同网络设备导致的不同网络速度和工作模式进行自动调整。</p>
+<h2 id="分析工具-3"><a href="#分析工具-3" class="headerlink" title="分析工具"></a>分析工具</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ping</td>
+<td>主要透过 ICMP 封包 来进行整个网络的状况报告</td>
+</tr>
+<tr>
+<td>traceroute</td>
+<td>用来检测发出数据包的主机到目标主机之间所经过的网关数量的工具</td>
+</tr>
+<tr>
+<td>netstat</td>
+<td>用于显示与IP、TCP、UDP和ICMP协议相关的统计数据，一般用于检验本机各端口的网络连接情况</td>
+</tr>
+<tr>
+<td>ss</td>
+<td>可以用来获取socket统计信息，而且比netstat更快速更高效</td>
+</tr>
+<tr>
+<td>host</td>
+<td>可以用来查出某个主机名的 IP,跟nslookup作用一样</td>
+</tr>
+<tr>
+<td>tcpdump</td>
+<td>是以包为单位进行输出的，阅读起来不是很方便</td>
+</tr>
+<tr>
+<td>tcpflow</td>
+<td>是面向tcp流的, 每个tcp传输会保存成一个文件,很方便的查看</td>
+</tr>
+<tr>
+<td>sar -n DEV</td>
+<td>网卡流量情况</td>
+</tr>
+<tr>
+<td>sar -n SOCK</td>
+<td>查询网络以及tcp，udp状态信息</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用方式-3"><a href="#使用方式-3" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">//显示网络统计信息</span><br><span class="line">netstat -s</span><br><span class="line"></span><br><span class="line">//显示当前UDP连接状况</span><br><span class="line">netstat -nu</span><br><span class="line"></span><br><span class="line">//显示UDP端口号的使用情况</span><br><span class="line">netstat -apu</span><br><span class="line"></span><br><span class="line">//统计机器中网络连接各个状态个数</span><br><span class="line">netstat -a | awk <span class="string">'/^tcp/ &#123;++S[$NF]&#125; END &#123;for(a in S) print a, S[a]&#125;'</span></span><br><span class="line"></span><br><span class="line">//显示TCP连接</span><br><span class="line">ss -t -a</span><br><span class="line"></span><br><span class="line">//显示sockets摘要信息</span><br><span class="line">ss -s</span><br><span class="line"></span><br><span class="line">//显示所有udp sockets</span><br><span class="line">ss -u -a</span><br><span class="line"></span><br><span class="line">//tcp,etcp状态</span><br><span class="line">sar -n TCP,ETCP 1</span><br><span class="line"></span><br><span class="line">//查看网络IO</span><br><span class="line">sar -n DEV 1</span><br><span class="line"></span><br><span class="line">//抓包以包为单位进行输出</span><br><span class="line">tcpdump -i eth1 host 192.168.1.1 and port 80 </span><br><span class="line"></span><br><span class="line">//抓包以流为单位显示数据内容</span><br><span class="line">tcpflow -cp host 192.168.1.1</span><br></pre></td></tr></table></figure>
+<h1 id="服务指标"><a href="#服务指标" class="headerlink" title="服务指标"></a>服务指标</h1><h2 id="响应时间-RT"><a href="#响应时间-RT" class="headerlink" title="响应时间(RT)"></a>响应时间(RT)</h2><p>响应时间是指系统对请求作出响应的时间。直观上看，这个指标与人对软件性能的主观感受是非常一致的，因为它完整地记录了整个计算机系统处理请求的时间。由于一个系统通常会提供许多功能，而不同功能的处理逻辑也千差万别，因而不同功能的响应时间也不尽相同，甚至同一功能在不同输入数据的情况下响应时间也不相同。所以，在讨论一个系统的响应时间时，人们通常是指该系统所有功能的平均时间或者所有功能的最大响应时间。当然，往往也需要对每个或每组功能讨论其平均响应时间和最大响应时间。</p>
+<p>对于单机的没有并发操作的应用系统而言，人们普遍认为响应时间是一个合理且准确的性能指标。需要指出的是，响应时间的绝对值并不能直接反映软件的性能的高低，软件性能的高低实际上取决于用户对该响应时间的接受程度。对于一个游戏软件来说，响应时间小于100毫秒应该是不错的，响应时间在1秒左右可能属于勉强可以接受，如果响应时间达到3秒就完全难以接受了。而对于编译系统来说，完整编译一个较大规模软件的源代码可能需要几十分钟甚至更长时间，但这些响应时间对于用户来说都是可以接受的。</p>
+<h2 id="吞吐量-Throughput"><a href="#吞吐量-Throughput" class="headerlink" title="吞吐量(Throughput)"></a>吞吐量(Throughput)</h2><p>吞吐量是指系统在单位时间内处理请求的数量。对于无并发的应用系统而言，吞吐量与响应时间成严格的反比关系，实际上此时吞吐量就是响应时间的倒数。前面已经说过，对于单用户的系统，响应时间（或者系统响应时间和应用延迟时间）可以很好地度量系统的性能，但对于并发系统，通常需要用吞吐量作为性能指标。</p>
+<p>对于一个多用户的系统，如果只有一个用户使用时系统的平均响应时间是t，当有你n个用户使用时，每个用户看到的响应时间通常并不是n×t，而往往比n×t小很多（当然，在某些特殊情况下也可能比n×t大，甚至大很多）。这是因为处理每个请求需要用到很多资源，由于每个请求的处理过程中有许多不走难以并发执行，这导致在具体的一个时间点，所占资源往往并不多。也就是说在处理单个请求时，在每个时间点都可能有许多资源被闲置，当处理多个请求时，如果资源配置合理，每个用户看到的平均响应时间并不随用户数的增加而线性增加。实际上，不同系统的平均响应时间随用户数增加而增长的速度也不大相同，这也是采用吞吐量来度量并发系统的性能的主要原因。一般而言，吞吐量是一个比较通用的指标，两个具有不同用户数和用户使用模式的系统，如果其最大吞吐量基本一致，则可以判断两个系统的处理能力基本一致。</p>
+<h2 id="并发用户数"><a href="#并发用户数" class="headerlink" title="并发用户数"></a>并发用户数</h2><p>并发用户数是指系统可以同时承载的正常使用系统功能的用户的数量。与吞吐量相比，并发用户数是一个更直观但也更笼统的性能指标。实际上，并发用户数是一个非常不准确的指标，因为用户不同的使用模式会导致不同用户在单位时间发出不同数量的请求。一网站系统为例，假设用户只有注册后才能使用，但注册用户并不是每时每刻都在使用该网站，因此具体一个时刻只有部分注册用户同时在线，在线用户就在浏览网站时会花很多时间阅读网站上的信息，因而具体一个时刻只有部分在线用户同时向系统发出请求。这样，对于网站系统我们会有三个关于用户数的统计数字：注册用户数、在线用户数和同时发请求用户数。由于注册用户可能长时间不登陆网站，使用注册用户数作为性能指标会造成很大的误差。而在线用户数和同事发请求用户数都可以作为性能指标。相比而言，以在线用户作为性能指标更直观些，而以同时发请求用户数作为性能指标更准确些。</p>
+<h2 id="QPS每秒查询率-Query-Per-Second"><a href="#QPS每秒查询率-Query-Per-Second" class="headerlink" title="QPS每秒查询率(Query Per Second)"></a>QPS每秒查询率(Query Per Second)</h2><p>每秒查询率QPS是对一个特定的查询服务器在规定时间内所处理流量多少的衡量标准，在因特网上，作为域名系统服务器的机器的性能经常用每秒查询率来衡量。对应fetches/sec，即每秒的响应请求数，也即是最大吞吐能力。</p>
+<p>从以上概念来看吞吐量和响应时间是衡量系统性能的重要指标，QPS虽然和吞吐量的计量单位不同，但应该是成正比的，任何一个指标都可以含量服务器的并行处理能力。当然Throughput更关心数据量，QPS更关心处理笔数。</p>
+<h2 id="CPU利用率"><a href="#CPU利用率" class="headerlink" title="CPU利用率"></a>CPU利用率</h2><p>CPU Load Average &lt; CPU个数 <em>核数</em> 0.7</p>
+<p><strong>Context Switch Rate</strong><br>就是Process（Thread）的切换，如果切换过多，会让CPU忙于切换，也会导致影响吞吐量。《高性能服务器架构 》这篇文章的第2节就是说的是这个问题的。究竟多少算合适？google了一大圈，没有一个确切的解释。Context Switch大体上由两个部分组成：中断和进程(包括线程)切换，一次中断（Interrupt）会引起一次切换，进程（线程）的创建、激活之类的也会引起一次切换。CS的值也和TPS（Transaction Per Second）相关的，假设每次调用会引起N次CS，那么就可以得出</p>
+<p>Context Switch Rate = Interrupt Rate + TPS* N</p>
+<p>CSR减掉IR，就是进程/线程的切换，假如主进程收到请求交给线程处理，线程处理完毕归还给主进程，这里就是2次切换。也可以用CSR、IR、TPS的值代入公式中，得出每次事物导致的切换数。因此，要降低CSR，就必须在每个TPS引起的切换上下功夫，只有N这个值降下去，CSR就能降低，理想情况下N=0，但是无论如何如果N &gt;= 4，则要好好检查检查。另外网上说的CSR&lt;5000，我认为标准不该如此单一。</p>
+<p>这三个指标在 LoadRunner 中可以监控到；另外，在 linux 中，也可以用 vmstat 查看r（Load Arerage），in（Interrupt）和cs（Context Switch）</p>
+<h1 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h1><ul>
+<li>uptime</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">uptime</span><br><span class="line">  08:21:34 up 36 min,  2 users,  load average: 0.00, 0.00, 0.00</span><br><span class="line"> </span><br><span class="line"><span class="comment">#当前服务器时间：    08:21:34</span></span><br><span class="line"><span class="comment">#当前服务器运行时长  36 min</span></span><br><span class="line"><span class="comment">#当前用户数          2 users</span></span><br><span class="line"><span class="comment">#当前的负载均衡      load average  0.00, 0.00, 0.00，分别取1min,5min,15min的均值</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>dmesg</p>
+<p>dmesg命令用于显示开机信息。</p>
+<p>kernel会将开机信息存储在ring buffer中。您若是开机时来不及查看信息，可利用dmesg来查看。开机信息亦保存在/var/log目录中，名称为dmesg的文件里。</p>
+<p><strong>语法</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dmesg [-cn][-s &lt;缓冲区大小&gt;]</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明</strong>：</p>
+<ul>
+<li>-c 　显示信息后，清除ring buffer中的内容。</li>
+<li>-s&lt;缓冲区大小&gt; 　预设置为8196，刚好等于ring buffer的大小。</li>
+<li>-n 　设置记录信息的层级。</li>
+</ul>
+</li>
+<li><p>top<br>查看进程活动状态以及一些系统状况</p>
+</li>
+<li><p>vmstat<br>查看系统状态、硬件和系统信息等</p>
+</li>
+<li><p>iostat<br>查看CPU 负载，硬盘状况</p>
+</li>
+<li><p>sar<br>综合工具，查看系统状况</p>
+</li>
+<li><p>mpstat<br>查看多处理器状况</p>
+</li>
+<li><p>netstat<br>查看网络状况</p>
+</li>
+<li><p>iptraf<br>实时网络状况监测</p>
+</li>
+<li><p>tcpdump<br>抓取网络数据包，详细分析</p>
+</li>
+<li><p>mpstat<br>查看多处理器状况</p>
+</li>
+<li><p>tcptrace<br>数据包分析工具</p>
+</li>
+<li><p>netperf<br>网络带宽工具</p>
+</li>
+<li><p>dstat<br>综合工具，综合了 vmstat, iostat, ifstat, netstat 等多个信息</p>
+</li>
+</ul>
+<h1 id="系统负载"><a href="#系统负载" class="headerlink" title="系统负载"></a>系统负载</h1><h2 id="说明-4"><a href="#说明-4" class="headerlink" title="说明"></a>说明</h2><p>Load 就是对计算机干活多少的度量（WikiPedia：the system Load is a measure of the amount of work that a compute system is doing）简单的说是进程队列的长度。Load Average 就是一段时间（1分钟、5分钟、15分钟）内平均Load。</p>
+<h2 id="分析工具-4"><a href="#分析工具-4" class="headerlink" title="分析工具"></a>分析工具</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>top</td>
+<td>查看系统负载情况</td>
+</tr>
+<tr>
+<td>uptime</td>
+<td>查看系统负载情况</td>
+</tr>
+<tr>
+<td>strace</td>
+<td>统计跟踪内核态信息</td>
+</tr>
+<tr>
+<td>vmstat</td>
+<td>查看负载情况</td>
+</tr>
+<tr>
+<td>dmesg</td>
+<td>查看内核日志信息</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用方式-4"><a href="#使用方式-4" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//查看负载情况</span></span><br><span class="line">uptime</span><br><span class="line"></span><br><span class="line">top</span><br><span class="line"></span><br><span class="line">vmstat</span><br><span class="line"></span><br><span class="line"><span class="comment">//统计系统调用耗时情况</span></span><br><span class="line">strace -<span class="built_in">c</span> -p pid</span><br><span class="line"></span><br><span class="line"><span class="comment">//跟踪指定的系统操作例如epoll_wait</span></span><br><span class="line">strace -<span class="type">T</span> -e epoll_wait -p pid</span><br><span class="line"></span><br><span class="line"><span class="comment">//查看内核日志信息</span></span><br><span class="line">dmesg</span><br></pre></td></tr></table></figure>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="http://tmq.qq.com/2016/07/it-is-necessary-to-know-the-background-performance-test/" target="_blank" rel="noopener">http://tmq.qq.com/2016/07/it-is-necessary-to-know-the-background-performance-test/</a></li>
+<li><a href="https://www.ibm.com/developerworks/java/library/j-nativememory-linux/" target="_blank" rel="noopener">https://www.ibm.com/developerworks/java/library/j-nativememory-linux/</a></li>
+<li><a href="http://www.oracle.com/technetwork/java/javase/index-137495.html" target="_blank" rel="noopener">http://www.oracle.com/technetwork/java/javase/index-137495.html</a></li>
+<li><a href="http://www.hollischuang.com/archives/303" target="_blank" rel="noopener">http://www.hollischuang.com/archives/303</a></li>
+<li><a href="https://www.jianshu.com/p/0bbac570fa4c" target="_blank" rel="noopener">https://www.jianshu.com/p/0bbac570fa4c</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/11/操作系统基础概念简述/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -435,7 +1516,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/架构/" itemprop="url" rel="index"><span itemprop="name">架构</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/架构/" itemprop="url" rel="index"><span itemprop="name">架构</span></a></span>
 
                 
                 
@@ -452,6 +1533,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">29k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">27 分钟</span>
+              
+            </div>
           
 
           
@@ -944,20 +2053,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/11/14个Java并发容器/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -1029,7 +2138,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a></span>
 
                 
                 
@@ -1046,6 +2155,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">21k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">19 分钟</span>
+              
+            </div>
           
 
           
@@ -1160,20 +2297,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/11/Java8开发的4个小技巧/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -1245,7 +2382,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a></span>
 
                 
                 
@@ -1262,6 +2399,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">14k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">13 分钟</span>
+              
+            </div>
           
 
           
@@ -1411,20 +2576,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/11/如何提高服务器的并发处理能力/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -1496,7 +2661,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/架构设计/" itemprop="url" rel="index"><span itemprop="name">架构设计</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/架构设计/" itemprop="url" rel="index"><span itemprop="name">架构设计</span></a></span>
 
                 
                 
@@ -1513,6 +2678,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">16k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">15 分钟</span>
+              
+            </div>
           
 
           
@@ -1737,20 +2930,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/06/分布式基础要点/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -1822,7 +3015,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/架构设计/" itemprop="url" rel="index"><span itemprop="name">架构设计</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/架构设计/" itemprop="url" rel="index"><span itemprop="name">架构设计</span></a></span>
 
                 
                 
@@ -1839,6 +3032,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">125k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">1:54</span>
+              
+            </div>
           
 
           
@@ -2137,9 +3358,9 @@
 </li>
 </ul>
 <p>下面是<strong>Netty</strong>建立服务端，客户端的简单实现：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> io.netty.bootstrap.ServerBootstrap;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelInitializer;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelPipeline;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.EventLoopGroup;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.nio.NioEventLoopGroup;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.socket.SocketChannel;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.socket.nio.NioServerSocketChannel;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.LengthFieldBasedFrameDecoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.LengthFieldPrepender;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.bytes.ByteArrayDecoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.bytes.ByteArrayEncoder;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="comment">/***</span></span><br><span class="line"><span class="comment"> * netty tcp 服务端</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> v_wangshiyu</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NettyTcpService</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(NettyTcpService.class);</span><br><span class="line">	<span class="keyword">private</span> String host;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> port;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NettyTcpService</span><span class="params">(String address)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        String str[] = address.split(<span class="string">":"</span>);</span><br><span class="line">        <span class="keyword">this</span>.host=str[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">this</span>.port=Integer.valueOf(str[<span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">NettyTcpService</span><span class="params">(String host,<span class="keyword">int</span> port)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.host=host;</span><br><span class="line">		<span class="keyword">this</span>.port=port;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">/**用于分配处理业务线程的线程组个数 */</span>  </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BIZGROUPSIZE = Runtime.getRuntime().availableProcessors()*<span class="number">2</span>; <span class="comment">//默认  </span></span><br><span class="line">    <span class="comment">/** 业务出现线程大小*/</span>  </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BIZTHREADSIZE = <span class="number">4</span>;  </span><br><span class="line">    <span class="comment">/* </span></span><br><span class="line"><span class="comment">     * NioEventLoopGroup实际上就是个线程,</span></span><br><span class="line"><span class="comment">     * NioEventLoopGroup在后台启动了n个NioEventLoop来处理Channel事件, </span></span><br><span class="line"><span class="comment">     * 每一个NioEventLoop负责处理m个Channel, </span></span><br><span class="line"><span class="comment">     * NioEventLoopGroup从NioEventLoop数组里挨个取出NioEventLoop来处理Channel</span></span><br><span class="line"><span class="comment">     */</span>  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> EventLoopGroup bossGroup = <span class="keyword">new</span> NioEventLoopGroup(BIZGROUPSIZE);  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> EventLoopGroup workerGroup = <span class="keyword">new</span> NioEventLoopGroup(BIZTHREADSIZE);  </span><br><span class="line">      </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    	log.info(<span class="string">"Netty Tcp Service Run..."</span>);</span><br><span class="line">        ServerBootstrap b = <span class="keyword">new</span> ServerBootstrap();  </span><br><span class="line">        b.group(bossGroup, workerGroup);  </span><br><span class="line">        b.channel(NioServerSocketChannel.class);  </span><br><span class="line">        b.childHandler(<span class="keyword">new</span> ChannelInitializer&lt;SocketChannel&gt;() &#123;  </span><br><span class="line">            <span class="meta">@Override</span>  </span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;  </span><br><span class="line">                ChannelPipeline pipeline = ch.pipeline();  </span><br><span class="line">                pipeline.addLast(<span class="string">"frameDecoder"</span>, <span class="keyword">new</span> LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, <span class="number">0</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">4</span>));  </span><br><span class="line">                pipeline.addLast(<span class="string">"frameEncoder"</span>, <span class="keyword">new</span> LengthFieldPrepender(<span class="number">4</span>));  </span><br><span class="line">                pipeline.addLast(<span class="string">"decoder"</span>, <span class="keyword">new</span> ByteArrayDecoder());  </span><br><span class="line">                pipeline.addLast(<span class="string">"encoder"</span>, <span class="keyword">new</span> ByteArrayEncoder());  </span><br><span class="line">              <span class="comment">//  pipeline.addLast(new Encoder());</span></span><br><span class="line">              <span class="comment">//  pipeline.addLast(new Decoder());</span></span><br><span class="line">                pipeline.addLast(<span class="keyword">new</span> TcpServerHandler());</span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;);  </span><br><span class="line">        b.bind(host, port).sync();  </span><br><span class="line">        log.info(<span class="string">"Netty Tcp Service Success!"</span>);</span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 停止服务并释放资源</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">shutdown</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        workerGroup.shutdownGracefully();  </span><br><span class="line">        bossGroup.shutdownGracefully();  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelHandlerContext;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.SimpleChannelInboundHandler;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 服务端处理器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TcpServerHandler</span> <span class="keyword">extends</span> <span class="title">SimpleChannelInboundHandler</span>&lt;<span class="title">Object</span>&gt;</span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(TcpServerHandler.class);</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">channelRead0</span><span class="params">(ChannelHandlerContext ctx, Object msg)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">byte</span>[] data=(<span class="keyword">byte</span>[])msg;</span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> io.netty.bootstrap.Bootstrap;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.Channel;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelInitializer;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelOption;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelPipeline;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.EventLoopGroup;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.nio.NioEventLoopGroup;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.socket.nio.NioSocketChannel;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.LengthFieldBasedFrameDecoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.LengthFieldPrepender;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.bytes.ByteArrayDecoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.bytes.ByteArrayEncoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.util.concurrent.Future;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * netty tcp 客户端</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> v_wangshiyu</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NettyTcpClient</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(NettyTcpClient.class);</span><br><span class="line">	<span class="keyword">private</span> String host;  </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> port;  </span><br><span class="line">	<span class="keyword">private</span> Bootstrap bootstrap;  </span><br><span class="line">	<span class="keyword">private</span> Channel channel;</span><br><span class="line">	<span class="keyword">private</span> EventLoopGroup group;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">NettyTcpClient</span><span class="params">(String host,<span class="keyword">int</span> port)</span></span>&#123;</span><br><span class="line">		bootstrap=getBootstrap();</span><br><span class="line">		channel= getChannel(host,port);</span><br><span class="line">		<span class="keyword">this</span>.host=host;</span><br><span class="line">		<span class="keyword">this</span>.port=port;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getHost</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> host;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getPort</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> port;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/** </span></span><br><span class="line"><span class="comment">     * 初始化Bootstrap </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> </span></span><br><span class="line"><span class="comment">     */</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Bootstrap <span class="title">getBootstrap</span><span class="params">()</span></span>&#123;  </span><br><span class="line">    	group = <span class="keyword">new</span> NioEventLoopGroup();  </span><br><span class="line">        Bootstrap b = <span class="keyword">new</span> Bootstrap();  </span><br><span class="line">        b.group(group).channel(NioSocketChannel.class);  </span><br><span class="line">        b.handler(<span class="keyword">new</span> ChannelInitializer&lt;Channel&gt;() &#123;  </span><br><span class="line">            <span class="meta">@Override</span>  </span><br><span class="line">            <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(Channel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;  </span><br><span class="line">                ChannelPipeline pipeline = ch.pipeline();  </span><br><span class="line">                 <span class="comment">// pipeline.addLast(new Encoder());</span></span><br><span class="line">                 <span class="comment">// pipeline.addLast(new Decoder());</span></span><br><span class="line">                pipeline.addLast(<span class="string">"frameDecoder"</span>, <span class="keyword">new</span> LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, <span class="number">0</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">4</span>));  </span><br><span class="line">                pipeline.addLast(<span class="string">"frameEncoder"</span>, <span class="keyword">new</span> LengthFieldPrepender(<span class="number">4</span>));  </span><br><span class="line">                pipeline.addLast(<span class="string">"decoder"</span>, <span class="keyword">new</span> ByteArrayDecoder());  </span><br><span class="line">                pipeline.addLast(<span class="string">"encoder"</span>, <span class="keyword">new</span> ByteArrayEncoder());  </span><br><span class="line">                </span><br><span class="line">                pipeline.addLast(<span class="string">"handler"</span>, <span class="keyword">new</span> TcpClientHandler());</span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;);  </span><br><span class="line">        b.option(ChannelOption.SO_KEEPALIVE, <span class="keyword">true</span>);  </span><br><span class="line">        <span class="keyword">return</span> b;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 连接，获取Channel</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> host</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> port</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Channel <span class="title">getChannel</span><span class="params">(String host,<span class="keyword">int</span> port)</span></span>&#123;  </span><br><span class="line">        Channel channel = <span class="keyword">null</span>;  </span><br><span class="line">        <span class="keyword">try</span> &#123;  </span><br><span class="line">            channel = bootstrap.connect(host, port).sync().channel();  </span><br><span class="line">            <span class="keyword">return</span> channel;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;  </span><br><span class="line">        	log.info(String.format(<span class="string">"connect Server(IP[%s],PORT[%s]) fail!"</span>, host,port));  </span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;  </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 发送消息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> msg</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">sendMsg</span><span class="params">(Object msg)</span> <span class="keyword">throws</span> Exception </span>&#123;  </span><br><span class="line">        <span class="keyword">if</span>(channel!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            channel.writeAndFlush(msg).sync();  </span><br><span class="line">            log.debug(<span class="string">"msg flush success"</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;  </span><br><span class="line">        	log.debug(<span class="string">"msg flush fail,connect is null"</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 连接断开</span></span><br><span class="line"><span class="comment">     * 并且释放资源</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">disconnectConnect</span><span class="params">()</span></span>&#123;</span><br><span class="line">    	<span class="comment">//channel.close().awaitUninterruptibly();</span></span><br><span class="line">    	Future&lt;?&gt; future =group.shutdownGracefully();<span class="comment">//shutdownGracefully释放所有资源，并且关闭所有当前正在使用的channel</span></span><br><span class="line">    	future.syncUninterruptibly();</span><br><span class="line">    	<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelHandlerContext;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.SimpleChannelInboundHandler;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 客户端处理器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TcpClientHandler</span> <span class="keyword">extends</span> <span class="title">SimpleChannelInboundHandler</span>&lt;<span class="title">Object</span>&gt;</span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(TcpClientHandler.class);</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">channelRead0</span><span class="params">(ChannelHandlerContext ctx, Object msg)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">byte</span>[] data=(<span class="keyword">byte</span>[])msg;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> io.netty.bootstrap.ServerBootstrap;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelInitializer;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelPipeline;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.EventLoopGroup;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.nio.NioEventLoopGroup;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.socket.SocketChannel;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.socket.nio.NioServerSocketChannel;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.LengthFieldBasedFrameDecoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.LengthFieldPrepender;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.bytes.ByteArrayDecoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.bytes.ByteArrayEncoder;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="comment">/***</span></span><br><span class="line"><span class="comment"> * netty tcp 服务端</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> v_wangshiyu</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NettyTcpService</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(NettyTcpService<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">	<span class="keyword">private</span> String host;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> port;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NettyTcpService</span><span class="params">(String address)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        String str[] = address.split(<span class="string">":"</span>);</span><br><span class="line">        <span class="keyword">this</span>.host=str[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">this</span>.port=Integer.valueOf(str[<span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">NettyTcpService</span><span class="params">(String host,<span class="keyword">int</span> port)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.host=host;</span><br><span class="line">		<span class="keyword">this</span>.port=port;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">/**用于分配处理业务线程的线程组个数 */</span>  </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BIZGROUPSIZE = Runtime.getRuntime().availableProcessors()*<span class="number">2</span>; <span class="comment">//默认  </span></span><br><span class="line">    <span class="comment">/** 业务出现线程大小*/</span>  </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BIZTHREADSIZE = <span class="number">4</span>;  </span><br><span class="line">    <span class="comment">/* </span></span><br><span class="line"><span class="comment">     * NioEventLoopGroup实际上就是个线程,</span></span><br><span class="line"><span class="comment">     * NioEventLoopGroup在后台启动了n个NioEventLoop来处理Channel事件, </span></span><br><span class="line"><span class="comment">     * 每一个NioEventLoop负责处理m个Channel, </span></span><br><span class="line"><span class="comment">     * NioEventLoopGroup从NioEventLoop数组里挨个取出NioEventLoop来处理Channel</span></span><br><span class="line"><span class="comment">     */</span>  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> EventLoopGroup bossGroup = <span class="keyword">new</span> NioEventLoopGroup(BIZGROUPSIZE);  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> EventLoopGroup workerGroup = <span class="keyword">new</span> NioEventLoopGroup(BIZTHREADSIZE);  </span><br><span class="line">      </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    	log.info(<span class="string">"Netty Tcp Service Run..."</span>);</span><br><span class="line">        ServerBootstrap b = <span class="keyword">new</span> ServerBootstrap();  </span><br><span class="line">        b.group(bossGroup, workerGroup);  </span><br><span class="line">        b.channel(NioServerSocketChannel<span class="class">.<span class="keyword">class</span>)</span>;  </span><br><span class="line">        b.childHandler(<span class="keyword">new</span> ChannelInitializer&lt;SocketChannel&gt;() &#123;  </span><br><span class="line">            <span class="meta">@Override</span>  </span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;  </span><br><span class="line">                ChannelPipeline pipeline = ch.pipeline();  </span><br><span class="line">                pipeline.addLast(<span class="string">"frameDecoder"</span>, <span class="keyword">new</span> LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, <span class="number">0</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">4</span>));  </span><br><span class="line">                pipeline.addLast(<span class="string">"frameEncoder"</span>, <span class="keyword">new</span> LengthFieldPrepender(<span class="number">4</span>));  </span><br><span class="line">                pipeline.addLast(<span class="string">"decoder"</span>, <span class="keyword">new</span> ByteArrayDecoder());  </span><br><span class="line">                pipeline.addLast(<span class="string">"encoder"</span>, <span class="keyword">new</span> ByteArrayEncoder());  </span><br><span class="line">              <span class="comment">//  pipeline.addLast(new Encoder());</span></span><br><span class="line">              <span class="comment">//  pipeline.addLast(new Decoder());</span></span><br><span class="line">                pipeline.addLast(<span class="keyword">new</span> TcpServerHandler());</span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;);  </span><br><span class="line">        b.bind(host, port).sync();  </span><br><span class="line">        log.info(<span class="string">"Netty Tcp Service Success!"</span>);</span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 停止服务并释放资源</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">shutdown</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        workerGroup.shutdownGracefully();  </span><br><span class="line">        bossGroup.shutdownGracefully();  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelHandlerContext;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.SimpleChannelInboundHandler;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 服务端处理器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TcpServerHandler</span> <span class="keyword">extends</span> <span class="title">SimpleChannelInboundHandler</span>&lt;<span class="title">Object</span>&gt;</span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(TcpServerHandler<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">channelRead0</span><span class="params">(ChannelHandlerContext ctx, Object msg)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">byte</span>[] data=(<span class="keyword">byte</span>[])msg;</span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> io.netty.bootstrap.Bootstrap;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.Channel;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelInitializer;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelOption;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelPipeline;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.EventLoopGroup;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.nio.NioEventLoopGroup;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.socket.nio.NioSocketChannel;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.LengthFieldBasedFrameDecoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.LengthFieldPrepender;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.bytes.ByteArrayDecoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.handler.codec.bytes.ByteArrayEncoder;</span><br><span class="line"><span class="keyword">import</span> io.netty.util.concurrent.Future;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * netty tcp 客户端</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> v_wangshiyu</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NettyTcpClient</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(NettyTcpClient<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">	<span class="keyword">private</span> String host;  </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> port;  </span><br><span class="line">	<span class="keyword">private</span> Bootstrap bootstrap;  </span><br><span class="line">	<span class="keyword">private</span> Channel channel;</span><br><span class="line">	<span class="keyword">private</span> EventLoopGroup group;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">NettyTcpClient</span><span class="params">(String host,<span class="keyword">int</span> port)</span></span>&#123;</span><br><span class="line">		bootstrap=getBootstrap();</span><br><span class="line">		channel= getChannel(host,port);</span><br><span class="line">		<span class="keyword">this</span>.host=host;</span><br><span class="line">		<span class="keyword">this</span>.port=port;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getHost</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> host;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getPort</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> port;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/** </span></span><br><span class="line"><span class="comment">     * 初始化Bootstrap </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> </span></span><br><span class="line"><span class="comment">     */</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Bootstrap <span class="title">getBootstrap</span><span class="params">()</span></span>&#123;  </span><br><span class="line">    	group = <span class="keyword">new</span> NioEventLoopGroup();  </span><br><span class="line">        Bootstrap b = <span class="keyword">new</span> Bootstrap();  </span><br><span class="line">        b.group(group).channel(NioSocketChannel<span class="class">.<span class="keyword">class</span>)</span>;  </span><br><span class="line">        b.handler(<span class="keyword">new</span> ChannelInitializer&lt;Channel&gt;() &#123;  </span><br><span class="line">            <span class="meta">@Override</span>  </span><br><span class="line">            <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(Channel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;  </span><br><span class="line">                ChannelPipeline pipeline = ch.pipeline();  </span><br><span class="line">                 <span class="comment">// pipeline.addLast(new Encoder());</span></span><br><span class="line">                 <span class="comment">// pipeline.addLast(new Decoder());</span></span><br><span class="line">                pipeline.addLast(<span class="string">"frameDecoder"</span>, <span class="keyword">new</span> LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, <span class="number">0</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">4</span>));  </span><br><span class="line">                pipeline.addLast(<span class="string">"frameEncoder"</span>, <span class="keyword">new</span> LengthFieldPrepender(<span class="number">4</span>));  </span><br><span class="line">                pipeline.addLast(<span class="string">"decoder"</span>, <span class="keyword">new</span> ByteArrayDecoder());  </span><br><span class="line">                pipeline.addLast(<span class="string">"encoder"</span>, <span class="keyword">new</span> ByteArrayEncoder());  </span><br><span class="line">                </span><br><span class="line">                pipeline.addLast(<span class="string">"handler"</span>, <span class="keyword">new</span> TcpClientHandler());</span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;);  </span><br><span class="line">        b.option(ChannelOption.SO_KEEPALIVE, <span class="keyword">true</span>);  </span><br><span class="line">        <span class="keyword">return</span> b;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 连接，获取Channel</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> host</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> port</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Channel <span class="title">getChannel</span><span class="params">(String host,<span class="keyword">int</span> port)</span></span>&#123;  </span><br><span class="line">        Channel channel = <span class="keyword">null</span>;  </span><br><span class="line">        <span class="keyword">try</span> &#123;  </span><br><span class="line">            channel = bootstrap.connect(host, port).sync().channel();  </span><br><span class="line">            <span class="keyword">return</span> channel;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;  </span><br><span class="line">        	log.info(String.format(<span class="string">"connect Server(IP[%s],PORT[%s]) fail!"</span>, host,port));  </span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;  </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 发送消息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> msg</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">sendMsg</span><span class="params">(Object msg)</span> <span class="keyword">throws</span> Exception </span>&#123;  </span><br><span class="line">        <span class="keyword">if</span>(channel!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            channel.writeAndFlush(msg).sync();  </span><br><span class="line">            log.debug(<span class="string">"msg flush success"</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;  </span><br><span class="line">        	log.debug(<span class="string">"msg flush fail,connect is null"</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 连接断开</span></span><br><span class="line"><span class="comment">     * 并且释放资源</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">disconnectConnect</span><span class="params">()</span></span>&#123;</span><br><span class="line">    	<span class="comment">//channel.close().awaitUninterruptibly();</span></span><br><span class="line">    	Future&lt;?&gt; future =group.shutdownGracefully();<span class="comment">//shutdownGracefully释放所有资源，并且关闭所有当前正在使用的channel</span></span><br><span class="line">    	future.syncUninterruptibly();</span><br><span class="line">    	<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.ChannelHandlerContext;</span><br><span class="line"><span class="keyword">import</span> io.netty.channel.SimpleChannelInboundHandler;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 客户端处理器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TcpClientHandler</span> <span class="keyword">extends</span> <span class="title">SimpleChannelInboundHandler</span>&lt;<span class="title">Object</span>&gt;</span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger log = LoggerFactory.getLogger(TcpClientHandler<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">channelRead0</span><span class="params">(ChannelHandlerContext ctx, Object msg)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">byte</span>[] data=(<span class="keyword">byte</span>[])msg;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>说到通讯就不能不说协议，通信时所遵守的规则，访问什么，传输的格式等都属于协议。作为一个开发人员，应该都了解TCP/IP协议，它是一个网络通信模型，以及一整套网络传输协议家族，是互联网的基础通信架构。也都应该用过http（超文本传输协议），Web服务器传输超文本到本地浏览器的传送协议，该协议建立在TCP/IP协议之上。分布式服务框架服务间的调用也会规定协议。为了支持不同场景，分布式服务框架会存在多种协议，如<strong>Dubbo</strong>就支持7种协议：<strong>dubbo协议(默认)</strong>，<strong>rmi协议</strong>，<strong>hessian协议</strong>，<strong>http协议</strong>，<strong>webservice协议</strong>，<strong>thrift协议</strong>，<strong>memcached协议</strong>，<strong>redis协议</strong>每种协议应对的场景不尽相同，具体场景具体对待。<br> (这里详细介绍了Dubbo 的协议：<a href="https://blog.csdn.net/xiaojin21cen/article/details/79834222" target="_blank" rel="noopener">Dubbo 的7种协议</a> )</p>
 <h3 id="服务路由"><a href="#服务路由" class="headerlink" title="服务路由"></a>服务路由</h3><p>分布式服务上线时都是集群组网部署，集群中会存在某个服务的多实例，消费者如何从服务列表中选择合适的服务提供者进行调用，这就涉及到服务路由。分布式服务框架需要能够满足用户灵活的路由需求。</p>
 <h4 id="透明化路由"><a href="#透明化路由" class="headerlink" title="透明化路由"></a>透明化路由</h4><p>很多开源的RPC框架调用者需要配置服务提供者的地址信息，尽管可以通过读取数据库的服务地址列表等方式避免硬编码地址信息，但是消费者依然要感知服务提供者的地址信息，这违反了透明化路由原则。而基于服务注册中心的服务订阅发布，消费者通过主动查询和被动通知的方式获取服务提供者的地址信息，而不再需要通过硬编码方式得到提供者的地址信息，只需要知道当前系统发布了那些服务，而不需要知道服务具体存在于什么位置，这就是透明化路由。  </p>
@@ -2171,7 +3392,7 @@
 <p>消费者端没有具体的实现，需要调用接口时会动态的去创建一个代理类。与spirng集成的情况，那直接在bean构建的时候注入代理类。</p>
 <p>下面是构建代理类：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.Proxy;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JdkProxy</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">getInstance</span><span class="params">(Class&lt;?&gt; cls)</span></span>&#123;       </span><br><span class="line">    	JdkMethodProxy invocationHandler = <span class="keyword">new</span> JdkMethodProxy();</span><br><span class="line">        Object newProxyInstance = Proxy.newProxyInstance(  </span><br><span class="line">                cls.getClassLoader(),  </span><br><span class="line">                <span class="keyword">new</span> Class[] &#123; cls &#125;, </span><br><span class="line">                invocationHandler); </span><br><span class="line">        <span class="keyword">return</span> (Object)newProxyInstance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationHandler;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JdkMethodProxy</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] parameters)</span>  <span class="keyword">throws</span> Throwable </span>&#123;        </span><br><span class="line">        <span class="comment">//如果传进来是一个已实现的具体类</span></span><br><span class="line">        <span class="keyword">if</span> (Object.class.equals(method.getDeclaringClass())) &#123;  </span><br><span class="line">            <span class="keyword">try</span> &#123;  </span><br><span class="line">                <span class="keyword">return</span> method.invoke(<span class="keyword">this</span>, parameters);  </span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable t) &#123;  </span><br><span class="line">                t.printStackTrace();  </span><br><span class="line">            &#125;  </span><br><span class="line">        <span class="comment">//如果传进来的是一个接口</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;  </span><br><span class="line">        	<span class="comment">//实现接口的核心方法 </span></span><br><span class="line">            <span class="comment">//return RemoteInvoking.invoking(serviceName, serializationType, //timeOut,loadBalanceStrategy,method, parameters);</span></span><br><span class="line">        &#125;  </span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationHandler;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JdkMethodProxy</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] parameters)</span>  <span class="keyword">throws</span> Throwable </span>&#123;        </span><br><span class="line">        <span class="comment">//如果传进来是一个已实现的具体类</span></span><br><span class="line">        <span class="keyword">if</span> (Object<span class="class">.<span class="keyword">class</span>.<span class="title">equals</span>(<span class="title">method</span>.<span class="title">getDeclaringClass</span>())) </span>&#123;  </span><br><span class="line">            <span class="keyword">try</span> &#123;  </span><br><span class="line">                <span class="keyword">return</span> method.invoke(<span class="keyword">this</span>, parameters);  </span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable t) &#123;  </span><br><span class="line">                t.printStackTrace();  </span><br><span class="line">            &#125;  </span><br><span class="line">        <span class="comment">//如果传进来的是一个接口</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;  </span><br><span class="line">        	<span class="comment">//实现接口的核心方法 </span></span><br><span class="line">            <span class="comment">//return RemoteInvoking.invoking(serviceName, serializationType, //timeOut,loadBalanceStrategy,method, parameters);</span></span><br><span class="line">        &#125;  </span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>代理会做很多事情，对请求服务的名称及参数信息的的序列化、通过路由选择最为合适服务提供者、建立通讯连接发送请求信息（或者直接发起http请求）、最后返回获取到的结果。当然这里面需要考虑很多问题，如调用超时，请求异常，通讯连接的缓存，同步服务调用还是异步服务调用等等。</p>
 <ul>
 <li><p><strong>同步服务调用</strong>：客户端发起远程服务调用请求，用户线程完成消息序列化之后，将消息投递到通信框架，然后同步阻塞，等待通信线程发送请求并接收到应答之后，唤醒同步等待的用户线程，用户线程获取到应答之后返回。</p>
@@ -2392,20 +3613,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/06/HTTP协议要点/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -2477,7 +3698,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/HTTP/" itemprop="url" rel="index"><span itemprop="name">HTTP</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/HTTP/" itemprop="url" rel="index"><span itemprop="name">HTTP</span></a></span>
 
                 
                 
@@ -2494,6 +3715,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">70k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">1:04</span>
+              
+            </div>
           
 
           
@@ -3159,20 +4408,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/04/Mermaid-实用教程/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -3244,7 +4493,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/mermaid/" itemprop="url" rel="index"><span itemprop="name">mermaid</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/mermaid/" itemprop="url" rel="index"><span itemprop="name">mermaid</span></a></span>
 
                 
                 
@@ -3261,6 +4510,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">28k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">25 分钟</span>
+              
+            </div>
           
 
           
@@ -3560,20 +4837,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/04/使用Apache-Bench-和-Gnuplot产生性能测试图/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -3645,7 +4922,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
 
                 
                 
@@ -3662,6 +4939,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">22k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">20 分钟</span>
+              
+            </div>
           
 
           
@@ -3746,395 +5051,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/04/12个Git高级命令/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="vincent">
-      <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="星辰大海">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/04/12个Git高级命令/" itemprop="url">
-                  12个Git高级命令
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2020-02-04 21:03:00" itemprop="dateCreated datePublished" datetime="2020-02-04T21:03:00+08:00">2020-02-04</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>使用Git时常用的命令有pull、commit、push等，貌似很简单。不过，有时你会遇到合并冲突的情况，Git这时会将冲突标记出来，需要你手工来解决。有时，你会不小心将代码提交到错误的分支上，并且又推送到了远程仓库。还有些时候，你需要切换到不同的分支，但Git却不让你这么做，因为还有未保存的修改。如果需要通过另一个分支的提交来为代码打补丁该怎么做呢？本文就将介绍12个Git高级命令，合理使用这些命令可以大大提升应用Git的效率。</p>
-<h2 id="1-使用rebase而非merge来拉取上游修改"><a href="#1-使用rebase而非merge来拉取上游修改" class="headerlink" title="1. 使用rebase而非merge来拉取上游修改"></a><strong>1. 使用rebase而非merge来拉取上游修改</strong></h2><p>分支合并会被记录为一次合并提交，这种做法是很有意义的。比如说，可以通过这种方式来标识一个新特性被合并到了发布分支中。不过，当多个团队成员工作在一个项目中并使用常规的git pull来同步分支时，提交时间线就会被不必要的合并提交所污染。更好的做法则是使用git rebase将一个feature分支变基到master分支：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout feature</span><br><span class="line">$ git rebase master</span><br></pre></td></tr></table></figure>
-<p>这么做会将整个feature分支移动到master分支的起点，它会合并master分支上所有新的提交。不过，相比于使用合并提交来说，变基会通过在原来的分支中为每次提交创建全新提交来重写项目历史。变基的主要好处在于你会得到一个更加整洁的项目历史。此外，这里还有关于变基的陷阱的一些讨论。</p>
-<h2 id="2-在执行git-rebase后解决合并冲突"><a href="#2-在执行git-rebase后解决合并冲突" class="headerlink" title="2. 在执行git rebase后解决合并冲突"></a><strong>2. 在执行git rebase后解决合并冲突</strong></h2><p>正如能力越大责任就越大一样。在执行git rebase时，你可能会遇到合并冲突的情况。合并冲突表示两个提交修改了同一个文件的同一行，Git不知道该应用哪一个修改。</p>
-<p>Git会为你提供3个选择来修复导致冲突的提交（fa39187）：</p>
-<ul>
-<li>可以运行git rebase –abort来完全取消变基。这么做会取消变基修改，并将分支置回到执行git rebase之前的状态。</li>
-<li>可以运行git rebase –skip来完全忽略该提交。这样，有问题的提交所引入的变化就不会被添加到历史中。</li>
-<li>可以使用与合并冲突相同的标准步骤来解决冲突。</li>
-</ul>
-<h2 id="3-临时性保存修改"><a href="#3-临时性保存修改" class="headerlink" title="3. 临时性保存修改"></a><strong>3. 临时性保存修改</strong></h2><p>在工作进行中时，有些东西常常会处于凌乱的状态。如果这时需要切换到不同的分支该怎么办呢？Git是不允许你这么做的，因为还有尚未保存的修改。坦率地说，你并不想将半成品提交上去，后面再来修改。这个问题的解决之道就是使用git stash命令。Stash会接收工作目录的当前状态（比如说，修改了的追踪文件与暂存区的修改等），并将其保存到未完成的修改栈中，这样后面随时可以再来修改。可以通过如下命令来暂存你的工作：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git stash</span><br><span class="line">Saved working directory and index state WIP on feature: 3fc175f fix race condition</span><br><span class="line">HEAD is now at 3fc175f fix race condition</span><br></pre></td></tr></table></figure>
-<p>现在，工作目录就是干净的了：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line"><span class="comment"># On branch feature</span></span><br><span class="line">nothing to commit, working directory clean</span><br></pre></td></tr></table></figure>
-<p>这时就可以安全地切换分支做别的事情了。不过不必担心，暂存的提交依旧还在：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git stash list</span><br><span class="line">stash@&#123;0&#125;: WIP on feature: 3fc175f fix race condition</span><br></pre></td></tr></table></figure>
-<p>稍后，在回到feature分支后，你就可以取回所有暂存的变更了：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git stash pop</span><br><span class="line">On branch feature</span><br><span class="line">Changes not staged <span class="keyword">for</span> commit:</span><br><span class="line">  (use <span class="string">"git add ..."</span> to update what will be committed)</span><br><span class="line"></span><br><span class="line">     modified:   index.html</span><br><span class="line">Dropped refs/stash@&#123;0&#125; (ac2321cc3a33ba712b8e50c99a99d3c20da9d6b8)</span><br></pre></td></tr></table></figure>
-<p>关于暂存，还有其他一些选项可用，如下所示：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git stash save <span class="string">"describe it"</span>   <span class="comment"># give the stash a name</span></span><br><span class="line">$ git stash clear                <span class="comment"># delete a stashed commit</span></span><br><span class="line">$ git stash save --keep-index    <span class="comment"># stash only unstaged files</span></span><br></pre></td></tr></table></figure>
-<h2 id="4-克隆一个特定的远程分支"><a href="#4-克隆一个特定的远程分支" class="headerlink" title="4. 克隆一个特定的远程分支"></a><strong>4. 克隆一个特定的远程分支</strong></h2><p>如果想要从远程仓库中克隆一个特定的分支该怎么做呢？通常你会使用git clone，不过这么做会将所有其他分支都一并克隆下来。一个便捷的方式是使用git remote add：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git init  </span><br><span class="line">$ git remote add -t  -f origin </span><br><span class="line">$ git checkout</span><br></pre></td></tr></table></figure>
-<h2 id="5-将cherry-pick远程提交合并到自己的分支中"><a href="#5-将cherry-pick远程提交合并到自己的分支中" class="headerlink" title="5. 将cherry-pick远程提交合并到自己的分支中"></a><strong>5. 将cherry-pick远程提交合并到自己的分支中</strong></h2><p>更有甚者，如果只想将远程仓库的一个特定提交合并到自己的分支中该怎么做呢？可以使用git cherry-pick 来选择给定SHA值的提交，然后将其合并到当前分支中：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git cherry-pick</span><br></pre></td></tr></table></figure>
-<h2 id="6-应用来自于不相关的本地仓库的补丁"><a href="#6-应用来自于不相关的本地仓库的补丁" class="headerlink" title="6. 应用来自于不相关的本地仓库的补丁"></a><strong>6. 应用来自于不相关的本地仓库的补丁</strong></h2><p>如果需要将另一个不相关的本地仓库的提交补丁应用到当前仓库该怎么做呢？答案就是下面这条命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git --git-dir=/.git format-patch -k -1 --stdout  | git am -3 -k</span><br></pre></td></tr></table></figure>
-<h2 id="7-忽略追踪文件中的变更"><a href="#7-忽略追踪文件中的变更" class="headerlink" title="7. 忽略追踪文件中的变更"></a><strong>7. 忽略追踪文件中的变更</strong></h2><p>如果你和你的同事操纵的是相同分支，那么很有可能需要频繁执行git merge或是git rebase。不过，这么做可能会重置一些与环境相关的配置文件，这样在每次合并后都需要修改。与之相反，你可以通过如下命令永久性地告诉Git不要管某个本地文件：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git update-index --assume-unchanged</span><br></pre></td></tr></table></figure>
-<h2 id="8-每隔X秒运行一次git-pull"><a href="#8-每隔X秒运行一次git-pull" class="headerlink" title="8. 每隔X秒运行一次git pull"></a><strong>8. 每隔X秒运行一次git pull</strong></h2><p>通常，合并冲突出现的原因在于你正在工作的本地仓库不再反映远程仓库的当前状态。这正是我们为什么每天早晨要首先执行一次git pull的缘故。此外，你还可以在后台通过脚本（或是使用GNU Screen）每隔X秒调用一次git pull：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ screen</span><br><span class="line">$ <span class="keyword">for</span>((i=1;i&lt;=10000;i+=1)); <span class="keyword">do</span> sleep X &amp;&amp; git pull; <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
-<h2 id="9-将子目录分隔为新的仓库"><a href="#9-将子目录分隔为新的仓库" class="headerlink" title="9. 将子目录分隔为新的仓库"></a><strong>9. 将子目录分隔为新的仓库</strong></h2><p>有时，你可能需要将Git仓库中某个特定的目录转换为一个全新的仓库。这可以通过git filter-branch来实现：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git filter-branch --prune-empty --subdirectory-filter  master</span><br><span class="line"><span class="comment"># Filter the master branch to your directory and remove empty commits</span></span><br><span class="line">Rewrite 48dc599c80e20527ed902928085e7861e6b3cbe6 (89/89)</span><br><span class="line">Ref <span class="string">'refs/heads/master'</span> was rewritten</span><br></pre></td></tr></table></figure>
-<p>现在，仓库会包含指定子目录中的所有文件。虽然之前的所有文件都会被删除，但他们依旧存在于Git历史中。现在可以将新的本地仓库推送到远程了。</p>
-<h2 id="10-清理"><a href="#10-清理" class="headerlink" title="10. 清理"></a><strong>10. 清理</strong></h2><p>有时，Git会提示“untracked working tree files”会“overwritten by checkout”。造成这种情况的原因有很多。不过通常来说，我们可以使用如下命令来保持工作树的整洁，从而防止这种情况的发生：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git clean -f     <span class="comment"># remove untracked files</span></span><br><span class="line">$ git clean -fd    <span class="comment"># remove untracked files/directories</span></span><br><span class="line">$ git clean -nfd   <span class="comment"># list all files/directories that would be removed</span></span><br></pre></td></tr></table></figure>
-<h2 id="11-将项目文件打成tar包，并且排除-git目录"><a href="#11-将项目文件打成tar包，并且排除-git目录" class="headerlink" title="11. 将项目文件打成tar包，并且排除.git目录"></a><strong>11. 将项目文件打成tar包，并且排除.git目录</strong></h2><p>有时，你需要将项目副本提供给无法访问GitHub仓库的外部成员。最简单的方式就是使用tar或zip来打包所有的项目文件。不过，如果不小心，隐藏的.git目录就会包含到tar文件中，这会导致文件体积变大；同时，如果里面的文件与接收者自己的Git仓库弄混了，那就更加令人头疼了。轻松的做法则是自动从tar文件中排除掉.git目录：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ tar cJf .tar.xz / --exclude-vcs</span><br></pre></td></tr></table></figure>
-<h2 id="12-查找修改者"><a href="#12-查找修改者" class="headerlink" title="12. 查找修改者"></a><strong>12. 查找修改者</strong></h2><p>最后，如果出现混乱的情况，你一定想要找出是谁造成的。如果生产服务器宕机，那么找到罪魁祸首是比较容易的事情：只需执行git blame。该命令会显示出文件中每一行的作者，提交hash则会找出该行的上一次修改，还能看到提交的时间戳：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git blame</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/04/在CentOS上安装Git/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="vincent">
-      <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="星辰大海">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/04/在CentOS上安装Git/" itemprop="url">
-                  在CentOS上安装Git
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2020-02-04 21:00:57" itemprop="dateCreated datePublished" datetime="2020-02-04T21:00:57+08:00">2020-02-04</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>CentOS的yum源中没有git，只能自己编译安装，现在记录下编译安装的内容，留给自己备忘。</p>
-<p>确保已安装了依赖的包</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">yum install curl</span><br><span class="line">yum install curl-devel</span><br><span class="line">yum install zlib-devel</span><br><span class="line">yum install openssl-devel</span><br><span class="line">yum install perl</span><br><span class="line">yum install cpio</span><br><span class="line">yum install expat-devel</span><br><span class="line">yum install gettext-devel yum install perl-ExtUtils-CBuilder perl-ExtUtils-MakeMaker</span><br></pre></td></tr></table></figure>
-<p>下载最新的git包</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wget http://www.codemonkey.org.uk/projects/git-snapshots/git/git-latest.tar.gz</span><br><span class="line">tar xzvf git-latest.tar.gz</span><br><span class="line"><span class="built_in">cd</span> git-2011-11-30 ＃你的目录可能不是这个</span><br><span class="line">autoconf</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
-<p>检查下安装的版本，大功告成</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git --version</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -4164,7 +5085,9 @@
 
       <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="vincent">
             
               <p class="site-author-name" itemprop="name">vincent</p>
               <p class="site-description motion-element" itemprop="description">The King is dead, long live the King!</p>
@@ -4177,7 +5100,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-count">41</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -4343,7 +5266,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">52</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">54</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -4352,12 +5279,24 @@
           
 
           
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
 
           
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
                   <a href="https://github.com/vincentruan" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:rzw0813@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
                   
                 </span>
               
@@ -4399,7 +5338,21 @@
   <span class="author" itemprop="copyrightHolder">vincent</span>
 
   
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">383k</span>
+  
 
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">5:49</span>
   
 </div>
 
@@ -4471,6 +5424,8 @@
 
 
 
+  
+
 
 
   
@@ -4500,6 +5455,11 @@
   
   
     <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
   
 
   

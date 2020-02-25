@@ -31,7 +31,7 @@
     
     
   <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
-  <link href="/lib/pace/pace-theme-mac-osx.min.css?v=1.0.2" rel="stylesheet">
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
 
 
 
@@ -58,6 +58,10 @@
 
 
 
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -96,7 +100,7 @@
     scheme: 'Muse',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: false,
+    fancybox: true,
     fastclick: false,
     lazyload: false,
     tabs: true,
@@ -130,6 +134,8 @@
 <meta name="twitter:description" content="The King is dead, long live the King!">
 
 
+
+  <link rel="alternate" href="/atom.xml" title="星辰大海" type="application/atom+xml">
 
 
 
@@ -184,7 +190,7 @@
 
 </head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -195,7 +201,7 @@
   page-home">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -350,20 +356,459 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/06/24/docker碎片拾遗/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vincent">
+      <meta itemprop="description" content="The King is dead, long live the King!">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/24/docker碎片拾遗/" itemprop="url">
+                  docker碎片拾遗
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-24 13:22:34" itemprop="dateCreated datePublished" datetime="2018-06-24T13:22:34+08:00">2018-06-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/docker/" itemprop="url" rel="index"><span itemprop="name">docker</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">7.6k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">7 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="进入shell环境"><a href="#进入shell环境" class="headerlink" title="进入shell环境"></a>进入shell环境</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker exec -it &lt;container&gt; bash</span><br></pre></td></tr></table></figure>
+<p>and run</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get install vim</span><br></pre></td></tr></table></figure>
+<h2 id="！不要去改系统配置"><a href="#！不要去改系统配置" class="headerlink" title="！不要去改系统配置"></a>！不要去改系统配置</h2><p>正常运行的docker先保存一下docker的ID，之后不要去改下面的配置，否则docker会更新为新的那个，导致数据丢失</p>
+<p><img src="/2018/06/24/docker碎片拾遗/1529818594236.png" alt="1529818594236"></p>
+<h2 id="docker指令"><a href="#docker指令" class="headerlink" title="docker指令"></a>docker指令</h2><h3 id="1、启动docker"><a href="#1、启动docker" class="headerlink" title="1、启动docker"></a>1、启动docker</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --privileged=<span class="literal">true</span> -v /home/oracle/download:/usr/Downloads centos /bin/bash</span><br></pre></td></tr></table></figure>
+<h3 id="2、查看当前docker运行"><a href="#2、查看当前docker运行" class="headerlink" title="2、查看当前docker运行"></a>2、查看当前docker运行</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></table></figure>
+<h3 id="3、提交docker"><a href="#3、提交docker" class="headerlink" title="3、提交docker"></a>3、提交docker</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit 9f73a02d5ef0[CONTAINER ID] docker.io/ubuntu[REPOSITORY]</span><br></pre></td></tr></table></figure>
+<h3 id="4、查看容器的root用户密码"><a href="#4、查看容器的root用户密码" class="headerlink" title="4、查看容器的root用户密码"></a>4、查看容器的root用户密码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker logs &lt;容器名orID&gt; 2&gt;&amp;1 | grep <span class="string">'^User: '</span> | tail -n1</span><br></pre></td></tr></table></figure>
+<p>因为docker容器启动时的root用户的密码是随机分配的。所以，通过这种方式就可以得到redmine容器的root用户的密码了。</p>
+<h3 id="5、查看容器日志"><a href="#5、查看容器日志" class="headerlink" title="5、查看容器日志"></a>5、查看容器日志</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker logs -f &lt;容器名orID&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="6、查看正在运行的容器"><a href="#6、查看正在运行的容器" class="headerlink" title="6、查看正在运行的容器"></a>6、查看正在运行的容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker ps -a为查看所有的容器，包括已经停止的。</span><br></pre></td></tr></table></figure>
+<h3 id="7、删除所有容器"><a href="#7、删除所有容器" class="headerlink" title="7、删除所有容器"></a>7、删除所有容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm $(docker ps -a -q)</span><br></pre></td></tr></table></figure>
+<h3 id="8、删除单个容器"><a href="#8、删除单个容器" class="headerlink" title="8、删除单个容器"></a>8、删除单个容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm &lt;容器名orID&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="9、停止、启动、杀死一个容器"><a href="#9、停止、启动、杀死一个容器" class="headerlink" title="9、停止、启动、杀死一个容器"></a>9、停止、启动、杀死一个容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker stop &lt;容器名orID&gt;</span><br><span class="line"></span><br><span class="line">docker start &lt;容器名orID&gt;</span><br><span class="line"></span><br><span class="line">docker <span class="built_in">kill</span> &lt;容器名orID&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="10、查看所有镜像"><a href="#10、查看所有镜像" class="headerlink" title="10、查看所有镜像"></a>10、查看所有镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+<h3 id="11、删除所有镜像"><a href="#11、删除所有镜像" class="headerlink" title="11、删除所有镜像"></a>11、删除所有镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi $(docker images | grep none | awk <span class="string">'&#123;print $3&#125;'</span> | sort -r)</span><br></pre></td></tr></table></figure>
+<h3 id="12、运行一个新容器，同时为它命名、端口映射、文件夹映射。以redmine镜像为例"><a href="#12、运行一个新容器，同时为它命名、端口映射、文件夹映射。以redmine镜像为例" class="headerlink" title="12、运行一个新容器，同时为它命名、端口映射、文件夹映射。以redmine镜像为例"></a>12、运行一个新容器，同时为它命名、端口映射、文件夹映射。以redmine镜像为例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name redmine -p 9003:80 -p 9023:22 -d -v /var/redmine/files:/redmine/files -v   /var/redmine/mysql:/var/lib/mysql sameersbn/redmine</span><br></pre></td></tr></table></figure>
+<h3 id="13、一个容器连接到另一个容器"><a href="#13、一个容器连接到另一个容器" class="headerlink" title="13、一个容器连接到另一个容器"></a>13、一个容器连接到另一个容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -i -t --name sonar -d -link mmysql:db  tpires/sonar-server</span><br></pre></td></tr></table></figure>
+<p>sonar容器连接到mmysql容器，并将mmysql容器重命名为db。这样，sonar容器就可以使用db的相关的环境变量了。</p>
+<h3 id="14、拉取镜像"><a href="#14、拉取镜像" class="headerlink" title="14、拉取镜像"></a>14、拉取镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull &lt;镜像名:tag&gt;</span><br></pre></td></tr></table></figure>
+<p>如docker pull sameersbn/redmine:latest</p>
+<p>当需要把一台机器上的镜像迁移到另一台机器的时候，需要保存镜像与加载镜像。</p>
+<p>机器a<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker save busybox-1 &gt; /home/save.tar</span><br></pre></td></tr></table></figure></p>
+<p>使用scp将save.tar拷到机器b上，然后：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker load &lt; /home/save.tar</span><br></pre></td></tr></table></figure></p>
+<h3 id="15、构建自己的镜像"><a href="#15、构建自己的镜像" class="headerlink" title="15、构建自己的镜像"></a>15、构建自己的镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t &lt;镜像名&gt; &lt;Dockerfile路径&gt;</span><br></pre></td></tr></table></figure>
+<p>如Dockerfile在当前路径：docker build -t xx/gitlab .</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/06/17/Xshell显示X11图形化界面/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vincent">
+      <meta itemprop="description" content="The King is dead, long live the King!">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/17/Xshell显示X11图形化界面/" itemprop="url">
+                  Xshell显示X11图形化界面
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-17 23:10:35 / 修改时间：23:38:38" itemprop="dateCreated datePublished" datetime="2018-06-17T23:10:35+08:00">2018-06-17</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">3.6k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">3 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="安装Xmanager全家桶"><a href="#安装Xmanager全家桶" class="headerlink" title="安装Xmanager全家桶"></a>安装Xmanager全家桶</h3><p>使用前检查一下是否安装了Xshell、Xstart、Xmanager - Passive，正常安装Xmanager全家桶应该是全的</p>
+<p><img src="/2018/06/17/Xshell显示X11图形化界面/1529248519265.png" alt="1529248519265"></p>
+<h3 id="使用XStart登录"><a href="#使用XStart登录" class="headerlink" title="使用XStart登录"></a>使用XStart登录</h3><p>通过SSH的方式尝试登录VPS，</p>
+<p><img src="/2018/06/17/Xshell显示X11图形化界面/1529248581921.png" alt="1529248581921"></p>
+<p>正常成功后会这样提示</p>
+<p><img src="/2018/06/17/Xshell显示X11图形化界面/1529248649118.png" alt="1529248649118"></p>
+<p>当然更多的可能是弹出个错误框提示“已拒绝X11转移申请”，这是因为默认的VPS一般不会安装XAUTH导致，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install xorg-x11-xauth</span><br></pre></td></tr></table></figure>
+<p>这里可能会缺一些其他组件，见招拆招即可，谷歌或者百度解决</p>
+<h3 id="设置XSHELL"><a href="#设置XSHELL" class="headerlink" title="设置XSHELL"></a>设置XSHELL</h3><ol>
+<li>打开会话对话框</li>
+<li>选择要激活X11转发功能的会话</li>
+<li>点击[属性]按钮</li>
+<li>在[类别]中选择[连接-&gt;SSH-&gt;隧道]</li>
+<li>选择[转发X11连接到]</li>
+<li>如用户的PC上已<a href="http://www.xshellcn.com/xmg_column/xm-az.html" target="_blank" rel="noopener">安装Xmanager</a>，请勾选[Xmanager(M)]。如使用其他PC X 服务器，请选择[X DISPLAY(D)]后输入适用的DISPLAY </li>
+<li>点击[确定] </li>
+</ol>
+<p><img src="/2018/06/17/Xshell显示X11图形化界面/1529248873947.png" alt="1529248873947"></p>
+<h3 id="检查当前监听端口"><a href="#检查当前监听端口" class="headerlink" title="检查当前监听端口"></a>检查当前监听端口</h3><p><strong>IMPORTANT</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo netstat -tnlp|grep sshd</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/06/17/Xshell显示X11图形化界面/1529249219317.png" alt="1529249219317"></p>
+<p>注意上面监听的6010，Xmanager会把X DISPLAY选项自动查找为<a href="http://www.xshellcn.com/" target="_blank" rel="noopener">Xshell</a>。其他 PC X 服务器程序需由用户进行设置。如果PC X 服务器使用TCP 6000号端口，DISPLAY设置为“localhost:0.0” ，也就是说，X11的<strong>偏移量是6000</strong>，因此下面需要设置一个最终要的DISPLAY的值<strong>:10.0</strong>，如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export DISPLAY=:10.0</span><br><span class="line">或者</span><br><span class="line">export DISPLAY=localhost:10.0</span><br></pre></td></tr></table></figure>
+<h3 id="测试X11-DISPLAY"><a href="#测试X11-DISPLAY" class="headerlink" title="测试X11 DISPLAY"></a>测试X11 DISPLAY</h3><p>如果本地已经有需要X11界面展示的应用，直接运行查看即可，如无，推荐使用xclock检查是否生效[以下步骤不是必须，自行选择]</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install xclock</span><br></pre></td></tr></table></figure>
+<p>这里可能出现乱码之类的，可能需要安装x窗口相关包，和字体显示包 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum groupinstall "X Window System" "Fonts"</span><br></pre></td></tr></table></figure>
+<p>然后执行xclock，看是否在PC桌面显示对应的时钟图形。如果xclock出现<a href="https://access.redhat.com/solutions/409033" target="_blank" rel="noopener">Warning: Missing charsets in String to FontSet conversion</a>，可以执行下面执行，然后重新执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export LC_ALL=C</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/06/01/Hexo添加Gitalk评论插件/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -435,7 +880,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Hexo使用攻略/" itemprop="url" rel="index"><span itemprop="name">Hexo使用攻略</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Hexo使用攻略/" itemprop="url" rel="index"><span itemprop="name">Hexo使用攻略</span></a></span>
 
                 
                 
@@ -452,6 +897,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">9.1k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">8 分钟</span>
+              
+            </div>
           
 
           
@@ -475,7 +948,7 @@
 <ul>
 <li>直接引入</li>
 </ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"</span>&gt;</span><br><span class="line">&lt;script src=<span class="string">"https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"</span>&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- or --&gt;</span><br><span class="line"></span><br><span class="line">&lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"https://unpkg.com/gitalk/dist/gitalk.css"</span>&gt;</span><br><span class="line">&lt;script src=<span class="string">"https://unpkg.com/gitalk/dist/gitalk.min.js"</span>&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"</span>&gt;</span><br><span class="line">&lt;script src=<span class="string">"https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"</span>&gt;&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&lt;!-- or --&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&lt;link rel="stylesheet" href="https:/</span><span class="regexp">/unpkg.com/gi</span>talk/dist/gitalk.css<span class="string">"&gt;</span></span><br><span class="line"><span class="string">&lt;script src="</span>https:<span class="comment">//unpkg.com/gitalk/dist/gitalk.min.js"&gt;&lt;/script&gt;</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>npm安装</li>
 </ul>
@@ -555,20 +1028,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/06/01/Hexo集成Algolia搜索插件/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -628,7 +1101,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Hexo使用攻略/" itemprop="url" rel="index"><span itemprop="name">Hexo使用攻略</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Hexo使用攻略/" itemprop="url" rel="index"><span itemprop="name">Hexo使用攻略</span></a></span>
 
                 
                 
@@ -645,6 +1118,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">6.8k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">6 分钟</span>
+              
+            </div>
           
 
           
@@ -740,20 +1241,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/05/27/Linux-xmr-stak挖矿教程/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -825,7 +1326,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/block-chain/" itemprop="url" rel="index"><span itemprop="name">block-chain</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/block-chain/" itemprop="url" rel="index"><span itemprop="name">block-chain</span></a></span>
 
                 
                 
@@ -842,6 +1343,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">11k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">10 分钟</span>
+              
+            </div>
           
 
           
@@ -932,20 +1461,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/05/26/Day-1-Bower-——-管理你的客户端依赖关系/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -1005,7 +1534,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/30天学习30种新技术系列/" itemprop="url" rel="index"><span itemprop="name">30天学习30种新技术系列</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/30天学习30种新技术系列/" itemprop="url" rel="index"><span itemprop="name">30天学习30种新技术系列</span></a></span>
 
                 
                 
@@ -1022,6 +1551,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">24k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">22 分钟</span>
+              
+            </div>
           
 
           
@@ -1148,20 +1705,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/05/26/30-天学习-30-种新技术系列/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -1221,7 +1778,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/30天学习30种新技术系列/" itemprop="url" rel="index"><span itemprop="name">30天学习30种新技术系列</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/30天学习30种新技术系列/" itemprop="url" rel="index"><span itemprop="name">30天学习30种新技术系列</span></a></span>
 
                 
                 
@@ -1238,6 +1795,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">5.4k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">5 分钟</span>
+              
+            </div>
           
 
           
@@ -1348,20 +1933,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/05/26/教你免费搭建个人博客，Hexo-Github/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -1421,7 +2006,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Hexo使用攻略/" itemprop="url" rel="index"><span itemprop="name">Hexo使用攻略</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Hexo使用攻略/" itemprop="url" rel="index"><span itemprop="name">Hexo使用攻略</span></a></span>
 
                 
                 
@@ -1438,6 +2023,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">11k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">10 分钟</span>
+              
+            </div>
           
 
           
@@ -1581,20 +2194,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/05/26/Hexo使用攻略-添加分类及标签/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -1666,7 +2279,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Hexo使用攻略/" itemprop="url" rel="index"><span itemprop="name">Hexo使用攻略</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Hexo使用攻略/" itemprop="url" rel="index"><span itemprop="name">Hexo使用攻略</span></a></span>
 
                 
                 
@@ -1683,6 +2296,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">6.2k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">6 分钟</span>
+              
+            </div>
           
 
           
@@ -1776,20 +2417,20 @@
 
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/05/26/hexo-hello-world/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="星辰大海">
     </span>
 
@@ -1861,7 +2502,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Hexo使用攻略/" itemprop="url" rel="index"><span itemprop="name">Hexo使用攻略</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Hexo使用攻略/" itemprop="url" rel="index"><span itemprop="name">Hexo使用攻略</span></a></span>
 
                 
                 
@@ -1878,6 +2519,34 @@
 
           
 
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">3.7k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">3 分钟</span>
+              
+            </div>
           
 
           
@@ -1955,335 +2624,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2018/05/20/Markdown吃了吗/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="vincent">
-      <meta itemprop="description" content="The King is dead, long live the King!">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="星辰大海">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/20/Markdown吃了吗/" itemprop="url">
-                  Markdown吃了吗?
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-05-20 19:00:56" itemprop="dateCreated datePublished" datetime="2018-05-20T19:00:56+08:00">2018-05-20</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-02-17 10:40:44" itemprop="dateModified" datetime="2020-02-17T10:40:44+08:00">2020-02-17</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Hexo使用攻略/" itemprop="url" rel="index"><span itemprop="name">Hexo使用攻略</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="markdown-介绍"><a href="#markdown-介绍" class="headerlink" title="markdown 介绍"></a>markdown 介绍</h1><blockquote>
-<p>Markdown 是一种轻量级标记语言，它允许人们“使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML(或者HTML)文档”。 - <strong>wikipedia</strong></p>
-</blockquote>
-<ul>
-<li><a href="http://daringfireball.net/projects/markdown/" target="_blank" rel="noopener">Daring Fireball: Markdown</a> Project markdown</li>
-<li><a href="https://zh.wikipedia.org/wiki/Markdown" target="_blank" rel="noopener">Markdown wikipedia 介绍</a></li>
-<li><a href="http://fletcherpenney.net/multimarkdown/" target="_blank" rel="noopener">MultiMarkdown</a> 引入更多标记特性和输出选项的改进版Markdown</li>
-</ul>
-<h1 id="why-markdown"><a href="#why-markdown" class="headerlink" title="why markdown"></a>why markdown</h1><ul>
-<li>纯文本，兼容性极强，可以用任意文本编辑器打开.</li>
-<li>语法简单（the syntax is so simple you can barely call it “syntax.”），零学习成本，极好的可读性，让你专注于文字写作而不是页面排版，并且兼容 HTML，simple but powerful .</li>
-<li>格式转换方便，Markdown 的文本你可以轻松转换为 html、pdf、epub、电子书等。</li>
-<li>适合团队协作，可以使用 git/svn 等进行版本控制管理。</li>
-<li><a href="http://www.yangzhiping.com/tech/r-markdown-knitr.html" target="_blank" rel="noopener">阳志平：为什么 Markdown 成为科技界写作主流？</a></li>
-<li><a href="http://www.ituring.com.cn/article/828?q=markdown" target="_blank" rel="noopener">图灵社区：用Markdown来写自由书籍-开源技术的方案</a></li>
-</ul>
-<p>目前很多在线服务商均支持使用markdown编写：</p>
-<ul>
-<li><a href="https://github.com" target="_blank" rel="noopener">Github</a> 最先支持，使用Markdown的一个分支版本来格式化评论、消息以及其它内容。</li>
-<li><a href="http://stackoverflow.com/" target="_blank" rel="noopener">Stack Overflow</a> 使用一种 Markdown 的分支作为它的文章格式化系统。</li>
-<li><a href="http://www.cnblogs.com/" target="_blank" rel="noopener">博客园</a> 国内技术人的博客家园，每天活跃上万用户，高质量社区。</li>
-<li><a href="http://www.csdn.net/" target="_blank" rel="noopener">CSDN</a> 号称全球最大中文IT社区，涵盖了多种语言、架构、博客、俱乐部等模块的技术论坛。</li>
-<li><a href="http://www.ituring.com.cn/" target="_blank" rel="noopener">图灵社区</a> 使用markdown语法供用户写作电子书.</li>
-<li><a href="http://www.jianshu.com/" target="_blank" rel="noopener">简书</a> 重拾文字的力量，交流故事，沟通想法，一个基于内容分享的社区。</li>
-<li><a href="http://www.wiz.cn/" target="_blank" rel="noopener">为知笔记</a> 国内顶尖笔记软件，支持使用Markdown语法编辑笔记。</li>
-<li><a href="http://note.youdao.com/noteintro.html" target="_blank" rel="noopener">有道云笔记</a> 最新版本开始支持，并且支持一些扩展语法。</li>
-<li>……</li>
-</ul>
-<h1 id="markdown-使用"><a href="#markdown-使用" class="headerlink" title="markdown 使用"></a>markdown 使用</h1><ul>
-<li><a href="http://wowubuntu.com/markdown/basic.html" target="_blank" rel="noopener">Markdown: Basics （快速入门）</a></li>
-<li><a href="http://wowubuntu.com/markdown/" target="_blank" rel="noopener">Markdown 完整语法说明 (简体中文版)</a></li>
-<li><a href="https://guides.github.com/features/mastering-markdown/" target="_blank" rel="noopener">Github: Mastering Markdown</a> GitHub 帮助中关于 Markdown 的语法帮助</li>
-<li><a href="https://github.com/hzlzh/1MarkDown" target="_blank" rel="noopener">MarkDown 语法团队规范</a> 语法规范简洁版</li>
-<li><a href="http://www.cirosantilli.com/markdown-style-guide/" target="_blank" rel="noopener">Markdown Style Guide</a> 语法规范复杂版</li>
-<li><a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank" rel="noopener">Markdown Cheatsheet</a></li>
-<li><a href="https://help.github.com/articles/github-flavored-markdown/" target="_blank" rel="noopener">GitHub Flavored Markdown</a> GitHub 使用的 Markdown 语法，略微不同于标准 Markdown 语法。提供了一些更加简洁的语法，类似 URL autolinking, Strikethrough, Fenced code blocks, Syntax highlighting 等等</li>
-<li><a href="http://fletcherpenney.net/multimarkdown/" target="_blank" rel="noopener">MultiMarkdown 介绍</a> 对 markdown 进行的扩展功能</li>
-</ul>
-<h1 id="markdown-工具"><a href="#markdown-工具" class="headerlink" title="markdown 工具"></a>markdown 工具</h1><ul>
-<li><a href="https://maxiang.info/" target="_blank" rel="noopener">马克飞象</a> web/chrome 离线客户端，markdown 全功能支持，最大特点内容能够同步到印象笔记（evernote）中，笔记的用户重度推荐，按年收费，目前作者 <a href="http://weibo.com/u/2788354117" target="_blank" rel="noopener">@weibo</a> 正在开发跨平台的客户端。</li>
-<li><a href="https://stackedit.io/" target="_blank" rel="noopener">StackEdit</a> 在线 markdown 编辑器，可同步文档到Google Drive和 Dropbox，可发布文章到 Blogger，GitHub，Google Drive，Dropbox，Tumblr和WordPress。</li>
-<li><a href="https://www.zybuluo.com/mdeditor" target="_blank" rel="noopener">cmd 作业部落</a> 支持 win/mac/linux/web/chrome 全平台，支持实时同步预览，支持代码高亮、数学公式，区分写作和阅读模式，支持在线存储，分享文稿网址。</li>
-<li><a href="http://macdown.uranusjr.com/" target="_blank" rel="noopener">MacDown</a> OSX 上的 Markdown 开源编辑器，支持代码高亮，实时预览等。</li>
-<li><a href="http://www.markdownpad.com/" target="_blank" rel="noopener">MarkdownPad</a> Windows上的全功能Markdown编辑器，推荐win上使用，基本全部功能。</li>
-<li><a href="http://marked2app.com/" target="_blank" rel="noopener">Marked2</a> 多种 md 显示方案，不能够编辑文件，只用来展示文件，配合 <a href="https://packagecontrol.io/packages/MarkdownEditing" target="_blank" rel="noopener">subline text markdown edit</a> 插件，完美使用；</li>
-<li><a href="http://zh.mweb.im/" target="_blank" rel="noopener">MWeb</a> 专业的 Markdown 写作、记笔记、静态博客生成软件，由国内独立开发者<a href="http://weibo.com/oulvhai" target="_blank" rel="noopener">@oulvhai</a>开发，支持Toc、Table、代码高亮、支持发布到 Wordrpess 博客、支持 Metaweblog API 的博客服务、Wordpress.com、Evernote 和印象笔记、Blogger、Scriptogr.am、Tumblr等服务。</li>
-<li><a href="http://pad.haroopress.com/user.html" target="_blank" rel="noopener">Haroopad</a> 又一款简洁多功能的跨平台编辑器，全功能支持，再加上对社交网络友好的连接，多种主题等，感兴趣的可以看看。详情参考<a href="https://github.com/xirong/my-markdown/issues/1" target="_blank" rel="noopener">issue#1</a></li>
-<li><a href="http://www.typora.io/" target="_blank" rel="noopener">Typora</a> 不分栏，实时展示看到写出的内容，对于不喜欢「两栏」设计的人来说是一个选择</li>
-<li><a href="http://markeditor.com/app/markeditor" target="_blank" rel="noopener">MarkEditor - ME</a> MarkEditor以markdown为基础语法，多标签栏、文件夹结构，纯文本的方式带来优雅、高效的体验。 确实很棒的工具，带来很多新鲜的理念，支持、重构、提升 markdown，加快写作的体验。具体可以查看几篇评测文章：<ul>
-<li><a href="http://sspai.com/34317" target="_blank" rel="noopener">简洁与强大，从不是矛盾的事物：写作工具 MarkEditor 功能详解</a></li>
-<li><a href="http://sspai.com/34656" target="_blank" rel="noopener">不止是一款简单的码字工具：MarkEditor 进阶功能介绍</a></li>
-</ul>
-</li>
-<li><a href="http://sspai.com/32483" target="_blank" rel="noopener">码字必备：18 款优秀的 Markdown 写作工具 | 2015 年度盘点</a> 喜欢哪一款，就看你的了。</li>
-<li>这几款就够了，多了就有选择症 ……</li>
-</ul>
-<h1 id="markdown流程图"><a href="#markdown流程图" class="headerlink" title="markdown流程图"></a>markdown流程图</h1><h2 id="1-1-流程图"><a href="#1-1-流程图" class="headerlink" title="1.1 流程图"></a>1.1 流程图</h2><h3 id="1-1-横向流程图源码格式"><a href="#1-1-横向流程图源码格式" class="headerlink" title="1.1 横向流程图源码格式:"></a>1.1 横向流程图源码格式:</h3><pre class="mermaid">graph LR
-A[方形] --> B(圆角)
-    B --> C{条件a}
-    C --> |a=1| D[结果1]
-    C --> |a=2| E[结果2]
-    F[横向流程图]</pre>
-
-<h3 id="1-2-竖向流程图源码格式"><a href="#1-2-竖向流程图源码格式" class="headerlink" title="1.2 竖向流程图源码格式:"></a>1.2 竖向流程图源码格式:</h3><pre class="mermaid">graph TD
-A[方形] --> B(圆角)
-    B --> C{条件a}
-    C --> |a=1| D[结果1]
-    C --> |a=2| E[结果2]
-    F[竖向流程图]</pre>
-
-<h3 id="1-3-标准流程图源码格式"><a href="#1-3-标准流程图源码格式" class="headerlink" title="1.3 标准流程图源码格式:"></a>1.3 标准流程图源码格式:</h3><div id="flowchart-0" class="flow-chart"></div>
-
-<h3 id="1-4-标准流程图源码格式-横向"><a href="#1-4-标准流程图源码格式-横向" class="headerlink" title="1.4 标准流程图源码格式(横向):"></a>1.4 标准流程图源码格式(横向):</h3><div id="flowchart-1" class="flow-chart"></div>
-
-<h2 id="1-2-UML时序图"><a href="#1-2-UML时序图" class="headerlink" title="1.2 UML时序图"></a>1.2 UML时序图</h2><h3 id="1-2-1-UML时序图源码样例"><a href="#1-2-1-UML时序图源码样例" class="headerlink" title="1.2.1 UML时序图源码样例:"></a>1.2.1 UML时序图源码样例:</h3><div id="sequence-0"></div>
-
-<h3 id="1-2-2-UML时序图源码复杂样例"><a href="#1-2-2-UML时序图源码复杂样例" class="headerlink" title="1.2.2 UML时序图源码复杂样例:"></a>1.2.2 UML时序图源码复杂样例:</h3><div id="sequence-1"></div>
-
-<h3 id="1-2-3-UML标准时序图样例"><a href="#1-2-3-UML标准时序图样例" class="headerlink" title="1.2.3 UML标准时序图样例:"></a>1.2.3 UML标准时序图样例:</h3><pre class="mermaid">%%时序图例子, -> 实线, --> 虚线, ->> 实线箭头
-    sequenceDiagram
-        participant 张三
-        participant 李四
-        张三 -> 王五: 王五你好吗?
-        loop 健康检查
-            王五 -> 王五: 与疾病战斗
-        end
-        Note right of 王五: 合理饮食 <br>看医生...
-        李四 ->> 张三: 很好!
-        王五 -> 李四: 你怎么样?
-        李四 --> 王五: 很好!</pre>
-
-<h2 id="1-3-甘特图样例"><a href="#1-3-甘特图样例" class="headerlink" title="1.3 甘特图样例:"></a>1.3 甘特图样例:</h2><pre class="mermaid">%%语法示例
-    gantt
-    dateFormat YYYY-MM-DD
-    title 软件开发甘特图
-
-    section 设计
-    需求  :done, des1, 2014-01-06, 2014-01-08
-    原型  :active, des2, 2014-01-09, 3d
-    UI设计    :des3, after des2, 5d
-    未来任务:   :des4, after des3, 5d
-
-    section 开发
-    学习准备理解需求    :crit, done, 2014-01-06, 24h
-    设计框架    :crit, done, after des2, 2d
-    开发  :crit, active, 3d
-    未来任务    :crit, 5d
-    耍   :2d
-
-    section 测试
-    功能测试    :active, a1, after des3, 3d
-    压力测试    :after a1, 20h
-    测试报告    :48h</pre>
-
-<h1 id="数学公式"><a href="#数学公式" class="headerlink" title="数学公式"></a>数学公式</h1><h2 id="矩阵方程"><a href="#矩阵方程" class="headerlink" title="矩阵方程"></a>矩阵方程</h2><p>$$<br>\begin{matrix}<br>    1 &amp; x &amp; x^2 \<br>    1 &amp; y &amp; y^2 \<br>    1 &amp; z &amp; z^2 \<br>    \end{matrix}<br>$$</p>
-<h1 id="reference-参考"><a href="#reference-参考" class="headerlink" title="reference 参考"></a>reference 参考</h1><ul>
-<li><a href="http://brettterpstra.com/2011/08/31/why-markdown-a-two-minute-explanation/" target="_blank" rel="noopener">Why Markdown? A two-minute explanation</a></li>
-<li><a href="http://www.jianshu.com/p/q81RER" target="_blank" rel="noopener">简书：献给写作者的 Markdown 新手指南</a></li>
-<li><a href="https://wizardforcel.gitbooks.io/markdown-simple-world/content/0.html" target="_blank" rel="noopener">Markdown simple world</a></li>
-<li><a href="https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference/5044 MathJax basic tutorial and quick reference" target="_blank" rel="noopener">MathJax语法规则</a></li>
-<li><a href="https://www.jianshu.com/p/7ddbb7dc8fec" target="_blank" rel="noopener">Mermaid语法规则</a></li>
-<li><a href="https://mermaidjs.github.io/demos.html" target="_blank" rel="noopener">Mermaid官方教程</a></li>
-<li><a href="https://github.com/webappdevelp/hexo-filter-mermaid-diagrams" target="_blank" rel="noopener">Mermaid Github仓库</a></li>
-<li>[MathJax Github仓库](<a href="https://github.com/mathjax/MathJax" target="_blank" rel="noopener">https://github.com/mathjax/MathJax</a><br><script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 开始框
-op=>operation: 处理框
-cond=>condition: 判断框
-sub1=>subroutine: 子流程
-io=>inputoutput: 输入输出框
-e=>end: 结束框
-st->op->cond
-cond(yes)->io->e
-cond(no)->sub1(right)->op</textarea><textarea id="flowchart-0-options" style="display: none">{"theme":"simple","scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script><textarea id="flowchart-1-code" style="display: none">st=>start: 开始框
-op=>operation: 处理框
-cond=>condition: 判断框(是或否?)
-sub1=>subroutine: 子流程
-io=>inputoutput: 输入输出框
-e=>end: 结束框
-st(right)->op(right)->cond
-cond(yes)->io(bottom)->e
-cond(no)->sub1(right)->op</textarea><textarea id="flowchart-1-options" style="display: none">{"theme":"simple","scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-1-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-1-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-1", options);</script><script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.27/webfontloader.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script><textarea id="sequence-0-code" style="display: none">对象A->对象B: 对象B你好吗? (请求)
-Note right of 对象B: 对象B的描述
-Note left of 对象A: 对象A的描述(提示)
-对象B --> 对象A: 我很好(响应)
-对象A --> 对象B: 你真的好吗?</textarea><textarea id="sequence-0-options" style="display: none">{"theme":"simple","scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("sequence-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("sequence-0-options").value));  var diagram = Diagram.parse(code);  diagram.drawSVG("sequence-0", options);</script><textarea id="sequence-1-code" style="display: none">Title: 标题: 复杂使用
-对象A -> 对象B: 对象B你好吗? (请求)
-Note right of 对象B: 对象B的描述
-Note right of 对象A: 对象A的描述(提示)
-对象B --> 对象A: 我很好(响应)
-对象B --> 小三: 你好吗?
-小三 -> 对象A: 对象B找我了
-对象A --> 对象B: 你真的好吗?
-Note over 小三, 对象B: 我们是朋友
-participant C
-Note right of C: 没人陪我玩</textarea><textarea id="sequence-1-options" style="display: none">{"theme":"simple","scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("sequence-1-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("sequence-1-options").value));  var diagram = Diagram.parse(code);  diagram.drawSVG("sequence-1", options);</script></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2313,7 +2658,9 @@ Note right of C: 没人陪我玩</textarea><textarea id="sequence-1-options" sty
 
       <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="vincent">
             
               <p class="site-author-name" itemprop="name">vincent</p>
               <p class="site-description motion-element" itemprop="description">The King is dead, long live the King!</p>
@@ -2326,7 +2673,7 @@ Note right of C: 没人陪我玩</textarea><textarea id="sequence-1-options" sty
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-count">41</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2492,7 +2839,11 @@ Note right of C: 没人陪我玩</textarea><textarea id="sequence-1-options" sty
                     
                       
                     
-                    <span class="site-state-item-count">52</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">54</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -2501,12 +2852,24 @@ Note right of C: 没人陪我玩</textarea><textarea id="sequence-1-options" sty
           
 
           
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
 
           
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
                   <a href="https://github.com/vincentruan" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:rzw0813@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
                   
                 </span>
               
@@ -2548,7 +2911,21 @@ Note right of C: 没人陪我玩</textarea><textarea id="sequence-1-options" sty
   <span class="author" itemprop="copyrightHolder">vincent</span>
 
   
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">383k</span>
+  
 
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">5:49</span>
   
 </div>
 
@@ -2620,6 +2997,8 @@ Note right of C: 没人陪我玩</textarea><textarea id="sequence-1-options" sty
 
 
 
+  
+
 
 
   
@@ -2649,6 +3028,11 @@ Note right of C: 没人陪我玩</textarea><textarea id="sequence-1-options" sty
   
   
     <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
   
 
   
@@ -3064,35 +3448,11 @@ Note right of C: 没人陪我玩</textarea><textarea id="sequence-1-options" sty
       
     
       
-        
+    
       
     
   
 
-  
-    
-      <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      },
-      TeX: {equationNumbers: { autoNumber: "AMS" }}
-    });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-      var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-    
   
 
 
