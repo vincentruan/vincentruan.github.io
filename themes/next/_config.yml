@@ -264,9 +264,9 @@ excerpt_description: true
 # Automatically Excerpt. Not recommend.
 # Please use <!-- more --> in the post to control excerpt accurately.
 auto_excerpt:
-  enable: false
+  enable: true
   length: 300 # 摘录字数
-# read_more_btn: true # 显示全文按钮
+read_more_btn: true # 显示全文按钮
 
 # Post meta display settings
 post_meta:
