@@ -6,13 +6,13 @@ tags:
 - JAVA8
 ---
 
-原文：https://dzone.com/articles/java-8-top-tips
-
 # Optional
 
 Optional是一个评价过低的特性，它可以显著的降低代码抛出NullPointerException的可能。它在边界代码(你正在使用的API或者你发布的API)中特别有用。
 
 但是对于它的不适当的使用和设计很容易使一个小的变动影响到很多的类，或者降低代码的可阅读性。这里有一些如何更加高效使用Optional的建议。
+
+<!-- more -->
 
 ### Optional应该仅仅用在返回类型中
 
@@ -254,3 +254,9 @@ list.forEach((e) -> System.out.println(e));
 ```java
 list.stream().filter((e) -> "a".equals(e)).count();
 ```
+
+
+
+------
+
+原文：https://dzone.com/articles/java-8-top-tips

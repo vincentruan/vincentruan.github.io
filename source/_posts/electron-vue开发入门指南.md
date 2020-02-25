@@ -17,6 +17,8 @@ date: 2020-01-31 12:48:08
 2. [中文文档](https://github.com/electron/i18n/tree/master/content/zh-CN)
 3. [W3C教程](https://www.w3cschool.cn/electronmanual/wcx31ql6.html)
 
+<!-- more -->
+
 # VUE概述
 
 ![Vue logo](electron-vue开发入门指南/68747470733a2f2f7675656a732e6f72672f696d616765732f6c6f676f2e706e67.png)

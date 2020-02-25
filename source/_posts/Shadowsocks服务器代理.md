@@ -16,9 +16,9 @@ tags:
 
 
 
-这里主要阐述服务端通过proxy连接的解决方案，shadowsocks server直连网络的方式比较简单，网上这块资料也比较齐全，不做过多描述，
+这里主要阐述服务端通过proxy连接的解决方案，shadowsocks server直连网络的方式比较简单，网上这块资料也比较齐全，不做过多描述
 
-
+<!-- more -->
 
 ## ssserver代理安装配置
 

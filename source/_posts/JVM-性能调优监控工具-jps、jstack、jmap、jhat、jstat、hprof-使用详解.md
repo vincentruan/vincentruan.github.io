@@ -18,7 +18,9 @@ Java应用开发、维护中，有时候我们会碰到下面这些问题：
 
 这些问题在日常开发、维护中可能被很多人忽视（比如有的人遇到上面的问题只是重启服务器或者调大内存，而不会深究问题根源），但能够理解并解决这些问题是Java程序员进阶的必备要求。本文将对一些常用的JVM性能调优监控工具进行介绍，希望能起抛砖引玉之用。
 
-# 一、jps(Java Virtual Machine Process Status Tool)   ： 基础工具
+<!-- more -->
+
+# jps(Java Virtual Machine Process Status Tool)   ： 基础工具
 
 jps主要用来输出JVM中运行的进程状态信息。语法格式如下：
 
@@ -51,7 +53,7 @@ root@ubuntu:/# jps -m -l
 21711 mrf-center.jar
 ```
 
-# 二、 jstack
+# jstack
 jstack主要用来查看某个Java进程内的线程堆栈信息。语法格式如下：
 ```shell
 jstack [option] pid
@@ -103,7 +105,7 @@ synchronized(sigLock) {try {
 ```
 它是轮询任务的空闲等待代码，上面的sigLock.wait(timeUntilContinue)就对应了前面的Object.wait()。
 
-#  三、jmap（Memory Map）和 jhat（Java Heap Analysis Tool）
+#  jmap（Memory Map）和 jhat（Java Heap Analysis Tool）
 jmap导出堆内存，生产上使用曾经导致过进程hang住的情况(JDK1.7)，分析可能存在侵入内存区间读取时，有一定概率造成影响，建议如果机器有重要任务在运行或者不能立刻重启的进程谨慎使用！
 然后使用jhat来进行分析
 jmap语法格式如下：
@@ -250,7 +252,7 @@ Started HTTP server on port 9998Server is ready.
 
 上面红线框出来的部分大家可以自己去摸索下，最后一项支持OQL（Object Query Language对象查询语言）。
 
-# 四、jstat（JVM统计监测工具）
+# jstat（JVM统计监测工具）
 
 看看各个区内存和GC的情况
 语法格式如下：
@@ -289,7 +291,7 @@ GCT：GC总耗时
 ```
 
 
-# 五、hprof（Heap/CPU Profiling Tool）
+# hprof（Heap/CPU Profiling Tool）
 
 hprof能够展现CPU使用率，统计堆内存使用情况。
 语法格式如下：

@@ -7,8 +7,6 @@ tags:
 - Algolia
 ---
 
-***本文转载自***[Hexo集成Algolia搜索插件](http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/)
-
 ## 前言
 
 个人博客自从2016年10月21日搭建以来，迄今为止已经有49 篇日志了。虽然不是很多篇文章，但是搜索站内的内容已经力不从心了。
@@ -16,6 +14,8 @@ tags:
 搜索了网上很多关于“Hexo 站内搜索”的内容，发现大部分都是使用[Swiftype](https://swiftype.com/)，但是发现Swiftype 搜索只有15 天的免费，之后就需要开始收费了。
 
 因为只是为自己的[个人博客 ](https://jobbym.github.io/)使用站内搜索，所以希望找一个类似与Swiftype 的，但是**免费的**站内搜索。最后找了Algolia 这个免费版本替代。
+
+<!-- more -->
 
 下面简单说下搭建过程：
 
@@ -104,3 +104,8 @@ Cannot GET /undefined/
 
 1. [Swiftype站内搜索](https://github.com/iissnan/hexo-theme-next/wiki/Swiftype%E7%AB%99%E5%86%85%E6%90%9C%E7%B4%A2)
 2. [Next 第三方服务集成](http://theme-next.iissnan.com/third-party-services.html)
+
+------
+
+***本文转载自***[Hexo集成Algolia搜索插件](http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/)
+

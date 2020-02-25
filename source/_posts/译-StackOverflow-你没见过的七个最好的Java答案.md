@@ -7,11 +7,9 @@ tags:
 - StackOverflow
 ---
 
-原文：https://dzone.com/articles/stackoverflow-7-of-the-best-java-answers-that-you
-
-译文: https://www.rowkey.me/blog/2016/08/03/so-java-7-answers/
-
 StackOverflow(后边简称so)发展到目前，已经成为了全球开发者的金矿。它能够帮助我们找到在各个领域遇到的问题的最有用的解决方案，同时我们也会从中学习到很多新的东西。这篇文章是在我们审阅了so上最流行的Java问题以及答案后从中挑出来的。即使你是一个有丰富经验的开发者，也能从中学到不少东西。
+
+<!-- more -->
 
 ## 分支预测
 
@@ -112,3 +110,7 @@ public static void main(String[] args) throws ParseException {
 ## 总结
 
 对于Java，其实关键的不在于你懂多少，而是在于你可以一直学到更多的东西。StackOverflow不仅在code上的一些问题可以帮助我们，也有助于我们回过头来去深入地学习一些我们已经知道的知识。
+
+> 转载文章
+> 原文：https://dzone.com/articles/stackoverflow-7-of-the-best-java-answers-that-you
+> 译文: https://www.rowkey.me/blog/2016/08/03/so-java-7-answers/

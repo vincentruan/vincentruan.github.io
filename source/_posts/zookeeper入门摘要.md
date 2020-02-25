@@ -15,6 +15,8 @@ ZooKeeper是一个分布式的，开放源码的分布式应用程序协调服�
 
 有序性是zookeeper中非常重要的一个特性，所有的更新都是全局有序的，每个更新都有一个唯一的时间戳，这个时间戳称为zxid（Zookeeper Transaction Id）。而读请求只会相对于更新有序，也就是读请求的返回结果中会带有这个zookeeper最新的zxid。
 
+<!-- more -->
+
 ## 2.ZooKeeper提供了什么？
 
 1、文件系统

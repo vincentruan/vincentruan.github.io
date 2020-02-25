@@ -15,6 +15,8 @@ tags:
 - [Markdown wikipedia 介绍](https://zh.wikipedia.org/wiki/Markdown)
 - [MultiMarkdown](http://fletcherpenney.net/multimarkdown/) 引入更多标记特性和输出选项的改进版Markdown
 
+<!-- more -->
+
 # why markdown
 
 - 纯文本，兼容性极强，可以用任意文本编辑器打开.

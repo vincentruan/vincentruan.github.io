@@ -22,6 +22,8 @@ yum install expat-devel
 yum install gettext-devel yum install perl-ExtUtils-CBuilder perl-ExtUtils-MakeMaker
 ```
 
+<!-- more -->
+
 下载最新的git包
 
 ```bash

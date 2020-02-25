@@ -9,8 +9,6 @@ tags:
 - AQS
 ---
 
-[转载自美团技术团队]: https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html	"美团技术团队"
-
 ## 前言
 
 Java中的大部分同步类（Lock、Semaphore、ReentrantLock等）都是基于AbstractQueuedSynchronizer（简称为AQS）实现的。AQS是一种提供了原子式管理同步状态、阻塞和唤醒线程功能以及队列模型的简单框架。本文会从应用层逐渐深入到原理层，并通过ReentrantLock的基本特性和ReentrantLock与AQS的关联，来深入解读AQS相关独占锁的知识点，同时采取问答的模式来帮助大家理解AQS。由于篇幅原因，本篇文章主要阐述AQS中独占锁的逻辑和Sync Queue，不讲述包含共享锁和Condition Queue的部分（本篇文章核心为AQS原理剖析，只是简单介绍了ReentrantLock，感兴趣同学可以阅读一下ReentrantLock的源码）。
@@ -18,6 +16,8 @@ Java中的大部分同步类（Lock、Semaphore、ReentrantLock等）都是基�
 下面列出本篇文章的大纲和思路，以便于大家更好地理解：
 
 ![img](从ReentrantLock的实现看AQS的原理及应用/9d182d944e0889c304ef529ba50a4fcd205214.png)
+
+<!-- more -->
 
 ## 1 ReentrantLock
 
@@ -996,3 +996,5 @@ public class LeeMain {
 - Lea D. The java. util. concurrent synchronizer framework[J]. Science of Computer Programming, 2005, 58(3): 293-309.
 - 《Java并发编程实战》
 - [不可不说的Java“锁”事](https://tech.meituan.com/2018/11/15/java-lock.html)
+
+> 转载自美团技术团队 https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html

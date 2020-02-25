@@ -9,9 +9,9 @@ tags:
 - 设计模式
 ---
 
-[来源]: http://www.crazyant.net/2022.html
-
 虽然我们都知道有26个设计模式，但是大多停留在概念层面，真实开发中很少遇到，Mybatis源码中使用了大量的设计模式，阅读源码并观察设计模式在其中的应用，能够更深入的理解设计模式。
+
+<!-- more -->
 
 Mybatis至少遇到了以下的设计模式的使用：
 
@@ -542,3 +542,5 @@ public class PropertyTokenizer implements Iterator<PropertyTokenizer> {
 - http://blog.csdn.net/wagcy/article/details/32963235
 - mybatis缓存机制详解（一）——Cache
 - https://my.oschina.net/lixin91/blog/620068
+
+> 转载自http://www.crazyant.net/2022.html 

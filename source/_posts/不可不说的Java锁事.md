@@ -7,13 +7,11 @@ tags:
 - JAVA
 ---
 
-[转载自美团技术团队]: https://tech.meituan.com/2018/11/15/java-lock.html	"美团技术团队"
-
-转载自美团技术团队，[原文地址](https://tech.meituan.com/2018/11/15/java-lock.html)，在原文基础上有修改.
-
 # 前言
 
 Java提供了种类丰富的锁，每种锁因其特性的不同，在适当的场景下能够展现出非常高的效率。本文旨在对锁相关源码（本文中的源码来自JDK 8和Netty 3.10.6）、使用场景进行举例，为读者介绍主流锁的知识点，以及不同的锁的适用场景。
+
+<!-- more -->
 
 # JAVA主流锁
 
@@ -1022,3 +1020,4 @@ private void doReleaseShared() {
 9. [Java多线程（十）之ReentrantReadWriteLock深入分析](https://my.oschina.net/adan1/blog/158107)
 10. [Java–读写锁的实现原理](https://mrdear.cn/2018/06/23/java/java--readwritelock)
 
+> 转载自美团技术团队，[原文地址](https://tech.meituan.com/2018/11/15/java-lock.html)，在原文基础上有修改.
