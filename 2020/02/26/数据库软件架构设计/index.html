@@ -141,7 +141,7 @@
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/26/数据库软件架构设计/640-1582687805568.webp">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/26/数据库软件架构设计/640-1582688661771.webp">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/26/数据库软件架构设计/640-1582688686209.webp">
-<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz/YrezxckhYOzbRcfS5SIbLMXktibZKEUDiacFsmjn3ytAvnDqV0ILbZT9TlKwtG9krGElkCyY7bv4T6HV7PYqkWMw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/26/数据库软件架构设计/640-1582710817260.webp">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/26/数据库软件架构设计/640-1582689399761.webp">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/26/数据库软件架构设计/640-1582689439373.webp">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/26/数据库软件架构设计/640-1582689464428.webp">
@@ -191,7 +191,7 @@
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/26/数据库软件架构设计/640-1582709010966.webp">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/26/数据库软件架构设计/640-1582709010962.webp">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/26/数据库软件架构设计/640-1582709011000.webp">
-<meta property="og:updated_time" content="2020-02-26T09:48:11.217Z">
+<meta property="og:updated_time" content="2020-02-26T09:53:39.957Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库软件架构设计">
 <meta name="twitter:description" content="基本概念概念一：单库 概念二：分片 分片解决“数据量太大”这一问题，也就是通常说的“水平切分”。 一旦引入分片，势必面临“数据路由”的新问题，数据到底要访问哪个库。路由规则通常有3种方法：">
@@ -466,7 +466,7 @@
                 
               
 
-              <time title="创建时间：2020-02-26 11:28:47 / 修改时间：17:48:11" itemprop="dateCreated datePublished" datetime="2020-02-26T11:28:47+08:00">2020-02-26</time>
+              <time title="创建时间：2020-02-26 11:28:47 / 修改时间：17:53:39" itemprop="dateCreated datePublished" datetime="2020-02-26T11:28:47+08:00">2020-02-26</time>
             
 
             
@@ -622,7 +622,7 @@
 <h2 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h2><p><img src="/2020/02/26/数据库软件架构设计/640-1582688661771.webp" alt="img"><br>如果某一个key有写操作，在不一致时间窗口内，中间件会将这个key的读操作也路由到主库上。</p>
 <h2 id="强制读主"><a href="#强制读主" class="headerlink" title="强制读主"></a>强制读主</h2><p><img src="/2020/02/26/数据库软件架构设计/640-1582688686209.webp" alt="img"><br>“双主高可用”的架构，主从一致性的问题能够大大缓解。</p>
 <p>第二类不一致，是db与缓存间的不一致。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz/YrezxckhYOzbRcfS5SIbLMXktibZKEUDiacFsmjn3ytAvnDqV0ILbZT9TlKwtG9krGElkCyY7bv4T6HV7PYqkWMw/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<p><img src="/2020/02/26/数据库软件架构设计/640-1582710817260.webp" alt="img"></p>
 <p>这一类不一致，<a href="http://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651961368&amp;idx=1&amp;sn=82a59f41332e11a29c5759248bc1ba17&amp;chksm=bd2d0dc48a5a84d293f5999760b994cee9b7e20e240c04d0ed442e139f84ebacf608d51f4342&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">《缓存架构，一篇足够？》</a>里有非常详细的叙述，本文不再展开。</p>
 <p>另外建议，所有允许cache miss的业务场景，缓存中的KEY都设置一个超时时间，这样即使出现不一致，有机会得到自修复。</p>
 <h1 id="如何保障数据库的扩展性？"><a href="#如何保障数据库的扩展性？" class="headerlink" title="如何保障数据库的扩展性？"></a>如何保障数据库的扩展性？</h1><h2 id="秒级成倍数据库扩容"><a href="#秒级成倍数据库扩容" class="headerlink" title="秒级成倍数据库扩容"></a>秒级成倍数据库扩容</h2><p>《<a href="http://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651962231&amp;idx=1&amp;sn=1b51d042c243f0b3ce0b748ddbcff865&amp;chksm=bd2d0eab8a5a87bdcbe7dd08fb4c969ad76fa0ea00b2c78645db8561fd2a78d813d7b8bef2ac&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">亿级数据DB秒级平滑扩容</a>》</p>
