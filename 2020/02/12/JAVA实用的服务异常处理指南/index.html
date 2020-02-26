@@ -122,7 +122,7 @@
 
 
   <meta name="description" content="服务异常的处理流程">
-<meta name="keywords" content="Linux,异常处理,Java">
+<meta name="keywords" content="Java,Linux,异常处理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux实用的服务异常处理指南">
 <meta property="og:url" content="https://vincentruan.github.io/2020/02/12/JAVA实用的服务异常处理指南/index.html">
@@ -130,7 +130,10 @@
 <meta property="og:description" content="服务异常的处理流程">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://vincentruan.github.io/2020/02/12/JAVA实用的服务异常处理指南/0ce47abcae0d474bb5bf9ebc993e6ad3.jpeg">
-<meta property="og:updated_time" content="2020-02-25T15:09:15.040Z">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/JAVA实用的服务异常处理指南/640-1582687536117.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/JAVA实用的服务异常处理指南/640-1582687644456.jpg">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/12/JAVA实用的服务异常处理指南/640-1582687655625.webp">
+<meta property="og:updated_time" content="2020-02-26T03:27:42.508Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux实用的服务异常处理指南">
 <meta name="twitter:description" content="服务异常的处理流程">
@@ -366,7 +369,7 @@
     <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/12/JAVA实用的服务异常处理指南/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="vincent">
+      <meta itemprop="name" content="Vincent">
       <meta itemprop="description" content="The King is dead, long live the King!">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
@@ -422,7 +425,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
+                <time title="修改时间：2020-02-26 11:27:42" itemprop="dateModified" datetime="2020-02-26T11:27:42+08:00">2020-02-26</time>
               
             
           </span>
@@ -467,7 +470,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">38k</span>
+                <span title="本文字数">40k</span>
               
 
               
@@ -481,7 +484,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">35 分钟</span>
+                <span title="阅读时长">37 分钟</span>
               
             </div>
           
@@ -868,6 +871,68 @@
 </tbody>
 </table>
 <h2 id="使用方式-4"><a href="#使用方式-4" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//查看负载情况</span></span><br><span class="line">uptime</span><br><span class="line"></span><br><span class="line">top</span><br><span class="line"></span><br><span class="line">vmstat</span><br><span class="line"></span><br><span class="line"><span class="comment">//统计系统调用耗时情况</span></span><br><span class="line">strace -<span class="built_in">c</span> -p pid</span><br><span class="line"></span><br><span class="line"><span class="comment">//跟踪指定的系统操作例如epoll_wait</span></span><br><span class="line">strace -<span class="type">T</span> -e epoll_wait -p pid</span><br><span class="line"></span><br><span class="line"><span class="comment">//查看内核日志信息</span></span><br><span class="line">dmesg</span><br></pre></td></tr></table></figure>
+<h1 id="实战场景一"><a href="#实战场景一" class="headerlink" title="实战场景一"></a>实战场景一</h1><p>某Java服务（假设PID=10765）出现了OOM，最常见的原因为：</p>
+<ul>
+<li>有可能是内存分配确实过小，而正常业务使用了大量内存</li>
+<li>某一个对象被频繁申请，却没有释放，内存不断泄漏，导致内存耗尽</li>
+<li>某一个资源被频繁申请，系统资源耗尽，例如：不断创建线程，不断发起网络连接</li>
+</ul>
+<p>更具体的，可以使用以下工具逐一排查。</p>
+<h2 id="确认是不是内存本身就分配过小"><a href="#确认是不是内存本身就分配过小" class="headerlink" title="确认是不是内存本身就分配过小"></a>确认是不是内存本身就分配过小</h2><blockquote>
+<p>方法：jmap -heap 10765</p>
+</blockquote>
+<p><img src="/2020/02/12/JAVA实用的服务异常处理指南/640-1582687536117.webp" alt="img"></p>
+<p>如上图，可以查看新生代，老生代堆内存的分配大小以及使用情况，看是否本身分配过小。</p>
+<h2 id="找到最耗内存的对象"><a href="#找到最耗内存的对象" class="headerlink" title="找到最耗内存的对象"></a>找到最耗内存的对象</h2><blockquote>
+<p>方法：jmap -histo:live 10765 | more</p>
+</blockquote>
+<p><img src="/2020/02/12/JAVA实用的服务异常处理指南/640-1582687644456.jpg" alt="img"></p>
+<p>如上图，输入命令后，会以表格的形式显示存活对象的信息，并按照所占内存大小排序：</p>
+<ul>
+<li><strong>实例数</strong></li>
+<li><strong>所占内存大小</strong></li>
+<li><strong>类名</strong></li>
+</ul>
+<p>是不是很直观？对于实例数较多，占用内存大小较多的实例/类，相关的代码就要针对性review了。</p>
+<p>上图中占内存最多的对象是RingBufferLogEvent，共占用内存18M，属于正常使用范围。</p>
+<p>如果发现某类对象占用内存很大（例如几个G），很可能是类对象创建太多，且一直未释放。例如：</p>
+<ul>
+<li>申请完资源后，未调用close()或dispose()释放资源</li>
+<li>消费者消费速度慢（或停止消费了），而生产者不断往队列中投递任务，导致队列中任务累积过多</li>
+</ul>
+<p><em>ps：线上执行该命令会强制执行一次fgc。另外还可以dump内存进行分析。</em></p>
+<h2 id="确认是否是资源耗尽"><a href="#确认是否是资源耗尽" class="headerlink" title="确认是否是资源耗尽"></a>确认是否是资源耗尽</h2><p>工具：</p>
+<ul>
+<li>pstree</li>
+<li>netstat</li>
+</ul>
+<p>查看进程创建的线程数，以及网络连接数，如果资源耗尽，也可能出现OOM。</p>
+<p>这里介绍另一种方法，通过</p>
+<ul>
+<li>/proc/${PID}/fd</li>
+<li>/proc/${PID}/task</li>
+</ul>
+<p>可以分别查看句柄详情和线程数。</p>
+<p>例如，某一台线上服务器的sshd进程PID是9339，查看</p>
+<ul>
+<li>ll /proc/9339/fd</li>
+<li>ll /proc/9339/task</li>
+</ul>
+<p><img src="/2020/02/12/JAVA实用的服务异常处理指南/640-1582687655625.webp" alt="img"></p>
+<p>如上图，sshd共占用了四个句柄</p>
+<ul>
+<li>0 -&gt; 标准输入</li>
+<li>1 -&gt; 标准输出</li>
+<li>2 -&gt; 标准错误输出</li>
+<li>3 -&gt; socket（容易想到是监听端口）</li>
+</ul>
+<p>sshd只有一个主线程PID为9339，并没有多线程。</p>
+<p>所以，只要</p>
+<ul>
+<li>ll /proc/${PID}/fd | wc -l</li>
+<li>ll /proc/${PID}/task | wc -l （效果等同pstree -p | wc -l）</li>
+</ul>
+<p>就能知道进程打开的句柄数和线程数。</p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
 <li><a href="http://tmq.qq.com/2016/07/it-is-necessary-to-know-the-background-performance-test/" target="_blank" rel="noopener">http://tmq.qq.com/2016/07/it-is-necessary-to-know-the-background-performance-test/</a></li>
 <li><a href="https://www.ibm.com/developerworks/java/library/j-nativememory-linux/" target="_blank" rel="noopener">https://www.ibm.com/developerworks/java/library/j-nativememory-linux/</a></li>
@@ -895,11 +960,11 @@
       
         <div class="post-tags">
           
+            <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+          
             <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
           
             <a href="/tags/异常处理/" rel="tag"><i class="fa fa-tag"></i> 异常处理</a>
-          
-            <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
           
         </div>
       
@@ -991,9 +1056,9 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="vincent">
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Vincent">
             
-              <p class="site-author-name" itemprop="name">vincent</p>
+              <p class="site-author-name" itemprop="name">Vincent</p>
               <p class="site-description motion-element" itemprop="description">The King is dead, long live the King!</p>
           </div>
 
@@ -1004,7 +1069,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">41</span>
+                    <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1053,7 +1118,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">18</span>
+                      
+                    
+                    <span class="site-state-item-count">19</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1174,7 +1241,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">54</span>
+                      
+                    
+                    <span class="site-state-item-count">55</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1231,7 +1300,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#服务异常的处理流程"><span class="nav-number">1.</span> <span class="nav-text">服务异常的处理流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CPU负载"><span class="nav-number">2.</span> <span class="nav-text">CPU负载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明"><span class="nav-number">2.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析工具"><span class="nav-number">2.2.</span> <span class="nav-text">分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式"><span class="nav-number">2.3.</span> <span class="nav-text">使用方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看机器-cpu-的负载"><span class="nav-number">2.4.</span> <span class="nav-text">查看机器 cpu 的负载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查找-cpu-占用率高的线程"><span class="nav-number">2.5.</span> <span class="nav-text">查找 cpu 占用率高的线程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存"><span class="nav-number">3.</span> <span class="nav-text">内存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明-1"><span class="nav-number">3.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析工具-1"><span class="nav-number">3.2.</span> <span class="nav-text">分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式-1"><span class="nav-number">3.3.</span> <span class="nav-text">使用方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统内存"><span class="nav-number">3.4.</span> <span class="nav-text">系统内存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是buffer-cache？"><span class="nav-number">3.4.1.</span> <span class="nav-text">什么是buffer/cache？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统如何回收cache？"><span class="nav-number">3.4.2.</span> <span class="nav-text">系统如何回收cache？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程内存"><span class="nav-number">3.5.</span> <span class="nav-text">进程内存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程内存统计"><span class="nav-number">3.5.1.</span> <span class="nav-text">进程内存统计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM-内存分配"><span class="nav-number">3.5.2.</span> <span class="nav-text">JVM 内存分配</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方法区"><span class="nav-number">3.5.2.1.</span> <span class="nav-text">方法区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#虚拟机栈"><span class="nav-number">3.5.2.2.</span> <span class="nav-text">虚拟机栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本地方法栈"><span class="nav-number">3.5.2.3.</span> <span class="nav-text">本地方法栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#堆"><span class="nav-number">3.5.2.4.</span> <span class="nav-text">堆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#程序计数器"><span class="nav-number">3.5.2.5.</span> <span class="nav-text">程序计数器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#直接内存"><span class="nav-number">3.5.2.6.</span> <span class="nav-text">直接内存</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM-内存分析"><span class="nav-number">3.6.</span> <span class="nav-text">JVM 内存分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看-JVM-堆内存情况"><span class="nav-number">3.6.1.</span> <span class="nav-text">查看 JVM 堆内存情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看-JVM-堆各个分区的内存情况"><span class="nav-number">3.6.2.</span> <span class="nav-text">查看 JVM 堆各个分区的内存情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析-JVM-堆内存中的对象"><span class="nav-number">3.6.3.</span> <span class="nav-text">分析 JVM 堆内存中的对象</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#磁盘IO"><span class="nav-number">4.</span> <span class="nav-text">磁盘IO</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明-2"><span class="nav-number">4.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析工具-2"><span class="nav-number">4.2.</span> <span class="nav-text">分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式-2"><span class="nav-number">4.3.</span> <span class="nav-text">使用方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络"><span class="nav-number">5.</span> <span class="nav-text">网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明-3"><span class="nav-number">5.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析工具-3"><span class="nav-number">5.2.</span> <span class="nav-text">分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式-3"><span class="nav-number">5.3.</span> <span class="nav-text">使用方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#服务指标"><span class="nav-number">6.</span> <span class="nav-text">服务指标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#响应时间-RT"><span class="nav-number">6.1.</span> <span class="nav-text">响应时间(RT)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#吞吐量-Throughput"><span class="nav-number">6.2.</span> <span class="nav-text">吞吐量(Throughput)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并发用户数"><span class="nav-number">6.3.</span> <span class="nav-text">并发用户数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QPS每秒查询率-Query-Per-Second"><span class="nav-number">6.4.</span> <span class="nav-text">QPS每秒查询率(Query Per Second)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU利用率"><span class="nav-number">6.5.</span> <span class="nav-text">CPU利用率</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工具"><span class="nav-number">7.</span> <span class="nav-text">工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#系统负载"><span class="nav-number">8.</span> <span class="nav-text">系统负载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明-4"><span class="nav-number">8.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析工具-4"><span class="nav-number">8.2.</span> <span class="nav-text">分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式-4"><span class="nav-number">8.3.</span> <span class="nav-text">使用方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">9.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#服务异常的处理流程"><span class="nav-number">1.</span> <span class="nav-text">服务异常的处理流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CPU负载"><span class="nav-number">2.</span> <span class="nav-text">CPU负载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明"><span class="nav-number">2.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析工具"><span class="nav-number">2.2.</span> <span class="nav-text">分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式"><span class="nav-number">2.3.</span> <span class="nav-text">使用方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看机器-cpu-的负载"><span class="nav-number">2.4.</span> <span class="nav-text">查看机器 cpu 的负载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查找-cpu-占用率高的线程"><span class="nav-number">2.5.</span> <span class="nav-text">查找 cpu 占用率高的线程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存"><span class="nav-number">3.</span> <span class="nav-text">内存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明-1"><span class="nav-number">3.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析工具-1"><span class="nav-number">3.2.</span> <span class="nav-text">分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式-1"><span class="nav-number">3.3.</span> <span class="nav-text">使用方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统内存"><span class="nav-number">3.4.</span> <span class="nav-text">系统内存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是buffer-cache？"><span class="nav-number">3.4.1.</span> <span class="nav-text">什么是buffer/cache？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统如何回收cache？"><span class="nav-number">3.4.2.</span> <span class="nav-text">系统如何回收cache？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程内存"><span class="nav-number">3.5.</span> <span class="nav-text">进程内存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程内存统计"><span class="nav-number">3.5.1.</span> <span class="nav-text">进程内存统计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM-内存分配"><span class="nav-number">3.5.2.</span> <span class="nav-text">JVM 内存分配</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方法区"><span class="nav-number">3.5.2.1.</span> <span class="nav-text">方法区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#虚拟机栈"><span class="nav-number">3.5.2.2.</span> <span class="nav-text">虚拟机栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本地方法栈"><span class="nav-number">3.5.2.3.</span> <span class="nav-text">本地方法栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#堆"><span class="nav-number">3.5.2.4.</span> <span class="nav-text">堆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#程序计数器"><span class="nav-number">3.5.2.5.</span> <span class="nav-text">程序计数器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#直接内存"><span class="nav-number">3.5.2.6.</span> <span class="nav-text">直接内存</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM-内存分析"><span class="nav-number">3.6.</span> <span class="nav-text">JVM 内存分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看-JVM-堆内存情况"><span class="nav-number">3.6.1.</span> <span class="nav-text">查看 JVM 堆内存情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看-JVM-堆各个分区的内存情况"><span class="nav-number">3.6.2.</span> <span class="nav-text">查看 JVM 堆各个分区的内存情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析-JVM-堆内存中的对象"><span class="nav-number">3.6.3.</span> <span class="nav-text">分析 JVM 堆内存中的对象</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#磁盘IO"><span class="nav-number">4.</span> <span class="nav-text">磁盘IO</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明-2"><span class="nav-number">4.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析工具-2"><span class="nav-number">4.2.</span> <span class="nav-text">分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式-2"><span class="nav-number">4.3.</span> <span class="nav-text">使用方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络"><span class="nav-number">5.</span> <span class="nav-text">网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明-3"><span class="nav-number">5.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析工具-3"><span class="nav-number">5.2.</span> <span class="nav-text">分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式-3"><span class="nav-number">5.3.</span> <span class="nav-text">使用方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#服务指标"><span class="nav-number">6.</span> <span class="nav-text">服务指标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#响应时间-RT"><span class="nav-number">6.1.</span> <span class="nav-text">响应时间(RT)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#吞吐量-Throughput"><span class="nav-number">6.2.</span> <span class="nav-text">吞吐量(Throughput)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并发用户数"><span class="nav-number">6.3.</span> <span class="nav-text">并发用户数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QPS每秒查询率-Query-Per-Second"><span class="nav-number">6.4.</span> <span class="nav-text">QPS每秒查询率(Query Per Second)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU利用率"><span class="nav-number">6.5.</span> <span class="nav-text">CPU利用率</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工具"><span class="nav-number">7.</span> <span class="nav-text">工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#系统负载"><span class="nav-number">8.</span> <span class="nav-text">系统负载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明-4"><span class="nav-number">8.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析工具-4"><span class="nav-number">8.2.</span> <span class="nav-text">分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式-4"><span class="nav-number">8.3.</span> <span class="nav-text">使用方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实战场景一"><span class="nav-number">9.</span> <span class="nav-text">实战场景一</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#确认是不是内存本身就分配过小"><span class="nav-number">9.1.</span> <span class="nav-text">确认是不是内存本身就分配过小</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#找到最耗内存的对象"><span class="nav-number">9.2.</span> <span class="nav-text">找到最耗内存的对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#确认是否是资源耗尽"><span class="nav-number">9.3.</span> <span class="nav-text">确认是否是资源耗尽</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">10.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
@@ -1255,7 +1324,7 @@
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">vincent</span>
+  <span class="author" itemprop="copyrightHolder">Vincent</span>
 
   
     <span class="post-meta-divider">|</span>
@@ -1263,7 +1332,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">384k</span>
+    <span title="站点总字数">401k</span>
   
 
   
@@ -1272,7 +1341,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">5:49</span>
+    <span title="站点阅读时长">6:05</span>
   
 </div>
 
