@@ -102,9 +102,9 @@
       <category term="架构设计" scheme="https://vincentruan.github.io/categories/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
     
     
-      <category term="架构" scheme="https://vincentruan.github.io/tags/%E6%9E%B6%E6%9E%84/"/>
-    
       <category term="微服务" scheme="https://vincentruan.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
+    
+      <category term="架构" scheme="https://vincentruan.github.io/tags/%E6%9E%B6%E6%9E%84/"/>
     
       <category term="k8s" scheme="https://vincentruan.github.io/tags/k8s/"/>
     
