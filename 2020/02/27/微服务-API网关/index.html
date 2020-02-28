@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="HzD3jseSmctf--z1mHXLAwERIBzdqIvVavEv6fq47pI">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="API 网关什么是 API 网关既然需要 API 网关为我所用，首先就让我们来了解一下什么是 API 网关。 什么是 API 网关网关一词最早出现在网络设备，比如两个相互独立的局域网之间通过路由器进行通信，中间的路由被称之为网关。 任何一个应用系统如果需要被其他系统调用，就需要暴露 API，这些 API 代表着一个一个的功能点。 如果两个系统中间通信，在系统之间加上一个中介者协助 API 的调用，">
+<meta name="keywords" content="微服务,架构设计,API网关">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服务-API网关">
+<meta property="og:url" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/index.html">
+<meta property="og:site_name" content="星辰大海">
+<meta property="og:description" content="API 网关什么是 API 网关既然需要 API 网关为我所用，首先就让我们来了解一下什么是 API 网关。 什么是 API 网关网关一词最早出现在网络设备，比如两个相互独立的局域网之间通过路由器进行通信，中间的路由被称之为网关。 任何一个应用系统如果需要被其他系统调用，就需要暴露 API，这些 API 代表着一个一个的功能点。 如果两个系统中间通信，在系统之间加上一个中介者协助 API 的调用，">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582785125084.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582785171304.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582785312869.jpg">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582785663976.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582785725522.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582785808868.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582785841303.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582786001001.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582786035615.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582786091726.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582786124168.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582786174509.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582786260809.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582786294156.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582786301772.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582786310099.jpg">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582786344099.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582785080155.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582785080158.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582786729359.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582786770091.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582785080167.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582785080168.webp">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582786854230.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/2973533330-5caf458852f74_articlex.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/3673220854-5caf459e353c7_articlex.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/2061935431-5caf45afea0b8_articlex.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/60484509-5caf45c794cb9_articlex.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/684416954-5caf45ec7efc3_articlex.png">
+<meta property="og:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/851752044-5caf460b876aa_articlex.png">
+<meta property="og:updated_time" content="2020-02-28T08:11:11.418Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微服务-API网关">
+<meta name="twitter:description" content="API 网关什么是 API 网关既然需要 API 网关为我所用，首先就让我们来了解一下什么是 API 网关。 什么是 API 网关网关一词最早出现在网络设备，比如两个相互独立的局域网之间通过路由器进行通信，中间的路由被称之为网关。 任何一个应用系统如果需要被其他系统调用，就需要暴露 API，这些 API 代表着一个一个的功能点。 如果两个系统中间通信，在系统之间加上一个中介者协助 API 的调用，">
+<meta name="twitter:image" content="https://vincentruan.github.io/2020/02/27/微服务-API网关/640-1582785125084.webp">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="星辰大海" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://vincentruan.github.io/2020/02/27/微服务-API网关/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>微服务-API网关 | 星辰大海</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">星辰大海</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">My Conquest Is the Sea of Stars.</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-sitemap">
+    <a href="/sitemap.xml" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>站点地图</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://vincentruan.github.io/2020/02/27/微服务-API网关/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent">
+      <meta itemprop="description" content="The King is dead, long live the King!">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="星辰大海">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">微服务-API网关
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-27 14:29:12" itemprop="dateCreated datePublished" datetime="2020-02-27T14:29:12+08:00">2020-02-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-28 16:11:11" itemprop="dateModified" datetime="2020-02-28T16:11:11+08:00">2020-02-28</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/微服务/" itemprop="url" rel="index"><span itemprop="name">微服务</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">20k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">18 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="API-网关"><a href="#API-网关" class="headerlink" title="API 网关"></a>API 网关</h1><h2 id="什么是-API-网关"><a href="#什么是-API-网关" class="headerlink" title="什么是 API 网关"></a>什么是 API 网关</h2><p>既然需要 API 网关为我所用，首先就让我们来了解一下什么是 API 网关。</p>
+<h3 id="什么是-API-网关-1"><a href="#什么是-API-网关-1" class="headerlink" title="什么是 API 网关"></a>什么是 API 网关</h3><p>网关一词最早出现在网络设备，比如两个相互独立的局域网之间通过路由器进行通信，中间的路由被称之为网关。</p>
+<p>任何一个应用系统如果需要被其他系统调用，就需要暴露 API，这些 API 代表着一个一个的功能点。</p>
+<p>如果两个系统中间通信，在系统之间加上一个中介者协助 API 的调用，这个中介者就是 API 网关。</p>
+<a id="more"></a>
+<p><img src="/2020/02/27/微服务-API网关/640-1582785125084.webp" alt="img"></p>
+<center><i>对接两个系统的 API 网关</i></center>
+
+<p>当然，API 网关可以放在两个系统之间，同时也可以放在客户端与服务端之间。</p>
+<p><img src="/2020/02/27/微服务-API网关/640-1582785171304.png" alt="img"></p>
+<center><i>对接客户端和服务端的 API 网关</i></center>
+
+<p>知道了 API 网关的基本定义，再来看看为什么我们要使用它。</p>
+<h3 id="为何要使用-API-网关"><a href="#为何要使用-API-网关" class="headerlink" title="为何要使用 API 网关"></a>为何要使用 API 网关</h3><p>网关作为系统的唯一入口，也就是说，进入系统的所有请求都需要经过 API 网关。</p>
+<p><strong>当系统外部的应用或者客户端访问系统的时候，都会遇到这样的情况：</strong></p>
+<ul>
+<li>系统要判断它们的权限</li>
+<li>如果传输协议不一致，需要对协议进行转换</li>
+<li>如果调用水平扩展的服务，需要做负载均衡</li>
+<li>一旦请求流量超出系统承受的范围，需要做限流操作</li>
+<li>针对每个请求以及回复，系统会记录响应的日志</li>
+</ul>
+<p>也就是说，只要是涉及到对系统的请求，并且能够从业务中抽离出来的功能，都有可能在网关上实现。</p>
+<p>例如：协议转换，负载均衡，请求路由，流量控制等等。后面我们会一一给大家介绍这些功能。</p>
+<p>在了解 API 网关有哪些基本功能以后，来看看它可以服务于哪些系统或者客户端。</p>
+<h3 id="API-网关服务定位"><a href="#API-网关服务定位" class="headerlink" title="API 网关服务定位"></a>API 网关服务定位</h3><p>API 网关拥有处理请求的能力，从定位来看分为 5 类：</p>
+<p><strong>①面向 WebApp，</strong>这部分的系统以网站和 H5 应用为主。通过前后端分离的设计，将大部分的业务功能都放在了后端，前面的 Web App 只展示页面的内容。</p>
+<p><strong>②MobileApp，</strong>这里的 Mobile 指的是 iOS 和 Android，设计思路和 WebApp 基本相同。<br>区别是 API 网关需要做一些移动设备管理的工作（MDM）。例如：设备的注册，激活，使用，淘汰等，全生命周期的管理。<br>由于移动设备的特殊性，导致了我们在考虑移动设备请求的时候，需要考虑请求，设备，使用者之间的关系。</p>
+<p><strong>③面向合作伙伴的 OpenAPI，</strong>通常系统会给合作伙伴提供接口。这些接口会全部开放或者部分开发，在有条件限制（时间，流量）的情况下给合作伙伴访问。因此需要更多考虑 API 网关的流量和安全以及协议转换的管理。</p>
+<p><strong>④企业内部可扩展 API，</strong>给企业内部的其他部门或者项目使用，也可以作为中台输出的一部分，支持其他系统。这里需要更多地考虑划分功能边界，认证和授权问题。</p>
+<p><strong>⑤面向 IOT 设备，</strong>会接收来自 IOT 设备的请求，特别是工业传感器等设备。这里需要考虑协议转换和数据过滤。</p>
+<h3 id="API-网关架构"><a href="#API-网关架构" class="headerlink" title="API 网关架构"></a>API 网关架构</h3><p>既然谈了 API 网关的功能和定位，接下来说说它的架构：</p>
+<p><img src="/2020/02/27/微服务-API网关/640-1582785312869.jpg" alt="img"></p>
+<center><i>API 网关系统架构图</i></center>
+
+<p>API 网关拆分成为 3 个系统：</p>
+<ul>
+<li><strong>Gateway-Core（核心）</strong></li>
+<li><strong>Gateway-Admin（管理）</strong></li>
+<li><strong>Gateway-Monitor（监控）</strong></li>
+</ul>
+<p>Gateway-Core 核心网关，负责接收客户端请求，调度、加载和执行组件，将请求路由到上游服务端，并处理其返回的结果。</p>
+<p>大多数的功能都在这一层完成，例如：验证，鉴权，负载均衡，协议转换，服务路由，数据缓存。如果没有其他两个子系统，它也是可以单独运行的。</p>
+<p>Gateway-Admin 网关管理界面，可以进行 API、组件等系统基础信息的配置；例如：限流的策略，缓存配置，告警设置。</p>
+<p>Gateway-Monitor 监控日志、生成各种运维管理报表、自动告警等；管理和监控系统主要是为核心系统服务的，起到支撑的作用。</p>
+<h2 id="API-网关技术原理"><a href="#API-网关技术原理" class="headerlink" title="API 网关技术原理"></a>API 网关技术原理</h2><p>上面谈到了网关的架构思路，这里谈几点技术原理。平时我们在使用网关的时候，多注重其实现的功能。例如：路由，负载均衡，限流，缓存，日志，发布等等。</p>
+<p>实际上这些功能的背后有一些原理我们可以了解，这样在应用功能的时候会更加笃定。下面是几个原理分享给大家。</p>
+<h3 id="协议转换"><a href="#协议转换" class="headerlink" title="协议转换"></a>协议转换</h3><p>每个系统内部服务之间的调用，可以统一使用一种协议，例如：HTTP，GRPC。</p>
+<p>假设每个系统使用的协议不同，那么系统之间的调用或者数据传输，就存在协议转换的问题了。如果解决这个问题呢？API 网关通过泛化调用的方式实现协议之间的转化。</p>
+<p>实际上就是将不同的协议转换成“通用协议”，然后再将通用协议转化成本地系统能够识别的协议。</p>
+<p>这一转化工作通常在 API 网关完成。通用协议用得比较多的有 JSON，当然也有使用 XML 或者自定义 JSON 文件的。</p>
+<p><img src="/2020/02/27/微服务-API网关/640-1582785663976.webp" alt="img"></p>
+<center><i>不同的协议需要转化成共同语言进行传输</i></center>
+
+<h3 id="链式处理"><a href="#链式处理" class="headerlink" title="链式处理"></a>链式处理</h3><p>设计模式中有一种责任链模式，它将“处理请求”和“处理步骤”分开。每个处理步骤，只关心这个步骤上需要做的处理操作，处理步骤存在先后顺序。</p>
+<p>消息从第一个“处理步骤”流入，从最后一个“处理步骤”流出，每个步骤对经过的消息进行处理，整个过程形成了一个链条。在 API 网关中也用到了类似的模式。</p>
+<p><img src="/2020/02/27/微服务-API网关/640-1582785725522.webp" alt="img"></p>
+<center><i>Zuul 网关过滤器链式处理</i></center>
+
+<p>下面以 Zuul 为例，当消息出入网关需要经历一系列的过滤器。这些过滤器之间是有先后顺序的，并且在每个过滤器需要进行的工作也是各不一样：</p>
+<ul>
+<li><strong>PRE：</strong>前置过滤器，用来处理通用事务，比如鉴权，限流，熔断降级，缓存。并且可以通过 Custom 过滤器进行扩展。</li>
+<li><strong>ROUTING：</strong>路由过滤器，在这种过滤器中把用户请求发送给 Origin Server。它主要负责：协议转化和路由的工作。</li>
+<li><strong>POST：</strong>后置过滤器，从 Origin Server 返回的响应信息会经过它，再返回给调用者。在返回的 Response 上加入 Response Header，同时可以做 Response 的统计和日志记录。</li>
+<li><strong>ERROR：</strong>错误过滤器，当上面三个过滤器发生异常时，错误信息会进到这里，并对错误进行处理。</li>
+</ul>
+<h3 id="异步请求"><a href="#异步请求" class="headerlink" title="异步请求"></a>异步请求</h3><p>所有的请求通过 API 网关访问应用服务，一旦吞吐量上去了，如何高效地处理这些请求？</p>
+<p><strong>拿 Zuul 为例，Zuul1 采用：</strong>一个线程处理一个请求的方式。线程负责接受请求，然后调用应用返回结果。</p>
+<p>如果把网络请求看成一次 IO 操作的话，处理请求的线程，从接受请求，到服务返回响应，都是阻塞状态。</p>
+<p>同时，如果多个线程都处在这种状态，会导致系统缓慢。因为每个网关能够开启的线程数量是有限的，特别是在访问的高峰期。</p>
+<p><img src="/2020/02/27/微服务-API网关/640-1582785808868.webp" alt="img"></p>
+<center><i>每个线程处理一个请求</i></center>
+
+
+
+<p>为了解决这个问题，Zuul2 启动了异步请求的机制。每个请求进入网关的时候，会被包装成一个事件，CPU 内核会维持一个监听器，不断轮询“请求事件”。</p>
+<p>一旦，发现请求事件，就会调用对应的应用。获取应用返回的信息以后，按照请求的要求把数据/文件放到指定的缓冲区，同时发送一个通知事件，告诉请求端数据已经就绪，可以从这个缓冲获取数据/文件。</p>
+<p>这个过程是异步的，请求的线程不用一直等待数据的返回。它在请求完毕以后，就直接返回了，这时它可以做其他的事情。</p>
+<p>当请求数据被 CPU 内核获取，并且发送到指定的数据缓冲区时，请求的线程会接到“数据返回”的通知，然后就直接使用数据，不用自己去做取数据的操作。</p>
+<p><img src="/2020/02/27/微服务-API网关/640-1582785841303.webp" alt="img"></p>
+<center><i>异步请求处理，CPU 处理数据以后通知请求端</i></center>
+
+<p>实现异步处理请求有两种模式，分别是：</p>
+<ul>
+<li><strong>Reactor</strong></li>
+<li><strong>Proactor</strong></li>
+</ul>
+<p><img src="/2020/02/27/微服务-API网关/640-1582786001001.png" alt="img"></p>
+<center><i>Reactor 工作原理流水图</i></center>
+
+<p><strong>Reactor：</strong>通过 handle_events 事件循环处理请求。用户线程注册事件处理器之后，可以继续执行其他的工作（异步），而 Reactor 线程负责调用内核的 Select 函数检查 Socket 状态。</p>
+<p>当有 Socket 被激活时（获取网络数据），则通知相应的用户线程，执行 handle_event 进行数据读取、处理的工作。</p>
+<p><img src="/2020/02/27/微服务-API网关/640-1582786035615.png" alt="img"></p>
+<center><i>Proactor 工作原理流水图</i></center>
+
+<p><strong>Proactor：</strong>用户线程使用 CPU 内核提供的异步 IO 发起请求，请求发起以后立即返回。CPU 内核继续执行用户请求线程代码。</p>
+<p>此时用户线程已将 AsynchronousOperation（异步处理）和 CompletionHandler（完成获取资源）注册到内核。之后操作系统开启独立的内核线程去处理 IO 操作。</p>
+<p>当请求的数据到达时，由内核负责读取 Socket（网络请求）中的数据，并写入用户指定的缓冲区中。</p>
+<p>最后内核将数据和用户线程注册的 CompletionHandler 分发给内部 Proactor，Proactor 将 IO 完成的信息通知给用户线程（一般通过调用用户线程注册的完成事件处理函数），完成异步 IO。</p>
+<h2 id="API-网关实现功能"><a href="#API-网关实现功能" class="headerlink" title="API 网关实现功能"></a>API 网关实现功能</h2><p>说起对 API 网关的使用，我们还是对具体功能更加感兴趣。让我们一起来看看它实现了哪些功能。</p>
+<h3 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h3><p>当网关后面挂接同一应用的多个副本时，每次用户的请求都会通过网关的负载均衡算法，路由到对应的服务上面。例如：随机算法，权重算法，Hash 算法等等。</p>
+<p>如果上游服务采取微服务的架构，也可以和注册中心合作实现动态的负载均衡。</p>
+<p>当微服务动态挂载（动态扩容）的时候，可以通过服务注册中心获取微服务的注册信息，从而实现负载均衡。</p>
+<p><img src="/2020/02/27/微服务-API网关/640-1582786091726.png" alt="img"></p>
+<center><i>Nginx+Lua+服务注册中心实现动态负载均衡</i></center>
+
+<h3 id="路由选择"><a href="#路由选择" class="headerlink" title="路由选择"></a>路由选择</h3><p>这个不言而喻，网关可以根据请求的 URL 地址解析，知道需要访问的服务。再通过路由表把请求路由到目标服务上去。</p>
+<p>有时候因为网络原因，服务可能会暂时的不可用，这个时候我们希望可以再次对服务进行重试。</p>
+<p><img src="/2020/02/27/微服务-API网关/640-1582786124168.webp" alt="img"></p>
+<center><i>Zuul 作为 API 网关将请求路由到上游服务器</i></center>
+
+<p>例如：Zuul 与 Spring Retry 合作完成路由重试。</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#是否开启重试功能</span></span><br><span class="line"><span class="meta">zuul.retryable</span>=<span class="string">true</span></span><br><span class="line"><span class="comment">#对当前服务的重试次数</span></span><br><span class="line"><span class="meta">ribbon.MaxAutoRetries</span>=<span class="string">2</span></span><br></pre></td></tr></table></figure>
+<h3 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h3><p>限流是 API 网关常用的功能之一，当上游服务超出请求承载范围，或者服务因为某种原因无法正常使用，都会导致服务处理能力下滑。</p>
+<p>这个时候，API 网关作为“看门人”，就可以限制流入的请求，让应用服务器免受冲击。</p>
+<p>限流实际上就是限制流入请求的数量，其算法不少，有令牌桶算法，漏桶算法，连接数限制等等。这里我们就介绍三个常用的，一般通过 Nginx+Lua 来实现。</p>
+<p><img src="/2020/02/27/微服务-API网关/640-1582786174509.png" alt="img"></p>
+<center><i>令牌桶限流</i></center>
+
+
+
+<h3 id="统一鉴权"><a href="#统一鉴权" class="headerlink" title="统一鉴权"></a>统一鉴权</h3><p>访问应用服务器的请求都需要拥有一定权限，如果说每访问一个服务都需要验证一次权限，这个对效率是很大的影响。可以把权限认证放到 API 网关来进行。</p>
+<p>目前比较常见的做法是，用户通过登录服务获取 Token，把它存放到客户端，在每次请求的时候把这个 Token 放入请求头，一起发送给服务器。</p>
+<p>API 网关要做的事情就是解析这个 Token，知道访问者是谁（鉴定），他能做什么/访问什么（权限）。</p>
+<p>说白了就是看访问者能够访问哪些 URL，这里根据权限/角色定义一个访问列表。</p>
+<p>如果要实现多个系统的 OSS（Single Sign On 单点登录），API 网关需要和 CAS（Central Authentication Service 中心鉴权服务）做连接，来确定请求者的身份和权限。</p>
+<h3 id="熔断降级"><a href="#熔断降级" class="headerlink" title="熔断降级"></a>熔断降级</h3><p>当应用服务出现异常，不能继续提供服务的时候，也就是说应用服务不可用了。作为 API 网关需要做出处理，把请求导入到其他服务上。</p>
+<p>或者对服务进行降级处理，例如：用兜底的服务数据返回客户端，或者提示服务暂时不可用。</p>
+<p>同时通过服务注册中心，监听存在问题的服务，一旦服务恢复，随即恢复路由请求到该服务。</p>
+<p>例如：Zuul 中提供了 ZuulFallbackProvider 接口来实现熔断，它提供两个方法，一个指明熔断拦截的服务 getRoute，一个指定返回内容 ClientHttpResponse。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span>  <span class="class"><span class="keyword">interface</span> <span class="title">ZuulFallbackProvider</span> </span>&#123;</span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The route this fallback will be used  for.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> The route the fallback will be  used for.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getRoute</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Provides a fallback response.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> The fallback response.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="title">ClientHttpResponsefallbackResponse</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们通过自定义的 Fallback 方法，并且将其指定给某个 Route 来实现该 Route 访问出问题的熔断处理。</p>
+<p>主要继承 ZuulFallbackProvider 接口来实现，ZuulFallbackProvider 默认有两个方法，一个用来指明熔断拦截哪个服务，一个定制返回内容。</p>
+<p><img src="/2020/02/27/微服务-API网关/640-1582786260809.png" alt="img"></p>
+<center><i>API 网关熔断降级</i></center>
+
+
+
+<h3 id="发布测试"><a href="#发布测试" class="headerlink" title="发布测试"></a>发布测试</h3><p>在发布版本的时候会采用：金丝雀发布和蓝绿发布。作为 API 网关可以使用路由选择和流量切换来协助上述行为。这里以金丝雀发布为例，看看 API 网关如何做路由转换的。</p>
+<p>假设将 4 个服务从 V1 更新到 V2 版本，这 4 个服务的流量请求由 1 个 API 网关管理。</p>
+<p><img src="/2020/02/27/微服务-API网关/640-1582786294156.webp" alt="img"></p>
+<p>那么先将一台服务与 API 网关断开，部署 V2 版本的服务，然后 API 网关再将流量导入到 V2 版本的服务上。</p>
+<p><img src="/2020/02/27/微服务-API网关/640-1582786301772.webp" alt="img"></p>
+<p>这里流量的导入可以是逐步进行的，一旦 V2 版本的服务趋于稳定。再如法炮制，将其他服务替换成 V2 版本。</p>
+<p><img src="/2020/02/27/微服务-API网关/640-1582786310099.jpg" alt="img"></p>
+<p>金丝雀发布一般先发 1 台，或者一个小比例，例如 2% 的服务器，主要做流量验证用，也称为金丝雀（Canary）测试（灰度测试）。</p>
+<p>其来历是，旷工下矿洞前，先放一只金丝雀探查是否有毒气，金丝雀发布由此得名。</p>
+<p>金丝雀测试需要完善的监控设施配合，通过监控指标反馈，观察金丝雀的健康状况，作为后续发布或回滚的依据。</p>
+<p>如果金丝测试通过，则把剩余的 V1 版本全部升级为 V2 版本。如果金丝雀测试失败，则直接回退金丝雀，发布失败。</p>
+<h3 id="缓存数据"><a href="#缓存数据" class="headerlink" title="缓存数据"></a>缓存数据</h3><p><img src="/2020/02/27/微服务-API网关/640-1582786344099.webp" alt="img"></p>
+<p>我们可以在 API 网关缓存一些修改频率不高的数据。<em>例如：用户信息，配置信息，通过服务定期刷新这个缓存就行了</em>：</p>
+<ul>
+<li>用户请求先访问 API 网关，如果发现有缓存信息，直接返回给用户。</li>
+<li>如果没有发现缓存信息，回源到应用服务器获取信息。</li>
+<li>另外，有一个缓存更新服务，定期把应用服务器中的信息更新到网关本地缓存中。</li>
+</ul>
+<h3 id="日志记录"><a href="#日志记录" class="headerlink" title="日志记录"></a>日志记录</h3><p>通过 API 网关上的过滤器我们可以加入日志服务，记录请求和返回信息。同时可以建立一个管理员的界面去监控这些数据。</p>
+<p><img src="/2020/02/27/微服务-API网关/640-1582785080155.webp" alt="img"></p>
+<center><i>日志服务简图</i></center>
+
+
+
+<p>日志记录了以后，可以做很多功能扩展。我们整理了以下几点供大家参考：</p>
+<ul>
+<li><strong>报表分析：</strong>针对服务访问情况，提供可视化展示。</li>
+<li><strong>实时查询：</strong>了解实时关键信息，例如：吞吐量，并发数。在秒杀活动的时候，会特别关注。</li>
+<li><strong>异常告警：</strong>针对关键参数进行监控，对于统计结果支持阈值报警，对接阿里云通知中心、短信、钉钉进行告警。</li>
+<li><strong>日志投递：</strong>将日志进行归档，存放到文件库或者数据仓库中，以便后期分析。</li>
+</ul>
+<p><img src="/2020/02/27/微服务-API网关/640-1582785080158.webp" alt="img"></p>
+<center><i>日志记录衍生的功能</i></center>
+
+
+
+<h2 id="流行-API-网关对比"><a href="#流行-API-网关对比" class="headerlink" title="流行 API 网关对比"></a>流行 API 网关对比</h2><p>在介绍了 API 网关的功能以后，再来看看目前几个流行的 API 网关项目。看看他们各自的特点，并且把他们做一个简单的比较。这些网关目前都是开源的，大家可以有选择地在项目中使用。</p>
+<h3 id="Kong"><a href="#Kong" class="headerlink" title="Kong"></a>Kong</h3><p>Kong 是 Mash ape 公司的开源项目，它是一个在 Nginx 中运行的 Lua 应用程序，并且可以通过 Lua-Nginx 模块实现扩展。</p>
+<p>所以，可以通过插件集合的方式定制功能，例如：HTTP 基本认证、密钥认证、CORS（Cross-origin Resource Sharing，跨域资源共享）、TCP、UDP、日志、API 限流、请求转发以及监控，都是目前已有的插件。</p>
+<p>由于是基于 Nginx 的，所以可以对网关进行水平扩展，来应对大批量的网络请求。</p>
+<p><img src="/2020/02/27/微服务-API网关/640-1582786729359.png" alt="img"></p>
+<center><i>Kong 架构图</i></center>
+
+<p>Kong 主要有三个组件：</p>
+<ul>
+<li><strong>KongServer ：</strong>基于 Nginx 的服务器，用来接收 API 请求。</li>
+<li><strong>ApacheCassandra/PostgreSQL：</strong>用来存储操作数据。</li>
+<li><strong>Kongdashboard：</strong>UI 管理工具。</li>
+</ul>
+<h3 id="Traefik"><a href="#Traefik" class="headerlink" title="Traefik"></a>Traefik</h3><p><img src="/2020/02/27/微服务-API网关/640-1582786770091.webp" alt="img"></p>
+<center><i>Traefik 架构图</i></center>
+
+
+
+<p>Traefik 是 HTTP 反向代理和负载均衡器，可以轻松部署微服务，可以与现有的组件（Docker、Swarm，Kubernetes，Marathon，Consul，Etcd）做集成。</p>
+<p>因为支持动态配置，所以它的伸缩性很好。不过它只支持 HTTP、HTTPS 和 GRPC。如果你需要 TCP 负载均衡，那么您需要选择其他方案了。</p>
+<h3 id="Ambassador"><a href="#Ambassador" class="headerlink" title="Ambassador"></a>Ambassador</h3><p><img src="/2020/02/27/微服务-API网关/640-1582785080167.webp" alt="img"></p>
+<center><i>Ambassador 架构图</i></center>
+
+<p>Ambassador 是一个基于 Envoy Proxy 构建的，Kubernetes 原生的开源微服务网关。</p>
+<p>它在构建之初就致力于支持多个独立的团队，这些团队需要为最终用户快速发布、监控和更新服务。</p>
+<p>Ambassador 还具有 Kubernetes Ingress 和负载均衡的能力。它支持处理 Kubernetes Ingress Controller 和负载均衡等功能，可以与 Istio 无缝集成。</p>
+<h3 id="Zuul"><a href="#Zuul" class="headerlink" title="Zuul"></a>Zuul</h3><p><img src="/2020/02/27/微服务-API网关/640-1582785080168.webp" alt="img"></p>
+<center><i>Zuul 2 结构图</i></center>
+
+
+
+<p>Zuul 是 Spring Cloud 全家桶中的微服务 API 网关。所有从设备或网站来的请求都会经过 Zuul 到达后端的 Netflix 应用程序。</p>
+<p>作为一个边界性质的应用程序，Zuul 提供了动态路由、监控、弹性负载和安全功能。包括 Zuul1 和 Zuul2 两个版本。</p>
+<p>介绍了几个开源 API 网关的基本信息以后，我们从几个维度对他们进行比较：</p>
+<p><img src="/2020/02/27/微服务-API网关/640-1582786854230.png" alt="img"></p>
+<p>从开源社区活跃度来说，Kong 和 Traefik 较好；从成熟度来看，较好的是 Kong、Traefik；从架构优势的扩展性来看，Kong 有丰富的插件，Ambassador 也有插件但不多，而 Zuul 是需要自研。</p>
+<p>但 Zuul 由于与 Spring Cloud 集成，如果使用 Spring Cloud 的小伙伴可以考虑使用。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>API 网关是系统内外通讯的中介者。从定位上来说它服务 WebApp，MobileApp，合作伙伴 OpenAPI，企业内部可扩展 API，以及 IOT 设备。</p>
+<p>从架构设计角度来说，分为 Gateway-Core（核心）、Gateway-Admin（管理）、Gateway-Monitor（监控）三部分。</p>
+<p>API 网关需要注意的技术原理有，协议转换，链式处理以及异步请求。它的应用比较广泛，例如：负载均衡，路由选择，流量控制，统一鉴权，熔断降级，发布测试，缓存数据，日志记录等。</p>
+<p>比较流行的开源 API网关有 Kong，Traefik，Ambassador，Zuul。从使用上来说他们各有千秋，可以根据项目的情况选取。</p>
+<blockquote>
+<p>转载自<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&amp;mid=2655826846&amp;idx=1&amp;sn=483ea4f2d1d34f921ef07e35a4af63c1&amp;chksm=bd74fe498a03775fc5980c568e1af13f53c64ebaaedea643dc4ec03acc338fac7a323e3656a7&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&amp;mid=2655826846&amp;idx=1&amp;sn=483ea4f2d1d34f921ef07e35a4af63c1&amp;chksm=bd74fe498a03775fc5980c568e1af13f53c64ebaaedea643dc4ec03acc338fac7a323e3656a7&amp;scene=21#wechat_redirect</a> 原<em>作者：崔皓</em></p>
+</blockquote>
+<h1 id="各大API网关性能比较"><a href="#各大API网关性能比较" class="headerlink" title="各大API网关性能比较"></a>各大API网关性能比较</h1><p>API网关最基本的功能就是反向代理，所以在对API网关做技术选型的时候需要着重考察其性能表现，本文对Nginx、Haproxy、Netty、Spring Cloud Gateway、Zuul2做了性能测试，测试代码可以在<a href="https://github.com/chanjarster/api-gateways-comparison" target="_blank" rel="noopener">github</a>获得。</p>
+<h2 id="测试方法"><a href="#测试方法" class="headerlink" title="测试方法"></a>测试方法</h2><ul>
+<li>准备了三台2CPU 4G内存的服务器，分别运行Tomcat、API Gateway、Gatling（压测工具）</li>
+<li>先对Tomcat做压测，取Tomcat充分预热后的压测结果作为基准。压的是Tomcat自带的example：<code>/examples/jsp/jsp2/simpletag/book.jsp</code></li>
+<li>在对Netty、Zuul2、Spring Cloud Gateway做压测时候也是先压个几轮做预热。</li>
+<li>被测的API网关都没有添加额外业务，只做反向代理</li>
+</ul>
+<h2 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h2><p>下图是吞吐量的情况，可以看到Netty、Nginx、Haproxy均比直压Tomcat低一点点，而Spring Cloud Gateway和Zuul2则要低得多。</p>
+<p><img src="/2020/02/27/微服务-API网关/2973533330-5caf458852f74_articlex.png" alt="clipboard.png"></p>
+<p>下面这张图可以更明显的看到吞吐量比较，Tomcat为100%因为它是基准值，Netty、Nginx、Haproxy的只比基准值低8%，而Spring Cloud Gateway和Zuul2则只是基准值的35%和34%（难兄难弟）。</p>
+<p><img src="/2020/02/27/微服务-API网关/3673220854-5caf459e353c7_articlex.png" alt="clipboard.png"></p>
+<h2 id="平均响应时间"><a href="#平均响应时间" class="headerlink" title="平均响应时间"></a>平均响应时间</h2><p>下图可以看到Netty、Nginx、Haproxy的平均响应时间与Tomcat差不多。但是Spring Cloud Gateway和Zuul2则是Tomcat的3倍多，不出所料。</p>
+<p><img src="/2020/02/27/微服务-API网关/2061935431-5caf45afea0b8_articlex.png" alt="clipboard.png"></p>
+<p>下图同样是以Tomcat作为基准值的比较：</p>
+<p><img src="/2020/02/27/微服务-API网关/60484509-5caf45c794cb9_articlex.png" alt="clipboard.png"></p>
+<h2 id="响应时间分布"><a href="#响应时间分布" class="headerlink" title="响应时间分布"></a>响应时间分布</h2><p>光看平均响应时间是不够的，我们还得看P50、P90、P99、P99.9以及Max响应时间（可惜Gatling只能设置4个百分位，否则我还想看看P99.99的响应时间）。</p>
+<blockquote>
+<p>为何要观察P99.9的响应时间？光看P90不够吗？理由有两个：</p>
+<p>1）观察P99、P99.9、P99.99的响应时间可以观察系统的在高压情况下的稳定性，如果这三个时间的增长比较平滑那么说明该系统在高压力情况下比较稳定，如果这个曲线非常陡峭则说明不稳定。</p>
+<p>2）观察P99、P99.9、P99.99的响应时间能够帮助你估算用户体验。假设你有一个页面会发出5次请求，那么这5次请求均落在P90以内概率是多少？90%^5=59%，至少会经历一次 &gt; P90响应时间的概率是 100%-59%=41%，如果你的P90=10s，那么就意味着用户有41%的概率会在加载页面的时候超过10s，是不是很惊人？如果你的P99=10s，那么用户只有5%的概率会在访问页面的时候超过10s。如果P99.9=10s，则有0.4%的概率。</p>
+<p>关于如何正确测量系统可以看 <a href="https://www.youtube.com/watch?v=lJ8ydIuPFeU" target="_blank" rel="noopener">“How NOT to Measure Latency” by Gil Tene</a></p>
+</blockquote>
+<p><img src="/2020/02/27/微服务-API网关/684416954-5caf45ec7efc3_articlex.png" alt="clipboard.png"></p>
+<p>下面同样是把结果与Tomcat基准值做对比：</p>
+<p><img src="/2020/02/27/微服务-API网关/851752044-5caf460b876aa_articlex.png" alt="clipboard.png"></p>
+<p>可以看到几个很有趣的现象：</p>
+<ul>
+<li>Haproxy、Nginx的P50、P90、P99、P99.9、Max都是逐渐递增的。</li>
+<li>Netty的P50、P90、P99、P99.9是很平坦的，Max则为基准值的207%。</li>
+<li>Spring Cloud Gateway和Zuul2则是相反的，它们的平面呈现下降趋势。Spring Cloud Gateway的Max甚至还比基准值低了一点点（94%），我相信这只是一个随机出现的数字，不要太在意。</li>
+</ul>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>Nginx、Haproxy、Netty三者的表现均很不错，其对于吞吐量和响应时间的性能损耗很低，可以忽略不计。</p>
+<p>但是目前最为火热的Spring Cloud Gateway和Zuul2则表现得比较糟糕，因我没有写额外的业务逻辑这，可以推测这和它们的内置逻辑有关，那么大致有这么几种可能：</p>
+<ol>
+<li>内置逻辑比较多</li>
+<li>内置逻辑算法存在问题，占用了太多CPU时间</li>
+<li>内置逻辑存在阻塞</li>
+<li>内置逻辑没有用正确姿势使用Netty（两者皆基于Netty）</li>
+</ol>
+<p>不管是上面的哪一种都需要再后续分析。</p>
+<p>不过话说回来考虑选用那种作为API网关（的基础技术）不光要看性能，还要看：</p>
+<ul>
+<li>是否易于扩展自己的业务逻辑</li>
+<li>API使用的便利性</li>
+<li>代码的可维护性</li>
+<li>文档是否齐全</li>
+<li>…</li>
+</ul>
+<p>性能只是我们手里的一个筹码，当我们知道这个东西性能到底几何后，才可以与上面的这些做交换（trade-off）。比如Nginx和Haproxy的可扩展性很差，那么我们可以使用Netty。如果你觉得Netty的API太底层了太难用了，那么可以考虑<code>Spring Cloud Gateway</code>或<code>Zuul2</code>。前提是你知道你会失去多少性能。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/微服务/" rel="tag"><i class="fa fa-tag"></i> 微服务</a>
+          
+            <a href="/tags/架构设计/" rel="tag"><i class="fa fa-tag"></i> 架构设计</a>
+          
+            <a href="/tags/API网关/" rel="tag"><i class="fa fa-tag"></i> API网关</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/26/数据库软件架构设计/" rel="next" title="数据库软件架构设计">
+                <i class="fa fa-chevron-left"></i> 数据库软件架构设计
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/27/B-树和数据库索引原理简述/" rel="prev" title="B+树和数据库索引原理简述">
+                B+树和数据库索引原理简述 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Vincent">
+            
+              <p class="site-author-name" itemprop="name">Vincent</p>
+              <p class="site-description motion-element" itemprop="description">The King is dead, long live the King!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">45</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">59</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/vincentruan" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:rzw0813@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#API-网关"><span class="nav-number">1.</span> <span class="nav-text">API 网关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是-API-网关"><span class="nav-number">1.1.</span> <span class="nav-text">什么是 API 网关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是-API-网关-1"><span class="nav-number">1.1.1.</span> <span class="nav-text">什么是 API 网关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为何要使用-API-网关"><span class="nav-number">1.1.2.</span> <span class="nav-text">为何要使用 API 网关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API-网关服务定位"><span class="nav-number">1.1.3.</span> <span class="nav-text">API 网关服务定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API-网关架构"><span class="nav-number">1.1.4.</span> <span class="nav-text">API 网关架构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API-网关技术原理"><span class="nav-number">1.2.</span> <span class="nav-text">API 网关技术原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#协议转换"><span class="nav-number">1.2.1.</span> <span class="nav-text">协议转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链式处理"><span class="nav-number">1.2.2.</span> <span class="nav-text">链式处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步请求"><span class="nav-number">1.2.3.</span> <span class="nav-text">异步请求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API-网关实现功能"><span class="nav-number">1.3.</span> <span class="nav-text">API 网关实现功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#负载均衡"><span class="nav-number">1.3.1.</span> <span class="nav-text">负载均衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路由选择"><span class="nav-number">1.3.2.</span> <span class="nav-text">路由选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流量控制"><span class="nav-number">1.3.3.</span> <span class="nav-text">流量控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#统一鉴权"><span class="nav-number">1.3.4.</span> <span class="nav-text">统一鉴权</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#熔断降级"><span class="nav-number">1.3.5.</span> <span class="nav-text">熔断降级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#发布测试"><span class="nav-number">1.3.6.</span> <span class="nav-text">发布测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存数据"><span class="nav-number">1.3.7.</span> <span class="nav-text">缓存数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志记录"><span class="nav-number">1.3.8.</span> <span class="nav-text">日志记录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流行-API-网关对比"><span class="nav-number">1.4.</span> <span class="nav-text">流行 API 网关对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Kong"><span class="nav-number">1.4.1.</span> <span class="nav-text">Kong</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Traefik"><span class="nav-number">1.4.2.</span> <span class="nav-text">Traefik</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ambassador"><span class="nav-number">1.4.3.</span> <span class="nav-text">Ambassador</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Zuul"><span class="nav-number">1.4.4.</span> <span class="nav-text">Zuul</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.5.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#各大API网关性能比较"><span class="nav-number">2.</span> <span class="nav-text">各大API网关性能比较</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#测试方法"><span class="nav-number">2.1.</span> <span class="nav-text">测试方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#吞吐量"><span class="nav-number">2.2.</span> <span class="nav-text">吞吐量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#平均响应时间"><span class="nav-number">2.3.</span> <span class="nav-text">平均响应时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#响应时间分布"><span class="nav-number">2.4.</span> <span class="nav-text">响应时间分布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">2.5.</span> <span class="nav-text">结论</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Vincent</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">421k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">6:23</span>
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.3.0</div>
+
+
+
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+    
+      <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+	  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+	  <script>
+        //去除尾部匹配正则数组的字符串  
+        String.prototype.trimEnd = function(regStr)  
+        {  
+            var result = this;
+            if(regStr==undefined||regStr==null||regStr=="")  
+            {    
+                return result;
+            }
+            var array = regStr.split(',');
+
+            if(array.length > 0){
+                 
+                var c = array.shift();
+                var str= this;
+                var i = str.length;  
+                var rg = new RegExp(c);
+                var matchArr = str.match(rg);
+
+                if(matchArr != undefined && matchArr != null && matchArr.length > 0)
+                {
+                  var matchStr = matchArr[0].replace(/\\/g, "\\\\").replace(/\*/g, "\\*")
+                                            .replace(/\+/g, "\\+").replace(/\|/g, "\\|")
+                                            .replace(/\{/g, "\\{").replace(/\}/g, "\\}")
+                                            .replace(/\(/g, "\\(").replace(/\)/g, "\\)")
+                                            .replace(/\^/g, "\\^").replace(/\$/g, "\\$")
+                                            .replace(/\[/g, "\\[").replace(/\]/g, "\\]")
+                                            .replace(/\?/g, "\\?").replace(/\,/g, "\\,")
+                                            .replace(/\./g, "\\.").replace(/\&/g, "\\&");
+                  matchStr = matchStr + '$';
+                  result = str.replace(new RegExp(matchStr), "");
+                }
+                
+                if(array.length > 0){
+                    return result.trimEnd(array.join())
+                }
+                else{
+                    return result; 
+                } 
+            } 
+        };
+      </script>
+      <script type="text/javascript">
+        const gitalk = new Gitalk({
+          clientID: '77de951f4b5c331b23b4',
+          clientSecret: '41f88d6edb14f19e3ac0f49acc84c100debcdf7d',
+          repo: 'vincentruan.github.io',
+          owner: 'vincentruan',
+          admin: 'vincentruan'.split(','),
+          pagerDirection: 'first',
+		  id: md5(location.href.trimEnd('')),
+          // facebook-like distraction free mode
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')
+      </script>
+    
+  
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/xiaomai.model.json"},"display":{"position":"left","width":280,"height":375},"mobile":{"show":false},"log":false});</script></body>
+</html>
