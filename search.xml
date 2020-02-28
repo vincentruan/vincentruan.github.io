@@ -1478,8 +1478,8 @@
         <category>架构设计</category>
       </categories>
       <tags>
-        <tag>架构</tag>
         <tag>CAP</tag>
+        <tag>架构</tag>
       </tags>
   </entry>
   <entry>
@@ -3719,9 +3719,9 @@
         <category>Linux</category>
       </categories>
       <tags>
+        <tag>Java</tag>
         <tag>Linux</tag>
         <tag>异常处理</tag>
-        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -6556,8 +6556,8 @@ A[现实世界] -.高度抽象.-> B[数学] -.应用实现.-> C[计算机原理]
         <category>Java</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>Java</tag>
+        <tag>Linux</tag>
         <tag>JVM</tag>
       </tags>
   </entry>
