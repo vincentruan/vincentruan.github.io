@@ -1,9 +1,10 @@
 ---
 title: Java8开发的4个小技巧
 date: 2020-02-11 16:48:32
-categories: JAVA
+categories: Java
 tags:
-- JAVA8
+- Java
+- Lambda
 ---
 
 # Optional
