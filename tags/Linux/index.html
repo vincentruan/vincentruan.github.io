@@ -125,7 +125,7 @@
 <meta name="keywords" content="tech">
 <meta property="og:type" content="website">
 <meta property="og:title" content="星辰大海">
-<meta property="og:url" content="https://vincentruan.github.io/tags/Linux/index.html">
+<meta property="og:url" content="https://vincentruan.github.io/tags/LINUX/index.html">
 <meta property="og:site_name" content="星辰大海">
 <meta property="og:description" content="The King is dead, long live the King!">
 <meta property="og:locale" content="zh-CN">
@@ -140,7 +140,7 @@
 
 
 
-  <link rel="canonical" href="https://vincentruan.github.io/tags/Linux/">
+  <link rel="canonical" href="https://vincentruan.github.io/tags/LINUX/">
 
 
 
@@ -150,7 +150,7 @@
   };
 </script>
 
-  <title>标签: Linux | 星辰大海</title>
+  <title>标签: LINUX | 星辰大海</title>
   
 
 
@@ -376,7 +376,7 @@
 
     <div id="posts" class="posts-collapse">
       <div class="collection-title">
-        <h1>Linux<small>标签</small>
+        <h1>LINUX<small>标签</small>
         </h1>
       </div>
 
@@ -388,69 +388,17 @@
 
       <h2 class="post-title">
         
-            <a class="post-title-link" href="/2020/02/12/JAVA实用的服务异常处理指南/" itemprop="url">
+            <a class="post-title-link" href="/2020/03/23/【转载】20条Linux命令面试问答/" itemprop="url">
               
-                <span itemprop="name">Linux实用的服务异常处理指南</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-02-12T10:49:31+08:00" content="2020-02-12">
-          02-12
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/01/27/JVM-性能调优监控工具-jps、jstack、jmap、jhat、jstat、hprof-使用详解/" itemprop="url">
-              
-                <span itemprop="name">JVM 性能调优监控工具 jps、jstack、jmap、jhat、jstat、hprof 使用详解</span>
+                <span itemprop="name">【转载】20条Linux命令面试问答</span>
               
             </a>
         
       </h2>
 
       <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-01-27T12:51:30+08:00" content="2020-01-27">
-          01-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/01/27/Linux命令-netstat/" itemprop="url">
-              
-                <span itemprop="name">Linux命令 - netstat</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-01-27T12:44:15+08:00" content="2020-01-27">
-          01-27
+        <time class="post-time" itemprop="dateCreated" datetime="2020-03-23T16:27:24+08:00" content="2020-03-23">
+          03-23
         </time>
       </div>
 
@@ -509,7 +457,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">45</span>
+                    <span class="site-state-item-count">47</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -562,7 +510,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">20</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -695,7 +647,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">60</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">62</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -768,7 +724,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">506k</span>
+    <span title="站点总字数">537k</span>
   
 
   
@@ -777,7 +733,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">7:40</span>
+    <span title="站点阅读时长">8:08</span>
   
 </div>
 
@@ -1230,6 +1186,78 @@
             $('.search-icon').click(inputEventFunction);
             input.addEventListener('keypress', function (event) {
               if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/xiaomai.model.json"},"display":{"position":"left","width":280,"height":375},"mobile":{"show":false},"log":false});</script></body>
+</html>
+f (event.keyCode === 13) {
                 inputEventFunction();
               }
             });
