@@ -167,7 +167,7 @@
 <meta property="og:image" content="https://vincentruan.github.io/2020/03/23/【转载】Nginx反向代理，负载均衡，redis-session共享，keepalived高可用/824587-20161210164655538-1777482179.png">
 <meta property="og:image" content="https://vincentruan.github.io/2020/03/23/【转载】Nginx反向代理，负载均衡，redis-session共享，keepalived高可用/824587-20161210172645757-50735121.png">
 <meta property="og:image" content="https://vincentruan.github.io/2020/03/23/【转载】Nginx反向代理，负载均衡，redis-session共享，keepalived高可用/824587-20161210172826429-550094922.png">
-<meta property="og:updated_time" content="2020-03-23T09:13:26.203Z">
+<meta property="og:updated_time" content="2020-03-24T13:07:20.413Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【转载】Nginx反向代理，负载均衡，redis session共享，keepalived高可用">
 <meta name="twitter:description" content="来自：MrLinFeng - 博客园 链接：www.cnblogs.com/mrlinfeng/p/6146866.html  使用的资源： nginx主服务器一台，nginx备服务器一台，使用keepalived进行宕机切换。 tomcat服务器两台，由nginx进行反向代理和负载均衡，此处可搭建服务器集群。 redis服务器一台，用于session的分离共享。 nginx主服务器：192.1">
@@ -442,12 +442,24 @@
                 
               
 
-              <time title="创建时间：2020-03-23 16:47:55 / 修改时间：17:13:26" itemprop="dateCreated datePublished" datetime="2020-03-23T16:47:55+08:00">2020-03-23</time>
+              <time title="创建时间：2020-03-23 16:47:55" itemprop="dateCreated datePublished" datetime="2020-03-23T16:47:55+08:00">2020-03-23</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-03-24 21:07:20" itemprop="dateModified" datetime="2020-03-24T21:07:20+08:00">2020-03-24</time>
               
             
           </span>
@@ -540,6 +552,7 @@
 <p>tomcat项目服务器2:192.168.50.139</p>
 <p>redis服务器：192.168.50.140</p>
 <p>注意访问时需要配置防火墙规则，或者关闭防火墙</p>
+ <a id="more"></a>
 <h1 id="Nginx反向代理与负载均衡"><a href="#Nginx反向代理与负载均衡" class="headerlink" title="Nginx反向代理与负载均衡"></a>Nginx反向代理与负载均衡</h1><p>架构图：</p>
 <p><img src="/2020/03/23/【转载】Nginx反向代理，负载均衡，redis-session共享，keepalived高可用/824587-20161210013029741-1131403264.png" alt="img"><strong>此时需要用到三台服务器，一台nginx服务器，两台正式部署项目的服务器：选择的是192.168.50.133主nginx和192.168.50.137,192.168.50.139两台tomcat服务器</strong></p>
 <p><strong>首先在两台服务器上安装tomcat：这个也是简单，不多说</strong></p>
