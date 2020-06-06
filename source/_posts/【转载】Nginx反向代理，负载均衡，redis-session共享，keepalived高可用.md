@@ -6,9 +6,7 @@ tags:
 - NGINX
 ---
 
->**来自：MrLinFeng - 博客园**
->
->链接：www.cnblogs.com/mrlinfeng/p/6146866.html
+>**来自：MrLinFeng - 博客园** 链接：www.cnblogs.com/mrlinfeng/p/6146866.html
 
 使用的资源：
 

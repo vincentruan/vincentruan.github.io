@@ -140,7 +140,7 @@ printf %x 线程号
 
 # Java命令学习系列（零）— 常见命令及Java Dump介绍
 
-### 一、常用命令：
+## 常用命令：
 
 在JDK的bin目彔下,包含了java命令及其他实用工具。
 
@@ -158,9 +158,9 @@ printf %x 线程号
 >
 > jvisualvm:功能强大的控制台。
 
-### 二、认识Java Dump：
+## 认识Java Dump：
 
-#### 什么是Java Dump？
+### 什么是Java Dump？
 
 > Java虚拟机的运行时快照。将Java虚拟机运行时的状态和信息保存到文件。
 >
@@ -168,11 +168,11 @@ printf %x 线程号
 >
 > **堆Dump**,包含线程Dump,幵包含所有堆对象的状态。二进制格式。
 
-#### Java Dump有什么用？
+### Java Dump有什么用？
 
 > 补足传统Bug分析手段的不足: 可在任何Java环境使用;信息量充足。 针对非功能正确性的Bug,主要为:多线程幵发、内存泄漏。
 
-### 制作Java Dump
+## 制作Java Dump
 
 **使用Java虚拟机制作Dump**
 
@@ -737,16 +737,14 @@ Found 1 deadlock.
 
 # Java命令学习系列（三）— Jmap
 
-**jmap**
-
-jmap是JDK自带的工具软件，主要用于打印指定Java进程(或核心文件、远程调试服务器)的共享对象内存映射或堆内存细节。可以使用jmap生成Heap Dump。在《Java命令学习系列（零）— 常见命令及Java Dump》介绍中分别有关于Java Dump以及线程 Dump的介绍。 **这篇文章主要介绍Java的堆Dump以及jamp命令**
+> jmap是JDK自带的工具软件，主要用于打印指定Java进程(或核心文件、远程调试服务器)的共享对象内存映射或堆内存细节。可以使用jmap生成Heap Dump。在`Java命令学习系列（零）— 常见命令及Java Dump`介绍中分别有关于Java Dump以及线程 Dump的介绍。 **这篇文章主要介绍Java的堆Dump以及jamp命令**
 
 
-### 什么是堆Dump
+## 什么是堆Dump
 
 堆Dump是反应Java堆使用情况的内存镜像，其中主要包括**系统信息**、**虚拟机属性**、**完整的线程Dump**、**所有类和对象的状态**等。 一般，在内存不足、GC异常等情况下，我们就会怀疑有[内存泄露](http://zh.wikipedia.org/zh-cn/内存泄漏)。这个时候我们就可以制作堆Dump来查看具体情况。分析原因。
 
-### 基础知识
+## 基础知识
 
 《Java虚拟机的内存组成以及堆内存介绍》《Java GC工作原理》常见内存错误：
 
@@ -754,7 +752,7 @@ jmap是JDK自带的工具软件，主要用于打印指定Java进程(或核心�
 > outOfMemoryError:PermGen Space **永久代内存不足。**
 > outOfMemoryError:GC overhead limit exceed **垃圾回收时间占用系统运行时间的98%或以上。**
 
-### jmap
+## jmap
 
 **用法摘要**
 
@@ -815,7 +813,7 @@ where <option> is one of:
 > > `-help` 打印帮助信息。
 > > `-J<flag>` 指定传递给运行jmap的JVM的参数。
 
-### 举例
+## 举例
 
 **查看java 堆（heap）使用情况,**执行命令： `hollis@hos:~/workspace/design_apaas/apaasweb/control/bin$ jmap -heap 31846`
 
@@ -897,16 +895,16 @@ num     #instances         #bytes  class name
 
 > **这个命令执行，JVM会将整个heap的信息dump写入到一个文件，heap如果比较大的话，就会导致这个过程比较耗时，并且执行的过程中为了保证dump的信息是可靠的，所以会暂停应用。**
 
-### 总结
+## 总结
 
-1.如果程序内存不足或者频繁GC，很有可能存在内存泄露情况，这时候就要借助Java堆Dump查看对象的情况。
-2.要制作堆Dump可以直接使用jvm自带的jmap命令
-3.可以先使用`jmap -heap`命令查看堆的使用情况，看一下各个堆空间的占用情况。
-4.使用`jmap -histo:[live]`查看堆内存中的对象的情况。如果有大量对象在持续被引用，并没有被释放掉，那就产生了内存泄露，就要结合代码，把不用的对象释放掉。
-5.也可以使用 `jmap -dump:format=b,file=<fileName>`命令将堆信息保存到一个文件中，再借助jhat命令查看详细内容
-6.在内存出现泄露、溢出或者其它前提条件下，建议多dump几次内存，把内存文件进行编号归档，便于后续内存整理分析。
+1. 如果程序内存不足或者频繁GC，很有可能存在内存泄露情况，这时候就要借助Java堆Dump查看对象的情况。
+2. 要制作堆Dump可以直接使用jvm自带的jmap命令
+3. 可以先使用`jmap -heap`命令查看堆的使用情况，看一下各个堆空间的占用情况。
+4. 使用`jmap -histo:[live]`查看堆内存中的对象的情况。如果有大量对象在持续被引用，并没有被释放掉，那就产生了内存泄露，就要结合代码，把不用的对象释放掉。
+5. 也可以使用 `jmap -dump:format=b,file=<fileName>`命令将堆信息保存到一个文件中，再借助jhat命令查看详细内容
+6. 在内存出现泄露、溢出或者其它前提条件下，建议多dump几次内存，把内存文件进行编号归档，便于后续内存整理分析。
 
-### Error attaching to process: sun.jvm.hotspot.debugger.DebuggerException: Can’t attach to the process
+**Error attaching to process: sun.jvm.hotspot.debugger.DebuggerException: Can’t attach to the process**
 
 在ubuntu中第一次使用jmap会报错：`Error attaching to process: sun.jvm.hotspot.debugger.DebuggerException: Can't attach to the process`，这是oracla文档中提到的一个bug:http://bugs.java.com/bugdatabase/view_bug.do?bug_id=7050524,解决方式如下：
 
@@ -917,17 +915,15 @@ num     #instances         #bytes  class name
 
 > jstat(JVM Statistics Monitoring Tool)是用于监控虚拟机各种运行状态信息的命令行工具。他可以显示本地或远程虚拟机进程中的类装载、内存、垃圾收集、JIT编译等运行数据，在没有GUI图形的服务器上，它是运行期定位虚拟机性能问题的首选工具。
 
-
-
 jstat位于java的bin目录下，主要利用JVM内建的指令对Java应用程序的资源和性能进行实时的命令行的监控，包括了对Heap size和垃圾回收状况的监控。可见，Jstat是轻量级的、专门针对JVM的工具，非常适用。
 
-### jstat 命令格式
+## jstat 命令格式
 
 ```shell
  jstat -<option> [-t] [-h<lines>] <vmid> [<interval> [<count>]]
 ```
 
-### 参数解释：
+## 参数解释：
 
 Option — 选项，我们一般使用 -gcutil 查看gc情况
 
@@ -945,59 +941,61 @@ jstat -gc 5828 250 5
 
 > 对于命令格式中的`VMID`与`LVMID`需要特别说明下：如果是本地虚拟机进程，`VMID`(Virtual Machine IDentifier,虚机标识符)和`LVMID`(Local Virtual Machine IDentifier,虚机标识符)是一致的，如果是远程虚拟机进程，那VMID的格式应当是：`[protocol:][//] lvmid [@hostname[:port]/servername]`
 
-### option
+## option
 
 选项option代表这用户希望查询的虚拟机信息，主要分为3类：类装载、垃圾收集和运行期编译状况，具体选项及作用如下：
 
 > –`class` 监视类装载、卸载数量、总空间及类装载所耗费的时间 –`gc` 监视Java堆状况，包括Eden区、2个Survivor区、老年代、永久代等的容量 –`gccapacity` 监视内容与-gc基本相同，但输出主要关注Java堆各个区域使用到的最大和最小空间 –`gcutil` 监视内容与-gc基本相同，但输出主要关注已使用空间占总空间的百分比 –`gccause` 与-gcutil功能一样，但是会额外输出导致上一次GC产生的原因 –`gcnew` 监视新生代GC的状况 –`gcnewcapacity` 监视内容与-gcnew基本相同，输出主要关注使用到的最大和最小空间 –`gcold` 监视老年代GC的状况 –`gcoldcapacity` 监视内容与——gcold基本相同，输出主要关注使用到的最大和最小空间 –`gcpermcapacity` 输出永久代使用到的最大和最小空间 –`compiler` 输出JIT编译器编译过的方法、耗时等信息 –`printcompilation` 输出已经被JIT编译的方法
 
-### 常见术语
+## 常见术语
 
-#### 1、`jstat –class<pid> :` 显示加载class的数量，及所占空间等信息。
+### 1、`jstat –class<pid> :` 显示加载class的数量，及所占空间等信息。
 
 > `Loaded` 装载的类的数量 `Bytes` 装载类所占用的字节数 `Unloaded` 卸载类的数量 `Bytes` 卸载类的字节数 `Time` 装载和卸载类所花费的时间
 
-#### 2、`jstat -compiler <pid>`显示VM实时编译的数量等信息。
+### 2、`jstat -compiler <pid>`显示VM实时编译的数量等信息。
 
 > `Compiled` 编译任务执行数量 `Failed` 编译任务执行失败数量 `Invalid` 编译任务执行失效数量 `Time` 编译任务消耗时间 `FailedType` 最后一个编译失败任务的类型 `FailedMethod` 最后一个编译失败任务所在的类及方法
 
-#### 3、`jstat -gc <pid>`: 可以显示gc的信息，查看gc的次数，及时间。
+### 3、`jstat -gc <pid>`: 可以显示gc的信息，查看gc的次数，及时间。
 
 > `S0C` 年轻代中第一个survivor（幸存区）的容量 (字节) `S1C` 年轻代中第二个survivor（幸存区）的容量 (字节) `S0U` 年轻代中第一个survivor（幸存区）目前已使用空间 (字节) `S1U` 年轻代中第二个survivor（幸存区）目前已使用空间 (字节) `EC` 年轻代中Eden（伊甸园）的容量 (字节) `EU` 年轻代中Eden（伊甸园）目前已使用空间 (字节) `OC` Old代的容量 (字节) `OU` Old代目前已使用空间 (字节) `PC` Perm(持久代)的容量 (字节) `PU` Perm(持久代)目前已使用空间 (字节) `YGC` 从应用程序启动到采样时年轻代中gc次数 `YGCT` 从应用程序启动到采样时年轻代中gc所用时间(s) `FGC` 从应用程序启动到采样时old代(全gc)gc次数 `FGCT` 从应用程序启动到采样时old代(全gc)gc所用时间(s) `GCT` 从应用程序启动到采样时gc用的总时间(s)
 
-#### 4、`jstat -gccapacity <pid>:`可以显示，VM内存中三代（young,old,perm）对象的使用和占用大小
+### 4、`jstat -gccapacity <pid>:`可以显示，VM内存中三代（young,old,perm）对象的使用和占用大小
 
 > `NGCMN` 年轻代(young)中初始化(最小)的大小(字节) `NGCMX` 年轻代(young)的最大容量 (字节) `NGC` 年轻代(young)中当前的容量 (字节) `S0C` 年轻代中第一个survivor（幸存区）的容量 (字节) `S1C` 年轻代中第二个survivor（幸存区）的容量 (字节) `EC` 年轻代中Eden（伊甸园）的容量 (字节) `OGCMN` old代中初始化(最小)的大小 (字节) `OGCMX` old代的最大容量(字节) `OGC` old代当前新生成的容量 (字节) `OC` Old代的容量 (字节) `PGCMN` perm代中初始化(最小)的大小 (字节) `PGCMX` perm代的最大容量 (字节)
 > `PGC` perm代当前新生成的容量 (字节) `PC` Perm(持久代)的容量 (字节) `YGC` 从应用程序启动到采样时年轻代中gc次数 `FGC` 从应用程序启动到采样时old代(全gc)gc次数
 
-#### 5、`jstat -gcutil <pid>`:统计gc信息
+### 5、`jstat -gcutil <pid>`:统计gc信息
 
 > `S0` 年轻代中第一个survivor（幸存区）已使用的占当前容量百分比 `S1` 年轻代中第二个survivor（幸存区）已使用的占当前容量百分比 `E` 年轻代中Eden（伊甸园）已使用的占当前容量百分比 `O` old代已使用的占当前容量百分比 `P` perm代已使用的占当前容量百分比 `YGC` 从应用程序启动到采样时年轻代中gc次数 `YGCT` 从应用程序启动到采样时年轻代中gc所用时间(s) `FGC` 从应用程序启动到采样时old代(全gc)gc次数 `FGCT` 从应用程序启动到采样时old代(全gc)gc所用时间(s) `GCT` 从应用程序启动到采样时gc用的总时间(s)
 
-#### 6、`jstat -gcnew <pid>`:年轻代对象的信息。
+### 6、`jstat -gcnew <pid>`:年轻代对象的信息。
 
 > `S0C` 年轻代中第一个survivor（幸存区）的容量 (字节) `S1C` 年轻代中第二个survivor（幸存区）的容量 (字节) `S0U` 年轻代中第一个survivor（幸存区）目前已使用空间 (字节) `S1U` 年轻代中第二个survivor（幸存区）目前已使用空间 (字节) `TT` 持有次数限制 `MTT` 最大持有次数限制 `EC` 年轻代中Eden（伊甸园）的容量 (字节) `EU` 年轻代中Eden（伊甸园）目前已使用空间 (字节) `YGC` 从应用程序启动到采样时年轻代中gc次数 `YGCT` 从应用程序启动到采样时年轻代中gc所用时间(s)
 
-#### 7、`jstat -gcnewcapacity<pid>`: 年轻代对象的信息及其占用量。
+### 7、`jstat -gcnewcapacity<pid>`: 年轻代对象的信息及其占用量。
 
 > `NGCMN` 年轻代(young)中初始化(最小)的大小(字节) `NGCMX` 年轻代(young)的最大容量 (字节) `NGC` 年轻代(young)中当前的容量 (字节) `S0CMX` 年轻代中第一个survivor（幸存区）的最大容量 (字节) `S0C` 年轻代中第一个survivor（幸存区）的容量 (字节) `S1CMX` 年轻代中第二个survivor（幸存区）的最大容量 (字节) `S1C` 年轻代中第二个survivor（幸存区）的容量 (字节) `ECMX` 年轻代中Eden（伊甸园）的最大容量 (字节) `EC` 年轻代中Eden（伊甸园）的容量 (字节) `YGC` 从应用程序启动到采样时年轻代中gc次数 `FGC` 从应用程序启动到采样时old代(全gc)gc次数
 
-8、`jstat -gcold <pid>：`old代对象的信息。
+### 8、`jstat -gcold <pid>：`old代对象的信息。
 
 > `PC` Perm(持久代)的容量 (字节) `PU` Perm(持久代)目前已使用空间 (字节) `OC` Old代的容量 (字节) `OU` Old代目前已使用空间 (字节) `YGC` 从应用程序启动到采样时年轻代中gc次数 `FGC` 从应用程序启动到采样时old代(全gc)gc次数 `FGCT` 从应用程序启动到采样时old代(全gc)gc所用时间(s) `GCT` 从应用程序启动到采样时gc用的总时间(s)
 
-9、`stat -gcoldcapacity <pid>`: old代对象的信息及其占用量。
+### 9、`stat -gcoldcapacity <pid>`: old代对象的信息及其占用量。
 
 > `OGCMN` old代中初始化(最小)的大小 (字节) `OGCMX` old代的最大容量(字节) `OGC` old代当前新生成的容量 (字节) `OC` Old代的容量 (字节) `YGC` 从应用程序启动到采样时年轻代中gc次数 `FGC` 从应用程序启动到采样时old代(全gc)gc次数 `FGCT` 从应用程序启动到采样时old代(全gc)gc所用时间(s) `GCT` 从应用程序启动到采样时gc用的总时间(s)
 
-10、`jstat -gcpermcapacity<pid>`: perm对象的信息及其占用量。
+### 10、`jstat -gcpermcapacity<pid>`: perm对象的信息及其占用量。
 
 > `PGCMN` perm代中初始化(最小)的大小 (字节) `PGCMX` perm代的最大容量 (字节)
 > `PGC` perm代当前新生成的容量 (字节) `PC` Perm(持久代)的容量 (字节) `YGC` 从应用程序启动到采样时年轻代中gc次数 `FGC` 从应用程序启动到采样时old代(全gc)gc次数 `FGCT` 从应用程序启动到采样时old代(全gc)gc所用时间(s) `GCT` 从应用程序启动到采样时gc用的总时间(s)
 
-11、`jstat -printcompilation <pid>`：当前VM执行的信息。
+### 11、`jstat -printcompilation <pid>`：当前VM执行的信息。
 
 > `Compiled` 编译任务的数目 `Size` 方法生成的字节码的大小 `Type` 编译类型 `Method` 类名和方法名用来标识编译的方法。类名使用/做为一个命名空间分隔符。方法名是给定类中的方法。上述格式是由-XX:+PrintComplation选项进行设置的
+
+
 
 # Java命令学习系列（五）— jhat
 
@@ -1007,7 +1005,7 @@ jhat命令解析会Java堆dump并启动一个web服务器，然后就可以在�
 
 ## 实例
 
-### 一、导出dump文件
+### 导出dump文件
 
 关于dump文件的生成可以看`jmap`命令的详细介绍.
 
@@ -1058,7 +1056,7 @@ Heap dump file created
 >
 > 3、使用 hprof 命令
 
-### 二、解析Java堆转储文件,并启动一个 web server
+### 解析Java堆转储文件,并启动一个 web server
 
 ```shell
 HollisMacBook-Air:apaas hollis$ jhat heapDump
@@ -1081,7 +1079,7 @@ Server is ready.
 
 ![QQ20160121-1](Java开发必须掌握的线上问题排查命令-常见命令、JPS、JSTACK、JMAP、JSTAT、JHAT、JINFO、JAVAP等/QQ20160121-1.png)
 
-### 三、分析
+### 分析
 
 在浏览器里面看到dump文件之后就可以进行分析了。这个页面会列出当前进程中的所有对像情况。
 
@@ -1214,7 +1212,7 @@ Caused by: sun.jvm.hotspot.runtime.VMVersionMismatchException: Supported version
 
 由于打印jvm常用信息可以使用`jps`命令，并且在后续的java版本中可能不再支持，所以这个命令笔者就不详细介绍了。下面给出help信息，读者可自行阅读使用。（这就好像上高中，老师讲到一些难点的时候说，不明白也不要紧，知道有这么一回事就可以了！）
 
-### 用法摘要
+## 用法摘要
 
 以键值对的形式打印出JAVA系统参数及命令行参数的名称和内容。
 
@@ -1235,7 +1233,7 @@ prints a help message
 prints a help message
 ```
 
-### 参考资料
+## 参考资料
 
 [jinfo](http://docs.oracle.com/javase/7/docs/technotes/tools/share/jinfo.html)
 
@@ -1364,7 +1362,7 @@ javap可以用于反编译和查看编译器编译后的字节码。平时一般
 
 # Java代码的编译与反编译那些事儿
 
-### 编程语言
+## 编程语言
 
 在介绍编译和反编译之前，我们先来简单介绍下编程语言（Programming Language）。编程语言（Programming Language）分为低级语言（Low-level Language）和高级语言（High-level Language）。
 
@@ -1380,7 +1378,7 @@ javap可以用于反编译和查看编译器编译后的字节码。平时一般
 
 但是，汇编语言用起来同样比较复杂，后面，就衍生出了Java、C、C++等高级语言。
 
-### 什么是编译
+## 什么是编译
 
 上面提到语言有两种，一种低级语言，一种高级语言。可以这样简单的理解：低级语言是计算机认识的语言、高级语言是程序员认识的语言。
 
@@ -1396,17 +1394,17 @@ javap可以用于反编译和查看编译器编译后的字节码。平时一般
 
 **当我们写完一个`HelloWorld.java`文件后，我们可以使用`javac HelloWorld.java`命令来生成`HelloWorld.class`文件，这个`class`类型的文件是JVM可以识别的文件。通常我们认为这个过程叫做Java语言的编译。其实，`class`文件仍然不是机器能够识别的语言，因为机器只能识别机器语言，还需要JVM再将这种`class`文件类型字节码转换成机器可以识别的机器语言。**
 
-### 什么是反编译
+## 什么是反编译
 
 反编译的过程与编译刚好相反，就是将已编译好的编程语言还原到未编译的状态，也就是找出程序语言的源代码。就是将机器看得懂的语言转换成程序员可以看得懂的语言。Java语言中的反编译一般指将`class`文件转换成`java`文件。
 
 有了反编译工具，我们可以做很多事情，最主要的功能就是有了反编译工具，我们就能读得懂Java编译器生成的字节码。如果你想问读懂字节码有啥用，那么我可以很负责任的告诉你，好处大大的。比如我的博文几篇典型的原理性文章，都是通过反编译工具得到反编译后的代码分析得到的。如深入理解多线程（一）— Synchronized的实现原理、深度分析Java的枚举类型—-枚举的线程安全性及序列化问题、Java中的Switch对整型、字符型、字符串型的具体实现细节、Java的类型擦除等。我最近在GitChat写了一篇关于Java语法糖的文章，其中大部分内容都用到反编译工具来洞悉语法糖背后的原理。
 
-### Java反编译工具
+## Java反编译工具
 
 本文主要介绍3个Java的反编译工具：**javap**、**jad**和**cfr**
 
-#### javap
+### javap
 
 `javap`是jdk自带的一个工具，可以对代码反编译，也可以查看java编译器生成的字节码。`javap`和其他两个反编译工具最大的区别是他生成的文件并不是`java`文件，也不像其他两个工具生成代码那样更容易理解。拿一段简单的代码举例，如我们想分析Java 7中的`switch`是如何支持`String`的，我们先有以下可以编译通过的源代码：
 
@@ -1625,7 +1623,7 @@ private static /* synthetic */ void lambda$main$0(String s) {
 
 CFR还有很多其他参数，均用于不同场景，读者可以使用`java -jar cfr_0_125.jar --help`进行了解。这里不逐一介绍了。
 
-### 如何防止反编译
+## 如何防止反编译
 
 由于我们有工具可以对`Class`文件进行反编译，所以，对开发人员来说，如何保护Java程序就变成了一个非常重要的挑战。但是，魔高一尺、道高一丈。当然有对应的技术可以应对反编译咯。但是，这里还是要说明一点，和网络安全的防护一样，无论做出多少努力，其实都只是提高攻击者的成本而已。无法彻底防治。
 
@@ -1642,12 +1640,12 @@ CFR还有很多其他参数，均用于不同场景，读者可以使用`java -j
 
 什么是Java虚拟机这里就不介绍了，不明白的可以另外一篇博文：`JDK,JRE,JVM区别与联系`
 
-### 一、java内存组成介绍：`堆(Heap)`和`非堆(Non-heap)`内存
+## java内存组成介绍：`堆(Heap)`和`非堆(Non-heap)`内存
 
 > 按照官方的说法：“Java 虚拟机具有一个堆，堆是运行时数据区域，所有类实例和数组的内存均从此处分配。堆是在 Java 虚拟机启动时创建的。”“在JVM中堆之外的内存称为非堆内存(Non-heap memory)”。可以看出**JVM主要管理两种类型的内存：堆和非堆**。简单来说堆就是Java代码可及的内存，是留给开发人员使用的；非堆就是JVM留给 自己用的，所以方法区、JVM内部处理或优化所需的内存(如JIT编译后的代码缓存)、每个类结构(如运行时常数池、字段和方法数据)以及方法和构造方法 的代码都在非堆内存中。
 
 
-### 二、JVM内存区域模型
+## JVM内存区域模型
 
 ![2354447461](Java开发必须掌握的线上问题排查命令-常见命令、JPS、JSTACK、JMAP、JSTAT、JHAT、JINFO、JAVAP等/2354447461-300x217.jpg)
 
@@ -1689,11 +1687,11 @@ Old Generation          Tenured Generation 即图中的Old Space
 
 是最小的一块内存区域，它的作用是当前线程所执行的字节码的行号指示器，在虚拟机的模型里，字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令，分支、循环、异常处理、线程恢复等基础功能都需要依赖计数器完成。
 
-### 三、直接内存
+## 直接内存
 
 直接内存并不是虚拟机内存的一部分，也不是Java虚拟机规范中定义的内存区域。jdk1.4中新加入的NIO，引入了通道与缓冲区的IO方式，它可以调用Native方法直接分配堆外内存，这个堆外内存就是本机内存，不会影响到堆内存的大小。
 
-### 四、Java堆内存的10个要点
+## Java堆内存的10个要点
 
 > 1. Java堆内存是操作系统分配给JVM的内存的一部分。
 > 2. 当我们创建对象时，它们存储在Java堆内存中。
@@ -1708,7 +1706,7 @@ Old Generation          Tenured Generation 即图中的Old Space
 
 # Java GC工作原理
 
-### GC的基本原理
+## GC的基本原理
 
 GC是什么?为什么要有GC呢?
 
@@ -1718,12 +1716,12 @@ GC是什么?为什么要有GC呢?
 > 对于程序员来说，分配对象使用`new`关键字；释放对象时，只要将对象所有引用赋值为null，让程序不能够再访问到这个对象，我们称该对象为”不可达的”.GC将负责回收所有”不可达”对象的内存空间。
 > 对于GC来说，**当程序员创建对象时，GC就开始监控这个对象的地址、大小以及使用情况。通常，GC采用有向图的方式记录和管理堆（heap）中的所有对象。通过这种方式确定哪些对象是”可达的”，哪些对象是”不可达的”.当GC确定一些对象为”不可达”时，GC就有责任回收这些内存空间。但是，为了保证GC能够在不同平台实现的问题，Java规范对GC的很多行为都没有进行严格的规定。例如，对于采用什么类型的回收算法、什么时候进行回收等重要问题都没有明确的规定。因此，不同的JVM的实现者往往有不同的实现算法。这也给Java程序员的开发带来行多不确定性。**本文研究了几个与GC工作相关的问题，努力减少这种不确定性给Java程序带来的负面影响。
 
-### 增量式GC（IncrementalGC）
+## 增量式GC（IncrementalGC）
 
 GC在JVM中通常是由一个或一组进程来实现的，它本身也和用户程序一样占用heap空间，运行时也占用CPU.当GC进程运行时，应用程序停止运行。因此，当GC运行时间较长时，用户能够感到Java程序的停顿，另外一方面，如果GC运行时间太短，则可能对象回收率太低，这意味着还有很多应该回收的对象没有被回收，仍然占用大量内存。因此，在设计GC的时候，就必须在停顿时间和回收率之间进行权衡。一个好的GC实现允许用户定义自己所需要的设置，例如有些内存有限有设备，对内存的使用量非常敏感，希望GC能够准确的回收内存，它并不在意程序速度的放慢。另外一些实时网络游戏，就不能够允许程序有长时间的中断。增量式GC就是通过一定的回收算法，把一个长时间的中断，划分为很多个小的中断，通过这种方式减少GC对用户程序的影响。虽然，增量式GC在整体性能上可能不如普通GC的效率高，但是它能够减少程序的最长停顿时间。
 SunJDK提供的HotSpotJVM就能支持增量式GC.HotSpotJVM缺省GC方式为不使用增量GC，为了启动增量GC，我们必须在运行Java程序时增加-Xincgc的参数。HotSpotJVM增量式GC的实现是采用TrainGC算法。它的基本想法就是，将堆中的所有对象按照创建和使用情况进行分组（分层），将使用频繁高和具有相关性的对象放在一队中，随着程序的运行，不断对组进行调整。当GC运行时，它总是先回收最老的（最近很少访问的）的对象，如果整组都为可回收对象，GC将整组回收。这样，每次GC运行只回收一定比例的不可达对象，保证程序的顺畅运行。
 
-### 为什么要分代
+## 为什么要分代
 
 分代的垃圾回收策略，是基于这样一个事实：不同的对象的生命周期是不一样的。因此，不同生命周期的对象可以采取不同的收集方式，以便提高回收效率。
 在Java程序运行的过程中，会产生大量的对象，其中有些对象是与业务信息相关，比如Http请求中的Session对象、线程、Socket连接，这类对象跟业务直接挂钩，因此生命周期比较长。但是还有一些对象，主要是程序运行过程中生成的临时变量，这些对象生命周期会比较短，比如：String对象，由于其不变类的特性，系统会产生大量的这些对象，有些对象甚至只用一次即可回收。
@@ -1755,7 +1753,7 @@ SunJDK提供的HotSpotJVM就能支持增量式GC.HotSpotJVM缺省GC方式为不�
 > · System.gc()被显示调用
 > ·上一次GC之后Heap的各域分配策略动态变化
 
-### 详解`finalize`函数
+## 详解`finalize`函数
 
 `finalize`是位于Object类的一个方法，该方法的访问修饰符为`protected`，由于所有类为Object的子类，因此用户类很容易访问到这个方法。由于，finalize函数没有自动实现链式调用，我们必须手动的实现，因此finalize函数的最后一个语句通常是`super.finalize（）`。通过这种方式，我们可以实现从下到上实现finalize的调用，即先释放自己的资源，然后再释放父类的资源。
 **根据Java语言规范，JVM保证调用finalize函数之前，这个对象是不可达的，但是JVM不保证这个函数一定会被调用。另外，规范还保证finalize函数最多运行一次。**
@@ -1797,7 +1795,7 @@ Thisisfinalize
 
 `MyObject`还活着：此例子中，需要注意的是虽然MyObject对象在finalize中变成可达对象，但是下次回收时候，finalize却不再被调用，因为finalize函数最多只调用一次。
 
-### 程序如何与GC进行交互
+## 程序如何与GC进行交互
 
 Java2增强了内存管理功能，增加了一个`java.lang.ref`包，其中定义了三种引用类。这三种引用类分别为`SoftReference`、`WeakReference`和`PhantomReference`.通过使用这些引用类，程序员可以在一定程度与GC进行交互，以便改善GC的工作效率。这些引用类的引用强度介于可达对象和不可达对象之间。
 创建一个引用对象也非常容易，例如如果你需要创建一个`SoftReference`对象，那么首先创建一个对象，并采用普通引用方式（可达对象）；然后再创建一个`SoftReference`引用该对象；最后将普通引用设置为`null`.通过这种方式，这个对象就只有一个`SoftReference`引用。同时，我们称这个对象为`SoftReference`对象。
@@ -1825,16 +1823,17 @@ sr=newSoftReference(image);
 Weak引用对象与Soft引用对象的最大不同就在于：GC在进行回收时，需要通过算法检查是否回收Soft引用对象，而对于Weak引用对象，GC总是进行回收。Weak引用对象更容易、更快被GC回收。虽然，GC在运行时一定回收Weak对象，但是复杂关系的Weak对象群常常需要好几次GC的运行才能完成。Weak引用对象常常用于Map结构中，引用数据量较大的对象，一旦该对象的强引用为null时，GC能够快速地回收该对象空间。
 Phantom引用的用途较少，主要用于辅助finalize函数的使用。Phantom对象指一些对象，它们执行完了finalize函数，并为不可达对象，但是它们还没有被GC回收。这种对象可以辅助finalize进行一些后期的回收工作，我们通过覆盖Reference的clear（）方法，增强资源回收机制的灵活性。
 
-### 一些Java编程的建议
+## 一些Java编程的建议
 
 根据GC的工作原理，我们可以通过一些技巧和方式，让GC运行更加有效率，更加符合应用程序的要求。一些关于程序设计的几点建议：
-　　1.最基本的建议就是尽早释放无用对象的引用。大多数程序员在使用临时变量的时候，都是让引用变量在退出活动域（scope）后，自动设置为null.我们在使用这种方式时候，必须特别注意一些复杂的对象图，例如数组，队列，树，图等，这些对象之间有相互引用关系较为复杂。对于这类对象，GC回收它们一般效率较低。如果程序允许，尽早将不用的引用对象赋为null.这样可以加速GC的工作。
-　　2.尽量少用finalize函数。finalize函数是Java提供给程序员一个释放对象或资源的机会。但是，它会加大GC的工作量，因此尽量少采用finalize方式回收资源。
-　　3.如果需要使用经常使用的图片，可以使用soft应用类型。它可以尽可能将图片保存在内存中，供程序调用，而不引起OutOfMemory.
-　　4.注意集合数据类型，包括数组，树，图，链表等数据结构，这些数据结构对GC来说，回收更为复杂。另外，注意一些全局的变量，以及一些静态变量。这些变量往往容易引起悬挂对象（danglingreference），造成内存浪费。
-　　5.当程序有一定的等待时间，程序员可以手动执行System.gc（），通知GC运行，但是Java语言规范并不保证GC一定会执行。使用增量式GC可以缩短Java程序的暂停时间。
 
-### Java的垃圾回收机制
+　　1. 最基本的建议就是尽早释放无用对象的引用。大多数程序员在使用临时变量的时候，都是让引用变量在退出活动域（scope）后，自动设置为null.我们在使用这种方式时候，必须特别注意一些复杂的对象图，例如数组，队列，树，图等，这些对象之间有相互引用关系较为复杂。对于这类对象，GC回收它们一般效率较低。如果程序允许，尽早将不用的引用对象赋为null.这样可以加速GC的工作。
+  　　2. 尽量少用finalize函数。finalize函数是Java提供给程序员一个释放对象或资源的机会。但是，它会加大GC的工作量，因此尽量少采用finalize方式回收资源。
+  　　3. 如果需要使用经常使用的图片，可以使用soft应用类型。它可以尽可能将图片保存在内存中，供程序调用，而不引起OutOfMemory.
+  　　4. 注意集合数据类型，包括数组，树，图，链表等数据结构，这些数据结构对GC来说，回收更为复杂。另外，注意一些全局的变量，以及一些静态变量。这些变量往往容易引起悬挂对象（danglingreference），造成内存浪费。
+  　　5. 当程序有一定的等待时间，程序员可以手动执行System.gc（），通知GC运行，但是Java语言规范并不保证GC一定会执行。使用增量式GC可以缩短Java程序的暂停时间。
+
+## Java的垃圾回收机制
 
 **a、 停止—复制(stop-and-copy)**：先暂停程序的运行，然后将所有存活的对象从当前堆复制到另一个堆，没有复制的全部都是垃圾。当对象被复制到新堆时，它们是一个挨着一个的，紧凑的。效率很低：首先，得有两个堆空间占用率200%;其次，垃圾较少时，复制大量的活着的对象，是很大的浪费。
 
@@ -1849,13 +1848,13 @@ d、 在java虚拟机中，内存分配是以较大的块为单位的。每个�
 
 # JAVA线程dump的分析 --- jstack pid
 
-### Java 的线程
+## Java 的线程
 
 线程是指能独立于程序的其它部分运行的执行单元。 JAVA语言能够很好的实现多线程的程序。我们在调试程序，或者在开发后期需要做性能调优的时候，往往也需要了解当前程序正在运行的线程的状态，正在执行的操作，从而分析系统可能存在的问题。
 
 在阅读本文之间，应对 Java线程的编程原理，同步机制有一定了解 
 
-### 产生 JAVA线程 dump
+## 产生 JAVA线程 dump
 
 JAVA 的线程 DUMP，就象当前 JAVA进程的一个快照，打印出所有线程的状态和调用堆栈，以及 Monitor的状态。在不同的操作系统下，产生线程 DUMP的方式是不同的。
 
@@ -1873,9 +1872,10 @@ JAVA 的线程 DUMP，就象当前 JAVA进程的一个快照，打印出所有�
 1.   不同的 JAVA虚机的线程 DUMP的创建方法和文件格式是不一样的，不同的 JVM版本， dump信息也有差别。本文中，只以 SUN的 hotspot JVM 5.0_06 为例。
 2.   在实际运行中，往往一次 dump的信息，还不足以确认问题。建议产生三次 dump信息，如果每次 dump都指向同一个问题，我们才确定问题的典型性。
 
-### 线程分析 
+## 线程分析 
 
-1.   JVM 线程
+### JVM 线程
+
 在线程中，有一些 JVM内部的后台线程，来执行譬如垃圾回收，或者低内存的检测等等任务，这些线程往往在 JVM初始化的时候就存在，如下所示：
 
 ```shell
@@ -1943,15 +1943,15 @@ at java.lang.Thread.run(Thread.java:595)
 
     这些信息对我们随后的分析都有用处。
 
-2.   线程的状态分析
+### 线程的状态分析
 
 正如我们刚看到的那样，线程的状态是一个重要的指标，它会显示在线程 Stacktrace的头一行结尾的地方。那么线程常见的有哪些状态呢？线程在什么样的情况下会进入这种状态呢？我们能从中发现什么线索？< /span>
 
-1.1 Runnable
+#### Runnable
 
 该状态表示线程具备所有运行条件，在运行队列中准备操作系统的调度，或者正在运行。
 
-1.2 Wait on condition
+#### Wait on condition
 
 该状态出现在线程等待某个条件的发生。具体是什么原因，可以结合 stacktrace来分析。最常见的情况是线程在等待网络的读写，比如当网络数据没有准备好读时，线程处于这种等待状态，而一旦有数据准备好读之后，线程会重新激活，读取并处理数据。在 Java引入 NewIO之前，对于每个网络连接，都有一个对应的线程来处理网络的读写操作，即使没有可读写的数据，线程仍然阻塞在读写操作上，这样有可能造成资源浪费，而且给操作系统的线程调度也带来压力。在 NewIO里采用了新的机制，编写的服务器程序的性能和可扩展性都得到提高。
 
@@ -2040,9 +2040,9 @@ synchronized(obj) {
 
 上面我们提到如果 synchronized和 monitor机制运用不当，可能会造成多线程程序的性能问题。在 JDK 5.0中，引入了 Lock机制，从而使开发者能更灵活的开发高性能的并发多线程程序，可以替代以往 JDK中的 synchronized和 Monitor的 机制。但是，要注意的是，因为 Lock类只是一个普通类， JVM无从得知 Lock对象的占用情况，所以在线程 DUMP中，也不会包含关于 Lock的信息， 关于死锁等问题，就不如用 synchronized的编程方式容易识别。
 
-### 案例分析
+## 案例分析
 
-1. 死锁
+### 死锁
 
 在多线程程序的编写中，如果不适当的运用同步机制，则有可能造成程序的死锁，经常表现为程序的停顿，或者不再响应用户的请求。
 
@@ -2090,7 +2090,7 @@ waiting to lock monitor 0x0003f314 (object 0x22c19f20, a java.lang.Object),
 which is held by "Thread-1"
 ```
 
-2.   热锁
+### 热锁
 
 热锁，也往往是导致系统性能瓶颈的主要因素。其表现特征为，由于多个线程对临界区，或者锁的竞争，可能出现：
 
@@ -2109,7 +2109,7 @@ which is held by "Thread-1"
 
 我们曾经遇到过这样的例子，程序运行时，出现了以上指出的各种现象，通过观察操作系统的资源使用统计信息，以及线程 DUMP信息，确定了程序中热锁的存在，并发现大多数的线程状态都是 Waiting for monitor entry或者 Wait on monitor，且是阻塞在压缩和解压缩的方法上。后来采用第三方的压缩包 javalib替代 JDK自带的压缩包后，系统的性能提高了几倍。
 
-### 总结
+## 总结
 
 本文就介绍了 Java线程 DUMP的基本知识和分析的基本方法，并且解释了如何利用线程的 DUMP信息，以及结合操作系统的各种资源使用情况，分析程序的性能问题，从而达到改进程序，提高性能的目的。
 
@@ -2128,3 +2128,50 @@ which is held by "Thread-1"
 下图很好的表面了JDK,JRE,JVM三者间的关系：
 
 ![2932682015](Java开发必须掌握的线上问题排查命令-常见命令、JPS、JSTACK、JMAP、JSTAT、JHAT、JINFO、JAVAP等/2932682015-300x184.gif)
+
+#Linux端口被占用的解决
+
+> Error: JBoss port is in use. Please check
+
+原因：原因很简单，端口被占用
+
+解决：
+
+**知道端口号，直接查找进程ID，杀掉进程**
+
+1. 知道端口号，查看是否被占用，比如说知道jboss用的是8080端口，那就直接使用命令：
+
+```
+netstat -tln | grep 8080 
+```
+
+`netstat -tln` 查看端口使用情况，而`netstat -tln | grep 8080` 则是只查看端口8080的使用情况
+
+2. 查看端口属于哪个程序？端口被哪个进程占用
+
+```
+lsof -i :8080
+```
+
+可以看到端口使用情况如下
+
+> COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME
+> java 8253 hollis 143u IPv4 757826 0t0 TCP *:http-alt (LISTEN)
+> java 8253 hollis 737u IPv4 756898 0t0 TCP 10.16.47.163:39451->10.101.104.55:http-alt (ESTABLISHED)
+> java 8253 hollis 806u IPv4 757695 0t0 TCP 10.16.47.163:50381->10.101.104.50:http-alt (ESTABLISHED)
+
+3. 使用命令 `kill -9 进程id(8253)`杀掉进程
+
+**不知道知道端口号，但是知道进程的名字，比如知道是个java进程，找到进程ID，直接杀死**
+
+1. 使用命令
+
+```
+ps aux|grep java
+```
+
+查找哪些进程适合java相关的进程
+
+> hollis 15690 1.2 6.4 3537252 524812 pts/28 Sl 3月12 0:17 /home/hollis/tools/java/jdk1.7.0_71/bin/java -D[Standalone] -XX:+UseCompressedOops -server -Xms1024m -Xmx1024m -XX:PermSize=128m -XX:MaxPermSize=192m -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Dorg.jboss.boot.log.file=/home/hollis/out/logs/jboss_stdout.log -Dlogging.configuration=file:/home/hollis/workspace/stand/standalone/control/jboss/config/logging.properties -Djboss.modules.system.pkgs=com.sun.btrace -Dapplication.name=standalone-sync-appinfo -Dlog4j.ignoreTCL=true -Dlogback.ignoreTCL=true -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=7001,server=y,suspend=n -Dproject.name=standalone-sync-appinfo -Dorg.apache.tomcat.util.http.ServerCookie.ALLOW_EQUALS_IN_VALUE=true -DloggingRoot=/home/hollis/out/logs -DloggingCharset=UTF-8 -DloggingLevel=DEBUG -jar /opt/taobao/install/jboss-7.2.0/jboss-modules.jar -mp /opt/taobao/install/jboss-7.2.0/modules:/home/hollis/workspace/stand/standalone/control/jboss/hilton/modules -jaxpmodule javax.xml.jaxp-provider org.jboss.as.standalone -Djboss.home.dir=/opt/taobao/install/jboss-7.2.0 -Djboss.server.base.dir=/home/hollis/workspace/stand/standalone/deploy/target -Djboss.server.config.dir=/home/hollis/workspace/stand/standalone/control/jboss/config -Djboss.server.log.dir=/home/hollis/out/logs
+
+2. 使用命令 `kill -9 进程id(15690)`杀掉进程
