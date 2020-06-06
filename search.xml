@@ -1,6 +1,736 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Java开发必须掌握的线上问题排查命令 - 常见命令、JPS、JSTACK、JMAP、JSTAT、JHAT、JINFO、JAVAP等</title>
+    <url>/2020/06/06/Java%E5%BC%80%E5%8F%91%E5%BF%85%E9%A1%BB%E6%8E%8C%E6%8F%A1%E7%9A%84%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E5%91%BD%E4%BB%A4-%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4%E3%80%81JPS%E3%80%81JSTACK%E3%80%81JMAP%E3%80%81JSTAT%E3%80%81JHAT%E3%80%81JINFO%E3%80%81JAVAP%E7%AD%89/</url>
+    <content><![CDATA[<blockquote>
+<p>本文转载自<a href="http://www.hollischuang.com/archives/tag/java%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97" target="_blank" rel="noopener">java命令学习系列</a>，文章内容略有调整。</p>
+</blockquote>
+<h1 id="Java开发必须掌握的线上问题排查命令"><a href="#Java开发必须掌握的线上问题排查命令" class="headerlink" title="Java开发必须掌握的线上问题排查命令"></a>Java开发必须掌握的线上问题排查命令</h1><p>作为一个合格的开发人员，不仅要能写得一手还代码，还有一项很重要的技能就是排查问题。这里提到的排查问题不仅仅是在coding的过程中debug等，还包括的就是线上问题的排查。由于在生产环境中，一般没办法debug（其实有些问题，debug也白扯。。。）,所以我们需要借助一些常用命令来查看运行时的具体情况，这些运行时信息包括但不限于运行日志、异常堆栈、堆使用情况、GC情况、JVM参数情况、线程情况等。</p>
+<p>给一个系统定位问题的时候，知识、经验是关键，数据是依据，工具是运用知识处理数据的手段。为了便于我们排查和解决问题，Sun公司为我们提供了一些常用命令。这些命令一般都是jdk/lib/tools.jar中类库的一层薄包装。随着JVM的安装一起被安装到机器中，在bin目录中。下面就来认识一下这些命令以及具体使用方式。</p>
+<a id="more"></a>
+<h2 id="jps"><a href="#jps" class="headerlink" title="jps"></a>jps</h2><h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>显示当前所有java进程pid的命令。</p>
+<h3 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h3><p><code>jps</code>：显示当前用户的所有java进程的PID</p>
+<p><code>jps -v 3331</code>：显示虚拟机参数</p>
+<p><code>jps -m 3331</code>：显示传递给main()函数的参数</p>
+<p><code>jps -l 3331</code>：显示主类的全路径</p>
+<h2 id="jinfo"><a href="#jinfo" class="headerlink" title="jinfo"></a>jinfo</h2><h3 id="功能-1"><a href="#功能-1" class="headerlink" title="功能"></a>功能</h3><p>实时查看和调整虚拟机参数，可以显示未被显示指定的参数的默认值（<code>jps -v 则不能</code>）。</p>
+<blockquote>
+<p>jdk8中已经不支持该命令。</p>
+</blockquote>
+<h3 id="常用指令-1"><a href="#常用指令-1" class="headerlink" title="常用指令"></a>常用指令</h3><p><code>jinfo -flag CMSIniniatingOccupancyFration 1444</code>：查询CMSIniniatingOccupancyFration参数值</p>
+<h2 id="jstat"><a href="#jstat" class="headerlink" title="jstat"></a>jstat</h2><h3 id="功能-2"><a href="#功能-2" class="headerlink" title="功能"></a>功能</h3><p>显示进程中的类装载、内存、垃圾收集、JIT编译等运行数据。</p>
+<h3 id="常用指令-2"><a href="#常用指令-2" class="headerlink" title="常用指令"></a>常用指令</h3><p><code>jstat -gc 3331 250 20</code> ：查询进程2764的垃圾收集情况，每250毫秒查询一次，一共查询20次。</p>
+<p><code>jstat -gccause</code>：额外输出上次GC原因</p>
+<p><code>jstat -calss</code>：件事类装载、类卸载、总空间以及所消耗的时间</p>
+<h2 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h2><h3 id="功能-3"><a href="#功能-3" class="headerlink" title="功能"></a>功能</h3><p>生成堆转储快照（heapdump）</p>
+<h3 id="常用指令-3"><a href="#常用指令-3" class="headerlink" title="常用指令"></a>常用指令</h3><p><code>jmap -heap 3331</code>：查看java 堆（heap）使用情况</p>
+<p><code>jmap -histo 3331</code>：查看堆内存(histogram)中的对象数量及大小</p>
+<p><code>jmap -histo:live 3331</code>：JVM会先触发gc，然后再统计信息</p>
+<p><code>jmap -dump:format=b,file=heapDump 3331</code>：将内存使用的详细情况输出到文件，之后一般使用其他工具进行分析。</p>
+<h2 id="jhat"><a href="#jhat" class="headerlink" title="jhat"></a>jhat</h2><h3 id="功能-4"><a href="#功能-4" class="headerlink" title="功能"></a>功能</h3><p>一般与jmap搭配使用，用来分析jmap生成的堆转储文件。</p>
+<blockquote>
+<p>由于有很多可视化工具（Eclipse Memory Analyzer 、IBM HeapAnalyzer）可以替代，所以很少用。不过在没有可视化工具的机器上也是可用的。</p>
+</blockquote>
+<h3 id="常用指令-4"><a href="#常用指令-4" class="headerlink" title="常用指令"></a>常用指令</h3><p><code>jmap -dump:format=b,file=heapDump 3331</code> + <code>jhat heapDump</code>：解析Java堆转储文件,并启动一个 web server</p>
+<h2 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h2><h3 id="功能-5"><a href="#功能-5" class="headerlink" title="功能"></a>功能</h3><p>生成当前时刻的线程快照。</p>
+<h3 id="常用指令-5"><a href="#常用指令-5" class="headerlink" title="常用指令"></a>常用指令</h3><p><code>jstack 3331</code>：查看线程情况</p>
+<p><code>jstack -F 3331</code>：正常输出不被响应时，使用该指令</p>
+<p><code>jstack -l 3331</code>：除堆栈外，显示关于锁的附件信息</p>
+<h2 id="常见问题定位过程"><a href="#常见问题定位过程" class="headerlink" title="常见问题定位过程"></a>常见问题定位过程</h2><h3 id="频繁GC问题或内存溢出问题"><a href="#频繁GC问题或内存溢出问题" class="headerlink" title="频繁GC问题或内存溢出问题"></a>频繁GC问题或内存溢出问题</h3><p>一、使用<code>jps</code>查看线程ID</p>
+<p>二、使用<code>jstat -gc 3331 250 20</code> 查看gc情况，一般比较关注PERM区的情况，查看GC的增长情况。</p>
+<p>三、使用<code>jstat -gccause</code>：额外输出上次GC原因</p>
+<p>四、使用<code>jmap -dump:format=b,file=heapDump 3331</code>生成堆转储文件</p>
+<p>五、使用jhat或者可视化工具（Eclipse Memory Analyzer 、IBM HeapAnalyzer）分析堆情况。</p>
+<p>六、结合代码解决内存溢出或泄露问题。</p>
+<h3 id="死锁问题"><a href="#死锁问题" class="headerlink" title="死锁问题"></a>死锁问题</h3><p>一、使用<code>jps</code>查看线程ID，转换为16进制<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">printf %x 线程号</span><br></pre></td></tr></table></figure></p>
+<p>二、使用<code>jstack 3331</code>：查看线程情况</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>经常使用适当的虚拟机监控和分析工具可以加快我们分析数据、定位解决问题的速度，但也要知道，工具永远都是知识技能的一层包装，没有什么工具是包治百病的。</p>
+<h1 id="Java命令学习系列（零）—-常见命令及Java-Dump介绍"><a href="#Java命令学习系列（零）—-常见命令及Java-Dump介绍" class="headerlink" title="Java命令学习系列（零）— 常见命令及Java Dump介绍"></a>Java命令学习系列（零）— 常见命令及Java Dump介绍</h1><h2 id="常用命令："><a href="#常用命令：" class="headerlink" title="常用命令："></a>常用命令：</h2><p>在JDK的bin目彔下,包含了java命令及其他实用工具。</p>
+<blockquote>
+<p>jps:查看本机的Java中进程信息。</p>
+<p>jstack:打印线程的栈信息,制作线程Dump。</p>
+<p>jmap:打印内存映射,制作堆Dump。</p>
+<p>jstat:性能监控工具。</p>
+<p>jhat:内存分析工具。</p>
+<p>jconsole:简易的可视化控制台。</p>
+<p>jvisualvm:功能强大的控制台。</p>
+</blockquote>
+<h2 id="认识Java-Dump："><a href="#认识Java-Dump：" class="headerlink" title="认识Java Dump："></a>认识Java Dump：</h2><h3 id="什么是Java-Dump？"><a href="#什么是Java-Dump？" class="headerlink" title="什么是Java Dump？"></a>什么是Java Dump？</h3><blockquote>
+<p>Java虚拟机的运行时快照。将Java虚拟机运行时的状态和信息保存到文件。</p>
+<p><strong>线程Dump</strong>,包含所有线程的运行状态。纯文本格式。</p>
+<p><strong>堆Dump</strong>,包含线程Dump,幵包含所有堆对象的状态。二进制格式。</p>
+</blockquote>
+<h3 id="Java-Dump有什么用？"><a href="#Java-Dump有什么用？" class="headerlink" title="Java Dump有什么用？"></a>Java Dump有什么用？</h3><blockquote>
+<p>补足传统Bug分析手段的不足: 可在任何Java环境使用;信息量充足。 针对非功能正确性的Bug,主要为:多线程幵发、内存泄漏。</p>
+</blockquote>
+<h2 id="制作Java-Dump"><a href="#制作Java-Dump" class="headerlink" title="制作Java Dump"></a>制作Java Dump</h2><p><strong>使用Java虚拟机制作Dump</strong></p>
+<p>指示虚拟机在发生内存不足错误时,自动生成堆Dump</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">-XX:+HeapDumpOnOutOfMemoryError</span><br></pre></td></tr></table></figure>
+<p><strong>使用图形化工具制作Dump</strong></p>
+<p>使用JDK(1.6)自带的工具:Java VisualVM。</p>
+<p><strong>使用命令行制作Dump</strong></p>
+<p><code>jstack</code>:打印线程的栈信息,制作线程Dump。</p>
+<p><code>jmap</code>:打印内存映射,制作堆Dump。</p>
+<p><strong>步骤：</strong></p>
+<ol>
+<li>检查虚拟机版本（java -version）</li>
+<li>找出目标Java应用的进程ID（jps）</li>
+<li>使用jstack命令制作线程Dump• Linux环境下使用kill命令制作线程Dump</li>
+<li>使用jmap命令制作堆Dump</li>
+</ol>
+<h1 id="Java命令学习系列（一）—-Jps"><a href="#Java命令学习系列（一）—-Jps" class="headerlink" title="Java命令学习系列（一）— Jps"></a>Java命令学习系列（一）— Jps</h1><blockquote>
+<p>jps位于jdk的bin目录下，其作用是显示当前系统的java进程情况，及其id号。 jps相当于Solaris进程工具ps。不象”pgrep java”或”ps -ef grep java”，jps并不使用应用程序名来查找JVM实例。因此，它查找所有的Java应用程序，包括即使没有使用java执行体的那种（例如，定制的启动 器）。另外，jps仅查找当前用户的Java进程，而不是当前系统中的所有进程。</p>
+</blockquote>
+<h2 id="位置"><a href="#位置" class="headerlink" title="位置"></a>位置</h2><p>我们知道，很多Java命令都在jdk的JAVA_HOME/bin/目录下面，jps也不例外，他就在bin目录下，所以，他是java自带的一个命令。</p>
+<h2 id="功能-6"><a href="#功能-6" class="headerlink" title="功能"></a>功能</h2><p>jps(Java Virtual Machine Process Status Tool)是JDK 1.5提供的一个显示当前所有java进程pid的命令，简单实用，非常适合在linux/unix平台上简单察看当前java进程的一些简单情况。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>jdk中的jps命令可以显示当前运行的java进程以及相关参数，它的实现机制如下：<br>java程序在启动以后，会在<code>java.io.tmpdir</code>指定的目录下，就是临时文件夹里，生成一个类似于<code>hsperfdata_User</code>的文件夹，这个文件夹里（在Linux中为/tmp/hsperfdata_{userName}/），有几个文件，名字就是java进程的pid，因此列出当前运行的java进程，只是把这个目录里的文件名列一下而已。 至于系统的参数什么，就可以解析这几个文件获得。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hollis@hos:/tmp/hsperfdata_hollis$ pwd</span><br><span class="line">/tmp/hsperfdata_hollis</span><br><span class="line">hollis@hos:/tmp/hsperfdata_hollis$ ll</span><br><span class="line">total 48</span><br><span class="line">drwxr-xr-x 2 hollis hollis  4096  4月 16 10:54 ./</span><br><span class="line">drwxrwxrwt 7 root   root   12288  4月 16 10:56 ../</span><br><span class="line">-rw------- 1 hollis hollis 32768  4月 16 10:57 2679</span><br><span class="line">hollis@hos:/tmp/hsperfdata_hollis$</span><br></pre></td></tr></table></figure>
+<p>上面的内容就是我机器中/tmp/hsperfdata_hollis目录下的内容，其中2679就是我机器上当前运行中的java的进程的pid，我们执行jps验证一下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hollis@hos:/tmp/hsperfdata_hollis$ jps</span><br><span class="line">2679 org.eclipse.equinox.launcher_1.3.0.v20130327-1440.jar</span><br><span class="line">4445 Jps</span><br></pre></td></tr></table></figure>
+<p>执行了jps命令之后，我们发现有两个java进程，一个是pid为2679的eclipse运行的进程，另外一个是pid为4445的jps使用的进程（他也是java命令，也要开一个进程）</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>想要学习一个命令，先来看看帮助，使用<code>jps -help</code>查看帮助：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hollis@hos:/tmp/hsperfdata_hollis$ jps -help</span><br><span class="line">usage: jps [-help]</span><br><span class="line">       jps [-q] [-mlvV] [&lt;hostid&gt;]</span><br><span class="line"></span><br><span class="line">Definitions:</span><br><span class="line">    &lt;hostid&gt;:      &lt;hostname&gt;[:&lt;port&gt;]</span><br></pre></td></tr></table></figure>
+<p>接下来，为了详细介绍这些参数，我们编写几个类，在main方法里写一个while(true)的循环，查看java进程情况。代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.JavaCommand;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> hollis</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JpsDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">            System.out.println(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>-q 只显示pid，不显示class名称,jar文件名和传递给main 方法的参数</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hollis@hos:/tmp/hsperfdata_hollis$ jps -q</span><br><span class="line">2679</span><br><span class="line">11421</span><br></pre></td></tr></table></figure>
+<p><strong>-m 输出传递给main 方法的参数，在嵌入式jvm上可能是null，</strong> 在这里，在启动main方法的时候，我给String[] args传递两个参数。hollis,chuang,执行<code>jsp -m</code>:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hollis@hos:/tmp/hsperfdata_hollis$ jps -m</span><br><span class="line">12062 JpsDemo hollis,chuang</span><br></pre></td></tr></table></figure>
+<p><strong>-l 输出应用程序main class的完整package名 或者 应用程序的jar文件完整路径名</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hollis@hos:/tmp/hsperfdata_hollis$ jps -l</span><br><span class="line">12356 sun.tools.jps.Jps</span><br><span class="line">2679 /home/hollis/tools/eclipse//plugins/org.eclipse.equinox.launcher_1.3.0.v20130327-1440.jar</span><br><span class="line">12329 com.JavaCommand.JpsDemo</span><br></pre></td></tr></table></figure>
+<p><strong>-v 输出传递给JVM的参数</strong> 在这里，在启动main方法的时候，我给jvm传递一个参数：-Dfile.encoding=UTF-8,执行<code>jps -v</code>：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hollis@hos:/tmp/hsperfdata_hollis$ jps -v</span><br><span class="line">2679 org.eclipse.equinox.launcher_1.3.0.v20130327-1440.jar -Djava.library.path=/usr/lib/jni:/usr/lib/x86_64-linux-gnu/jni -Dosgi.requiredJavaVersion=1.6 -XX:MaxPermSize=256m -Xms40m -Xmx512m</span><br><span class="line">13157 Jps -Denv.class.path=/home/hollis/tools/java/jdk1.7.0_71/lib:/home/hollis/tools/java/jdk1.7.0_71/jre/lib: -Dapplication.home=/home/hollis/tools/java/jdk1.7.0_71 -Xms8m</span><br><span class="line">13083 JpsDemo -Dfile.encoding=UTF-8</span><br></pre></td></tr></table></figure>
+<p>PS:jps命令有个地方很不好，似乎只能显示当前用户的java进程，要显示其他用户的还是只能用unix/linux的ps命令。</p>
+<blockquote>
+<p><strong>jps是我最常用的java命令。使用jps可以查看当前有哪些Java进程处于运行状态。如果我运行了一个web应用（使用tomcat、jboss、jetty等启动）的时候，我就可以使用jps查看启动情况。有的时候我想知道这个应用的日志会输出到哪里，或者启动的时候使用了哪些javaagent，那么我可以使用<code>jps -v</code> 查看进程的jvm参数情况。</strong></p>
+</blockquote>
+<h2 id="JPS失效处理"><a href="#JPS失效处理" class="headerlink" title="JPS失效处理"></a>JPS失效处理</h2><p><strong>现象：</strong> 用ps -ef|grep java能看到启动的java进程，但是用jps查看却不存在该进程的id。待会儿解释过之后就能知道在该情况下，jconsole、jvisualvm可能无法监控该进程，其他java自带工具也可能无法使用</p>
+<p><strong>分析：</strong> jps、jconsole、jvisualvm等工具的数据来源就是这个文件（/tmp/hsperfdata_userName/pid)。所以当该文件不存在或是无法读取时就会出现jps无法查看该进程号，jconsole无法监控等问题</p>
+<p><strong>原因：</strong></p>
+<p>（1）、磁盘读写、目录权限问题 若该用户没有权限写/tmp目录或是磁盘已满，则无法创建/tmp/hsperfdata_userName/pid文件。或该文件已经生成，但用户没有读权限</p>
+<p>（2）、临时文件丢失，被删除或是定期清理 对于linux机器，一般都会存在定时任务对临时文件夹进行清理，导致/tmp目录被清空。这也是我第一次碰到该现象的原因。常用的可能定时删除临时目录的工具为crontab、redhat的tmpwatch、ubuntu的tmpreaper等等</p>
+<p>这个导致的现象可能会是这样，用jconsole监控进程，发现在某一时段后进程仍然存在，但是却没有监控信息了。</p>
+<p>（3）、java进程信息文件存储地址被设置，不在/tmp目录下 上面我们在介绍时说默认会在/tmp/hsperfdata_userName目录保存进程信息，但由于以上1、2所述原因，可能导致该文件无法生成或是丢失，所以java启动时提供了参数(-Djava.io.tmpdir)，可以对这个文件的位置进行设置，而jps、jconsole都只会从/tmp目录读取，而无法从设置后的目录读物信息，这是我第二次碰到该现象的原因</p>
+<h2 id="附："><a href="#附：" class="headerlink" title="附："></a>附：</h2><p>1.如何给main传递参数 在eclipse中，鼠标右键-&gt;Run As-&gt;Run COnfiguations-&gt;Arguments-&gt;在Program arguments中写下要传的参数值</p>
+<p>1.如何给JVM传递参数 在eclipse中，鼠标右键-&gt;Run As-&gt;Run COnfiguations-&gt;Arguments-&gt;在VM arguments中写下要传的参数值（一般以-D开头）</p>
+<h1 id="Java命令学习系列（二）—-Jstack"><a href="#Java命令学习系列（二）—-Jstack" class="headerlink" title="Java命令学习系列（二）— Jstack"></a>Java命令学习系列（二）— Jstack</h1><blockquote>
+<p>jstack是java虚拟机自带的一种堆栈跟踪工具。</p>
+</blockquote>
+<h2 id="功能-7"><a href="#功能-7" class="headerlink" title="功能"></a>功能</h2><p>jstack用于生成java虚拟机当前时刻的线程快照。线程快照是当前java虚拟机内每一条线程正在执行的方法堆栈的集合，生成线程快照的主要目的是定位线程出现长时间停顿的原因，如线程间死锁、死循环、请求外部资源导致的长时间等待等。 线程出现停顿的时候通过jstack来查看各个线程的调用堆栈，就可以知道没有响应的线程到底在后台做什么事情，或者等待什么资源。 如果java程序崩溃生成core文件，jstack工具可以用来获得core文件的java stack和native stack的信息，从而可以轻松地知道java程序是如何崩溃和在程序何处发生问题。另外，jstack工具还可以附属到正在运行的java程序中，看到当时运行的java程序的java stack和native stack的信息, 如果现在运行的java程序呈现hung的状态，jstack是非常有用的。</p>
+<blockquote>
+<p>So,<strong>jstack命令主要用来查看Java线程的调用堆栈的，可以用来分析线程问题（如死锁）。</strong></p>
+</blockquote>
+<h3 id="线程状态"><a href="#线程状态" class="headerlink" title="线程状态"></a>线程状态</h3><p>想要通过jstack命令来分析线程的情况的话，首先要知道线程都有哪些状态，下面这些状态是我们使用jstack命令查看线程堆栈信息时可能会看到的<strong>线程的几种状态</strong>：</p>
+<blockquote>
+<p>NEW,未启动的。不会出现在Dump中。</p>
+<p>RUNNABLE,在虚拟机内执行的。</p>
+<p>BLOCKED,受阻塞并等待监视器锁。</p>
+<p>WATING,无限期等待另一个线程执行特定操作。</p>
+<p>TIMED_WATING,有时限的等待另一个线程的特定操作。</p>
+<p>TERMINATED,已退出的。</p>
+</blockquote>
+<h3 id="Monitor"><a href="#Monitor" class="headerlink" title="Monitor"></a>Monitor</h3><p>在多线程的 JAVA程序中，实现线程之间的同步，就要说说 Monitor。 <strong>Monitor是 Java中用以实现线程之间的互斥与协作的主要手段</strong>，它可以看成是对象或者 Class的锁。每一个对象都有，也仅有一个 monitor。下 面这个图，描述了线程和 Monitor之间关系，以 及线程的状态转换图：</p>
+<p><img src="/2020/06/06/Java开发必须掌握的线上问题排查命令-常见命令、JPS、JSTACK、JMAP、JSTAT、JHAT、JINFO、JAVAP等/thread.bmp" alt="thread"></p>
+<p><strong>进入区(Entrt Set)</strong>:表示线程通过synchronized要求获取对象的锁。如果对象未被锁住,则迚入拥有者;否则则在进入区等待。一旦对象锁被其他线程释放,立即参与竞争。</p>
+<p><strong>拥有者(The Owner)</strong>:表示某一线程成功竞争到对象锁。</p>
+<p><strong>等待区(Wait Set)</strong>:表示线程通过对象的wait方法,释放对象的锁,并在等待区等待被唤醒。</p>
+<p>从图中可以看出，一个 Monitor在某个时刻，只能被一个线程拥有，该线程就是 <code>“Active Thread”</code>，而其它线程都是 <code>“Waiting Thread”</code>，分别在两个队列 <code>“ Entry Set”</code>和 <code>“Wait Set”</code>里面等候。在 <code>“Entry Set”</code>中等待的线程状态是 <code>“Waiting for monitor entry”</code>，而在 <code>“Wait Set”</code>中等待的线程状态是 <code>“in Object.wait()”</code>。 先看 “Entry Set”里面的线程。我们称被 synchronized保护起来的代码段为临界区。当一个线程申请进入临界区时，它就进入了 “Entry Set”队列。对应的 code就像：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">synchronized</span>(obj) &#123;</span><br><span class="line">.........</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="调用修饰"><a href="#调用修饰" class="headerlink" title="调用修饰"></a>调用修饰</h3><p>表示线程在方法调用时,额外的重要的操作。线程Dump分析的重要信息。修饰上方的方法调用。</p>
+<blockquote>
+<p>locked &lt;地址&gt; 目标：使用synchronized申请对象锁成功,监视器的拥有者。</p>
+<p>waiting to lock &lt;地址&gt; 目标：使用synchronized申请对象锁未成功,在迚入区等待。</p>
+<p>waiting on &lt;地址&gt; 目标：使用synchronized申请对象锁成功后,释放锁幵在等待区等待。</p>
+<p>parking to wait for &lt;地址&gt; 目标</p>
+</blockquote>
+<p><strong>locked</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">at oracle.jdbc.driver.PhysicalConnection.prepareStatement</span><br><span class="line">- locked &lt;0x00002aab63bf7f58&gt; (a oracle.jdbc.driver.T4CConnection)</span><br><span class="line">at oracle.jdbc.driver.PhysicalConnection.prepareStatement</span><br><span class="line">- locked &lt;0x00002aab63bf7f58&gt; (a oracle.jdbc.driver.T4CConnection)</span><br><span class="line">at com.jiuqi.dna.core.internal.db.datasource.PooledConnection.prepareStatement</span><br></pre></td></tr></table></figure>
+<p>通过synchronized关键字,成功获取到了对象的锁,成为监视器的拥有者,在临界区内操作。对象锁是可以线程重入的。</p>
+<p><strong>waiting to lock</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">at com.jiuqi.dna.core.impl.CacheHolder.isVisibleIn(CacheHolder.java:165)</span><br><span class="line">- waiting to lock &lt;0x0000000097ba9aa8&gt; (a CacheHolder)</span><br><span class="line">at com.jiuqi.dna.core.impl.CacheGroup$Index.findHolder</span><br><span class="line">at com.jiuqi.dna.core.impl.ContextImpl.find</span><br><span class="line">at com.jiuqi.dna.bap.basedata.common.util.BaseDataCenter.findInfo</span><br></pre></td></tr></table></figure>
+<p>通过synchronized关键字,没有获取到了对象的锁,线程在监视器的进入区等待。在调用栈顶出现,线程状态为Blocked。</p>
+<p><strong>waiting on</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">at java.lang.Object.wait(Native Method)</span><br><span class="line">- waiting on &lt;0x00000000da2defb0&gt; (a WorkingThread)</span><br><span class="line">at com.jiuqi.dna.core.impl.WorkingManager.getWorkToDo</span><br><span class="line">- locked &lt;0x00000000da2defb0&gt; (a WorkingThread)</span><br><span class="line">at com.jiuqi.dna.core.impl.WorkingThread.run</span><br></pre></td></tr></table></figure>
+<p>通过synchronized关键字,成功获取到了对象的锁后,调用了wait方法,进入对象的等待区等待。在调用栈顶出现,线程状态为WAITING或TIMED_WATING。</p>
+<p><strong>parking to wait for</strong></p>
+<p>park是基本的线程阻塞原语,不通过监视器在对象上阻塞。随concurrent包会出现的新的机制,不synchronized体系不同。</p>
+<h3 id="线程动作"><a href="#线程动作" class="headerlink" title="线程动作"></a>线程动作</h3><p>线程状态产生的原因</p>
+<blockquote>
+<p>runnable:状态一般为RUNNABLE。</p>
+<p>in Object.wait():等待区等待,状态为WAITING或TIMED_WAITING。</p>
+<p>waiting for monitor entry:进入区等待,状态为BLOCKED。</p>
+<p>waiting on condition:等待区等待、被park。</p>
+<p>sleeping:休眠的线程,调用了Thread.sleep()。</p>
+</blockquote>
+<p><strong>Wait on condition</strong> 该状态出现在线程等待某个条件的发生。具体是什么原因，可以结合 stacktrace来分析。 最常见的情况就是线程处于sleep状态，等待被唤醒。 常见的情况还有等待网络IO：在java引入nio之前，对于每个网络连接，都有一个对应的线程来处理网络的读写操作，即使没有可读写的数据，线程仍然阻塞在读写操作上，这样有可能造成资源浪费，而且给操作系统的线程调度也带来压力。在 NewIO里采用了新的机制，编写的服务器程序的性能和可扩展性都得到提高。 正等待网络读写，这可能是一个网络瓶颈的征兆。因为网络阻塞导致线程无法执行。一种情况是网络非常忙，几乎消耗了所有的带宽，仍然有大量数据等待网络读 写；另一种情况也可能是网络空闲，但由于路由等问题，导致包无法正常的到达。所以要结合系统的一些性能观察工具来综合分析，比如 netstat统计单位时间的发送包的数目，如果很明显超过了所在网络带宽的限制 ; 观察 cpu的利用率，如果系统态的 CPU时间，相对于用户态的 CPU时间比例较高；如果程序运行在 Solaris 10平台上，可以用 dtrace工具看系统调用的情况，如果观察到 read/write的系统调用的次数或者运行时间遥遥领先；这些都指向由于网络带宽所限导致的网络瓶颈。</p>
+<h2 id="线程Dump的分析"><a href="#线程Dump的分析" class="headerlink" title="线程Dump的分析"></a>线程Dump的分析</h2><h3 id="原则"><a href="#原则" class="headerlink" title="原则"></a>原则</h3><blockquote>
+<p>结合代码阅读的推理。需要线程Dump和源码的相互推导和印证。</p>
+<p>造成Bug的根源往往丌会在调用栈上直接体现,一定格外注意线程当前调用之前的所有调用。</p>
+</blockquote>
+<h3 id="入手点"><a href="#入手点" class="headerlink" title="入手点"></a>入手点</h3><p><strong>进入区等待</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">"d&amp;a-3588" daemon waiting for monitor entry [0x000000006e5d5000]</span><br><span class="line">java.lang.Thread.State: BLOCKED (on object monitor)</span><br><span class="line">at com.jiuqi.dna.bap.authority.service.UserService$LoginHandler.handle()</span><br><span class="line">- waiting to lock &lt;0x0000000602f38e90&gt; (a java.lang.Object)</span><br><span class="line">at com.jiuqi.dna.bap.authority.service.UserService$LoginHandler.handle()</span><br></pre></td></tr></table></figure>
+<p>线程状态BLOCKED,线程动作wait on monitor entry,调用修饰waiting to lock总是一起出现。表示在代码级别已经存在冲突的调用。必然有问题的代码,需要尽可能减少其发生。</p>
+<p><strong>同步块阻塞</strong></p>
+<p>一个线程锁住某对象,大量其他线程在该对象上等待。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">"blocker" runnable</span><br><span class="line">java.lang.Thread.State: RUNNABLE</span><br><span class="line">at com.jiuqi.hcl.javadump.Blocker$1.run(Blocker.java:23)</span><br><span class="line">- locked &lt;0x00000000eb8eff68&gt; (a java.lang.Object)</span><br><span class="line">"blockee-11" waiting for monitor entry</span><br><span class="line">java.lang.Thread.State: BLOCKED (on object monitor)</span><br><span class="line">at com.jiuqi.hcl.javadump.Blocker$2.run(Blocker.java:41)</span><br><span class="line">- waiting to lock &lt;0x00000000eb8eff68&gt; (a java.lang.Object)</span><br><span class="line">"blockee-86" waiting for monitor entry</span><br><span class="line">java.lang.Thread.State: BLOCKED (on object monitor)</span><br><span class="line">at com.jiuqi.hcl.javadump.Blocker$2.run(Blocker.java:41)</span><br><span class="line">- waiting to lock &lt;0x00000000eb8eff68&gt; (a java.lang.Object)</span><br></pre></td></tr></table></figure>
+<p><strong>持续运行的IO</strong> IO操作是可以以RUNNABLE状态达成阻塞。例如:数据库死锁、网络读写。 格外注意对IO线程的真实状态的分析。 一般来说,被捕捉到RUNNABLE的IO调用,都是有问题的。</p>
+<p>以下堆栈显示： 线程状态为RUNNABLE。 调用栈在SocketInputStream或SocketImpl上,socketRead0等方法。 调用栈包含了jdbc相关的包。很可能发生了数据库死锁</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">"d&amp;a-614" daemon prio=6 tid=0x0000000022f1f000 nid=0x37c8 runnable</span><br><span class="line">[0x0000000027cbd000]</span><br><span class="line">java.lang.Thread.State: RUNNABLE</span><br><span class="line">at java.net.SocketInputStream.socketRead0(Native Method)</span><br><span class="line">at java.net.SocketInputStream.read(Unknown Source)</span><br><span class="line">at oracle.net.ns.Packet.receive(Packet.java:240)</span><br><span class="line">at oracle.net.ns.DataPacket.receive(DataPacket.java:92)</span><br><span class="line">at oracle.net.ns.NetInputStream.getNextPacket(NetInputStream.java:172)</span><br><span class="line">at oracle.net.ns.NetInputStream.read(NetInputStream.java:117)</span><br><span class="line">at oracle.jdbc.driver.T4CMAREngine.unmarshalUB1(T4CMAREngine.java:1034)</span><br><span class="line">at oracle.jdbc.driver.T4C8Oall.receive(T4C8Oall.java:588)</span><br></pre></td></tr></table></figure>
+<p><strong>分线程调度的休眠</strong></p>
+<p>正常的线程池等待</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">"d&amp;a-131" in Object.wait()</span><br><span class="line">java.lang.Thread.State: TIMED_WAITING (on object monitor)</span><br><span class="line">at java.lang.Object.wait(Native Method)</span><br><span class="line">at com.jiuqi.dna.core.impl.WorkingManager.getWorkToDo(WorkingManager.java:322)</span><br><span class="line">- locked &lt;0x0000000313f656f8&gt; (a com.jiuqi.dna.core.impl.WorkingThread)</span><br><span class="line">at com.jiuqi.dna.core.impl.WorkingThread.run(WorkingThread.java:40)</span><br></pre></td></tr></table></figure>
+<p>可疑的线程等待</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">"d&amp;a-121" in Object.wait()</span><br><span class="line">java.lang.Thread.State: WAITING (on object monitor)</span><br><span class="line">at java.lang.Object.wait(Native Method)</span><br><span class="line">at java.lang.Object.wait(Object.java:485)</span><br><span class="line">at com.jiuqi.dna.core.impl.AcquirableAccessor.exclusive()</span><br><span class="line">- locked &lt;0x00000003011678d8&gt; (a com.jiuqi.dna.core.impl.CacheGroup)</span><br><span class="line">at com.jiuqi.dna.core.impl.Transaction.lock()</span><br></pre></td></tr></table></figure>
+<h3 id="入手点总结"><a href="#入手点总结" class="headerlink" title="入手点总结"></a>入手点总结</h3><p><strong>wait on monitor entry：</strong> 被阻塞的,肯定有问题</p>
+<p><strong>runnable</strong> ： 注意IO线程</p>
+<p><strong>in Object.wait()</strong>： 注意非线程池等待</p>
+<h2 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h2><p>想要学习一个命令，先来看看帮助，使用jstack -help查看帮助：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hollis@hos:~$ jstack -help</span><br><span class="line">Usage:</span><br><span class="line">    jstack [-l] &lt;pid&gt;</span><br><span class="line">        (to connect to running process)</span><br><span class="line">    jstack -F [-m] [-l] &lt;pid&gt;</span><br><span class="line">        (to connect to a hung process)</span><br><span class="line">    jstack [-m] [-l] &lt;executable&gt; &lt;core&gt;</span><br><span class="line">        (to connect to a core file)</span><br><span class="line">    jstack [-m] [-l] [server_id@]&lt;remote server IP or hostname&gt;</span><br><span class="line">        (to connect to a remote debug server)</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">    -F  to force a thread dump. Use when jstack &lt;pid&gt; does not respond (process is hung)</span><br><span class="line">    -m  to print both java and native frames (mixed mode)</span><br><span class="line">    -l  long listing. Prints additional information about locks</span><br><span class="line">    -h or -help to print this help message</span><br></pre></td></tr></table></figure>
+<p><code>-F</code>当’jstack [-l] pid’没有相应的时候强制打印栈信息 <code>-l</code>长列表. 打印关于锁的附加信息,例如属于java.util.concurrent的ownable synchronizers列表. <code>-m</code>打印java和native c/c++框架的所有栈信息. <code>-h</code> | -help打印帮助信息 <code>pid</code> 需要被打印配置信息的java进程id,可以用jps查询.</p>
+<p>首先，我们分析这么一段程序的线程情况：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> hollis</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JStackDemo1</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="comment">//Do Nothing</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>先是有jps查看进程号：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hollis@hos:~$ jps</span><br><span class="line">29788 JStackDemo1</span><br><span class="line">29834 Jps</span><br><span class="line">22385 org.eclipse.equinox.launcher_1.3.0.v20130327-1440.jar</span><br></pre></td></tr></table></figure>
+<p>然后使用jstack 查看堆栈信息：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hollis@hos:~$ jstack 29788</span><br><span class="line">2015-04-17 23:47:31</span><br><span class="line">...此处省略若干内容...</span><br><span class="line">"main" prio=10 tid=0x00007f197800a000 nid=0x7462 runnable [0x00007f197f7e1000]</span><br><span class="line">   java.lang.Thread.State: RUNNABLE</span><br><span class="line">    at javaCommand.JStackDemo1.main(JStackDemo1.java:7)</span><br></pre></td></tr></table></figure>
+<p>我们可以从这段堆栈信息中看出什么来呢？我们可以看到，当前一共有一条用户级别线程,线程处于runnable状态，执行到JStackDemo1.java的第七行。 看下面代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> hollis</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JStackDemo1</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Thread thread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Thread1());</span><br><span class="line">        thread.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Thread1</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">            System.out.println(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>线程堆栈信息如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">"Reference Handler" daemon prio=10 tid=0x00007fbbcc06e000 nid=0x286c in Object.wait() [0x00007fbbc8dfc000]</span><br><span class="line">   java.lang.Thread.State: WAITING (on object monitor)</span><br><span class="line">    at java.lang.Object.wait(Native Method)</span><br><span class="line">    - waiting on &lt;0x0000000783e066e0&gt; (a java.lang.ref.Reference$Lock)</span><br><span class="line">    at java.lang.Object.wait(Object.java:503)</span><br><span class="line">    at java.lang.ref.Reference$ReferenceHandler.run(Reference.java:133)</span><br><span class="line">    - locked &lt;0x0000000783e066e0&gt; (a java.lang.ref.Reference$Lock)</span><br></pre></td></tr></table></figure>
+<p>我们能看到：</p>
+<blockquote>
+<p>线程的状态： WAITING 线程的调用栈 线程的当前锁住的资源： <0x0000000783e066e0> 线程当前等待的资源：<0x0000000783e066e0></0x0000000783e066e0></0x0000000783e066e0></p>
+</blockquote>
+<p>为什么同时锁住的等待同一个资源：</p>
+<blockquote>
+<p>线程的执行中，先获得了这个对象的 Monitor（对应于 locked <0x0000000783e066e0>）。当执行到 obj.wait(), 线程即放弃了 Monitor的所有权，进入 “wait set”队列（对应于 waiting on <0x0000000783e066e0> ）。</0x0000000783e066e0></0x0000000783e066e0></p>
+</blockquote>
+<h3 id="死锁分析"><a href="#死锁分析" class="headerlink" title="死锁分析"></a>死锁分析</h3><p>学会了怎么使用jstack命令之后，我们就可以看看，如何使用jstack分析死锁了，这也是我们一定要掌握的内容。 <strong>啥叫死锁？</strong> 所谓<a href="http://zh.wikipedia.org/wiki/死锁" target="_blank" rel="noopener">死锁</a>： 是指两个或两个以上的进程在执行过程中，由于竞争资源或者由于彼此通信而造成的一种阻塞的现象，若无外力作用，它们都将无法推进下去。此时称系统处于死锁状态或系统产生了死锁，这些永远在互相等待的进程称为死锁进程。 说白了，我现在想吃鸡蛋灌饼，桌子上放着鸡蛋和饼，但是我和我的朋友同时分别拿起了鸡蛋和病，我手里拿着鸡蛋，但是我需要他手里的饼。他手里拿着饼，但是他想要我手里的鸡蛋。就这样，如果不能同时拿到鸡蛋和饼，那我们就不能继续做后面的工作（做鸡蛋灌饼）。所以，这就造成了死锁。 <strong>看一段死锁的程序：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> javaCommand;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> hollis</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JStackDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Thread t1 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> DeadLockclass(<span class="keyword">true</span>));<span class="comment">//建立一个线程</span></span><br><span class="line">        Thread t2 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> DeadLockclass(<span class="keyword">false</span>));<span class="comment">//建立另一个线程</span></span><br><span class="line">        t1.start();<span class="comment">//启动一个线程</span></span><br><span class="line">        t2.start();<span class="comment">//启动另一个线程</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DeadLockclass</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> falg;<span class="comment">// 控制线程</span></span><br><span class="line">    DeadLockclass(<span class="keyword">boolean</span> falg) &#123;</span><br><span class="line">        <span class="keyword">this</span>.falg = falg;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 如果falg的值为true则调用t1线程</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">if</span> (falg) &#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">                <span class="keyword">synchronized</span> (Suo.o1) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"o1 "</span> + Thread.currentThread().getName());</span><br><span class="line">                    <span class="keyword">synchronized</span> (Suo.o2) &#123;</span><br><span class="line">                        System.out.println(<span class="string">"o2 "</span> + Thread.currentThread().getName());</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 如果falg的值为false则调用t2线程</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">                <span class="keyword">synchronized</span> (Suo.o2) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"o2 "</span> + Thread.currentThread().getName());</span><br><span class="line">                    <span class="keyword">synchronized</span> (Suo.o1) &#123;</span><br><span class="line">                        System.out.println(<span class="string">"o1 "</span> + Thread.currentThread().getName());</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Suo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> Object o1 = <span class="keyword">new</span> Object();</span><br><span class="line">    <span class="keyword">static</span> Object o2 = <span class="keyword">new</span> Object();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当我启动该程序时，我们看一下控制台：</p>
+<p><img src="/2020/06/06/Java开发必须掌握的线上问题排查命令-常见命令、JPS、JSTACK、JMAP、JSTAT、JHAT、JINFO、JAVAP等/QQ20160118-0.png" alt="thread_meitu_1"></p>
+<p>我们发现，程序只输出了两行内容，然后程序就不再打印其它的东西了，但是程序并没有停止。这样就产生了死锁。 当线程1使用<code>synchronized</code>锁住了o1的同时，线程2也是用<code>synchronized</code>锁住了o2。当两个线程都执行完第一个打印任务的时候，线程1想锁住o2，线程2想锁住o1。但是，线程1当前锁着o1，线程2锁着o2。所以两个想成都无法继续执行下去，就造成了死锁。</p>
+<p>然后，我们使用<strong>jstack来看一下线程堆栈信息</strong>：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Found one Java-level deadlock:</span><br><span class="line">=============================</span><br><span class="line">"Thread-1":</span><br><span class="line">  waiting to lock monitor 0x00007f0134003ae8 (object 0x00000007d6aa2c98, a java.lang.Object),</span><br><span class="line">  which is held by "Thread-0"</span><br><span class="line">"Thread-0":</span><br><span class="line">  waiting to lock monitor 0x00007f0134006168 (object 0x00000007d6aa2ca8, a java.lang.Object),</span><br><span class="line">  which is held by "Thread-1"</span><br><span class="line"></span><br><span class="line">Java stack information for the threads listed above:</span><br><span class="line">===================================================</span><br><span class="line">"Thread-1":</span><br><span class="line">    at javaCommand.DeadLockclass.run(JStackDemo.java:40)</span><br><span class="line">    - waiting to lock &lt;0x00000007d6aa2c98&gt; (a java.lang.Object)</span><br><span class="line">    - locked &lt;0x00000007d6aa2ca8&gt; (a java.lang.Object)</span><br><span class="line">    at java.lang.Thread.run(Thread.java:745)</span><br><span class="line">"Thread-0":</span><br><span class="line">    at javaCommand.DeadLockclass.run(JStackDemo.java:27)</span><br><span class="line">    - waiting to lock &lt;0x00000007d6aa2ca8&gt; (a java.lang.Object)</span><br><span class="line">    - locked &lt;0x00000007d6aa2c98&gt; (a java.lang.Object)</span><br><span class="line">    at java.lang.Thread.run(Thread.java:745)</span><br><span class="line"></span><br><span class="line">Found 1 deadlock.</span><br></pre></td></tr></table></figure>
+<p>哈哈，堆栈写的很明显，它告诉我们 <code>Found one Java-level deadlock</code>，然后指出造成死锁的两个线程的内容。然后，又通过 <code>Java stack information for the threads listed above</code>来显示更详细的死锁的信息。 他说</p>
+<blockquote>
+<p>Thread-1在想要执行第40行的时候，当前锁住了资源<code>&lt;0x00000007d6aa2ca8&gt;</code>,但是他在等待资源<code>&lt;0x00000007d6aa2c98&gt;</code> Thread-0在想要执行第27行的时候，当前锁住了资源<code>&lt;0x00000007d6aa2c98&gt;</code>,但是他在等待资源<code>&lt;0x00000007d6aa2ca8&gt;</code> 由于这两个线程都持有资源，并且都需要对方的资源，所以造成了死锁。 原因我们找到了，就可以具体问题具体分析，解决这个死锁了。</p>
+</blockquote>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p><strong>虚拟机执行Full GC时,会阻塞所有的用户线程。因此,即时获取到同步锁的线程也有可能被阻塞。</strong> 在查看线程Dump时,首先查看内存使用情况。</p>
+<h1 id="Java命令学习系列（三）—-Jmap"><a href="#Java命令学习系列（三）—-Jmap" class="headerlink" title="Java命令学习系列（三）— Jmap"></a>Java命令学习系列（三）— Jmap</h1><blockquote>
+<p>jmap是JDK自带的工具软件，主要用于打印指定Java进程(或核心文件、远程调试服务器)的共享对象内存映射或堆内存细节。可以使用jmap生成Heap Dump。在<code>Java命令学习系列（零）— 常见命令及Java Dump</code>介绍中分别有关于Java Dump以及线程 Dump的介绍。 <strong>这篇文章主要介绍Java的堆Dump以及jamp命令</strong></p>
+</blockquote>
+<h2 id="什么是堆Dump"><a href="#什么是堆Dump" class="headerlink" title="什么是堆Dump"></a>什么是堆Dump</h2><p>堆Dump是反应Java堆使用情况的内存镜像，其中主要包括<strong>系统信息</strong>、<strong>虚拟机属性</strong>、<strong>完整的线程Dump</strong>、<strong>所有类和对象的状态</strong>等。 一般，在内存不足、GC异常等情况下，我们就会怀疑有<a href="http://zh.wikipedia.org/zh-cn/内存泄漏" target="_blank" rel="noopener">内存泄露</a>。这个时候我们就可以制作堆Dump来查看具体情况。分析原因。</p>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>《Java虚拟机的内存组成以及堆内存介绍》《Java GC工作原理》常见内存错误：</p>
+<blockquote>
+<p>outOfMemoryError <strong>年老代内存不足。</strong><br>outOfMemoryError:PermGen Space <strong>永久代内存不足。</strong><br>outOfMemoryError:GC overhead limit exceed <strong>垃圾回收时间占用系统运行时间的98%或以上。</strong></p>
+</blockquote>
+<h2 id="jmap-1"><a href="#jmap-1" class="headerlink" title="jmap"></a>jmap</h2><p><strong>用法摘要</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Usage:</span><br><span class="line">    jmap [option] &lt;pid&gt;</span><br><span class="line">        (to connect to running process)</span><br><span class="line">    jmap [option] &lt;executable &lt;core&gt;</span><br><span class="line">        (to connect to a core file)</span><br><span class="line">    jmap [option] [server_id@]&lt;remote server IP or hostname&gt;</span><br><span class="line">        (to connect to remote debug server)</span><br><span class="line"></span><br><span class="line">where &lt;option&gt; is one of:</span><br><span class="line">    &lt;none&gt;               to print same info as Solaris pmap</span><br><span class="line">    -heap                to print java heap summary</span><br><span class="line">    -histo[:live]        to print histogram of java object heap; if the "live"</span><br><span class="line">                         suboption is specified, only count live objects</span><br><span class="line">    -permstat            to print permanent generation statistics</span><br><span class="line">    -finalizerinfo       to print information on objects awaiting finalization</span><br><span class="line">    -dump:&lt;dump-options&gt; to dump java heap in hprof binary format</span><br><span class="line">                         dump-options:</span><br><span class="line">                           live         dump only live objects; if not specified,</span><br><span class="line">                                        all objects in the heap are dumped.</span><br><span class="line">                           format=b     binary format</span><br><span class="line">                           file=&lt;file&gt;  dump heap to &lt;file&gt;</span><br><span class="line">                         Example: jmap -dump:live,format=b,file=heap.bin &lt;pid&gt;</span><br><span class="line">    -F                   force. Use with -dump:&lt;dump-options&gt; &lt;pid&gt; or -histo</span><br><span class="line">                         to force a heap dump or histogram when &lt;pid&gt; does not</span><br><span class="line">                         respond. The "live" suboption is not supported</span><br><span class="line">                         in this mode.</span><br><span class="line">    -h | -help           to print this help message</span><br><span class="line">    -J&lt;flag&gt;             to pass &lt;flag&gt; directly to the runtime system</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>指定进程号(pid)的进程</strong> jmap [ option ] <strong>指定核心文件</strong> jmap [ option ] <strong>指定远程调试服务器</strong> jmap [ option ] [server-id@]</p>
+</blockquote>
+<hr>
+<blockquote>
+<p><strong>参数：</strong></p>
+<blockquote>
+<p><strong>option</strong> 选项参数是互斥的(不可同时使用)。想要使用选项参数，直接跟在命令名称后即可。<br><strong>pid</strong> 需要打印配置信息的进程ID。该进程必须是一个Java进程。想要获取运行的Java进程列表，你可以使用jps。<br><strong>executable</strong> 产生核心dump的Java可执行文件。<br><strong>core</strong> 需要打印配置信息的核心文件。<br><strong>remote-hostname-or-IP</strong> 远程调试服务器的(请查看jsadebugd)主机名或IP地址。<br><strong>server-id</strong> 可选的唯一id，如果相同的远程主机上运行了多台调试服务器，用此选项参数标识服务器。</p>
+</blockquote>
+<p><strong>选项:</strong></p>
+<blockquote>
+<p><code>&lt;no option&gt;</code> 如果使用不带选项参数的jmap打印共享对象映射，将会打印目标虚拟机中加载的每个共享对象的起始地址、映射大小以及共享对象文件的路径全称。这与Solaris的pmap工具比较相似。<br><code>-dump:[live,]format=b,file=&lt;filename&gt;</code> 以hprof二进制格式转储Java堆到指定<code>filename</code>的文件中。live子选项是可选的。如果指定了live子选项，堆中只有活动的对象会被转储。想要浏览heap dump，你可以使用jhat(Java堆分析工具)读取生成的文件。<br><code>-finalizerinfo</code> 打印等待终结的对象信息。<br><code>-heap</code> 打印一个堆的摘要信息，包括使用的GC算法、堆配置信息和generation wise heap usage。<br><code>-histo[:live]</code> 打印堆的柱状图。其中包括每个Java类、对象数量、内存大小(单位：字节)、完全限定的类名。打印的虚拟机内部的类名称将会带有一个’*’前缀。如果指定了live子选项，则只计算活动的对象。<br><code>-permstat</code> 打印Java堆内存的永久保存区域的类加载器的智能统计信息。对于每个类加载器而言，它的名称、活跃度、地址、父类加载器、它所加载的类的数量和大小都会被打印。此外，包含的字符串数量和大小也会被打印。<br><code>-F</code> 强制模式。如果指定的pid没有响应，请使用jmap -dump或jmap -histo选项。此模式下，不支持live子选项。<br><code>-h</code> 打印帮助信息。<br><code>-help</code> 打印帮助信息。<br><code>-J&lt;flag&gt;</code> 指定传递给运行jmap的JVM的参数。</p>
+</blockquote>
+</blockquote>
+<h2 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h2><p><strong>查看java 堆（heap）使用情况,</strong>执行命令： <code>hollis@hos:~/workspace/design_apaas/apaasweb/control/bin$ jmap -heap 31846</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Attaching to process ID 31846, please wait...</span><br><span class="line">Debugger attached successfully.</span><br><span class="line">Server compiler detected.</span><br><span class="line">JVM version is 24.71-b01</span><br><span class="line"></span><br><span class="line">using thread-local object allocation.</span><br><span class="line">Parallel GC with 4 thread(s)//GC 方式</span><br><span class="line"></span><br><span class="line">Heap Configuration: //堆内存初始化配置</span><br><span class="line">   MinHeapFreeRatio = 0 //对应jvm启动参数-XX:MinHeapFreeRatio设置JVM堆最小空闲比率(default 40)</span><br><span class="line">   MaxHeapFreeRatio = 100 //对应jvm启动参数 -XX:MaxHeapFreeRatio设置JVM堆最大空闲比率(default 70)</span><br><span class="line">   MaxHeapSize      = 2082471936 (1986.0MB) //对应jvm启动参数-XX:MaxHeapSize=设置JVM堆的最大大小</span><br><span class="line">   NewSize          = 1310720 (1.25MB)//对应jvm启动参数-XX:NewSize=设置JVM堆的‘新生代’的默认大小</span><br><span class="line">   MaxNewSize       = 17592186044415 MB//对应jvm启动参数-XX:MaxNewSize=设置JVM堆的‘新生代’的最大大小</span><br><span class="line">   OldSize          = 5439488 (5.1875MB)//对应jvm启动参数-XX:OldSize=&lt;value&gt;:设置JVM堆的‘老生代’的大小</span><br><span class="line">   NewRatio         = 2 //对应jvm启动参数-XX:NewRatio=:‘新生代’和‘老生代’的大小比率</span><br><span class="line">   SurvivorRatio    = 8 //对应jvm启动参数-XX:SurvivorRatio=设置年轻代中Eden区与Survivor区的大小比值 </span><br><span class="line">   PermSize         = 21757952 (20.75MB)  //对应jvm启动参数-XX:PermSize=&lt;value&gt;:设置JVM堆的‘永生代’的初始大小</span><br><span class="line">   MaxPermSize      = 85983232 (82.0MB)//对应jvm启动参数-XX:MaxPermSize=&lt;value&gt;:设置JVM堆的‘永生代’的最大大小</span><br><span class="line">   G1HeapRegionSize = 0 (0.0MB)</span><br><span class="line"></span><br><span class="line">Heap Usage://堆内存使用情况</span><br><span class="line">PS Young Generation</span><br><span class="line">Eden Space://Eden区内存分布</span><br><span class="line">   capacity = 33030144 (31.5MB)//Eden区总容量</span><br><span class="line">   used     = 1524040 (1.4534378051757812MB)  //Eden区已使用</span><br><span class="line">   free     = 31506104 (30.04656219482422MB)  //Eden区剩余容量</span><br><span class="line">   4.614088270399305% used //Eden区使用比率</span><br><span class="line">From Space:  //其中一个Survivor区的内存分布</span><br><span class="line">   capacity = 5242880 (5.0MB)</span><br><span class="line">   used     = 0 (0.0MB)</span><br><span class="line">   free     = 5242880 (5.0MB)</span><br><span class="line">   0.0% used</span><br><span class="line">To Space:  //另一个Survivor区的内存分布</span><br><span class="line">   capacity = 5242880 (5.0MB)</span><br><span class="line">   used     = 0 (0.0MB)</span><br><span class="line">   free     = 5242880 (5.0MB)</span><br><span class="line">   0.0% used</span><br><span class="line">PS Old Generation //当前的Old区内存分布</span><br><span class="line">   capacity = 86507520 (82.5MB)</span><br><span class="line">   used     = 0 (0.0MB)</span><br><span class="line">   free     = 86507520 (82.5MB)</span><br><span class="line">   0.0% used</span><br><span class="line">PS Perm Generation//当前的 “永生代” 内存分布</span><br><span class="line">   capacity = 22020096 (21.0MB)</span><br><span class="line">   used     = 2496528 (2.3808746337890625MB)</span><br><span class="line">   free     = 19523568 (18.619125366210938MB)</span><br><span class="line">   11.337498256138392% used</span><br><span class="line"></span><br><span class="line">670 interned Strings occupying 43720 bytes.</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>查看堆内存(histogram)中的对象数量及大小</strong>。执行命令： <code>hollis@hos:~/workspace/design_apaas/apaasweb/control/bin$ jmap -histo 3331</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">num     #instances         #bytes  class name</span><br><span class="line">编号     个数                字节     类名</span><br><span class="line">----------------------------------------------</span><br><span class="line">   1:             7        1322080  [I</span><br><span class="line">   2:          5603         722368  &lt;methodKlass&gt;</span><br><span class="line">   3:          5603         641944  &lt;constMethodKlass&gt;</span><br><span class="line">   4:         34022         544352  java.lang.Integer</span><br><span class="line">   5:           371         437208  &lt;constantPoolKlass&gt;</span><br><span class="line">   6:           336         270624  &lt;constantPoolCacheKlass&gt;</span><br><span class="line">   7:           371         253816  &lt;instanceKlassKlass&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>jmap -histo:live 这个命令执行，JVM会先触发gc，然后再统计信息。</strong></p>
+</blockquote>
+<p><strong>将内存使用的详细情况输出到文件</strong>，执行命令： <code>hollis@hos:~/workspace/design_apaas/apaasweb/control/bin$ jmap -dump:format=b,file=heapDump 6900</code></p>
+<p>然后用<code>jhat</code>命令可以参看 <code>jhat -port 5000 heapDump</code> 在浏览器中访问：<code>http://localhost:5000/</code> 查看详细信息</p>
+<blockquote>
+<p><strong>这个命令执行，JVM会将整个heap的信息dump写入到一个文件，heap如果比较大的话，就会导致这个过程比较耗时，并且执行的过程中为了保证dump的信息是可靠的，所以会暂停应用。</strong></p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li>如果程序内存不足或者频繁GC，很有可能存在内存泄露情况，这时候就要借助Java堆Dump查看对象的情况。</li>
+<li>要制作堆Dump可以直接使用jvm自带的jmap命令</li>
+<li>可以先使用<code>jmap -heap</code>命令查看堆的使用情况，看一下各个堆空间的占用情况。</li>
+<li>使用<code>jmap -histo:[live]</code>查看堆内存中的对象的情况。如果有大量对象在持续被引用，并没有被释放掉，那就产生了内存泄露，就要结合代码，把不用的对象释放掉。</li>
+<li>也可以使用 <code>jmap -dump:format=b,file=&lt;fileName&gt;</code>命令将堆信息保存到一个文件中，再借助jhat命令查看详细内容</li>
+<li>在内存出现泄露、溢出或者其它前提条件下，建议多dump几次内存，把内存文件进行编号归档，便于后续内存整理分析。</li>
+</ol>
+<p><strong>Error attaching to process: sun.jvm.hotspot.debugger.DebuggerException: Can’t attach to the process</strong></p>
+<p>在ubuntu中第一次使用jmap会报错：<code>Error attaching to process: sun.jvm.hotspot.debugger.DebuggerException: Can&#39;t attach to the process</code>，这是oracla文档中提到的一个bug:<a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=7050524,解决方式如下：" target="_blank" rel="noopener">http://bugs.java.com/bugdatabase/view_bug.do?bug_id=7050524,解决方式如下：</a></p>
+<blockquote>
+<ol>
+<li>echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope 该方法在下次重启前有效。</li>
+<li>永久有效方法 sudo vi /etc/sysctl.d/10-ptrace.conf 编辑下面这行: kernel.yama.ptrace_scope = 1 修改为: kernel.yama.ptrace_scope = 0 重启系统，使修改生效。</li>
+</ol>
+</blockquote>
+<h1 id="Java命令学习系列（四）—-jstat"><a href="#Java命令学习系列（四）—-jstat" class="headerlink" title="Java命令学习系列（四）— jstat"></a>Java命令学习系列（四）— jstat</h1><blockquote>
+<p>jstat(JVM Statistics Monitoring Tool)是用于监控虚拟机各种运行状态信息的命令行工具。他可以显示本地或远程虚拟机进程中的类装载、内存、垃圾收集、JIT编译等运行数据，在没有GUI图形的服务器上，它是运行期定位虚拟机性能问题的首选工具。</p>
+</blockquote>
+<p>jstat位于java的bin目录下，主要利用JVM内建的指令对Java应用程序的资源和性能进行实时的命令行的监控，包括了对Heap size和垃圾回收状况的监控。可见，Jstat是轻量级的、专门针对JVM的工具，非常适用。</p>
+<h2 id="jstat-命令格式"><a href="#jstat-命令格式" class="headerlink" title="jstat 命令格式"></a>jstat 命令格式</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">jstat -&lt;option&gt; [-t] [-h&lt;lines&gt;] &lt;vmid&gt; [&lt;interval&gt; [&lt;count&gt;]]</span><br></pre></td></tr></table></figure>
+<h2 id="参数解释："><a href="#参数解释：" class="headerlink" title="参数解释："></a>参数解释：</h2><p>Option — 选项，我们一般使用 -gcutil 查看gc情况</p>
+<p>vmid — VM的进程号，即当前运行的java进程号</p>
+<p>interval– 间隔时间，单位为秒或者毫秒</p>
+<p>count — 打印次数，如果缺省则打印无数次</p>
+<p>参数interval和count代表查询间隔和次数，如果省略这两个参数，说明只查询一次。假设需要每250毫秒查询一次进程5828垃圾收集状况，一共查询5次，那命令行如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">jstat -gc 5828 250 5</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>对于命令格式中的<code>VMID</code>与<code>LVMID</code>需要特别说明下：如果是本地虚拟机进程，<code>VMID</code>(Virtual Machine IDentifier,虚机标识符)和<code>LVMID</code>(Local Virtual Machine IDentifier,虚机标识符)是一致的，如果是远程虚拟机进程，那VMID的格式应当是：<code>[protocol:][//] lvmid [@hostname[:port]/servername]</code></p>
+</blockquote>
+<h2 id="option"><a href="#option" class="headerlink" title="option"></a>option</h2><p>选项option代表这用户希望查询的虚拟机信息，主要分为3类：类装载、垃圾收集和运行期编译状况，具体选项及作用如下：</p>
+<blockquote>
+<p>–<code>class</code> 监视类装载、卸载数量、总空间及类装载所耗费的时间 –<code>gc</code> 监视Java堆状况，包括Eden区、2个Survivor区、老年代、永久代等的容量 –<code>gccapacity</code> 监视内容与-gc基本相同，但输出主要关注Java堆各个区域使用到的最大和最小空间 –<code>gcutil</code> 监视内容与-gc基本相同，但输出主要关注已使用空间占总空间的百分比 –<code>gccause</code> 与-gcutil功能一样，但是会额外输出导致上一次GC产生的原因 –<code>gcnew</code> 监视新生代GC的状况 –<code>gcnewcapacity</code> 监视内容与-gcnew基本相同，输出主要关注使用到的最大和最小空间 –<code>gcold</code> 监视老年代GC的状况 –<code>gcoldcapacity</code> 监视内容与——gcold基本相同，输出主要关注使用到的最大和最小空间 –<code>gcpermcapacity</code> 输出永久代使用到的最大和最小空间 –<code>compiler</code> 输出JIT编译器编译过的方法、耗时等信息 –<code>printcompilation</code> 输出已经被JIT编译的方法</p>
+</blockquote>
+<h2 id="常见术语"><a href="#常见术语" class="headerlink" title="常见术语"></a>常见术语</h2><h3 id="1、jstat-–class-lt-pid-gt-显示加载class的数量，及所占空间等信息。"><a href="#1、jstat-–class-lt-pid-gt-显示加载class的数量，及所占空间等信息。" class="headerlink" title="1、jstat –class&lt;pid&gt; : 显示加载class的数量，及所占空间等信息。"></a>1、<code>jstat –class&lt;pid&gt; :</code> 显示加载class的数量，及所占空间等信息。</h3><blockquote>
+<p><code>Loaded</code> 装载的类的数量 <code>Bytes</code> 装载类所占用的字节数 <code>Unloaded</code> 卸载类的数量 <code>Bytes</code> 卸载类的字节数 <code>Time</code> 装载和卸载类所花费的时间</p>
+</blockquote>
+<h3 id="2、jstat-compiler-lt-pid-gt-显示VM实时编译的数量等信息。"><a href="#2、jstat-compiler-lt-pid-gt-显示VM实时编译的数量等信息。" class="headerlink" title="2、jstat -compiler &lt;pid&gt;显示VM实时编译的数量等信息。"></a>2、<code>jstat -compiler &lt;pid&gt;</code>显示VM实时编译的数量等信息。</h3><blockquote>
+<p><code>Compiled</code> 编译任务执行数量 <code>Failed</code> 编译任务执行失败数量 <code>Invalid</code> 编译任务执行失效数量 <code>Time</code> 编译任务消耗时间 <code>FailedType</code> 最后一个编译失败任务的类型 <code>FailedMethod</code> 最后一个编译失败任务所在的类及方法</p>
+</blockquote>
+<h3 id="3、jstat-gc-lt-pid-gt-可以显示gc的信息，查看gc的次数，及时间。"><a href="#3、jstat-gc-lt-pid-gt-可以显示gc的信息，查看gc的次数，及时间。" class="headerlink" title="3、jstat -gc &lt;pid&gt;: 可以显示gc的信息，查看gc的次数，及时间。"></a>3、<code>jstat -gc &lt;pid&gt;</code>: 可以显示gc的信息，查看gc的次数，及时间。</h3><blockquote>
+<p><code>S0C</code> 年轻代中第一个survivor（幸存区）的容量 (字节) <code>S1C</code> 年轻代中第二个survivor（幸存区）的容量 (字节) <code>S0U</code> 年轻代中第一个survivor（幸存区）目前已使用空间 (字节) <code>S1U</code> 年轻代中第二个survivor（幸存区）目前已使用空间 (字节) <code>EC</code> 年轻代中Eden（伊甸园）的容量 (字节) <code>EU</code> 年轻代中Eden（伊甸园）目前已使用空间 (字节) <code>OC</code> Old代的容量 (字节) <code>OU</code> Old代目前已使用空间 (字节) <code>PC</code> Perm(持久代)的容量 (字节) <code>PU</code> Perm(持久代)目前已使用空间 (字节) <code>YGC</code> 从应用程序启动到采样时年轻代中gc次数 <code>YGCT</code> 从应用程序启动到采样时年轻代中gc所用时间(s) <code>FGC</code> 从应用程序启动到采样时old代(全gc)gc次数 <code>FGCT</code> 从应用程序启动到采样时old代(全gc)gc所用时间(s) <code>GCT</code> 从应用程序启动到采样时gc用的总时间(s)</p>
+</blockquote>
+<h3 id="4、jstat-gccapacity-lt-pid-gt-可以显示，VM内存中三代（young-old-perm）对象的使用和占用大小"><a href="#4、jstat-gccapacity-lt-pid-gt-可以显示，VM内存中三代（young-old-perm）对象的使用和占用大小" class="headerlink" title="4、jstat -gccapacity &lt;pid&gt;:可以显示，VM内存中三代（young,old,perm）对象的使用和占用大小"></a>4、<code>jstat -gccapacity &lt;pid&gt;:</code>可以显示，VM内存中三代（young,old,perm）对象的使用和占用大小</h3><blockquote>
+<p><code>NGCMN</code> 年轻代(young)中初始化(最小)的大小(字节) <code>NGCMX</code> 年轻代(young)的最大容量 (字节) <code>NGC</code> 年轻代(young)中当前的容量 (字节) <code>S0C</code> 年轻代中第一个survivor（幸存区）的容量 (字节) <code>S1C</code> 年轻代中第二个survivor（幸存区）的容量 (字节) <code>EC</code> 年轻代中Eden（伊甸园）的容量 (字节) <code>OGCMN</code> old代中初始化(最小)的大小 (字节) <code>OGCMX</code> old代的最大容量(字节) <code>OGC</code> old代当前新生成的容量 (字节) <code>OC</code> Old代的容量 (字节) <code>PGCMN</code> perm代中初始化(最小)的大小 (字节) <code>PGCMX</code> perm代的最大容量 (字节)<br><code>PGC</code> perm代当前新生成的容量 (字节) <code>PC</code> Perm(持久代)的容量 (字节) <code>YGC</code> 从应用程序启动到采样时年轻代中gc次数 <code>FGC</code> 从应用程序启动到采样时old代(全gc)gc次数</p>
+</blockquote>
+<h3 id="5、jstat-gcutil-lt-pid-gt-统计gc信息"><a href="#5、jstat-gcutil-lt-pid-gt-统计gc信息" class="headerlink" title="5、jstat -gcutil &lt;pid&gt;:统计gc信息"></a>5、<code>jstat -gcutil &lt;pid&gt;</code>:统计gc信息</h3><blockquote>
+<p><code>S0</code> 年轻代中第一个survivor（幸存区）已使用的占当前容量百分比 <code>S1</code> 年轻代中第二个survivor（幸存区）已使用的占当前容量百分比 <code>E</code> 年轻代中Eden（伊甸园）已使用的占当前容量百分比 <code>O</code> old代已使用的占当前容量百分比 <code>P</code> perm代已使用的占当前容量百分比 <code>YGC</code> 从应用程序启动到采样时年轻代中gc次数 <code>YGCT</code> 从应用程序启动到采样时年轻代中gc所用时间(s) <code>FGC</code> 从应用程序启动到采样时old代(全gc)gc次数 <code>FGCT</code> 从应用程序启动到采样时old代(全gc)gc所用时间(s) <code>GCT</code> 从应用程序启动到采样时gc用的总时间(s)</p>
+</blockquote>
+<h3 id="6、jstat-gcnew-lt-pid-gt-年轻代对象的信息。"><a href="#6、jstat-gcnew-lt-pid-gt-年轻代对象的信息。" class="headerlink" title="6、jstat -gcnew &lt;pid&gt;:年轻代对象的信息。"></a>6、<code>jstat -gcnew &lt;pid&gt;</code>:年轻代对象的信息。</h3><blockquote>
+<p><code>S0C</code> 年轻代中第一个survivor（幸存区）的容量 (字节) <code>S1C</code> 年轻代中第二个survivor（幸存区）的容量 (字节) <code>S0U</code> 年轻代中第一个survivor（幸存区）目前已使用空间 (字节) <code>S1U</code> 年轻代中第二个survivor（幸存区）目前已使用空间 (字节) <code>TT</code> 持有次数限制 <code>MTT</code> 最大持有次数限制 <code>EC</code> 年轻代中Eden（伊甸园）的容量 (字节) <code>EU</code> 年轻代中Eden（伊甸园）目前已使用空间 (字节) <code>YGC</code> 从应用程序启动到采样时年轻代中gc次数 <code>YGCT</code> 从应用程序启动到采样时年轻代中gc所用时间(s)</p>
+</blockquote>
+<h3 id="7、jstat-gcnewcapacity-lt-pid-gt-年轻代对象的信息及其占用量。"><a href="#7、jstat-gcnewcapacity-lt-pid-gt-年轻代对象的信息及其占用量。" class="headerlink" title="7、jstat -gcnewcapacity&lt;pid&gt;: 年轻代对象的信息及其占用量。"></a>7、<code>jstat -gcnewcapacity&lt;pid&gt;</code>: 年轻代对象的信息及其占用量。</h3><blockquote>
+<p><code>NGCMN</code> 年轻代(young)中初始化(最小)的大小(字节) <code>NGCMX</code> 年轻代(young)的最大容量 (字节) <code>NGC</code> 年轻代(young)中当前的容量 (字节) <code>S0CMX</code> 年轻代中第一个survivor（幸存区）的最大容量 (字节) <code>S0C</code> 年轻代中第一个survivor（幸存区）的容量 (字节) <code>S1CMX</code> 年轻代中第二个survivor（幸存区）的最大容量 (字节) <code>S1C</code> 年轻代中第二个survivor（幸存区）的容量 (字节) <code>ECMX</code> 年轻代中Eden（伊甸园）的最大容量 (字节) <code>EC</code> 年轻代中Eden（伊甸园）的容量 (字节) <code>YGC</code> 从应用程序启动到采样时年轻代中gc次数 <code>FGC</code> 从应用程序启动到采样时old代(全gc)gc次数</p>
+</blockquote>
+<h3 id="8、jstat-gcold-lt-pid-gt-：old代对象的信息。"><a href="#8、jstat-gcold-lt-pid-gt-：old代对象的信息。" class="headerlink" title="8、jstat -gcold &lt;pid&gt;：old代对象的信息。"></a>8、<code>jstat -gcold &lt;pid&gt;：</code>old代对象的信息。</h3><blockquote>
+<p><code>PC</code> Perm(持久代)的容量 (字节) <code>PU</code> Perm(持久代)目前已使用空间 (字节) <code>OC</code> Old代的容量 (字节) <code>OU</code> Old代目前已使用空间 (字节) <code>YGC</code> 从应用程序启动到采样时年轻代中gc次数 <code>FGC</code> 从应用程序启动到采样时old代(全gc)gc次数 <code>FGCT</code> 从应用程序启动到采样时old代(全gc)gc所用时间(s) <code>GCT</code> 从应用程序启动到采样时gc用的总时间(s)</p>
+</blockquote>
+<h3 id="9、stat-gcoldcapacity-lt-pid-gt-old代对象的信息及其占用量。"><a href="#9、stat-gcoldcapacity-lt-pid-gt-old代对象的信息及其占用量。" class="headerlink" title="9、stat -gcoldcapacity &lt;pid&gt;: old代对象的信息及其占用量。"></a>9、<code>stat -gcoldcapacity &lt;pid&gt;</code>: old代对象的信息及其占用量。</h3><blockquote>
+<p><code>OGCMN</code> old代中初始化(最小)的大小 (字节) <code>OGCMX</code> old代的最大容量(字节) <code>OGC</code> old代当前新生成的容量 (字节) <code>OC</code> Old代的容量 (字节) <code>YGC</code> 从应用程序启动到采样时年轻代中gc次数 <code>FGC</code> 从应用程序启动到采样时old代(全gc)gc次数 <code>FGCT</code> 从应用程序启动到采样时old代(全gc)gc所用时间(s) <code>GCT</code> 从应用程序启动到采样时gc用的总时间(s)</p>
+</blockquote>
+<h3 id="10、jstat-gcpermcapacity-lt-pid-gt-perm对象的信息及其占用量。"><a href="#10、jstat-gcpermcapacity-lt-pid-gt-perm对象的信息及其占用量。" class="headerlink" title="10、jstat -gcpermcapacity&lt;pid&gt;: perm对象的信息及其占用量。"></a>10、<code>jstat -gcpermcapacity&lt;pid&gt;</code>: perm对象的信息及其占用量。</h3><blockquote>
+<p><code>PGCMN</code> perm代中初始化(最小)的大小 (字节) <code>PGCMX</code> perm代的最大容量 (字节)<br><code>PGC</code> perm代当前新生成的容量 (字节) <code>PC</code> Perm(持久代)的容量 (字节) <code>YGC</code> 从应用程序启动到采样时年轻代中gc次数 <code>FGC</code> 从应用程序启动到采样时old代(全gc)gc次数 <code>FGCT</code> 从应用程序启动到采样时old代(全gc)gc所用时间(s) <code>GCT</code> 从应用程序启动到采样时gc用的总时间(s)</p>
+</blockquote>
+<h3 id="11、jstat-printcompilation-lt-pid-gt-：当前VM执行的信息。"><a href="#11、jstat-printcompilation-lt-pid-gt-：当前VM执行的信息。" class="headerlink" title="11、jstat -printcompilation &lt;pid&gt;：当前VM执行的信息。"></a>11、<code>jstat -printcompilation &lt;pid&gt;</code>：当前VM执行的信息。</h3><blockquote>
+<p><code>Compiled</code> 编译任务的数目 <code>Size</code> 方法生成的字节码的大小 <code>Type</code> 编译类型 <code>Method</code> 类名和方法名用来标识编译的方法。类名使用/做为一个命名空间分隔符。方法名是给定类中的方法。上述格式是由-XX:+PrintComplation选项进行设置的</p>
+</blockquote>
+<h1 id="Java命令学习系列（五）—-jhat"><a href="#Java命令学习系列（五）—-jhat" class="headerlink" title="Java命令学习系列（五）— jhat"></a>Java命令学习系列（五）— jhat</h1><blockquote>
+<p>jhat(Java Heap Analysis Tool),是一个用来分析java的堆情况的命令。之前的文章讲到过，使用jmap可以生成Java堆的Dump文件。生成dump文件之后就可以用jhat命令，将dump文件转成html的形式，然后通过http访问可以查看堆情况。</p>
+</blockquote>
+<p>jhat命令解析会Java堆dump并启动一个web服务器，然后就可以在浏览器中查看堆的dump文件了。</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><h3 id="导出dump文件"><a href="#导出dump文件" class="headerlink" title="导出dump文件"></a>导出dump文件</h3><p>关于dump文件的生成可以看<code>jmap</code>命令的详细介绍.</p>
+<p><strong>1、运行java程序</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by hollis on 16/1/21.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JhatTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">            String string = <span class="keyword">new</span> String(<span class="string">"hollis"</span>);</span><br><span class="line">            System.out.println(string);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>2、查看该进程的ID</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">HollisMacBook-Air:apaas hollis$ jps -l</span><br><span class="line">68680 org.jetbrains.jps.cmdline.Launcher</span><br><span class="line">62247 com.intellij.rt.execution.application.AppMain</span><br><span class="line">69038 sun.tools.jps.Jps</span><br></pre></td></tr></table></figure>
+<p>使用<code>jps</code>命令查看发现有三个java进程在运行，一个是我的IDEA使用的进程68680，一个是JPS命令使用的进程69038，另外一个就是上面那段代码运行的进程62247。</p>
+<p><strong>3、生成dump文件</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">HollisMacBook-Air:test hollis$ jmap -dump:format=b,file=heapDump 62247</span><br><span class="line">Dumping heap to /Users/hollis/workspace/test/heapDump ...</span><br><span class="line">Heap dump file created</span><br></pre></td></tr></table></figure>
+<p>以上命令可以将进程6900的堆dump文件导出到heapDump文件中。<br>查看当前目录就能看到heapDump文件。</p>
+<p>除了使用jmap命令，还可以通过以下方式：</p>
+<blockquote>
+<p>1、使用 jconsole 选项通过 HotSpotDiagnosticMXBean 从运行时获得堆转储（生成dump文件）、</p>
+<p>2、虚拟机启动时如果指定了 -XX:+HeapDumpOnOutOfMemoryError 选项, 则在抛出 OutOfMemoryError 时, 会自动执行堆转储。</p>
+<p>3、使用 hprof 命令</p>
+</blockquote>
+<h3 id="解析Java堆转储文件-并启动一个-web-server"><a href="#解析Java堆转储文件-并启动一个-web-server" class="headerlink" title="解析Java堆转储文件,并启动一个 web server"></a>解析Java堆转储文件,并启动一个 web server</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">HollisMacBook-Air:apaas hollis$ jhat heapDump</span><br><span class="line">Reading from heapDump...</span><br><span class="line">Dump file created Thu Jan 21 18:59:51 CST 2016</span><br><span class="line">Snapshot read, resolving...</span><br><span class="line">Resolving 341297 objects...</span><br><span class="line">Chasing references, expect 68 dots....................................................................</span><br><span class="line">Eliminating duplicate references....................................................................</span><br><span class="line">Snapshot resolved.</span><br><span class="line">Started HTTP server on port 7000</span><br><span class="line">Server is ready.</span><br></pre></td></tr></table></figure>
+<p>使用jhat命令，就启动了一个http服务，端口是7000</p>
+<p>然后在访问<a href="http://localhost:7000/" target="_blank" rel="noopener">http://localhost:7000/</a></p>
+<p>页面如下：</p>
+<p><img src="/2020/06/06/Java开发必须掌握的线上问题排查命令-常见命令、JPS、JSTACK、JMAP、JSTAT、JHAT、JINFO、JAVAP等/QQ20160121-1.png" alt="QQ20160121-1"></p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>在浏览器里面看到dump文件之后就可以进行分析了。这个页面会列出当前进程中的所有对像情况。</p>
+<p>该页面提供了几个查询功能可供使用：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">All classes including platform//</span><br><span class="line">Show all members of the rootset</span><br><span class="line">Show instance counts for all classes (including platform)</span><br><span class="line">Show instance counts for all classes (excluding platform)</span><br><span class="line">Show heap histogram</span><br><span class="line">Show finalizer summary</span><br><span class="line">Execute Object Query Language (OQL) query</span><br></pre></td></tr></table></figure>
+<p>一般查看堆异常情况主要看这个两个部分：</p>
+<p><strong>Show instance counts for all classes (excluding platform)</strong>，平台外的所有对象信息。如下图：</p>
+<p><img src="/2020/06/06/Java开发必须掌握的线上问题排查命令-常见命令、JPS、JSTACK、JMAP、JSTAT、JHAT、JINFO、JAVAP等/QQ20160121-3-1024x234.png" alt="QQ20160121-3"></p>
+<p><strong>Show heap histogram</strong> 以树状图形式展示堆情况。如下图：</p>
+<p><img src="/2020/06/06/Java开发必须掌握的线上问题排查命令-常见命令、JPS、JSTACK、JMAP、JSTAT、JHAT、JINFO、JAVAP等/QQ20160121-2.png" alt="QQ20160121-2"></p>
+<p>具体排查时需要结合代码，观察是否大量应该被回收的对象在一直被引用或者是否有占用内存特别大的对象无法被回收。</p>
+<h2 id="用法摘要"><a href="#用法摘要" class="headerlink" title="用法摘要"></a>用法摘要</h2><p>这一部分放在后面介绍的原因是一般不太使用。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">HollisMacBook-Air:~ hollis$ jhat -help</span><br><span class="line">Usage:  jhat [-stack &lt;bool&gt;] [-refs &lt;bool&gt;] [-port &lt;port&gt;] [-baseline &lt;file&gt;] [-debug &lt;int&gt;] [-version] [-h|-help] &lt;file&gt;</span><br><span class="line"></span><br><span class="line">    -J&lt;flag&gt;          Pass &lt;flag&gt; directly to the runtime system. For</span><br><span class="line">              example, -J-mx512m to use a maximum heap size of 512MB</span><br><span class="line">    -stack false:     Turn off tracking object allocation call stack.</span><br><span class="line">    -refs false:      Turn off tracking of references to objects</span><br><span class="line">    -port &lt;port&gt;:     Set the port for the HTTP server.  Defaults to 7000</span><br><span class="line">    -exclude &lt;file&gt;:  Specify a file that lists data members that should</span><br><span class="line">              be excluded from the reachableFrom query.</span><br><span class="line">    -baseline &lt;file&gt;: Specify a baseline object dump.  Objects in</span><br><span class="line">              both heap dumps with the same ID and same class will</span><br><span class="line">              be marked as not being "new".</span><br><span class="line">    -debug &lt;int&gt;:     Set debug level.</span><br><span class="line">                0:  No debug output</span><br><span class="line">                1:  Debug hprof file parsing</span><br><span class="line">                2:  Debug hprof file parsing, no server</span><br><span class="line">    -version          Report version number</span><br><span class="line">    -h|-help          Print this help and exit</span><br><span class="line">    &lt;file&gt;            The file to read</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>-stack false|true</p>
+<p>关闭对象分配调用栈跟踪(tracking object allocation call stack)。 如果分配位置信息在堆转储中不可用. 则必须将此标志设置为 false. 默认值为 true.</p>
+<p>-refs false|true</p>
+<p>关闭对象引用跟踪(tracking of references to objects)。 默认值为 true. 默认情况下, 返回的指针是指向其他特定对象的对象,如反向链接或输入引用(referrers or incoming references), 会统计/计算堆中的所有对象。</p>
+<p><strong>-port port-number</strong></p>
+<p>设置 jhat HTTP server 的端口号. 默认值 7000.</p>
+<p>-exclude exclude-file</p>
+<p>指定对象查询时需要排除的数据成员列表文件(a file that lists data members that should be excluded from the reachable objects query)。 例如, 如果文件列列出了 java.lang.String.value , 那么当从某个特定对象 Object o 计算可达的对象列表时, 引用路径涉及 java.lang.String.value 的都会被排除。</p>
+<p>-baseline exclude-file</p>
+<p>指定一个基准堆转储(baseline heap dump)。 在两个 heap dumps 中有相同 object ID 的对象会被标记为不是新的(marked as not being new). 其他对象被标记为新的(new). 在比较两个不同的堆转储时很有用.</p>
+<p>-debug int</p>
+<p>设置 debug 级别. 0 表示不输出调试信息。 值越大则表示输出更详细的 debug 信息.</p>
+<p>-version</p>
+<p>启动后只显示版本信息就退出</p>
+<p>-J&lt; flag &gt;</p>
+<p>因为 jhat 命令实际上会启动一个JVM来执行, 通过 -J 可以在启动JVM时传入一些启动参数. 例如, -J-Xmx512m 则指定运行 jhat 的Java虚拟机使用的最大堆内存为 512 MB. 如果需要使用多个JVM启动参数,则传入多个 -Jxxxxxx.</p>
+</blockquote>
+<h2 id="OQL"><a href="#OQL" class="headerlink" title="OQL"></a>OQL</h2><p>jhat还提供了一种对象查询语言(Object Query Language)，OQL有点类似SQL,可以用来查询。</p>
+<p>OQL语句的执行页面: <a href="http://localhost:7000/oql/" target="_blank" rel="noopener">http://localhost:7000/oql/</a></p>
+<p>OQL帮助信息页面为: <a href="http://localhost:7000/oqlhelp/" target="_blank" rel="noopener">http://localhost:7000/oqlhelp/</a></p>
+<p>OQL的预发可以在帮助页面查看，这里就不详细讲解了。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jhat.html" target="_blank" rel="noopener">jhat</a></p>
+<h1 id="Java命令学习系列（六）—-jinfo"><a href="#Java命令学习系列（六）—-jinfo" class="headerlink" title="Java命令学习系列（六）— jinfo"></a>Java命令学习系列（六）— jinfo</h1><p>jinfo可以输出java进程、core文件或远程debug服务器的配置信息。这些配置信息包括JAVA系统参数及命令行参数,如果进程运行在64位虚拟机上，需要指明<code>-J-d64</code>参数，如：<code>jinfo -J-d64 -sysprops pid</code></p>
+<p>另外，Java7的官方文档指出，这一命令在后续的版本中可能不再使用。笔者使用的版本(jdk8)中已经不支持该命令(笔者翻阅了<a href="http://docs.oracle.com/javase/8/docs/technotes/tools/unix/jinfo.html" target="_blank" rel="noopener">java8中该命令的文档</a>，其中已经明确说明不再支持)。提示如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">HollisMacBook-Air:test-workspace hollis$ jinfo 92520</span><br><span class="line">Attaching to process ID 92520, please wait...</span><br><span class="line">^@</span><br><span class="line"></span><br><span class="line">Exception in thread "main" java.lang.reflect.InvocationTargetException</span><br><span class="line">    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</span><br><span class="line">    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)</span><br><span class="line">    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)</span><br><span class="line">    at java.lang.reflect.Method.invoke(Method.java:606)</span><br><span class="line">    at sun.tools.jinfo.JInfo.runTool(JInfo.java:97)</span><br><span class="line">    at sun.tools.jinfo.JInfo.main(JInfo.java:71)</span><br><span class="line">Caused by: sun.jvm.hotspot.runtime.VMVersionMismatchException: Supported versions are 24.79-b02. Target VM is 25.40-b25</span><br><span class="line">    at sun.jvm.hotspot.runtime.VM.checkVMVersion(VM.java:234)</span><br><span class="line">    at sun.jvm.hotspot.runtime.VM.&lt;init&gt;(VM.java:297)</span><br><span class="line">    at sun.jvm.hotspot.runtime.VM.initialize(VM.java:368)</span><br><span class="line">    at sun.jvm.hotspot.bugspot.BugSpotAgent.setupVM(BugSpotAgent.java:598)</span><br><span class="line">    at sun.jvm.hotspot.bugspot.BugSpotAgent.go(BugSpotAgent.java:493)</span><br><span class="line">    at sun.jvm.hotspot.bugspot.BugSpotAgent.attach(BugSpotAgent.java:331)</span><br><span class="line">    at sun.jvm.hotspot.tools.Tool.start(Tool.java:163)</span><br><span class="line">    at sun.jvm.hotspot.tools.JInfo.main(JInfo.java:128)</span><br><span class="line">    ... 6 more</span><br></pre></td></tr></table></figure>
+<p>由于打印jvm常用信息可以使用<code>jps</code>命令，并且在后续的java版本中可能不再支持，所以这个命令笔者就不详细介绍了。下面给出help信息，读者可自行阅读使用。（这就好像上高中，老师讲到一些难点的时候说，不明白也不要紧，知道有这么一回事就可以了！）</p>
+<h2 id="用法摘要-1"><a href="#用法摘要-1" class="headerlink" title="用法摘要"></a>用法摘要</h2><p>以键值对的形式打印出JAVA系统参数及命令行参数的名称和内容。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">-flag name</span><br><span class="line">prints the name and value of the given command line flag.</span><br><span class="line">-flag [+|-]name</span><br><span class="line">enables or disables the given boolean command line flag.</span><br><span class="line">-flag name=value</span><br><span class="line">sets the given command line flag to the specified value.</span><br><span class="line">-flags</span><br><span class="line">prints command line flags passed to the JVM. pairs.</span><br><span class="line">-sysprops</span><br><span class="line">prints Java System properties as name, value pairs.</span><br><span class="line">-h</span><br><span class="line">prints a help message</span><br><span class="line">-help</span><br><span class="line">prints a help message</span><br></pre></td></tr></table></figure>
+<h2 id="参考资料-1"><a href="#参考资料-1" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://docs.oracle.com/javase/7/docs/technotes/tools/share/jinfo.html" target="_blank" rel="noopener">jinfo</a></p>
+<h1 id="Java命令学习系列（七）—-javap"><a href="#Java命令学习系列（七）—-javap" class="headerlink" title="Java命令学习系列（七）— javap"></a>Java命令学习系列（七）— javap</h1><blockquote>
+<p>javap是jdk自带的一个工具，可以对代码<code>反编译</code>，也可以查看java编译器生成的字节码。</p>
+</blockquote>
+<p>一般情况下，很少有人使用javap对class文件进行反编译，因为有很多成熟的反编译工具可以使用，比如jad。但是，javap还可以查看java编译器为我们生成的字节码。通过它，可以对照源代码和字节码，从而了解很多编译器内部的工作。</p>
+<h2 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h2><p>javap命令分解一个class文件，它根据options来决定到底输出什么。如果没有使用options,那么javap将会输出包，类里的protected和public域以及类里的所有方法。<code>javap</code>将会把它们输出在标准输出上。来看这个例子，先编译(<code>javac</code>)下面这个类。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.awt.*;</span><br><span class="line"><span class="keyword">import</span> java.applet.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DocFooter</span> <span class="keyword">extends</span> <span class="title">Applet</span> </span>&#123;</span><br><span class="line">        String date;</span><br><span class="line">        String email;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                resize(<span class="number">500</span>,<span class="number">100</span>);</span><br><span class="line">                date = getParameter(<span class="string">"LAST_UPDATED"</span>);</span><br><span class="line">                email = getParameter(<span class="string">"EMAIL"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paint</span><span class="params">(Graphics g)</span> </span>&#123;</span><br><span class="line">                g.drawString(date + <span class="string">" by "</span>,<span class="number">100</span>, <span class="number">15</span>);</span><br><span class="line">                g.drawString(email,<span class="number">290</span>,<span class="number">15</span>);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在命令行上键入javap DocFooter后，输出结果如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Compiled from "DocFooter.java"</span><br><span class="line">public class DocFooter extends java.applet.Applet &#123;</span><br><span class="line">  java.lang.String date;</span><br><span class="line">  java.lang.String email;</span><br><span class="line">  public DocFooter();</span><br><span class="line">  public void init();</span><br><span class="line">  public void paint(java.awt.Graphics);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果加入了-c，即javap -c DocFooter，那么输出结果如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Compiled from "DocFooter.java"</span><br><span class="line">public class DocFooter extends java.applet.Applet &#123;</span><br><span class="line">  java.lang.String date;</span><br><span class="line"></span><br><span class="line">  java.lang.String email;</span><br><span class="line"></span><br><span class="line">  public DocFooter();</span><br><span class="line">    Code:</span><br><span class="line">       0: aload_0       </span><br><span class="line">       1: invokespecial #1                  // Method java/applet/Applet."&lt;init&gt;":()V</span><br><span class="line">       4: return        </span><br><span class="line"></span><br><span class="line">  public void init();</span><br><span class="line">    Code:</span><br><span class="line">       0: aload_0       </span><br><span class="line">       1: sipush        500</span><br><span class="line">       4: bipush        100</span><br><span class="line">       6: invokevirtual #2                  // Method resize:(II)V</span><br><span class="line">       9: aload_0       </span><br><span class="line">      10: aload_0       </span><br><span class="line">      11: ldc           #3                  // String LAST_UPDATED</span><br><span class="line">      13: invokevirtual #4                  // Method getParameter:(Ljava/lang/String;)Ljava/lang/String;</span><br><span class="line">      16: putfield      #5                  // Field date:Ljava/lang/String;</span><br><span class="line">      19: aload_0       </span><br><span class="line">      20: aload_0       </span><br><span class="line">      21: ldc           #6                  // String EMAIL</span><br><span class="line">      23: invokevirtual #4                  // Method getParameter:(Ljava/lang/String;)Ljava/lang/String;</span><br><span class="line">      26: putfield      #7                  // Field email:Ljava/lang/String;</span><br><span class="line">      29: return        </span><br><span class="line"></span><br><span class="line">  public void paint(java.awt.Graphics);</span><br><span class="line">    Code:</span><br><span class="line">       0: aload_1       </span><br><span class="line">       1: new           #8                  // class java/lang/StringBuilder</span><br><span class="line">       4: dup           </span><br><span class="line">       5: invokespecial #9                  // Method java/lang/StringBuilder."&lt;init&gt;":()V</span><br><span class="line">       8: aload_0       </span><br><span class="line">       9: getfield      #5                  // Field date:Ljava/lang/String;</span><br><span class="line">      12: invokevirtual #10                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">      15: ldc           #11                 // String  by </span><br><span class="line">      17: invokevirtual #10                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">      20: invokevirtual #12                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span><br><span class="line">      23: bipush        100</span><br><span class="line">      25: bipush        15</span><br><span class="line">      27: invokevirtual #13                 // Method java/awt/Graphics.drawString:(Ljava/lang/String;II)V</span><br><span class="line">      30: aload_1       </span><br><span class="line">      31: aload_0       </span><br><span class="line">      32: getfield      #7                  // Field email:Ljava/lang/String;</span><br><span class="line">      35: sipush        290</span><br><span class="line">      38: bipush        15</span><br><span class="line">      40: invokevirtual #13                 // Method java/awt/Graphics.drawString:(Ljava/lang/String;II)V</span><br><span class="line">      43: return        </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面输出的内容就是字节码。</p>
+<h2 id="用法摘要-2"><a href="#用法摘要-2" class="headerlink" title="用法摘要"></a>用法摘要</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">-help 帮助</span><br><span class="line">-l 输出行和变量的表</span><br><span class="line">-public 只输出public方法和域</span><br><span class="line">-protected 只输出public和protected类和成员</span><br><span class="line">-package 只输出包，public和protected类和成员，这是默认的</span><br><span class="line">-p -private 输出所有类和成员</span><br><span class="line">-s 输出内部类型签名</span><br><span class="line">-c 输出分解后的代码，例如，类中每一个方法内，包含java字节码的指令，</span><br><span class="line">-verbose 输出栈大小，方法参数的个数</span><br><span class="line">-constants 输出静态final常量</span><br></pre></td></tr></table></figure>
+<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><p>javap可以用于反编译和查看编译器编译后的字节码。平时一般用<code>javap -c</code>比较多，该命令用于列出每个方法所执行的JVM指令，并显示每个方法的字节码的实际作用。可以通过字节码和源代码的对比，深入分析java的编译原理，了解和解决各种Java原理级别的问题。</p>
+<h1 id="Java代码的编译与反编译那些事儿"><a href="#Java代码的编译与反编译那些事儿" class="headerlink" title="Java代码的编译与反编译那些事儿"></a>Java代码的编译与反编译那些事儿</h1><h2 id="编程语言"><a href="#编程语言" class="headerlink" title="编程语言"></a>编程语言</h2><p>在介绍编译和反编译之前，我们先来简单介绍下编程语言（Programming Language）。编程语言（Programming Language）分为低级语言（Low-level Language）和高级语言（High-level Language）。</p>
+<p>机器语言（Machine Language）和汇编语言（Assembly Language）属于低级语言，直接用计算机指令编写程序。</p>
+<p>而C、C++、Java、Python等属于高级语言，用语句（Statement）编写程序，语句是计算机指令的抽象表示。</p>
+<p>举个例子，同样一个语句用C语言、汇编语言和机器语言分别表示如下：</p>
+<p><img src="/2020/06/06/Java开发必须掌握的线上问题排查命令-常见命令、JPS、JSTACK、JMAP、JSTAT、JHAT、JINFO、JAVAP等/WechatIMG363.jpeg" alt="img"></p>
+<p>计算机只能对数字做运算，符号、声音、图像在计算机内部都要用数字表示，指令也不例外，上表中的机器语言完全由十六进制数字组成。最早的程序员都是直接用机器语言编程，但是很麻烦，需要查大量的表格来确定每个数字表示什么意思，编写出来的程序很不直观，而且容易出错，于是有了汇编语言，把机器语言中一组一组的数字用助记符（Mnemonic）表示，直接用这些助记符写出汇编程序，然后让汇编器（Assembler）去查表把助记符替换成数字，也就把汇编语言翻译成了机器语言。</p>
+<p>但是，汇编语言用起来同样比较复杂，后面，就衍生出了Java、C、C++等高级语言。</p>
+<h2 id="什么是编译"><a href="#什么是编译" class="headerlink" title="什么是编译"></a>什么是编译</h2><p>上面提到语言有两种，一种低级语言，一种高级语言。可以这样简单的理解：低级语言是计算机认识的语言、高级语言是程序员认识的语言。</p>
+<p>那么如何从高级语言转换成低级语言呢？这个过程其实就是编译。</p>
+<p>从上面的例子还可以看出，C语言的语句和低级语言的指令之间不是简单的一一对应关系，一条<code>a=b+1</code>;语句要翻译成三条汇编或机器指令，这个过程称为编译（Compile），由编译器（Compiler）来完成，显然编译器的功能比汇编器要复杂得多。用C语言编写的程序必须经过编译转成机器指令才能被计算机执行，编译需要花一些时间，这是用高级语言编程的一个缺点，然而更多的是优点。首先，用C语言编程更容易，写出来的代码更紧凑，可读性更强，出了错也更容易改正。</p>
+<p><strong>将便于人编写、阅读、维护的高级计算机语言所写作的源代码程序，翻译为计算机能解读、运行的低阶机器语言的程序的过程就是编译。负责这一过程的处理的工具叫做编译器</strong></p>
+<p>现在我们知道了什么是编译，也知道了什么是编译器。不同的语言都有自己的编译器，Java语言中负责编译的编译器是一个命令：<code>javac</code></p>
+<blockquote>
+<p>javac是收录于JDK中的Java语言编译器。该工具可以将后缀名为.java的源文件编译为后缀名为.class的可以运行于Java虚拟机的字节码。</p>
+</blockquote>
+<p><strong>当我们写完一个<code>HelloWorld.java</code>文件后，我们可以使用<code>javac HelloWorld.java</code>命令来生成<code>HelloWorld.class</code>文件，这个<code>class</code>类型的文件是JVM可以识别的文件。通常我们认为这个过程叫做Java语言的编译。其实，<code>class</code>文件仍然不是机器能够识别的语言，因为机器只能识别机器语言，还需要JVM再将这种<code>class</code>文件类型字节码转换成机器可以识别的机器语言。</strong></p>
+<h2 id="什么是反编译"><a href="#什么是反编译" class="headerlink" title="什么是反编译"></a>什么是反编译</h2><p>反编译的过程与编译刚好相反，就是将已编译好的编程语言还原到未编译的状态，也就是找出程序语言的源代码。就是将机器看得懂的语言转换成程序员可以看得懂的语言。Java语言中的反编译一般指将<code>class</code>文件转换成<code>java</code>文件。</p>
+<p>有了反编译工具，我们可以做很多事情，最主要的功能就是有了反编译工具，我们就能读得懂Java编译器生成的字节码。如果你想问读懂字节码有啥用，那么我可以很负责任的告诉你，好处大大的。比如我的博文几篇典型的原理性文章，都是通过反编译工具得到反编译后的代码分析得到的。如深入理解多线程（一）— Synchronized的实现原理、深度分析Java的枚举类型—-枚举的线程安全性及序列化问题、Java中的Switch对整型、字符型、字符串型的具体实现细节、Java的类型擦除等。我最近在GitChat写了一篇关于Java语法糖的文章，其中大部分内容都用到反编译工具来洞悉语法糖背后的原理。</p>
+<h2 id="Java反编译工具"><a href="#Java反编译工具" class="headerlink" title="Java反编译工具"></a>Java反编译工具</h2><p>本文主要介绍3个Java的反编译工具：<strong>javap</strong>、<strong>jad</strong>和<strong>cfr</strong></p>
+<h3 id="javap"><a href="#javap" class="headerlink" title="javap"></a>javap</h3><p><code>javap</code>是jdk自带的一个工具，可以对代码反编译，也可以查看java编译器生成的字节码。<code>javap</code>和其他两个反编译工具最大的区别是他生成的文件并不是<code>java</code>文件，也不像其他两个工具生成代码那样更容易理解。拿一段简单的代码举例，如我们想分析Java 7中的<code>switch</code>是如何支持<code>String</code>的，我们先有以下可以编译通过的源代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">switchDemoString</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String str = <span class="string">"world"</span>;</span><br><span class="line">        <span class="keyword">switch</span> (str) &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"hello"</span>:</span><br><span class="line">                System.out.println(<span class="string">"hello"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"world"</span>:</span><br><span class="line">                System.out.println(<span class="string">"world"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行以下两个命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">javac switchDemoString.java</span><br><span class="line">javap -c switchDemoString.class</span><br></pre></td></tr></table></figure>
+<p>生成代码如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">public class com.hollis.suguar.switchDemoString &#123;</span><br><span class="line">  public com.hollis.suguar.switchDemoString();</span><br><span class="line">    Code:</span><br><span class="line">       0: aload_0</span><br><span class="line">       1: invokespecial #1                  // Method java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">       4: return</span><br><span class="line"></span><br><span class="line">  public static void main(java.lang.String[]);</span><br><span class="line">    Code:</span><br><span class="line">       0: ldc           #2                  // String world</span><br><span class="line">       2: astore_1</span><br><span class="line">       3: aload_1</span><br><span class="line">       4: astore_2</span><br><span class="line">       5: iconst_m1</span><br><span class="line">       6: istore_3</span><br><span class="line">       7: aload_2</span><br><span class="line">       8: invokevirtual #3                  // Method java/lang/String.hashCode:()I</span><br><span class="line">      11: lookupswitch  &#123; // 2</span><br><span class="line">              99162322: 36</span><br><span class="line">             113318802: 50</span><br><span class="line">               default: 61</span><br><span class="line">          &#125;</span><br><span class="line">      36: aload_2</span><br><span class="line">      37: ldc           #4                  // String hello</span><br><span class="line">      39: invokevirtual #5                  // Method java/lang/String.equals:(Ljava/lang/Object;)Z</span><br><span class="line">      42: ifeq          61</span><br><span class="line">      45: iconst_0</span><br><span class="line">      46: istore_3</span><br><span class="line">      47: goto          61</span><br><span class="line">      50: aload_2</span><br><span class="line">      51: ldc           #2                  // String world</span><br><span class="line">      53: invokevirtual #5                  // Method java/lang/String.equals:(Ljava/lang/Object;)Z</span><br><span class="line">      56: ifeq          61</span><br><span class="line">      59: iconst_1</span><br><span class="line">      60: istore_3</span><br><span class="line">      61: iload_3</span><br><span class="line">      62: lookupswitch  &#123; // 2</span><br><span class="line">                     0: 88</span><br><span class="line">                     1: 99</span><br><span class="line">               default: 110</span><br><span class="line">          &#125;</span><br><span class="line">      88: getstatic     #6                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">      91: ldc           #4                  // String hello</span><br><span class="line">      93: invokevirtual #7                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">      96: goto          110</span><br><span class="line">      99: getstatic     #6                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">     102: ldc           #2                  // String world</span><br><span class="line">     104: invokevirtual #7                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">     107: goto          110</span><br><span class="line">     110: return</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我个人的理解，<code>javap</code>并没有将字节码反编译成<code>java</code>文件，而是生成了一种我们可以看得懂字节码。其实javap生成的文件仍然是字节码，只是程序员可以稍微看得懂一些。如果你对字节码有所掌握，还是可以看得懂以上的代码的。其实就是把String转成hashcode，然后进行比较。</p>
+<p>个人认为，一般情况下我们会用到<code>javap</code>命令的时候不多，一般只有在真的需要看字节码的时候才会用到。但是字节码中间暴露的东西是最全的，你肯定有机会用到，比如我在分析<code>synchronized</code>的原理的时候就有是用到<code>javap</code>。通过<code>javap</code>生成的字节码，我发现<code>synchronized</code>底层依赖了<code>ACC_SYNCHRONIZED</code>标记和<code>monitorenter</code>、<code>monitorexit</code>两个指令来实现同步。</p>
+<h3 id="jad"><a href="#jad" class="headerlink" title="jad"></a>jad</h3><p>jad是一个比较不错的反编译工具，只要下载一个执行工具，就可以实现对<code>class</code>文件的反编译了。还是上面的源代码，使用jad反编译后内容如下：</p>
+<p>命令：<code>jad switchDemoString.class</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">switchDemoString</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">switchDemoString</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        String str = <span class="string">"world"</span>;</span><br><span class="line">        String s;</span><br><span class="line">        <span class="keyword">switch</span>((s = str).hashCode())</span><br><span class="line">        &#123;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">99162322</span>:</span><br><span class="line">            <span class="keyword">if</span>(s.equals(<span class="string">"hello"</span>))</span><br><span class="line">                System.out.println(<span class="string">"hello"</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">113318802</span>:</span><br><span class="line">            <span class="keyword">if</span>(s.equals(<span class="string">"world"</span>))</span><br><span class="line">                System.out.println(<span class="string">"world"</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看，这个代码你肯定看的懂，因为这不就是标准的java的源代码么。这个就很清楚的可以看到原来<strong>字符串的switch是通过<code>equals()</code>和<code>hashCode()</code>方法来实现的</strong>。</p>
+<p>但是，jad已经很久不更新了，在对Java7生成的字节码进行反编译时，偶尔会出现不支持的问题，在对Java 8的lambda表达式反编译时就彻底失败。</p>
+<h3 id="CFR"><a href="#CFR" class="headerlink" title="CFR"></a>CFR</h3><p>jad很好用，但是无奈的是很久没更新了，所以只能用一款新的工具替代他，CFR是一个不错的选择，相比jad来说，他的语法可能会稍微复杂一些，但是好在他可以work。</p>
+<p>如，我们使用cfr对刚刚的代码进行反编译。执行一下命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">java -jar cfr_0_125.jar switchDemoString.class --decodestringswitch false</span><br></pre></td></tr></table></figure>
+<p>得到以下代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">switchDemoString</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] arrstring)</span> </span>&#123;</span><br><span class="line">        String string;</span><br><span class="line">        String string2 = string = <span class="string">"world"</span>;</span><br><span class="line">        <span class="keyword">int</span> n = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">switch</span> (string2.hashCode()) &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">99162322</span>: &#123;</span><br><span class="line">                <span class="keyword">if</span> (!string2.equals(<span class="string">"hello"</span>)) <span class="keyword">break</span>;</span><br><span class="line">                n = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">113318802</span>: &#123;</span><br><span class="line">                <span class="keyword">if</span> (!string2.equals(<span class="string">"world"</span>)) <span class="keyword">break</span>;</span><br><span class="line">                n = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">switch</span> (n) &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">0</span>: &#123;</span><br><span class="line">                System.out.println(<span class="string">"hello"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">1</span>: &#123;</span><br><span class="line">                System.out.println(<span class="string">"world"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过这段代码也能得到字符串的switch是通过<code>equals()</code>和<code>hashCode()</code>方法来实现的结论。</p>
+<p>相比Jad来说，CFR有很多参数，还是刚刚的代码，如果我们使用以下命令，输出结果就会不同：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">java -jar cfr_0_125.jar switchDemoString.class</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">switchDemoString</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] arrstring)</span> </span>&#123;</span><br><span class="line">        String string;</span><br><span class="line">        <span class="keyword">switch</span> (string = <span class="string">"world"</span>) &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"hello"</span>: &#123;</span><br><span class="line">                System.out.println(<span class="string">"hello"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"world"</span>: &#123;</span><br><span class="line">                System.out.println(<span class="string">"world"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以<code>--decodestringswitch</code>表示对于switch支持string的细节进行解码。类似的还有<code>--decodeenumswitch</code>、<code>--decodefinally</code>、<code>--decodelambdas</code>等。在我的关于语法糖的文章中，我使用<code>--decodelambdas</code>对lambda表达式警进行了反编译。 源码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String... args)</span> </span>&#123;</span><br><span class="line">    List&lt;String&gt; strList = ImmutableList.of(<span class="string">"Hollis"</span>, <span class="string">"公众号：Hollis"</span>, <span class="string">"博客：www.hollischuang.com"</span>);</span><br><span class="line"></span><br><span class="line">    strList.forEach( s -&gt; &#123; System.out.println(s); &#125; );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>java -jar cfr_0_125.jar lambdaDemo.class --decodelambdas false</code>反编译后代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="comment">/* varargs */</span> <span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(String ... args)</span> </span>&#123;</span><br><span class="line">    ImmutableList strList = ImmutableList.of((Object)<span class="string">"Hollis"</span>, (Object)<span class="string">"\u516c\u4f17\u53f7\uff1aHollis"</span>, (Object)<span class="string">"\u535a\u5ba2\uff1awww.hollischuang.com"</span>);</span><br><span class="line">    strList.forEach((Consumer&lt;String&gt;)LambdaMetafactory.metafactory(<span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, (Ljava/lang/Object;)V, lambda$main$<span class="number">0</span>(java.lang.String ), (Ljava/lang/String;)V)());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="comment">/* synthetic */</span> <span class="keyword">void</span> lambda$main$<span class="number">0</span>(String s) &#123;</span><br><span class="line">    System.out.println(s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>CFR还有很多其他参数，均用于不同场景，读者可以使用<code>java -jar cfr_0_125.jar --help</code>进行了解。这里不逐一介绍了。</p>
+<h2 id="如何防止反编译"><a href="#如何防止反编译" class="headerlink" title="如何防止反编译"></a>如何防止反编译</h2><p>由于我们有工具可以对<code>Class</code>文件进行反编译，所以，对开发人员来说，如何保护Java程序就变成了一个非常重要的挑战。但是，魔高一尺、道高一丈。当然有对应的技术可以应对反编译咯。但是，这里还是要说明一点，和网络安全的防护一样，无论做出多少努力，其实都只是提高攻击者的成本而已。无法彻底防治。</p>
+<p>典型的应对策略有以下几种：</p>
+<ul>
+<li>隔离Java程序<ul>
+<li>让用户接触不到你的Class文件</li>
+</ul>
+</li>
+<li>对Class文件进行加密<ul>
+<li>提到破解难度</li>
+</ul>
+</li>
+<li>代码混淆<ul>
+<li>将代码转换成功能上等价，但是难于阅读和理解的形式</li>
+</ul>
+</li>
+</ul>
+<h1 id="Java虚拟机的内存组成以及堆内存介绍"><a href="#Java虚拟机的内存组成以及堆内存介绍" class="headerlink" title="Java虚拟机的内存组成以及堆内存介绍"></a>Java虚拟机的内存组成以及堆内存介绍</h1><p>什么是Java虚拟机这里就不介绍了，不明白的可以另外一篇博文：<code>JDK,JRE,JVM区别与联系</code></p>
+<h2 id="java内存组成介绍：堆-Heap-和非堆-Non-heap-内存"><a href="#java内存组成介绍：堆-Heap-和非堆-Non-heap-内存" class="headerlink" title="java内存组成介绍：堆(Heap)和非堆(Non-heap)内存"></a>java内存组成介绍：<code>堆(Heap)</code>和<code>非堆(Non-heap)</code>内存</h2><blockquote>
+<p>按照官方的说法：“Java 虚拟机具有一个堆，堆是运行时数据区域，所有类实例和数组的内存均从此处分配。堆是在 Java 虚拟机启动时创建的。”“在JVM中堆之外的内存称为非堆内存(Non-heap memory)”。可以看出<strong>JVM主要管理两种类型的内存：堆和非堆</strong>。简单来说堆就是Java代码可及的内存，是留给开发人员使用的；非堆就是JVM留给 自己用的，所以方法区、JVM内部处理或优化所需的内存(如JIT编译后的代码缓存)、每个类结构(如运行时常数池、字段和方法数据)以及方法和构造方法 的代码都在非堆内存中。</p>
+</blockquote>
+<h2 id="JVM内存区域模型"><a href="#JVM内存区域模型" class="headerlink" title="JVM内存区域模型"></a>JVM内存区域模型</h2><p><img src="/2020/06/06/Java开发必须掌握的线上问题排查命令-常见命令、JPS、JSTACK、JMAP、JSTAT、JHAT、JINFO、JAVAP等/2354447461-300x217.jpg" alt="2354447461"></p>
+<p><strong>1.方法区</strong> 也称”永久代” 、“非堆”， 它用于存储虚拟机加载的类信息、常量、静态变量、是各个线程共享的内存区域。默认最小值为16MB，最大值为64MB，可以通过<code>-XX:PermSize</code> 和 <code>-XX:MaxPermSize</code> 参数限制方法区的大小。</p>
+<p>运行时常量池：是方法区的一部分，其中的主要内容来自于JVM对Class的加载。</p>
+<p>Class文件中除了有类的版本、字段、方法、接口等描述信息外，还有一项信息是常量池，用于存放编译器生成的各种符号引用，这部分内容将在类加载后放到方法区的运行时常量池中。</p>
+<p><strong>2.虚拟机栈</strong></p>
+<p>描述的是java 方法执行的内存模型：每个方法被执行的时候 都会创建一个“栈帧”用于存储局部变量表(包括参数)、操作栈、方法出口等信息。每个方法被调用到执行完的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。声明周期与线程相同，是线程私有的。</p>
+<p>局部变量表存放了编译器可知的各种基本数据类型(<code>boolean</code>、<code>byte</code>、<code>char</code>、<code>short</code>、<code>int</code>、<code>float</code>、<code>long</code>、<code>double</code>)、对象引用(引用指针，并非对象本身)，其中64位长度的long和double类型的数据会占用2个局部变量的空间，其余数据类型只占1个。局部变量表所需的内存空间在编译期间完成分配，当进入一个方法时，这个方法需要在栈帧中分配多大的局部变量是完全确定的，在运行期间栈帧不会改变局部变量表的大小空间。</p>
+<p><strong>3.本地方法栈</strong></p>
+<p>与虚拟机栈基本类似，区别在于虚拟机栈为虚拟机执行的java方法服务，而本地方法栈则是为Native方法服务。</p>
+<p><strong>4.堆</strong></p>
+<p>也叫做java 堆、GC堆是java虚拟机所管理的内存中最大的一块内存区域，也是被各个线程共享的内存区域，在JVM启动时创建。该内存区域存放了对象实例及数组(所有new的对象)。其大小通过<code>-Xms</code>(最小值)和<code>-Xmx</code>(最大值)参数设置，-Xms为JVM启动时申请的最小内存，默认为操作系统物理内存的1/64但小于1G，<code>-Xmx</code>为JVM可申请的最大内存，默认为物理内存的1/4但小于1G，默认当空余堆内存小于40%时，JVM会增大Heap到<code>-Xmx</code>指定的大小，可通过<code>-XX:MinHeapFreeRation=</code>来指定这个比列；当空余堆内存大于70%时，JVM会减小heap的大小到-Xms指定的大小，可通过<code>XX:MaxHeapFreeRation=</code>来指定这个比列，对于运行系统，为避免在运行时频繁调整Heap的大小，通常-Xms与-Xmx的值设成一样。</p>
+<p>由于现在收集器都是采用分代收集算法，堆被划分为新生代和老年代。新生代主要存储新创建的对象和尚未进入老年代的对象。老年代存储经过多次新生代GC(Minor GC)任然存活的对象。</p>
+<blockquote>
+<p>新生代： 程序新创建的对象都是从新生代分配内存，新生代由<code>Eden Space</code>和两块相同大小的<code>Survivor Space</code>(通常又称S0和S1或From和To)构成，可通过-Xmn参数来指定新生代的大小，也可以通过<code>-XX:SurvivorRation</code>来调整<code>Eden Space</code>及<code>Survivor Space</code>的大小。 老年代： 用于存放经过多次新生代GC任然存活的对象，例如缓存对象，新建的对象也有可能直接进入老年代，主要有两种情况：①.大对象，可通过启动参数设置<code>-XX:PretenureSizeThreshold=1024</code>(单位为字节，默认为0)来代表超过多大时就不在新生代分配，而是直接在老年代分配。②.大的数组对象，切数组中无引用外部对象。 老年代所占的内存大小为-Xmx对应的值减去-Xmn对应的值。</p>
+</blockquote>
+<p><img src="/2020/06/06/Java开发必须掌握的线上问题排查命令-常见命令、JPS、JSTACK、JMAP、JSTAT、JHAT、JINFO、JAVAP等/2838681554-300x169.jpg" alt="2838681554"></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Young Generation        即图中的Eden + From Space + To Space</span><br><span class="line">Eden                    存放新生的对象</span><br><span class="line">Survivor Space          有两个，存放每次垃圾回收后存活的对象</span><br><span class="line">Old Generation          Tenured Generation 即图中的Old Space </span><br><span class="line">                        主要存放应用程序中生命周期长的存活对象</span><br></pre></td></tr></table></figure>
+<p><strong>5.程序计数器</strong></p>
+<p>是最小的一块内存区域，它的作用是当前线程所执行的字节码的行号指示器，在虚拟机的模型里，字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令，分支、循环、异常处理、线程恢复等基础功能都需要依赖计数器完成。</p>
+<h2 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h2><p>直接内存并不是虚拟机内存的一部分，也不是Java虚拟机规范中定义的内存区域。jdk1.4中新加入的NIO，引入了通道与缓冲区的IO方式，它可以调用Native方法直接分配堆外内存，这个堆外内存就是本机内存，不会影响到堆内存的大小。</p>
+<h2 id="Java堆内存的10个要点"><a href="#Java堆内存的10个要点" class="headerlink" title="Java堆内存的10个要点"></a>Java堆内存的10个要点</h2><blockquote>
+<ol>
+<li>Java堆内存是操作系统分配给JVM的内存的一部分。</li>
+<li>当我们创建对象时，它们存储在Java堆内存中。</li>
+<li>为了便于垃圾回收，Java堆空间分成三个区域，分别叫作New Generation, Old Generation或叫作Tenured Generation，还有Perm Space。</li>
+<li>你可以通过用JVM的命令行选项 -Xms, -Xmx, -Xmn来调整Java堆空间的大小。不要忘了在大小后面加上”M”或者”G”来表示单位。举个例子，你可以用 -Xmx256m来设置堆内存最大的大小为256MB。</li>
+<li>你可以用JConsole或者 Runtime.maxMemory(), Runtime.totalMemory(), Runtime.freeMemory()来查看Java中堆内存的大小。</li>
+<li>你可以使用命令“jmap”来获得heap dump，用“jhat”来分析heap dump。</li>
+<li>Java堆空间不同于栈空间，栈空间是用来储存调用栈和局部变量的。</li>
+<li>Java垃圾回收器是用来将死掉的对象(不再使用的对象)所占用的内存回收回来，再释放到Java堆空间中。</li>
+<li>当你遇到java.lang.outOfMemoryError时，不要紧张，有时候仅仅增加堆空间就可以了，但如果经常出现的话，就要看看Java程序中是不是存在内存泄露了。</li>
+<li>请使用Profiler和Heap dump分析工具来查看Java堆空间，可以查看给每个对象分配了多少内存。</li>
+</ol>
+</blockquote>
+<h1 id="Java-GC工作原理"><a href="#Java-GC工作原理" class="headerlink" title="Java GC工作原理"></a>Java GC工作原理</h1><h2 id="GC的基本原理"><a href="#GC的基本原理" class="headerlink" title="GC的基本原理"></a>GC的基本原理</h2><p>GC是什么?为什么要有GC呢?</p>
+<blockquote>
+<p>GC是垃圾收集的意思（<code>GarbageCollection</code>）,内存处理是编程人员容易出现问题的地方，忘记或者错误的内存回收会导致程序或系统的不稳定甚至崩溃，Java提供的GC功能可以自动监测对象是否超过作用域从而达到自动回收内存的目的，Java语言没有提供释放已分配内存的显示操作方法。</p>
+<p>所以，Java的内存管理实际上就是对象的管理，其中包括对象的分配和释放。<br>对于程序员来说，分配对象使用<code>new</code>关键字；释放对象时，只要将对象所有引用赋值为null，让程序不能够再访问到这个对象，我们称该对象为”不可达的”.GC将负责回收所有”不可达”对象的内存空间。<br>对于GC来说，<strong>当程序员创建对象时，GC就开始监控这个对象的地址、大小以及使用情况。通常，GC采用有向图的方式记录和管理堆（heap）中的所有对象。通过这种方式确定哪些对象是”可达的”，哪些对象是”不可达的”.当GC确定一些对象为”不可达”时，GC就有责任回收这些内存空间。但是，为了保证GC能够在不同平台实现的问题，Java规范对GC的很多行为都没有进行严格的规定。例如，对于采用什么类型的回收算法、什么时候进行回收等重要问题都没有明确的规定。因此，不同的JVM的实现者往往有不同的实现算法。这也给Java程序员的开发带来行多不确定性。</strong>本文研究了几个与GC工作相关的问题，努力减少这种不确定性给Java程序带来的负面影响。</p>
+</blockquote>
+<h2 id="增量式GC（IncrementalGC）"><a href="#增量式GC（IncrementalGC）" class="headerlink" title="增量式GC（IncrementalGC）"></a>增量式GC（IncrementalGC）</h2><p>GC在JVM中通常是由一个或一组进程来实现的，它本身也和用户程序一样占用heap空间，运行时也占用CPU.当GC进程运行时，应用程序停止运行。因此，当GC运行时间较长时，用户能够感到Java程序的停顿，另外一方面，如果GC运行时间太短，则可能对象回收率太低，这意味着还有很多应该回收的对象没有被回收，仍然占用大量内存。因此，在设计GC的时候，就必须在停顿时间和回收率之间进行权衡。一个好的GC实现允许用户定义自己所需要的设置，例如有些内存有限有设备，对内存的使用量非常敏感，希望GC能够准确的回收内存，它并不在意程序速度的放慢。另外一些实时网络游戏，就不能够允许程序有长时间的中断。增量式GC就是通过一定的回收算法，把一个长时间的中断，划分为很多个小的中断，通过这种方式减少GC对用户程序的影响。虽然，增量式GC在整体性能上可能不如普通GC的效率高，但是它能够减少程序的最长停顿时间。<br>SunJDK提供的HotSpotJVM就能支持增量式GC.HotSpotJVM缺省GC方式为不使用增量GC，为了启动增量GC，我们必须在运行Java程序时增加-Xincgc的参数。HotSpotJVM增量式GC的实现是采用TrainGC算法。它的基本想法就是，将堆中的所有对象按照创建和使用情况进行分组（分层），将使用频繁高和具有相关性的对象放在一队中，随着程序的运行，不断对组进行调整。当GC运行时，它总是先回收最老的（最近很少访问的）的对象，如果整组都为可回收对象，GC将整组回收。这样，每次GC运行只回收一定比例的不可达对象，保证程序的顺畅运行。</p>
+<h2 id="为什么要分代"><a href="#为什么要分代" class="headerlink" title="为什么要分代"></a>为什么要分代</h2><p>分代的垃圾回收策略，是基于这样一个事实：不同的对象的生命周期是不一样的。因此，不同生命周期的对象可以采取不同的收集方式，以便提高回收效率。<br>在Java程序运行的过程中，会产生大量的对象，其中有些对象是与业务信息相关，比如Http请求中的Session对象、线程、Socket连接，这类对象跟业务直接挂钩，因此生命周期比较长。但是还有一些对象，主要是程序运行过程中生成的临时变量，这些对象生命周期会比较短，比如：String对象，由于其不变类的特性，系统会产生大量的这些对象，有些对象甚至只用一次即可回收。<br>试想，在不进行对象存活时间区分的情况下，每次垃圾回收都是对整个堆空间进行回收，花费时间相对会长，同时，因为每次回收都需要遍历所有存活对象，但实际上，对于生命周期长的对象而言，这种遍历是没有效果的，因为可能进行了很多次遍历，但是他们依旧存在。因此，分代垃圾回收采用分治的思想，进行代的划分，把不同生命周期的对象放在不同代上，不同代上采用最适合它的垃圾回收方式进行回收。</p>
+<p>虚拟机中的共划分为三个代：年轻代(Young Generation)、年老点(Old Generation)和持久代(Permanent Generation)。其中持久代主要存放的是Java类的类信息，与垃圾收集要收集的Java对象关系不大。年轻代和年老代的划分是对垃圾收集影响比较大的。</p>
+<p><strong>年轻代</strong>:</p>
+<p>所有新生成的对象首先都是放在年轻代的。年轻代的目标就是尽可能快速的收集掉那些生命周期短的对象。年轻代分三个区。一个Eden区，两个Survivor区(一般而言)。大部分对象在Eden区中生成。当Eden区满时，还存活的对象将被复制到Survivor区(两个中的一个)，当这个Survivor区满时，此区的存活对象将被复制到另外一个Survivor区，当这个Survivor去也满了的时候，从第一个Survivor区复制过来的并且此时还存活的对象，将被复制“年老区(Tenured)”。需要注意，Survivor的两个区是对称的，没先后关系，所以同一个区中可能同时存在从Eden复制过来 对象，和从前一个Survivor复制过来的对象，而复制到年老区的只有从第一个Survivor去过来的对象。而且，Survivor区总有一个是空的。同时，根据程序需要，Survivor区是可以配置为多个的(多于两个)，这样可以增加对象在年轻代中的存在时间，减少被放到年老代的可能。</p>
+<p><strong>年老代</strong>:</p>
+<p>在年轻代中经历了N次垃圾回收后仍然存活的对象，就会被放到年老代中。因此，可以认为年老代中存放的都是一些生命周期较长的对象。</p>
+<p><strong>持久代</strong>:</p>
+<p>用于存放静态文件，如今Java类、方法等。持久代对垃圾回收没有显着影响，但是有些应用可能动态生成或者调用一些class，例如Hibernate等，在这种时候需要设置一个比较大的持久代空间来存放这些运行过程中新增的类。持久代大小通过-XX:MaxPermSize=进行设置。</p>
+<p>什么情况下触发垃圾回收<br>由于对象进行了分代处理，因此垃圾回收区域、时间也不一样。GC有两种类型：<code>Scavenge GC</code>和<code>Full GC</code>。</p>
+<blockquote>
+<p><code>Scavenge GC</code><br>一般情况下，当新对象生成，并且在Eden申请空间失败时，就会触发Scavenge GC，对Eden区域进行GC，清除非存活对象，并且把尚且存活的对象移动到Survivor区。然后整理Survivor的两个区。这种方式的GC是对年轻代的Eden区进行，不会影响到年老代。因为大部分对象都是从Eden区开始的，同时Eden区不会分配的很大，所以Eden区的GC会频繁进行。因而，一般在这里需要使用速度快、效率高的算法，使Eden去能尽快空闲出来。<br><code>Full GC</code><br>对整个堆进行整理，包括Young、Tenured和Perm。Full GC因为需要对整个对进行回收，所以比Scavenge GC要慢，因此应该尽可能减少Full GC的次数。在对JVM调优的过程中，很大一部分工作就是对于FullGC的调节。有如下原因可能导致Full GC：<br>· 年老代(Tenured)被写满<br>· 持久代(Perm)被写满<br>· System.gc()被显示调用<br>·上一次GC之后Heap的各域分配策略动态变化</p>
+</blockquote>
+<h2 id="详解finalize函数"><a href="#详解finalize函数" class="headerlink" title="详解finalize函数"></a>详解<code>finalize</code>函数</h2><p><code>finalize</code>是位于Object类的一个方法，该方法的访问修饰符为<code>protected</code>，由于所有类为Object的子类，因此用户类很容易访问到这个方法。由于，finalize函数没有自动实现链式调用，我们必须手动的实现，因此finalize函数的最后一个语句通常是<code>super.finalize（）</code>。通过这种方式，我们可以实现从下到上实现finalize的调用，即先释放自己的资源，然后再释放父类的资源。<br><strong>根据Java语言规范，JVM保证调用finalize函数之前，这个对象是不可达的，但是JVM不保证这个函数一定会被调用。另外，规范还保证finalize函数最多运行一次。</strong><br>很多Java初学者会认为这个方法类似与C++中的析构函数，将很多对象、资源的释放都放在这一函数里面。其实，这不是一种很好的方式。原因有三，其一，GC为了能够支持finalize函数，要对覆盖这个函数的对象作很多附加的工作。其二，在finalize运行完成之后，该对象可能变成可达的，GC还要再检查一次该对象是否是可达的。因此，使用finalize会降低GC的运行性能。其三，由于GC调用finalize的时间是不确定的，因此通过这种方式释放资源也是不确定的。<br>通常，finalize用于一些不容易控制、并且非常重要资源的释放，例如一些I/O的操作，数据的连接。这些资源的释放对整个应用程序是非常关键的。在这种情况下，程序员应该以通过程序本身管理（包括释放）这些资源为主，以finalize函数释放资源方式为辅，形成一种双保险的管理机制，而不应该仅仅依靠finalize来释放资源。<br>下面给出一个例子说明，finalize函数被调用以后，仍然可能是可达的，同时也可说明一个对象的finalize只可能运行一次。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyObject</span></span>&#123;</span><br><span class="line">　　Testmain;<span class="comment">//记录Test对象，在finalize中时用于恢复可达性</span></span><br><span class="line">　　publicMyObject(Testt)</span><br><span class="line">　　&#123;</span><br><span class="line">　　main=t;<span class="comment">//保存Test对象</span></span><br><span class="line">　　&#125;</span><br><span class="line">　　protectedvoidfinalize()</span><br><span class="line">　　&#123;</span><br><span class="line">　　main.ref=<span class="keyword">this</span>;<span class="comment">//恢复本对象，让本对象可达</span></span><br><span class="line">　　System.out.println(<span class="string">"Thisisfinalize"</span>);<span class="comment">//用于测试finalize只运行一次</span></span><br><span class="line">　　&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">classTest&#123;</span><br><span class="line">　　MyObjectref;</span><br><span class="line">　　publicstaticvoidmain(String[]args)</span><br><span class="line">&#123;</span><br><span class="line">　　Testtest=newTest();</span><br><span class="line">　　test.ref=newMyObject(test);</span><br><span class="line">　　test.ref=<span class="keyword">null</span>;<span class="comment">//MyObject对象为不可达对象，finalize将被调用</span></span><br><span class="line">　　System.gc();</span><br><span class="line">　　<span class="keyword">if</span>(test.ref!=<span class="keyword">null</span>)System.out.println(<span class="string">"MyObject还活着"</span>);</span><br><span class="line">　　&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">运行结果：</span><br><span class="line">Thisisfinalize</span><br></pre></td></tr></table></figure>
+<p><code>MyObject</code>还活着：此例子中，需要注意的是虽然MyObject对象在finalize中变成可达对象，但是下次回收时候，finalize却不再被调用，因为finalize函数最多只调用一次。</p>
+<h2 id="程序如何与GC进行交互"><a href="#程序如何与GC进行交互" class="headerlink" title="程序如何与GC进行交互"></a>程序如何与GC进行交互</h2><p>Java2增强了内存管理功能，增加了一个<code>java.lang.ref</code>包，其中定义了三种引用类。这三种引用类分别为<code>SoftReference</code>、<code>WeakReference</code>和<code>PhantomReference</code>.通过使用这些引用类，程序员可以在一定程度与GC进行交互，以便改善GC的工作效率。这些引用类的引用强度介于可达对象和不可达对象之间。<br>创建一个引用对象也非常容易，例如如果你需要创建一个<code>SoftReference</code>对象，那么首先创建一个对象，并采用普通引用方式（可达对象）；然后再创建一个<code>SoftReference</code>引用该对象；最后将普通引用设置为<code>null</code>.通过这种方式，这个对象就只有一个<code>SoftReference</code>引用。同时，我们称这个对象为<code>SoftReference</code>对象。<br><code>SoftReference</code>的主要特点是据有较强的引用功能。只有当内存不够的时候，才进行回收这类内存，因此在内存足够的时候，它们通常不被回收。另外，这些引用对象还能保证在Java抛出<code>OutOfMemory</code>异常之前，被设置为null.它可以用于实现一些常用图片的缓存，实现Cache的功能，保证最大限度的使用内存而不引起<code>OutOfMemory</code>.以下给出这种引用类型的使用伪代码；</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//申请一个图像对象</span></span><br><span class="line">Imageimage=newImage();<span class="comment">//创建Image对象</span></span><br><span class="line">　　…</span><br><span class="line"><span class="comment">//使用image</span></span><br><span class="line">　　…</span><br><span class="line"><span class="comment">//使用完了image，将它设置为soft引用类型，并且释放强引用；</span></span><br><span class="line">SoftReferencesr=newSoftReference(image);</span><br><span class="line">image=<span class="keyword">null</span>;</span><br><span class="line">　　…</span><br><span class="line"><span class="comment">//下次使用时</span></span><br><span class="line"><span class="keyword">if</span>(sr!=<span class="keyword">null</span>)image=sr.get();</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line"><span class="comment">//由于GC由于低内存，已释放image，因此需要重新装载；</span></span><br><span class="line">image=newImage();</span><br><span class="line">sr=newSoftReference(image);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Weak引用对象与Soft引用对象的最大不同就在于：GC在进行回收时，需要通过算法检查是否回收Soft引用对象，而对于Weak引用对象，GC总是进行回收。Weak引用对象更容易、更快被GC回收。虽然，GC在运行时一定回收Weak对象，但是复杂关系的Weak对象群常常需要好几次GC的运行才能完成。Weak引用对象常常用于Map结构中，引用数据量较大的对象，一旦该对象的强引用为null时，GC能够快速地回收该对象空间。<br>Phantom引用的用途较少，主要用于辅助finalize函数的使用。Phantom对象指一些对象，它们执行完了finalize函数，并为不可达对象，但是它们还没有被GC回收。这种对象可以辅助finalize进行一些后期的回收工作，我们通过覆盖Reference的clear（）方法，增强资源回收机制的灵活性。</p>
+<h2 id="一些Java编程的建议"><a href="#一些Java编程的建议" class="headerlink" title="一些Java编程的建议"></a>一些Java编程的建议</h2><p>根据GC的工作原理，我们可以通过一些技巧和方式，让GC运行更加有效率，更加符合应用程序的要求。一些关于程序设计的几点建议：</p>
+<p>　　1. 最基本的建议就是尽早释放无用对象的引用。大多数程序员在使用临时变量的时候，都是让引用变量在退出活动域（scope）后，自动设置为null.我们在使用这种方式时候，必须特别注意一些复杂的对象图，例如数组，队列，树，图等，这些对象之间有相互引用关系较为复杂。对于这类对象，GC回收它们一般效率较低。如果程序允许，尽早将不用的引用对象赋为null.这样可以加速GC的工作。<br>  　　2. 尽量少用finalize函数。finalize函数是Java提供给程序员一个释放对象或资源的机会。但是，它会加大GC的工作量，因此尽量少采用finalize方式回收资源。<br>  　　3. 如果需要使用经常使用的图片，可以使用soft应用类型。它可以尽可能将图片保存在内存中，供程序调用，而不引起OutOfMemory.<br>  　　4. 注意集合数据类型，包括数组，树，图，链表等数据结构，这些数据结构对GC来说，回收更为复杂。另外，注意一些全局的变量，以及一些静态变量。这些变量往往容易引起悬挂对象（danglingreference），造成内存浪费。<br>  　　5. 当程序有一定的等待时间，程序员可以手动执行System.gc（），通知GC运行，但是Java语言规范并不保证GC一定会执行。使用增量式GC可以缩短Java程序的暂停时间。</p>
+<h2 id="Java的垃圾回收机制"><a href="#Java的垃圾回收机制" class="headerlink" title="Java的垃圾回收机制"></a>Java的垃圾回收机制</h2><p><strong>a、 停止—复制(stop-and-copy)</strong>：先暂停程序的运行，然后将所有存活的对象从当前堆复制到另一个堆，没有复制的全部都是垃圾。当对象被复制到新堆时，它们是一个挨着一个的，紧凑的。效率很低：首先，得有两个堆空间占用率200%;其次，垃圾较少时，复制大量的活着的对象，是很大的浪费。</p>
+<p><strong>b、 标记—清扫(mark-and-sweep)</strong>：从对战和静态存储区出发，遍历所有的引用，进而找出所有存活的对象，如果活着，就标记。只有全部标记完毕的时候，清理动作才开始。在清理的时候，没有标记的对象将会被释放，不会发生任何肤质动作。但是盛夏的对空间是不连续的，垃圾回收器要是希望得到连续空间的话，就得重新整理剩下的对象。</p>
+<p>c、 注意：“停止—复制”的意思是这种垃圾回收动作不是在后台进行的;相反，垃圾回收动作发生的同时，程序将会被暂停。有人将垃圾回收视为低优先级的后台进程，而事实上并不是这样，当可用内存数量比较低的时候，Sun版本的垃圾回收器就会暂停运行程序。同样，“标记-清扫”工作也必须在程序暂停的情况下才能进行。</p>
+<p>d、 在java虚拟机中，内存分配是以较大的块为单位的。每个块内都用相应的代数(generation count)来记录它是否还存活。代数随着引用的次数而增加。垃圾回收器将对上次回收动作之后的新分配的块进行整理。这对处理大量短命的临时对象很有帮助。垃圾回收器会定期进行完整的清理动作——大型对象仍然不会被复制(只是代数增加)，内涵小型对象的那些块则被复制并整理。Java虚拟机会进行监视，如果所有对象都很稳定，垃圾回收器的效率降低的话，就切换到“标记—清扫”方式;同样，java虚拟机会追踪“标记—清扫”的效果，要是堆空间出现很多碎片，就会切换到“停止—复制”方式。这就是“自适应”技术。</p>
+<p><strong>总结：Java垃圾回收器是一种“自适应的、分代的、停止—复制、标记-清扫”式的垃圾回收器</strong></p>
+<h1 id="JAVA线程dump的分析-—-jstack-pid"><a href="#JAVA线程dump的分析-—-jstack-pid" class="headerlink" title="JAVA线程dump的分析 — jstack pid"></a>JAVA线程dump的分析 — jstack pid</h1><h2 id="Java-的线程"><a href="#Java-的线程" class="headerlink" title="Java 的线程"></a>Java 的线程</h2><p>线程是指能独立于程序的其它部分运行的执行单元。 JAVA语言能够很好的实现多线程的程序。我们在调试程序，或者在开发后期需要做性能调优的时候，往往也需要了解当前程序正在运行的线程的状态，正在执行的操作，从而分析系统可能存在的问题。</p>
+<p>在阅读本文之间，应对 Java线程的编程原理，同步机制有一定了解 </p>
+<h2 id="产生-JAVA线程-dump"><a href="#产生-JAVA线程-dump" class="headerlink" title="产生 JAVA线程 dump"></a>产生 JAVA线程 dump</h2><p>JAVA 的线程 DUMP，就象当前 JAVA进程的一个快照，打印出所有线程的状态和调用堆栈，以及 Monitor的状态。在不同的操作系统下，产生线程 DUMP的方式是不同的。</p>
+<ul>
+<li><p>在 windows环境中，<br>在启动程序的控制台里敲： Ctrl - Break，线程的 dump会产生在标准输出中（ 缺省标准输出就是控制台，如果对输出进行了重定向，则要查看输出文件）。</p>
+</li>
+<li><p>在 unix， linux和 MacOS 环境中，<br>在控制台中敲： Ctrl-\，或者，<br>用 “kill -3 <pid>” ，或者 “kill – QUIT <pid>”。 Pid是用所关注的 JAVA进程号，您可以用 “ps -ef | grep java” 找到，或者使用 JDK 5.0中的 “jps -v” 命令获得。</pid></pid></p>
+</li>
+<li><p>在各个操作系统平台，都可以用 JDK 5.0工具包中的 jstack <pid></pid></p>
+</li>
+</ul>
+<p>这里要注意的是：</p>
+<ol>
+<li>不同的 JAVA虚机的线程 DUMP的创建方法和文件格式是不一样的，不同的 JVM版本， dump信息也有差别。本文中，只以 SUN的 hotspot JVM 5.0_06 为例。</li>
+<li>在实际运行中，往往一次 dump的信息，还不足以确认问题。建议产生三次 dump信息，如果每次 dump都指向同一个问题，我们才确定问题的典型性。</li>
+</ol>
+<h2 id="线程分析"><a href="#线程分析" class="headerlink" title="线程分析"></a>线程分析</h2><h3 id="JVM-线程"><a href="#JVM-线程" class="headerlink" title="JVM 线程"></a>JVM 线程</h3><p>在线程中，有一些 JVM内部的后台线程，来执行譬如垃圾回收，或者低内存的检测等等任务，这些线程往往在 JVM初始化的时候就存在，如下所示：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">"Low Memory Detector" daemon prio=10 tid=0x081465f8 nid=0x7 runnable [0x00000000..0x00000000]</span><br><span class="line"></span><br><span class="line">"CompilerThread0" daemon prio=10 tid=0x08143c58 nid=0x6 waiting on condition [0x00000000..0xfb5fd798]</span><br><span class="line"></span><br><span class="line">"Signal Dispatcher" daemon prio=10 tid=0x08142f08 nid=0x5 waiting on condition [0x00000000..0x00000000]</span><br><span class="line"></span><br><span class="line">"Finalizer" daemon prio=10 tid=0x08137ca0 nid=0x4 in Object.wait() [0xfbeed000..0xfbeeddb8]</span><br><span class="line"></span><br><span class="line">at java.lang.Object.wait(Native Method)</span><br><span class="line"></span><br><span class="line">- waiting on &lt;0xef600848&gt; (a java.lang.ref.ReferenceQueue$Lock)</span><br><span class="line"></span><br><span class="line">at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:116)</span><br><span class="line"></span><br><span class="line">- locked &lt;0xef600848&gt; (a java.lang.ref.ReferenceQueue$Lock)</span><br><span class="line"></span><br><span class="line">at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:132)</span><br><span class="line"></span><br><span class="line">at java.lang.ref.Finalizer$FinalizerThread.run(Finalizer.java:159)</span><br><span class="line"></span><br><span class="line">"Reference Handler" daemon prio=10 tid=0x081370f0 nid=0x3 in Object.wait() [0xfbf4a000..0xfbf4aa38]</span><br><span class="line"></span><br><span class="line">at java.lang.Object.wait(Native Method)</span><br><span class="line"></span><br><span class="line">- waiting on &lt;0xef600758&gt; (a java.lang.ref.Reference$Lock)</span><br><span class="line"></span><br><span class="line">at java.lang.Object.wait(Object.java:474)</span><br><span class="line"></span><br><span class="line">at java.lang.ref.Reference$ReferenceHandler.run(Reference.java:116)</span><br><span class="line"></span><br><span class="line">- locked &lt;0xef600758&gt; (a java.lang.ref.Reference$Lock)</span><br><span class="line"></span><br><span class="line">"VM Thread" prio=10 tid=0x08134878 nid=0x2 runnable</span><br><span class="line"></span><br><span class="line">"VM Periodic Task Thread" prio=10 tid=0x08147768 nid=0x8 waiting on condition</span><br></pre></td></tr></table></figure>
+<p>我们更多的是要观察用户级别的线程，如下所示：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">"Thread-1" prio=10 tid=0x08223860 nid=0xa waiting on condition [0xef47a000..0xef47ac38]</span><br><span class="line"></span><br><span class="line">at java.lang.Thread.sleep(Native Method)</span><br><span class="line"></span><br><span class="line">at testthread.MySleepingThread.method2(MySleepingThread.java:53)</span><br><span class="line"></span><br><span class="line">- locked &lt;0xef63d600&gt; (a testthread.MySleepingThread)</span><br><span class="line"></span><br><span class="line">at testthread.MySleepingThread.run(MySleepingThread.java:35)</span><br><span class="line"></span><br><span class="line">at java.lang.Thread.run(Thread.java:595)</span><br></pre></td></tr></table></figure>
+<p>我们能看到：</p>
+<ul>
+<li><p>线程的状态： waiting on condition</p>
+</li>
+<li><p>线程的调用栈</p>
+</li>
+<li><p>线程的当前锁住的资源： <0xef63d600></0xef63d600></p>
+</li>
+</ul>
+<pre><code>这些信息对我们随后的分析都有用处。
+</code></pre><h3 id="线程的状态分析"><a href="#线程的状态分析" class="headerlink" title="线程的状态分析"></a>线程的状态分析</h3><p>正如我们刚看到的那样，线程的状态是一个重要的指标，它会显示在线程 Stacktrace的头一行结尾的地方。那么线程常见的有哪些状态呢？线程在什么样的情况下会进入这种状态呢？我们能从中发现什么线索？&lt; /span&gt;</p>
+<h4 id="Runnable"><a href="#Runnable" class="headerlink" title="Runnable"></a>Runnable</h4><p>该状态表示线程具备所有运行条件，在运行队列中准备操作系统的调度，或者正在运行。</p>
+<h4 id="Wait-on-condition"><a href="#Wait-on-condition" class="headerlink" title="Wait on condition"></a>Wait on condition</h4><p>该状态出现在线程等待某个条件的发生。具体是什么原因，可以结合 stacktrace来分析。最常见的情况是线程在等待网络的读写，比如当网络数据没有准备好读时，线程处于这种等待状态，而一旦有数据准备好读之后，线程会重新激活，读取并处理数据。在 Java引入 NewIO之前，对于每个网络连接，都有一个对应的线程来处理网络的读写操作，即使没有可读写的数据，线程仍然阻塞在读写操作上，这样有可能造成资源浪费，而且给操作系统的线程调度也带来压力。在 NewIO里采用了新的机制，编写的服务器程序的性能和可扩展性都得到提高。</p>
+<p>如果发现有大量的线程都在处在 Wait on condition，从线程 stack看， 正等待网络读写，这可能是一个网络瓶颈的征兆。因为网络阻塞导致线程无法执行。一种情况是网络非常忙，几 乎消耗了所有的带宽，仍然有大量数据等待网络读 写；另一种情况也可能是网络空闲，但由于路由等问题，导致包无法正常的到达。所以要结合系统的一些性能观察工具来综合分析，比如 netstat统计单位时间的发送包的数目，如果很明显超过了所在网络带宽的限制 ; 观察 cpu的利用率，如果系统态的 CPU时间，相对于用户态的 CPU时间比例较高；如果程序运行在 Solaris 10平台上，可以用 dtrace工具看系统调用的情况，如果观察到 read/write的系统调用的次数或者运行时间遥遥领先；这些都指向由于网络带宽所限导致的网络瓶颈。</p>
+<p>另外一种出现 Wait on condition的常见情况是该线程在 sleep，等待 sleep的时间到了时候，将被唤醒。</p>
+<p>1.3 Waiting for monitor entry 和 in Object.wait()</p>
+<p>在多线程的 JAVA程序中，实现线程之间的同步，就要说说 Monitor。 Monitor是 Java中用以实现线程之间的互斥与协作的主要手段，它可以看成是对象或者 Class的锁。每一个对象都有，也仅有一个 monitor。下 面这个图，描述了线程和 Monitor之间关系，以 及线程的状态转换图：<br><img src="/2020/06/06/Java开发必须掌握的线上问题排查命令-常见命令、JPS、JSTACK、JMAP、JSTAT、JHAT、JINFO、JAVAP等/thread.jpg" alt="img"></p>
+<p>从图中可以看出，每个 Monitor在某个时刻，只能被一个线程拥有，该线程就是 “Active Thread”，而其它线程都是 “Waiting Thread”，分别在两个队列 “ Entry Set”和 “Wait Set”里面等候。在 “Entry Set”中等待的线程状态是 “Waiting for monitor entry”，而在 “Wait Set”中等待的线程状态是 “in Object.wait()”。</p>
+<p>先看 “Entry Set”里面的线程。我们称被 synchronized保护起来的代码段为临界区。当一个线程申请进入临界区时，它就进入了 “Entry Set”队列。对应的 code就像：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">synchronized</span>(obj) &#123;</span><br><span class="line">.........</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这时有两种可能性：</p>
+<ol>
+<li>该 monitor不被其它线程拥有， Entry Set里面也没有其它等待线程。本线程即成为相应类或者对象的 Monitor的 Owner，执行临界区的代码</li>
+<li>该 monitor被其它线程拥有，本线程在 Entry Set队列中等待。</li>
+</ol>
+<p>在第一种情况下，线程将处于 “Runnable”的状态，而第二种情况下，线程 DUMP会显示处于 “waiting for monitor entry”。如下所示：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">"Thread-0" prio=10 tid=0x08222eb0 nid=0x9 waiting for monitor entry [0xf927b000..0xf927bdb8]</span><br><span class="line"></span><br><span class="line">at testthread.WaitThread.run(WaitThread.java:39)</span><br><span class="line"></span><br><span class="line">- waiting to lock &lt;0xef63bf08&gt; (a java.lang.Object)</span><br><span class="line"></span><br><span class="line">- locked &lt;0xef63beb8&gt; (a java.util.ArrayList)</span><br><span class="line"></span><br><span class="line">at java.lang.Thread.run(Thread.java:595)</span><br></pre></td></tr></table></figure>
+<p>临界区的设置，是为了保证其内部的代码执行的原子性和完整性。但是因为临界区在任何时间只允许线程串行通过，这 和我们多线程的程序的初衷是相反的。 如果在多线程的程序中，大量使用 synchronized，或者不适当的使用了它，会造成大量线程在临界区的入口等待，造成系统的性能大幅下降。如果在线程 DUMP中发现了这个情况，应该审查源码，改进程序。</p>
+<p>现在我们再来看现在线程为什么会进入 “Wait Set”。当线程获得了 Monitor，进入了临界区之后，如果发现线程继续运行的条件没有满足，它则调用对象（一般就是被 synchronized 的对象）的 wait() 方法，放弃了 Monitor，进入 “Wait Set”队列。只有当别的线程在该对象上调用了 notify() 或者 notifyAll() ， “ Wait Set”队列中线程才得到机会去竞争，但是只有一个线程获得对象的 Monitor，恢复到运行态。在 “Wait Set”中的线程， DUMP中表现为： in Object.wait()，类似于：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">"Thread-1" prio=10 tid=0x08223250 nid=0xa in Object.wait() [0xef47a000..0xef47aa38]</span><br><span class="line"></span><br><span class="line">at java.lang.Object.wait(Native Method)</span><br><span class="line"></span><br><span class="line">- waiting on &lt;0xef63beb8&gt; (a java.util.ArrayList)</span><br><span class="line"></span><br><span class="line">at java.lang.Object.wait(Object.java:474)</span><br><span class="line"></span><br><span class="line">at testthread.MyWaitThread.run(MyWaitThread.java:40)</span><br><span class="line"></span><br><span class="line">- locked &lt;0xef63beb8&gt; (a java.util.ArrayList)</span><br><span class="line"></span><br><span class="line">at java.lang.Thread.run(Thread.java:595)</span><br></pre></td></tr></table></figure>
+<p>仔细观察上面的 DUMP信息，你会发现它有以下两行：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">- locked &lt;0xef63beb8&gt; (a java.util.ArrayList)</span><br><span class="line"></span><br><span class="line">- waiting on &lt;0xef63beb8&gt; (a java.util.ArrayList)</span><br></pre></td></tr></table></figure>
+<p>这里需要解释一下，为什么先 lock了这个对象，然后又 waiting on同一个对象呢？让我们看看这个线程对应的代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">synchronized</span>(obj) &#123;</span><br><span class="line">    .........</span><br><span class="line">    obj.wait();</span><br><span class="line">    .........</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>线程的执行中，先用 synchronized 获得了这个对象的 Monitor（对应于 locked <0xef63beb8> ）。当执行到 obj.wait(), 线程即放弃了 Monitor的所有权，进入 “wait set”队列（对应于 waiting on <0xef63beb8> ）。</0xef63beb8></0xef63beb8></p>
+<p>往往在你的程序中，会出现多个类似的线程，他们都有相似的 DUMP信息。这也可能是正常的。比如，在程序中，有多个服务线程，设计成从一个队列里面读取请求数据。这个队列就是 lock以及 waiting on的对象。当队列为空的时候，这些线程都会在这个队列上等待，直到队列有了数据，这些线程被 Notify，当然只有一个线程获得了 lock，继续执行，而其它线程继续等待。</p>
+<ol start="3">
+<li>JDK 5.0 的 lock</li>
+</ol>
+<p>上面我们提到如果 synchronized和 monitor机制运用不当，可能会造成多线程程序的性能问题。在 JDK 5.0中，引入了 Lock机制，从而使开发者能更灵活的开发高性能的并发多线程程序，可以替代以往 JDK中的 synchronized和 Monitor的 机制。但是，要注意的是，因为 Lock类只是一个普通类， JVM无从得知 Lock对象的占用情况，所以在线程 DUMP中，也不会包含关于 Lock的信息， 关于死锁等问题，就不如用 synchronized的编程方式容易识别。</p>
+<h2 id="案例分析"><a href="#案例分析" class="headerlink" title="案例分析"></a>案例分析</h2><h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p>在多线程程序的编写中，如果不适当的运用同步机制，则有可能造成程序的死锁，经常表现为程序的停顿，或者不再响应用户的请求。</p>
+<p>比如在下面这个示例中，是个较为典型的死锁情况：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">"Thread-1" prio=5 tid=0x00acc490 nid=0xe50 waiting for monitor entry [0x02d3f000</span><br><span class="line"></span><br><span class="line">..0x02d3fd68]</span><br><span class="line"></span><br><span class="line">at deadlockthreads.TestThread.run(TestThread.java:31)</span><br><span class="line"></span><br><span class="line">- waiting to lock &lt;0x22c19f18&gt; (a java.lang.Object)</span><br><span class="line"></span><br><span class="line">- locked &lt;0x22c19f20&gt; (a java.lang.Object)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">"Thread-0" prio=5 tid=0x00accdb0 nid=0xdec waiting for monitor entry [0x02cff000</span><br><span class="line"></span><br><span class="line">..0x02cff9e8]</span><br><span class="line"></span><br><span class="line">at deadlockthreads.TestThread.run(TestThread.java:31)</span><br><span class="line"></span><br><span class="line">- waiting to lock &lt;0x22c19f20&gt; (a java.lang.Object)</span><br><span class="line"></span><br><span class="line">- locked &lt;0x22c19f18&gt; (a java.lang.Object)</span><br></pre></td></tr></table></figure>
+<p>在 JAVA 5中加强了对死锁的检测。线程 Dump中可以直接报告出 Java级别的死锁，如下所示：</p>
+<p>Found one Java-level deadlock:</p>
+<p>=============================<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">"Thread-1":</span><br><span class="line"></span><br><span class="line">waiting to lock monitor 0x0003f334 (object 0x22c19f18, a java.lang.Object),</span><br><span class="line"></span><br><span class="line">which is held by "Thread-0"</span><br><span class="line"></span><br><span class="line">"Thread-0":</span><br><span class="line"></span><br><span class="line">waiting to lock monitor 0x0003f314 (object 0x22c19f20, a java.lang.Object),</span><br><span class="line"></span><br><span class="line">which is held by "Thread-1"</span><br></pre></td></tr></table></figure></p>
+<h3 id="热锁"><a href="#热锁" class="headerlink" title="热锁"></a>热锁</h3><p>热锁，也往往是导致系统性能瓶颈的主要因素。其表现特征为，由于多个线程对临界区，或者锁的竞争，可能出现：</p>
+<ul>
+<li><p>频繁的线程的上下文切换：从操作系统对线程的调度来看，当 线程在等待资源而阻塞的时候，操作系统会将之切换出来，放到等待的队列，当线程获得资源之后，调度算法会将这个线程切换进去，放到执行队列中。</p>
+</li>
+<li><p>大量的系统调用：因为线程的上下文切换，以及热锁的竞争，或 者临界区的频繁的进出，都可能导致大量的系统调用。</p>
+</li>
+<li><p>大部分 CPU开销用在 “系统态 ”：线程上下文切换，和系统调用，都会导致 CPU在 “系统态 ”运行，换而言之，虽然系统很忙碌，但是 CPU用在 “用户态 ”的比例较小，应用程序得不到充分的 CPU资源。</p>
+</li>
+<li><p>随着 CPU数目的增多，系统的性能反而下降。因为 CPU数目多，同 时运行的线程就越多，可能就会造成更频繁的线程上下文切换和系统态的 CPU开销，从而导致更糟糕的性能。</p>
+</li>
+</ul>
+<p>上面的描述，都是一个 scalability（可扩展性）很差的系统的表现。从整体的性能指标看，由于线程热锁的存在，程序的响应时间会变长，吞吐量会降低。&lt; /span&gt;</p>
+<p>那么，怎么去了解 “热锁 ”出现在什么地方呢？一个重要的方法还是结合操作系统的各种工具观察系统资源使用状况，以及收集 Java线程的 DUMP信息，看线程都阻塞在什么方法上，了解原因，才能找到对应的解决方法。</p>
+<p>我们曾经遇到过这样的例子，程序运行时，出现了以上指出的各种现象，通过观察操作系统的资源使用统计信息，以及线程 DUMP信息，确定了程序中热锁的存在，并发现大多数的线程状态都是 Waiting for monitor entry或者 Wait on monitor，且是阻塞在压缩和解压缩的方法上。后来采用第三方的压缩包 javalib替代 JDK自带的压缩包后，系统的性能提高了几倍。</p>
+<h2 id="总结-2"><a href="#总结-2" class="headerlink" title="总结"></a>总结</h2><p>本文就介绍了 Java线程 DUMP的基本知识和分析的基本方法，并且解释了如何利用线程的 DUMP信息，以及结合操作系统的各种资源使用情况，分析程序的性能问题，从而达到改进程序，提高性能的目的。</p>
+<h1 id="JDK-JRE-JVM区别与联系"><a href="#JDK-JRE-JVM区别与联系" class="headerlink" title="JDK,JRE,JVM区别与联系"></a>JDK,JRE,JVM区别与联系</h1><p><strong>JDK</strong> : <code>Java Development ToolKit</code>(Java开发工具包)。JDK是整个JAVA的核心，<em>包括了Java运行环境（Java Runtime Envirnment），一堆Java工具（javac/java/jdb等）和Java基础的类库（即Java API 包括rt.jar）</em>。</p>
+<blockquote>
+<p>JDK有以下三种版本： <code>J2SE</code>，standard edition，标准版，是我们通常用的一个版本 <code>J2EE</code>，enterpsise edtion，企业版，使用这种JDK开发J2EE应用程序 <code>J2ME</code>，micro edtion，主要用于移动设备、嵌入式设备上的java应用程序</p>
+</blockquote>
+<p>我们常常用JDK来代指<code>Java API</code>，Java API是Java的应用程序接口，其实就是前辈们写好的一些java Class，包括一些重要的语言结构以及基本图形，网络和文件I/O等等 ，我们在自己的程序中，调用前辈们写好的这些Class，来作为我们自己开发的一个基础。当然，现在已经有越来越多的性能更好或者功能更强大的第三方类库供我们使用。</p>
+<p><strong>JRE</strong>:<code>Java Runtime Enviromental</code>(java运行时环境)。也就是我们说的JAVA平台，所有的Java程序都要在JRE下才能运行。包括JVM和JAVA核心类库和支持文件。<strong>与JDK相比，它不包含开发工具——编译器、调试器和其它工具。</strong></p>
+<p><code>JVM</code>：<code>Java Virtual Mechinal</code>(JAVA虚拟机)。JVM是JRE的一部分，它是一个虚构出来的计算机，是通过在实际的计算机上仿真模拟各种计算机功能来实现的。JVM有自己完善的硬件架构，如处理器、堆栈、寄存器等，还具有相应的指令系统。JVM 的主要工作是解释自己的指令集（即字节码）并映射到本地的 CPU 的指令集或 OS 的系统调用。Java语言是跨平台运行的，其实就是不同的操作系统，使用不同的JVM映射规则，让其与操作系统无关，完成了跨平台性。JVM 对上层的 Java 源文件是不关心的，它关注的只是由源文件生成的类文件（ class file ）。类文件的组成包括 JVM 指令集，符号表以及一些补助信息。 关于JVM的内存结构请看这篇文章：<code>Java虚拟机的内存组成以及堆内存介绍</code></p>
+<p>下图很好的表面了JDK,JRE,JVM三者间的关系：</p>
+<p><img src="/2020/06/06/Java开发必须掌握的线上问题排查命令-常见命令、JPS、JSTACK、JMAP、JSTAT、JHAT、JINFO、JAVAP等/2932682015-300x184.gif" alt="2932682015"></p>
+<p>#Linux端口被占用的解决</p>
+<blockquote>
+<p>Error: JBoss port is in use. Please check</p>
+</blockquote>
+<p>原因：原因很简单，端口被占用</p>
+<p>解决：</p>
+<p><strong>知道端口号，直接查找进程ID，杀掉进程</strong></p>
+<ol>
+<li>知道端口号，查看是否被占用，比如说知道jboss用的是8080端口，那就直接使用命令：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">netstat -tln | grep 8080</span><br></pre></td></tr></table></figure>
+<p><code>netstat -tln</code> 查看端口使用情况，而<code>netstat -tln | grep 8080</code> 则是只查看端口8080的使用情况</p>
+<ol start="2">
+<li>查看端口属于哪个程序？端口被哪个进程占用</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">lsof -i :8080</span><br></pre></td></tr></table></figure>
+<p>可以看到端口使用情况如下</p>
+<blockquote>
+<p>COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME<br>java 8253 hollis 143u IPv4 757826 0t0 TCP *:http-alt (LISTEN)<br>java 8253 hollis 737u IPv4 756898 0t0 TCP 10.16.47.163:39451-&gt;10.101.104.55:http-alt (ESTABLISHED)<br>java 8253 hollis 806u IPv4 757695 0t0 TCP 10.16.47.163:50381-&gt;10.101.104.50:http-alt (ESTABLISHED)</p>
+</blockquote>
+<ol start="3">
+<li>使用命令 <code>kill -9 进程id(8253)</code>杀掉进程</li>
+</ol>
+<p><strong>不知道知道端口号，但是知道进程的名字，比如知道是个java进程，找到进程ID，直接杀死</strong></p>
+<ol>
+<li>使用命令</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ps aux|grep java</span><br></pre></td></tr></table></figure>
+<p>查找哪些进程适合java相关的进程</p>
+<blockquote>
+<p>hollis 15690 1.2 6.4 3537252 524812 pts/28 Sl 3月12 0:17 /home/hollis/tools/java/jdk1.7.0_71/bin/java -D[Standalone] -XX:+UseCompressedOops -server -Xms1024m -Xmx1024m -XX:PermSize=128m -XX:MaxPermSize=192m -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Dorg.jboss.boot.log.file=/home/hollis/out/logs/jboss_stdout.log -Dlogging.configuration=file:/home/hollis/workspace/stand/standalone/control/jboss/config/logging.properties -Djboss.modules.system.pkgs=com.sun.btrace -Dapplication.name=standalone-sync-appinfo -Dlog4j.ignoreTCL=true -Dlogback.ignoreTCL=true -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=7001,server=y,suspend=n -Dproject.name=standalone-sync-appinfo -Dorg.apache.tomcat.util.http.ServerCookie.ALLOW_EQUALS_IN_VALUE=true -DloggingRoot=/home/hollis/out/logs -DloggingCharset=UTF-8 -DloggingLevel=DEBUG -jar /opt/taobao/install/jboss-7.2.0/jboss-modules.jar -mp /opt/taobao/install/jboss-7.2.0/modules:/home/hollis/workspace/stand/standalone/control/jboss/hilton/modules -jaxpmodule javax.xml.jaxp-provider org.jboss.as.standalone -Djboss.home.dir=/opt/taobao/install/jboss-7.2.0 -Djboss.server.base.dir=/home/hollis/workspace/stand/standalone/deploy/target -Djboss.server.config.dir=/home/hollis/workspace/stand/standalone/control/jboss/config -Djboss.server.log.dir=/home/hollis/out/logs</p>
+</blockquote>
+<ol start="2">
+<li>使用命令 <code>kill -9 进程id(15690)</code>杀掉进程</li>
+</ol>
+]]></content>
+      <categories>
+        <category>JAVA</category>
+      </categories>
+      <tags>
+        <tag>JAVA</tag>
+        <tag>JPS</tag>
+        <tag>JMAP</tag>
+        <tag>JSTACK</tag>
+        <tag>JSTAT</tag>
+        <tag>JHAT</tag>
+        <tag>JINFO</tag>
+        <tag>JAVAP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux常用命令整理</title>
+    <url>/2020/06/06/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%95%B4%E7%90%86/</url>
+    <content><![CDATA[<p>本文并不会对所有命令进行详细讲解，只给出常见用法和解释。具体用法可以使用<code>--help</code>查看帮助或者直接通过google搜索学习。</p>
+<h2 id="查找文件"><a href="#查找文件" class="headerlink" title="查找文件"></a>查找文件</h2><p><code>find / -name filename.txt</code> 根据名称查找/目录下的filename.txt文件。</p>
+<p><code>find . -name &quot;*.xml&quot;</code> 递归查找所有的xml文件</p>
+<p><code>find . -name &quot;*.xml&quot; |xargs grep &quot;hello world&quot;</code> 递归查找所有文件内容中包含hello world的xml文件</p>
+<p><code>grep -H &#39;spring&#39; *.xml</code> 查找所以有的包含spring的xml文件</p>
+<p><code>find ./ -size 0 | xargs rm -f &amp;</code> 删除文件大小为零的文件</p>
+<p><code>ls -l | grep &#39;.jar&#39;</code> 查找当前目录中的所有jar文件</p>
+<p><code>grep &#39;test&#39; d*</code> 显示所有以d开头的文件中包含test的行。</p>
+<p><code>grep &#39;test&#39; aa bb cc</code> 显示在aa，bb，cc文件中匹配test的行。</p>
+<p><code>grep &#39;[a-z]\{5\}&#39; aa</code> 显示所有包含每个字符串至少有5个连续小写字符的字符串的行。</p>
+<a id="more"></a>
+<h2 id="查看一个程序是否运行"><a href="#查看一个程序是否运行" class="headerlink" title="查看一个程序是否运行"></a>查看一个程序是否运行</h2><p><code>ps –ef|grep tomcat</code> 查看所有有关tomcat的进程</p>
+<h2 id="终止线程"><a href="#终止线程" class="headerlink" title="终止线程"></a>终止线程</h2><p><code>kill -9 19979</code> 终止线程号位19979的进程</p>
+<h2 id="查看文件，包含隐藏文件"><a href="#查看文件，包含隐藏文件" class="headerlink" title="查看文件，包含隐藏文件"></a>查看文件，包含隐藏文件</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ls -al</span><br></pre></td></tr></table></figure>
+<h2 id="当前工作目录"><a href="#当前工作目录" class="headerlink" title="当前工作目录"></a>当前工作目录</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pwd</span><br></pre></td></tr></table></figure>
+<h2 id="复制文件"><a href="#复制文件" class="headerlink" title="复制文件"></a>复制文件</h2><p><code>cp source dest</code> 复制文件</p>
+<p><code>cp -r sourceFolder targetFolder</code> 递归复制整个文件夹</p>
+<p><code>scp sourecFile romoteUserName@remoteIp:remoteAddr</code> 远程拷贝</p>
+<h2 id="创建目录"><a href="#创建目录" class="headerlink" title="创建目录"></a>创建目录</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir newfolder</span><br></pre></td></tr></table></figure>
+<h2 id="删除目录"><a href="#删除目录" class="headerlink" title="删除目录"></a>删除目录</h2><p><code>rmdir deleteEmptyFolder</code> 删除空目录 <code>rm -rf deleteFile</code> 递归删除目录中所有内容</p>
+<h2 id="移动文件"><a href="#移动文件" class="headerlink" title="移动文件"></a>移动文件</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mv /temp/movefile /targetFolder</span><br></pre></td></tr></table></figure>
+<h2 id="重命令"><a href="#重命令" class="headerlink" title="重命令"></a>重命令</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mv oldNameFile newNameFile</span><br></pre></td></tr></table></figure>
+<h2 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">su -username</span><br><span class="line">sudo su - username</span><br></pre></td></tr></table></figure>
+<h2 id="修改文件权限"><a href="#修改文件权限" class="headerlink" title="修改文件权限"></a>修改文件权限</h2><p><code>chmod 777 file.java</code> //file.java的权限-rwxrwxrwx，r表示读、w表示写、x表示可执行</p>
+<h2 id="压缩文件"><a href="#压缩文件" class="headerlink" title="压缩文件"></a>压缩文件</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tar -czf test.tar.gz /test1 /test2</span><br></pre></td></tr></table></figure>
+<h2 id="列出压缩文件列表"><a href="#列出压缩文件列表" class="headerlink" title="列出压缩文件列表"></a>列出压缩文件列表</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tar -tzf test.tar.gz</span><br></pre></td></tr></table></figure>
+<h2 id="解压文件"><a href="#解压文件" class="headerlink" title="解压文件"></a>解压文件</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tar -xvzf test.tar.gz</span><br></pre></td></tr></table></figure>
+<h2 id="查看文件头10行"><a href="#查看文件头10行" class="headerlink" title="查看文件头10行"></a>查看文件头10行</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">head -n 10 example.txt</span><br></pre></td></tr></table></figure>
+<h2 id="查看文件尾10行"><a href="#查看文件尾10行" class="headerlink" title="查看文件尾10行"></a>查看文件尾10行</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tail -n 10 example.txt</span><br></pre></td></tr></table></figure>
+<h2 id="查看日志类型文件"><a href="#查看日志类型文件" class="headerlink" title="查看日志类型文件"></a>查看日志类型文件</h2><p><code>tail -f exmaple.log</code> //这个命令会自动显示新增内容，屏幕只显示10行内容的（可设置）。</p>
+<h2 id="使用超级管理员身份执行命令"><a href="#使用超级管理员身份执行命令" class="headerlink" title="使用超级管理员身份执行命令"></a>使用超级管理员身份执行命令</h2><p><code>sudo rm a.txt</code> 使用管理员身份删除文件</p>
+<h2 id="查看端口占用情况"><a href="#查看端口占用情况" class="headerlink" title="查看端口占用情况"></a>查看端口占用情况</h2><p><code>netstat -tln | grep 8080</code> 查看端口8080的使用情况</p>
+<h2 id="查看端口属于哪个程序"><a href="#查看端口属于哪个程序" class="headerlink" title="查看端口属于哪个程序"></a>查看端口属于哪个程序</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">lsof -i :8080</span><br></pre></td></tr></table></figure>
+<h2 id="查看进程"><a href="#查看进程" class="headerlink" title="查看进程"></a>查看进程</h2><p><code>ps aux|grep java</code> 查看java进程</p>
+<p><code>ps aux</code> 查看所有进程</p>
+<h2 id="以树状图列出目录的内容"><a href="#以树状图列出目录的内容" class="headerlink" title="以树状图列出目录的内容"></a>以树状图列出目录的内容</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tree a</span><br></pre></td></tr></table></figure>
+<p>ps:<a href="http://www.hollischuang.com/archives/546" target="_blank" rel="noopener">Mac下使用tree命令</a></p>
+<h2 id="文件下载"><a href="#文件下载" class="headerlink" title="文件下载"></a>文件下载</h2><p><code>wget http://file.tgz</code> <a href="http://www.hollischuang.com/archives/548" target="_blank" rel="noopener">mac下安装wget命令</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">curl http://file.tgz</span><br></pre></td></tr></table></figure>
+<h2 id="网络检测"><a href="#网络检测" class="headerlink" title="网络检测"></a>网络检测</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ping www.just-ping.com</span><br></pre></td></tr></table></figure>
+<h2 id="远程登录"><a href="#远程登录" class="headerlink" title="远程登录"></a>远程登录</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh userName@ip</span><br></pre></td></tr></table></figure>
+<h2 id="打印信息"><a href="#打印信息" class="headerlink" title="打印信息"></a>打印信息</h2><p><code>echo $JAVA_HOME</code> 打印java home环境变量的值</p>
+<h2 id="java-常用命令"><a href="#java-常用命令" class="headerlink" title="java 常用命令"></a>java 常用命令</h2><p>参考站点内关于的文章，java javac, jps ,jstat,jmap, jstack</p>
+<h2 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h2><p>svn git maven</p>
+<h2 id="linux命令学习网站"><a href="#linux命令学习网站" class="headerlink" title="linux命令学习网站:"></a>linux命令学习网站:</h2><p><a href="http://explainshell.com/" target="_blank" rel="noopener">http://explainshell.com/</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://www.hollischuang.com/archives/239" target="_blank" rel="noopener">Linux端口被占用的解决(Error: JBoss port is in use. Please check)</a></p>
+<p><a href="https://linux.cn/article-1672-1.html" target="_blank" rel="noopener">linux 中强大且常用命令：find、grep</a></p>
+]]></content>
+      <categories>
+        <category>LINUX</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【转载】Nginx反向代理，负载均衡，redis session共享，keepalived高可用</title>
     <url>/2020/03/23/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%EF%BC%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%EF%BC%8Credis-session%E5%85%B1%E4%BA%AB%EF%BC%8Ckeepalived%E9%AB%98%E5%8F%AF%E7%94%A8/</url>
     <content><![CDATA[<blockquote>
@@ -4344,8 +5074,8 @@
         <category>架构设计</category>
       </categories>
       <tags>
-        <tag>微服务</tag>
         <tag>架构</tag>
+        <tag>微服务</tag>
         <tag>k8s</tag>
       </tags>
   </entry>
