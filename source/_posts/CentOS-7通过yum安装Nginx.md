@@ -1,0 +1,52 @@
+---
+title: CentOS 7通过yum安装Nginx
+date: 2020-06-07 21:58:51
+categories：LINUX
+tags:
+- linux
+- nginx
+- yum
+---
+
+> 文章转载自[CentOS 7通过yum安装Nginx](https://www.4spaces.org/centos-yum-install-nginx/)，根据实际搭建情况，略有修改
+
+创建文件：
+
+```shell
+vi /etc/yum.repos.d/nginx.repo
+```
+
+添加如下内容：
+
+```properties
+[nginx]
+name=nginx repo
+baseurl=http://nginx.org/packages/centos/7/$basearch/
+gpgcheck=0
+enabled=1
+```
+
+然后执行
+
+```shell
+sudo yum install nginx
+```
+
+具体配置：
+
+```shell
+vi /etc/nginx/nginx.conf
+```
+
+服务：
+
+```shell
+systemctl start nginx.service # 启动Nginx服务
+
+systemctl enable nginx.service #开机自启
+```
+
+参考内容：
+
+1. http://nginx.org/en/linux_packages.html#mainline；
+2. https://gist.github.com/ifels/c8cfdfe249e27ffa9ba1；

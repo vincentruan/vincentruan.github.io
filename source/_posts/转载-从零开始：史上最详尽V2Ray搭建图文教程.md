@@ -1,19 +1,21 @@
 ---
 title: '[转载]从零开始：史上最详尽V2Ray搭建图文教程'
 date: 2019-12-22 17:05:18
+categories: LINUX
 tags:
 - v2ray
+- 科学上网
 ---
 
 本文转载自从零开始：[史上最详尽V2Ray搭建图文教程](https://www.4spaces.org/digitalocean-build-v2ray-0-1/)，根据实际服务器配置做部分修改。
 
-## 一、服务端安装
+# 服务端安装
 
 以下所有操作都是使用root用户（普通用户自行sudo）进行操作的，服务器centos7。
 
 <!-- more -->
 
-**1.安装wget**
+## 安装wget
 
 如提示没有安装wget，在登录完成的窗口输入下面命令并回车进行wget安装：
 
@@ -21,7 +23,7 @@ tags:
 yum -y install wget
 ```
 
-**2.下载脚本**
+## 下载脚本
 
 安装完wget之后就可以进行下载安装v2ray的脚本了，输入如下命令并回车：
 
@@ -29,7 +31,7 @@ yum -y install wget
 wget https://install.direct/go.sh
 ```
 
-**3.安装unzip**
+## 安装unzip
 
 因为centos不支持apt-get，我们需要安装unzip，详见[官方说明](https://www.v2ray.com/chapter_00/install.html)：
 
@@ -37,7 +39,7 @@ wget https://install.direct/go.sh
 yum install -y zip unzip  
 ```
 
-**4.执行安装**
+## 执行安装
 
 输入下面的命令并回车执行安装
 
@@ -71,7 +73,7 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/v2ray.service t
 V2Ray v3.14 is installed.
 ```
 
-**5.相关命令**
+## 相关命令
 
 在首次安装完成之后，V2Ray不会自动启动，需要手动运行上述启动命令。而在已经运行V2Ray的VPS上再次执行安装脚本，安装脚本会自动停止V2Ray 进程，升级V2Ray程序，然后自动运行V2Ray。在升级过程中，配置文件不会被修改。
 
@@ -91,7 +93,7 @@ systemctl enable v2ray
 
 关于软件更新：**更新 V2Ray 的方法是再次执行安装脚本！再次执行安装脚本！再次执行安装脚本！**
 
-**6.配置**
+## 配置
 
 如果你按照上面的命令执行安装完成之后，服务端其实是不需要再进行任何配置的，配置文件位于`/etc/v2ray/config.json`，使用`cat /etc/v2ray/config.json`查看配置信息。接下来进行客户端配置就行了。
 
@@ -114,9 +116,9 @@ firewall-cmd --zone=public --list-ports
 firewall-cmd --zone=public --add-port=80/tcp --permanent
 ```
 
-## 二、Windows 客户端
+# Windows 客户端
 
-**1.下载**
+## 下载
 
 目前不支持水果系列，水果机只能自行走野路子解决。
 
@@ -127,7 +129,7 @@ firewall-cmd --zone=public --add-port=80/tcp --permanent
 
 ![img](转载-从零开始：史上最详尽V2Ray搭建图文教程/vmess-windows-client-dir.jpg)
 
-**2.配置**
+## 配置
 
 运行V2RayN.exe，然后进行配置，下图中的配置信息，需要和你VPS搭建的时候的配置信息对应，VPS的v2ray配置信息位于`/etc/v2ray/config.json`文件里。
 
@@ -139,11 +141,11 @@ firewall-cmd --zone=public --add-port=80/tcp --permanent
 
 ![1577006106052](转载-从零开始：史上最详尽V2Ray搭建图文教程/1577006106052.png)
 
-## 三、测试
+# 测试
 
 打开浏览器，访问`www.google.com`
 
-## 四、进阶
+# 进阶
 
 现在你已经学会使用v2ray了，为了更好的上网效果，建议继续了解一下下面文章：
 
@@ -151,7 +153,7 @@ firewall-cmd --zone=public --add-port=80/tcp --permanent
 - [使用Google BBR PLUS加速你的VPS网络](https://www.4spaces.org/speed-up-your-vps-with-bbr-plus/)；
 - [如何以mkcp方式部署v2ray](https://www.4spaces.org/digitalocean-build-v2ray-mkcp/)；
 
-## 五、相关问题
+# 相关问题
 
 - [使用v2ray访问谷歌提示异常流量](https://www.4spaces.org/v2ray-google-check/)；
 - [启用cloudflare cdn之后v2ray报403错误](https://www.4spaces.org/v2ray-cloudflare-cdn-403/)；
