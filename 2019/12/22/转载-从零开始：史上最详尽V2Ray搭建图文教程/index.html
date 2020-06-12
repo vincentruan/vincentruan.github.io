@@ -121,22 +121,22 @@
 
 
 
-  <meta name="description" content="本文转载自从零开始：史上最详尽V2Ray搭建图文教程，根据实际服务器配置做部分修改。 一、服务端安装以下所有操作都是使用root用户（普通用户自行sudo）进行操作的，服务器centos7。">
-<meta name="keywords" content="v2ray">
+  <meta name="description" content="本文转载自从零开始：史上最详尽V2Ray搭建图文教程，根据实际服务器配置做部分修改。 服务端安装以下所有操作都是使用root用户（普通用户自行sudo）进行操作的，服务器centos7。">
+<meta name="keywords" content="v2ray,科学上网">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[转载]从零开始：史上最详尽V2Ray搭建图文教程">
 <meta property="og:url" content="https://vincentruan.github.io/2019/12/22/转载-从零开始：史上最详尽V2Ray搭建图文教程/index.html">
 <meta property="og:site_name" content="星辰大海">
-<meta property="og:description" content="本文转载自从零开始：史上最详尽V2Ray搭建图文教程，根据实际服务器配置做部分修改。 一、服务端安装以下所有操作都是使用root用户（普通用户自行sudo）进行操作的，服务器centos7。">
+<meta property="og:description" content="本文转载自从零开始：史上最详尽V2Ray搭建图文教程，根据实际服务器配置做部分修改。 服务端安装以下所有操作都是使用root用户（普通用户自行sudo）进行操作的，服务器centos7。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://vincentruan.github.io/2019/12/22/转载-从零开始：史上最详尽V2Ray搭建图文教程/vmess-windows-client-dir.jpg">
 <meta property="og:image" content="https://vincentruan.github.io/2019/12/22/转载-从零开始：史上最详尽V2Ray搭建图文教程/new-vmess-config.jpg">
 <meta property="og:image" content="https://vincentruan.github.io/2019/12/22/转载-从零开始：史上最详尽V2Ray搭建图文教程/vmess-windows-client.jpg">
 <meta property="og:image" content="https://vincentruan.github.io/2019/12/22/转载-从零开始：史上最详尽V2Ray搭建图文教程/1577006106052.png">
-<meta property="og:updated_time" content="2020-02-25T15:09:15.073Z">
+<meta property="og:updated_time" content="2020-06-12T12:52:15.582Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[转载]从零开始：史上最详尽V2Ray搭建图文教程">
-<meta name="twitter:description" content="本文转载自从零开始：史上最详尽V2Ray搭建图文教程，根据实际服务器配置做部分修改。 一、服务端安装以下所有操作都是使用root用户（普通用户自行sudo）进行操作的，服务器centos7。">
+<meta name="twitter:description" content="本文转载自从零开始：史上最详尽V2Ray搭建图文教程，根据实际服务器配置做部分修改。 服务端安装以下所有操作都是使用root用户（普通用户自行sudo）进行操作的，服务器centos7。">
 <meta name="twitter:image" content="https://vincentruan.github.io/2019/12/22/转载-从零开始：史上最详尽V2Ray搭建图文教程/vmess-windows-client-dir.jpg">
 
 
@@ -425,11 +425,29 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-02-25 23:09:15" itemprop="dateModified" datetime="2020-02-25T23:09:15+08:00">2020-02-25</time>
+                <time title="修改时间：2020-06-12 20:52:15" itemprop="dateModified" datetime="2020-06-12T20:52:15+08:00">2020-06-12</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/LINUX/" itemprop="url" rel="index"><span itemprop="name">LINUX</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -452,7 +470,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">9.4k</span>
+                <span title="本文字数">9.9k</span>
               
 
               
@@ -487,26 +505,20 @@
 
       
         <p>本文转载自从零开始：<a href="https://www.4spaces.org/digitalocean-build-v2ray-0-1/" target="_blank" rel="noopener">史上最详尽V2Ray搭建图文教程</a>，根据实际服务器配置做部分修改。</p>
-<h2 id="一、服务端安装"><a href="#一、服务端安装" class="headerlink" title="一、服务端安装"></a>一、服务端安装</h2><p>以下所有操作都是使用root用户（普通用户自行sudo）进行操作的，服务器centos7。</p>
+<h1 id="服务端安装"><a href="#服务端安装" class="headerlink" title="服务端安装"></a>服务端安装</h1><p>以下所有操作都是使用root用户（普通用户自行sudo）进行操作的，服务器centos7。</p>
 <a id="more"></a>
-<p><strong>1.安装wget</strong></p>
-<p>如提示没有安装wget，在登录完成的窗口输入下面命令并回车进行wget安装：</p>
+<h2 id="安装wget"><a href="#安装wget" class="headerlink" title="安装wget"></a>安装wget</h2><p>如提示没有安装wget，在登录完成的窗口输入下面命令并回车进行wget安装：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install wget</span><br></pre></td></tr></table></figure>
-<p><strong>2.下载脚本</strong></p>
-<p>安装完wget之后就可以进行下载安装v2ray的脚本了，输入如下命令并回车：</p>
+<h2 id="下载脚本"><a href="#下载脚本" class="headerlink" title="下载脚本"></a>下载脚本</h2><p>安装完wget之后就可以进行下载安装v2ray的脚本了，输入如下命令并回车：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://install.direct/go.sh</span><br></pre></td></tr></table></figure>
-<p><strong>3.安装unzip</strong></p>
-<p>因为centos不支持apt-get，我们需要安装unzip，详见<a href="https://www.v2ray.com/chapter_00/install.html" target="_blank" rel="noopener">官方说明</a>：</p>
+<h2 id="安装unzip"><a href="#安装unzip" class="headerlink" title="安装unzip"></a>安装unzip</h2><p>因为centos不支持apt-get，我们需要安装unzip，详见<a href="https://www.v2ray.com/chapter_00/install.html" target="_blank" rel="noopener">官方说明</a>：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y zip unzip</span><br></pre></td></tr></table></figure>
-<p><strong>4.执行安装</strong></p>
-<p>输入下面的命令并回车执行安装</p>
+<h2 id="执行安装"><a href="#执行安装" class="headerlink" title="执行安装"></a>执行安装</h2><p>输入下面的命令并回车执行安装</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[michael@centos74 v2ray]$ bash go.sh </span><br><span class="line">Installing V2Ray v3.14 on x86_64</span><br><span class="line">Downloading V2Ray.</span><br><span class="line"><span class="meta">  %</span><span class="bash"> Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span></span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">100   608    0   608    0     0   2229      0 --:--:-- --:--:-- --:--:--  2235</span><br><span class="line">100 8482k  100 8482k    0     0  2501k      0  0:00:03  0:00:03 --:--:-- 2813k</span><br><span class="line">Extracting V2Ray package to /tmp/v2ray.</span><br><span class="line">Archive:  /tmp/v2ray/v2ray.zip</span><br><span class="line">   creating: /tmp/v2ray/v2ray-v3.14-linux-64/</span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/geoip.dat  </span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/geosite.dat  </span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/readme.md  </span><br><span class="line">   creating: /tmp/v2ray/v2ray-v3.14-linux-64/systemd/</span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/systemd/v2ray.service  </span><br><span class="line">   creating: /tmp/v2ray/v2ray-v3.14-linux-64/systemv/</span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/systemv/v2ray  </span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/v2ctl  </span><br><span class="line"> extracting: /tmp/v2ray/v2ray-v3.14-linux-64/v2ctl.sig  </span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/v2ray  </span><br><span class="line"> extracting: /tmp/v2ray/v2ray-v3.14-linux-64/v2ray.sig  </span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/vpoint_socks_vmess.json  </span><br><span class="line">  inflating: /tmp/v2ray/v2ray-v3.14-linux-64/vpoint_vmess_freedom.json  </span><br><span class="line">PORT:13437</span><br><span class="line">UUID:f500ecf5-e135-49c6-9ce2-78eb490d0aa9</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/v2ray.service to /etc/systemd/system/v2ray.service.</span><br><span class="line">V2Ray v3.14 is installed.</span><br></pre></td></tr></table></figure>
-<p><strong>5.相关命令</strong></p>
-<p>在首次安装完成之后，V2Ray不会自动启动，需要手动运行上述启动命令。而在已经运行V2Ray的VPS上再次执行安装脚本，安装脚本会自动停止V2Ray 进程，升级V2Ray程序，然后自动运行V2Ray。在升级过程中，配置文件不会被修改。</p>
+<h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><p>在首次安装完成之后，V2Ray不会自动启动，需要手动运行上述启动命令。而在已经运行V2Ray的VPS上再次执行安装脚本，安装脚本会自动停止V2Ray 进程，升级V2Ray程序，然后自动运行V2Ray。在升级过程中，配置文件不会被修改。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 启动</span></span></span><br><span class="line">systemctl start v2ray</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 停止</span></span></span><br><span class="line">systemctl stop v2ray</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 重启</span></span></span><br><span class="line">systemctl restart v2ray</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 开机自启</span></span></span><br><span class="line">systemctl enable v2ray</span><br></pre></td></tr></table></figure>
 <p>关于软件更新：<strong>更新 V2Ray 的方法是再次执行安装脚本！再次执行安装脚本！再次执行安装脚本！</strong></p>
-<p><strong>6.配置</strong></p>
-<p>如果你按照上面的命令执行安装完成之后，服务端其实是不需要再进行任何配置的，配置文件位于<code>/etc/v2ray/config.json</code>，使用<code>cat /etc/v2ray/config.json</code>查看配置信息。接下来进行客户端配置就行了。</p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>如果你按照上面的命令执行安装完成之后，服务端其实是不需要再进行任何配置的，配置文件位于<code>/etc/v2ray/config.json</code>，使用<code>cat /etc/v2ray/config.json</code>查看配置信息。接下来进行客户端配置就行了。</p>
 <p><strong>说明：</strong></p>
 <ul>
 <li><em>配置文件中的id、端口、alterId需要和客户端的配置保持一致</em>；</li>
@@ -516,25 +528,24 @@
 <p><strong>9.防火墙开放端口</strong></p>
 <p>有的vps端口默认不开放，可能导致连接不成功，如果有这种情况，详细配置，见<a href="https://www.4spaces.org/centos-open-porter/" target="_blank" rel="noopener">CentOs开放端口的方法—二、firewalld</a>。部分服务器的防火墙配置只能在服务提供商的控制台操作，请注意。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">## 查看已开放端口</span><br><span class="line">firewall-cmd --zone=public --list-ports</span><br><span class="line"></span><br><span class="line">## 添加开放端口</span><br><span class="line">firewall-cmd --zone=public --add-port=80/tcp --permanent</span><br></pre></td></tr></table></figure>
-<h2 id="二、Windows-客户端"><a href="#二、Windows-客户端" class="headerlink" title="二、Windows 客户端"></a>二、Windows 客户端</h2><p><strong>1.下载</strong></p>
-<p>目前不支持水果系列，水果机只能自行走野路子解决。</p>
+<h1 id="Windows-客户端"><a href="#Windows-客户端" class="headerlink" title="Windows 客户端"></a>Windows 客户端</h1><h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p>目前不支持水果系列，水果机只能自行走野路子解决。</p>
 <p>1)下载【<a href="https://github.com/v2ray/v2ray-core/releases" target="_blank" rel="noopener">v2ray-windows-64.zip Github Release</a>】;<br>2)下载【<a href="https://github.com/2dust/v2rayN/releases" target="_blank" rel="noopener">v2rayN-v2rayN.exe-Github Release</a>】；</p>
 <p>对<code>v2ray-windows-64.zip</code>进行解压，然后将下载的<code>V2RayN.exe</code>复制到解压后的目录，即两个下载好的文件需要在同一目录。</p>
 <p><img src="/2019/12/22/转载-从零开始：史上最详尽V2Ray搭建图文教程/vmess-windows-client-dir.jpg" alt="img"></p>
-<p><strong>2.配置</strong></p>
-<p>运行V2RayN.exe，然后进行配置，下图中的配置信息，需要和你VPS搭建的时候的配置信息对应，VPS的v2ray配置信息位于<code>/etc/v2ray/config.json</code>文件里。</p>
+<h2 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h2><p>运行V2RayN.exe，然后进行配置，下图中的配置信息，需要和你VPS搭建的时候的配置信息对应，VPS的v2ray配置信息位于<code>/etc/v2ray/config.json</code>文件里。</p>
 <p>如果采用上面的默认方式安装，服务端配置是协议vmess，则配置如下：</p>
 <p><img src="/2019/12/22/转载-从零开始：史上最详尽V2Ray搭建图文教程/new-vmess-config.jpg" alt="img"></p>
 <p><img src="/2019/12/22/转载-从零开始：史上最详尽V2Ray搭建图文教程/vmess-windows-client.jpg" alt="img"></p>
 <p><img src="/2019/12/22/转载-从零开始：史上最详尽V2Ray搭建图文教程/1577006106052.png" alt="1577006106052"></p>
-<h2 id="三、测试"><a href="#三、测试" class="headerlink" title="三、测试"></a>三、测试</h2><p>打开浏览器，访问<code>www.google.com</code></p>
-<h2 id="四、进阶"><a href="#四、进阶" class="headerlink" title="四、进阶"></a>四、进阶</h2><p>现在你已经学会使用v2ray了，为了更好的上网效果，建议继续了解一下下面文章：</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>打开浏览器，访问<code>www.google.com</code></p>
+<h1 id="安卓客户端"><a href="#安卓客户端" class="headerlink" title="安卓客户端"></a>安卓客户端</h1><p>参考github项目，下载发行最新版即可，<a href="https://github.com/2dust/v2rayNG/releases配置方式与windows方式一样" target="_blank" rel="noopener">https://github.com/2dust/v2rayNG/releases配置方式与windows方式一样</a></p>
+<h1 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h1><p>现在你已经学会使用v2ray了，为了更好的上网效果，建议继续了解一下下面文章：</p>
 <ul>
 <li><a href="https://www.4spaces.org/v2ray-nginx-tls-websocket/" target="_blank" rel="noopener">centos7基于nginx搭建v2ray服务端配置vmess+tls+websocket完全手册</a>；【推荐】</li>
 <li><a href="https://www.4spaces.org/speed-up-your-vps-with-bbr-plus/" target="_blank" rel="noopener">使用Google BBR PLUS加速你的VPS网络</a>；</li>
 <li><a href="https://www.4spaces.org/digitalocean-build-v2ray-mkcp/" target="_blank" rel="noopener">如何以mkcp方式部署v2ray</a>；</li>
 </ul>
-<h2 id="五、相关问题"><a href="#五、相关问题" class="headerlink" title="五、相关问题"></a>五、相关问题</h2><ul>
+<h1 id="相关问题"><a href="#相关问题" class="headerlink" title="相关问题"></a>相关问题</h1><ul>
 <li><a href="https://www.4spaces.org/v2ray-google-check/" target="_blank" rel="noopener">使用v2ray访问谷歌提示异常流量</a>；</li>
 <li><a href="https://www.4spaces.org/v2ray-cloudflare-cdn-403/" target="_blank" rel="noopener">启用cloudflare cdn之后v2ray报403错误</a>；</li>
 </ul>
@@ -559,6 +570,8 @@
         <div class="post-tags">
           
             <a href="/tags/v2ray/" rel="tag"><i class="fa fa-tag"></i> v2ray</a>
+          
+            <a href="/tags/科学上网/" rel="tag"><i class="fa fa-tag"></i> 科学上网</a>
           
         </div>
       
@@ -663,7 +676,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-count">52</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -871,7 +884,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">69</span>
+                      
+                    
+                    <span class="site-state-item-count">70</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -928,7 +943,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、服务端安装"><span class="nav-number">1.</span> <span class="nav-text">一、服务端安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、Windows-客户端"><span class="nav-number">2.</span> <span class="nav-text">二、Windows 客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、测试"><span class="nav-number">3.</span> <span class="nav-text">三、测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、进阶"><span class="nav-number">4.</span> <span class="nav-text">四、进阶</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、相关问题"><span class="nav-number">5.</span> <span class="nav-text">五、相关问题</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#服务端安装"><span class="nav-number">1.</span> <span class="nav-text">服务端安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装wget"><span class="nav-number">1.1.</span> <span class="nav-text">安装wget</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下载脚本"><span class="nav-number">1.2.</span> <span class="nav-text">下载脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装unzip"><span class="nav-number">1.3.</span> <span class="nav-text">安装unzip</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行安装"><span class="nav-number">1.4.</span> <span class="nav-text">执行安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关命令"><span class="nav-number">1.5.</span> <span class="nav-text">相关命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">1.6.</span> <span class="nav-text">配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Windows-客户端"><span class="nav-number">2.</span> <span class="nav-text">Windows 客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载"><span class="nav-number">2.1.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置-1"><span class="nav-number">2.2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-number">2.3.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安卓客户端"><span class="nav-number">3.</span> <span class="nav-text">安卓客户端</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进阶"><span class="nav-number">4.</span> <span class="nav-text">进阶</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相关问题"><span class="nav-number">5.</span> <span class="nav-text">相关问题</span></a></li></ol></div>
             
 
           </div>
@@ -960,7 +975,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">601k</span>
+    <span title="站点总字数">613k</span>
   
 
   
@@ -969,7 +984,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">9:07</span>
+    <span title="站点阅读时长">9:17</span>
   
 </div>
 
