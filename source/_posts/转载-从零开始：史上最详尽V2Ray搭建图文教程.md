@@ -141,9 +141,13 @@ firewall-cmd --zone=public --add-port=80/tcp --permanent
 
 ![1577006106052](转载-从零开始：史上最详尽V2Ray搭建图文教程/1577006106052.png)
 
-# 测试
+## 测试
 
 打开浏览器，访问`www.google.com`
+
+# 安卓客户端
+
+参考github项目，下载发行最新版即可，https://github.com/2dust/v2rayNG/releases配置方式与windows方式一样
 
 # 进阶
 
