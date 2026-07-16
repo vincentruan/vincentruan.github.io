@@ -1,0 +1,129 @@
+# NexT Theme Configuration Override
+# See: https://theme-next.js.org/docs/
+
+# ---------------------------------------------------------------
+# Theme Core Configuration Settings
+# ---------------------------------------------------------------
+
+# Site Information
+site:
+  author: vincentruan
+  language: zh-CN
+
+# Menu Settings
+menu:
+  home: / || fa fa-home
+  about: /about/ || fa fa-user
+  tags: /tags/ || fa fa-tags
+  categories: /categories/ || fa fa-th
+  archives: /archives/ || fa fa-archive
+  #sitemap: /sitemap.xml || fa fa-sitemap
+  #commonweal: /404/ || fa fa-heartbeat
+
+# Sidebar Settings
+sidebar:
+  position: left
+
+# Post Settings
+post_meta:
+  item_text: true
+  created_at: true
+  updated_at:
+    enable: true
+    another_day: true
+  categories: true
+
+# Post Wordcount
+symbols_count_time:
+  separated_meta: true
+  item_text_post: true
+  item_text_total: false
+
+# Code Highlight
+codeblock:
+  theme:
+    light: default
+    dark: tomorrow-night
+
+# Related Popular Posts
+related_posts:
+  enable: true
+  title:
+  display_in_excerpt: false
+  limit: 5
+  date_format: YYYY-MM-DD
+
+# MathJax
+math:
+  enable: true
+  per_page: false
+  engine: mathjax
+
+# Local Search
+local_search:
+  enable: true
+  trigger: auto
+  top_n_per_article: 1
+  unescape: false
+  preload: false
+
+# Tabs
+tabs:
+  enable: true
+  transition:
+    tabs: false
+    labels: true
+  border_radius: 0
+
+# Motion
+motion:
+  enable: true
+  async: false
+  transition:
+    post_block: fadeIn
+    post_header: slideDownIn
+    post_body: slideDownIn
+    coll_header: slideLeftIn
+    sidebar: slideUpIn
+
+# Canvas Nest
+canvas_nest:
+  enable: true
+  onmobile: true
+  color: "0,0,255"
+  opacity: 0.5
+  zIndex: -1
+  count: 99
+
+# ---------------------------------------------------------------
+# Third Party Plugins & Services Settings
+# ---------------------------------------------------------------
+
+# Comments
+# Available values: disqus | disqusjs | livere | gitalk | utterances | isso
+comments:
+  active: gitalk
+  storage: true
+  lazyload: false
+
+# Gitalk
+# https://github.com/gitalk/gitalk
+gitalk:
+  enable: true
+  github_id: vincentruan
+  repo: vincentruan.github.io
+  client_id: 77de951f4b5c331b23b4
+  client_secret: 41f88d6edb14f19e3ac0f49acc84c100debcdf7d
+  admin_user: vincentruan
+  distraction_free_mode: true
+
+# Mermaid
+mermaid:
+  enable: true
+  version: "7.1.2"
+  options:
+    theme: default
+
+# Flowchart
+flowchart:
+  enable: true
