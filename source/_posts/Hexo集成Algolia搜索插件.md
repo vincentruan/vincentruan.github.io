@@ -28,14 +28,14 @@ tags:
 ### 一个Algolia 帐号
 
 [官网地址](https://www.algolia.com/users/sign_in) 使用GitHub 或Google 帐号登录。
-[![img](Hexo集成Algolia搜索插件/algolia_login.jpg)](http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_login.jpg)
+[![img](algolia_login.jpg)](http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_login.jpg)
 
 ### 创建Index
 
 进入[Dashboard](https://www.algolia.com/dashboard)，
 选择[Indices](https://www.algolia.com/explorer#?index=getstarted_actors) 新建一个Index。
-[![img](Hexo集成Algolia搜索插件/algolia_explorer.jpg)](http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_explorer.jpg)
-[![img](Hexo集成Algolia搜索插件/algolia_newindex.jpg)](http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_newindex.jpg)
+[![img](algolia_explorer.jpg)](http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_explorer.jpg)
+[![img](algolia_newindex.jpg)](http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_newindex.jpg)
 
 ### 安装Hexo Algolia
 
@@ -48,7 +48,7 @@ npm install --save hexo-algolia
 ### 获取Key，更新站点信配置
 
 点击Dashborad 左侧的[API Keys](https://www.algolia.com/api-keys)，其中的信息接下来将会被用到。
-[![img](Hexo集成Algolia搜索插件/algolia_apikeys.jpg)](http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_apikeys.jpg)
+[![img](algolia_apikeys.jpg)](http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_apikeys.jpg)
 包括`Application ID` 、`Search-Only API Key` 和 `Admin API Key`，其中`Admin API Key`需要保密保存
 
 编辑站点配置文件，新增以下配置：
@@ -65,7 +65,7 @@ algolia:
 ### 更新Index
 
 当配置完成，在站点根目录下执行`hexo algolia` 来更新Index。请注意观察命令的输出。
-[![img](Hexo集成Algolia搜索插件/algolia_hexo_algolia.jpg)](http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_hexo_algolia.jpg)
+[![img](algolia_hexo_algolia.jpg)](http://zouzeir.xyz/2017/01/16/Hexo%E9%9B%86%E6%88%90Algolia%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/algolia_hexo_algolia.jpg)
 
 ### 主题集成
 

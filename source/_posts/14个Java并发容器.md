@@ -85,7 +85,7 @@ public class CopyOnWriteArrayList<E>
 
 SkipList即跳表，跳表是一种空间换时间的数据结构，通过冗余数据，将链表一层一层索引，达到类似二分查找的效果
 
-![img](14个Java并发容器/640.webp)
+![img](640.webp)
 
 ## **7.ConcurrentSkipListSet 基于跳表的并发Set**
 

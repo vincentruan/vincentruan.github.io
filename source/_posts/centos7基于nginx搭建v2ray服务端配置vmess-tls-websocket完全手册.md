@@ -15,11 +15,11 @@ tags:
 
 <!-- more -->
 
-![shadowsocks-tcp.jpg](centos7基于nginx搭建v2ray服务端配置vmess-tls-websocket完全手册/shadowsocks-tcp.jpg)
+![shadowsocks-tcp.jpg](shadowsocks-tcp.jpg)
 
 怎么让手机上网记录看起来更正常一点呢？v2ray服务端配置vmess+tls+websocket就是一种解决方式，下面是我使用这种方式之后手机上网记录信息：
 
-![v2ray-ssl上网记录](centos7基于nginx搭建v2ray服务端配置vmess-tls-websocket完全手册/v2ray-ssl.jpg)
+![v2ray-ssl上网记录](v2ray-ssl.jpg)
 
 接下来就是我实现上述情形的解决过程记录。
 
@@ -163,9 +163,9 @@ systemctl restart nginx
 
 这里我是用[v2rayN](https://github.com/2dust/v2rayN/releases)，配置如下：
 
-![v2rayn-config-windows.png](centos7基于nginx搭建v2ray服务端配置vmess-tls-websocket完全手册/v2rayn-config-windows.png)
+![v2rayn-config-windows.png](v2rayn-config-windows.png)
 
-![v2rayn-config-windows-1.png](centos7基于nginx搭建v2ray服务端配置vmess-tls-websocket完全手册/v2rayn-config-windows-1.png)
+![v2rayn-config-windows-1.png](v2rayn-config-windows-1.png)
 
 ## 配置CloudFlare
 
@@ -202,7 +202,7 @@ Connected (press CTRL+C to quit)
 
 按照这篇文章搭建了v2ray服务之后，又尝试启用cloudflare cdn来隐藏自己的真实IP，但是启用cdn之后就无法访问了。
 
-![v2ray-cloudflare-cdn-403-error.jpg](centos7基于nginx搭建v2ray服务端配置vmess-tls-websocket完全手册/v2ray-cloudflare-cdn-403-error.jpg)
+![v2ray-cloudflare-cdn-403-error.jpg](v2ray-cloudflare-cdn-403-error.jpg)
 
 这是因为我增加了header伪装域名，去掉之后v2ray就能正常使用了。也就是cloudflare的cdn功能和v2ray的伪装功能不能同时使用。
 
@@ -214,7 +214,7 @@ Connected (press CTRL+C to quit)
 
 按照这篇文章【[centos7基于nginx搭建v2ray服务端配置vmess+tls+websocket完全手册](https://www.4spaces.org/v2ray-nginx-tls-websocket/)】搭建了v2ray服务之后，使用google搜索的时候经常提示：我们的系统检测到您的计算机网络中存在异常流量，需要进行人验证，对于离不开google的人来说比较烦人。
 
-![v2ray-google-abnormal-traffic.jpg](centos7基于nginx搭建v2ray服务端配置vmess-tls-websocket完全手册/v2ray-google-abnormal-traffic.jpg)
+![v2ray-google-abnormal-traffic.jpg](v2ray-google-abnormal-traffic.jpg)
 
 
 

@@ -129,3 +129,8 @@ symbols_count_time:
   time: true
   total_symbols: true
   total_time: true
+# hexo-renderer-marked
+marked:
+  prependRoot: true
+  postAsset: true
+

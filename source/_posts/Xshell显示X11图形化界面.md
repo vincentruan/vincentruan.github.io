@@ -11,7 +11,7 @@ tags:
 
 使用前检查一下是否安装了Xshell、Xstart、Xmanager - Passive，正常安装Xmanager全家桶应该是全的
 
-![1529248519265](Xshell显示X11图形化界面/1529248519265.png)
+![1529248519265](1529248519265.png)
 
 <!-- more -->
 
@@ -19,11 +19,11 @@ tags:
 
 通过SSH的方式尝试登录VPS，
 
-![1529248581921](Xshell显示X11图形化界面/1529248581921.png)
+![1529248581921](1529248581921.png)
 
 正常成功后会这样提示
 
-![1529248649118](Xshell显示X11图形化界面/1529248649118.png)
+![1529248649118](1529248649118.png)
 
 当然更多的可能是弹出个错误框提示“已拒绝X11转移申请”，这是因为默认的VPS一般不会安装XAUTH导致，
 
@@ -43,7 +43,7 @@ sudo yum install xorg-x11-xauth
 6. 如用户的PC上已[安装Xmanager](http://www.xshellcn.com/xmg_column/xm-az.html)，请勾选[Xmanager(M)]。如使用其他PC X 服务器，请选择[X DISPLAY(D)]后输入适用的DISPLAY 
 7. 点击[确定] 
 
-![1529248873947](Xshell显示X11图形化界面/1529248873947.png)
+![1529248873947](1529248873947.png)
 
 ### 检查当前监听端口
 
@@ -53,7 +53,7 @@ sudo yum install xorg-x11-xauth
 sudo netstat -tnlp|grep sshd
 ```
 
-![1529249219317](Xshell显示X11图形化界面/1529249219317.png)
+![1529249219317](1529249219317.png)
 
 注意上面监听的6010，Xmanager会把X DISPLAY选项自动查找为[Xshell](http://www.xshellcn.com/)。其他 PC X 服务器程序需由用户进行设置。如果PC X 服务器使用TCP 6000号端口，DISPLAY设置为“localhost:0.0” ，也就是说，X11的**偏移量是6000**，因此下面需要设置一个最终要的DISPLAY的值**:10.0**，如下
 

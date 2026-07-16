@@ -11,7 +11,7 @@ date: 2020-01-31 12:48:08
 
 # Electron概述
 
-![Electron Logo](electron-vue开发入门指南/68747470733a2f2f656c656374726f6e6a732e6f72672f696d616765732f656c656374726f6e2d6c6f676f2e737667.svg)
+![Electron Logo](68747470733a2f2f656c656374726f6e6a732e6f72672f696d616765732f656c656374726f6e2d6c6f676f2e737667.svg)
 
 1. [GitHub](https://github.com/electron/electron) 官网不翻墙太卡，本着能偷懒就偷懒，GayHub就够了，不用翻官网了
 2. [中文文档](https://github.com/electron/i18n/tree/master/content/zh-CN)
@@ -21,7 +21,7 @@ date: 2020-01-31 12:48:08
 
 # VUE概述
 
-![Vue logo](electron-vue开发入门指南/68747470733a2f2f7675656a732e6f72672f696d616765732f6c6f676f2e706e67.png)
+![Vue logo](68747470733a2f2f7675656a732e6f72672f696d616765732f6c6f676f2e706e67.png)
 
 1. [GitHub](https://github.com/vuejs/vue)
 2. [VUE官网](https://cn.vuejs.org/) 官网资料齐全，中英文档都齐备，基本看完够搞个工程了
@@ -111,13 +111,13 @@ ncu -u
 
 Yarn工作流：
 
- ![img](electron-vue开发入门指南/1087883-20190909202049178-776852540-1580637729972.png)
+ ![img](1087883-20190909202049178-776852540-1580637729972.png)
 
 Yarn使用方法：[https://yarn.bootcss.com/docs/usage](https://yarn.bootcss.com/docs/usage/)/
 
 Yarn使用方法-如图：
 
-![img](electron-vue开发入门指南/1087883-20190909202053234-421219548-1580637730004.png)
+![img](1087883-20190909202053234-421219548-1580637730004.png)
 
  
 
@@ -331,7 +331,7 @@ Recently updated (since 2020-01-23): 10 packages (detail see file D:\gitspace\al
 $ cnpm run dev
 ```
 
-![image-20200130174511175](electron-vue开发入门指南/image-20200130174511175.png)
+![image-20200130174511175](image-20200130174511175.png)
 
 ### 问题收集与处理
 
@@ -464,7 +464,7 @@ require('./index')
 
 应用自动重启，注意首次启动vue插件被>>这个隐藏了，需要手动拖动一下
 
-![image-20200130183344218](electron-vue开发入门指南/image-20200130183344218.png)
+![image-20200130183344218](image-20200130183344218.png)
 
 #### 问题三：ERROR in  Error: .\node_modules\html-webpack-plugin\node_modules\clean-css\index.js:1 SyntaxError: Invalid or unexpected token
 

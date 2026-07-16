@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "hexo": "^7.3.0",
-    "hexo-asset-image": "^1.0.0",
     "hexo-cli": "^4.3.2",
     "hexo-deployer-git": "^4.0.0",
     "hexo-generator-archive": "^2.0.0",
@@ -35,6 +34,7 @@
     "hexo-server": "^3.0.0",
     "hexo-symbols-count-time": "^0.7.1",
     "hexo-theme-next": "^8.28.0",
+    "highlight.js": "^11.11.1",
     "live2d-widget-model-shizuku": "^1.0.5",
     "md5": "^2.3.0"
   }

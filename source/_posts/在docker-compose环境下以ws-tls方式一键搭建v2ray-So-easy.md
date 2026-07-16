@@ -108,7 +108,7 @@ sudo ./init-letsencrypt.sh
 
 下面是我运行的详细过程：
 
-![docker-compose-install-v2ray-ws-tls-1.jpg](在docker-compose环境下以ws-tls方式一键搭建v2ray-So-easy/docker-compose-install-v2ray-ws-tls-1.jpg)
+![docker-compose-install-v2ray-ws-tls-1.jpg](docker-compose-install-v2ray-ws-tls-1.jpg)
 
 ## 四、客户端配置
 

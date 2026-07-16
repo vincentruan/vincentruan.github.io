@@ -105,7 +105,7 @@ public static void main(String[] args) throws ParseException {
 
 如果你还是对这些感到困惑，这里有一个相关说明的图表可以[参考](http://zeroturnaround.com/wp-content/uploads/2016/04/Java-Collections-cheat-sheet.png)(Rebel Labs制作)。
 
-![Java-Collections-cheat-sheet](译-StackOverflow-你没见过的七个最好的Java答案/Java-Collections-cheat-sheet.png)
+![Java-Collections-cheat-sheet](Java-Collections-cheat-sheet.png)
 
 ## 总结
 

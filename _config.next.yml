@@ -43,7 +43,7 @@ symbols_count_time:
 codeblock:
   theme:
     light: default
-    dark: tomorrow-night
+    dark: tomorrow-night-bright
 
 # Related Popular Posts
 related_posts:
