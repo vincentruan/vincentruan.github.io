@@ -77,10 +77,10 @@ theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
-deploy:
-  type: git
-  repo: git@github.com:vincentruan/vincentruan.github.io.git
-  branch: main
+# deploy:
+#   type: git
+#   repo: git@github.com:vincentruan/vincentruan.github.io.git
+#   branch: gh-pages
 
 # algolia:
 #   applicationID: 085Q2989Y8

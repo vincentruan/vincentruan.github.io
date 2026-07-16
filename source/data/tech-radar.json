@@ -1,0 +1,108 @@
+{
+  "date": "2026-07",
+  "quadrants": {
+    "languages": "语言 & 框架",
+    "infrastructure": "基础设施",
+    "tools": "工具",
+    "techniques": "方法论"
+  },
+  "rings": {
+    "adopt": "采纳",
+    "trial": "试用",
+    "assess": "评估",
+    "hold": "暂缓"
+  },
+  "items": [
+    {
+      "name": "Java",
+      "quadrant": "languages",
+      "ring": "adopt",
+      "moved": 0,
+      "description": "金融科技核心语言，Spring Boot 生态成熟"
+    },
+    {
+      "name": "Rust",
+      "quadrant": "languages",
+      "ring": "trial",
+      "moved": 1,
+      "description": "高性能系统编程，用于核心引擎"
+    },
+    {
+      "name": "Go",
+      "quadrant": "languages",
+      "ring": "trial",
+      "moved": 1,
+      "description": "云原生微服务，正在迁移"
+    },
+    {
+      "name": "TypeScript",
+      "quadrant": "languages",
+      "ring": "adopt",
+      "moved": 0,
+      "description": "前端和 Node.js 开发，类型安全"
+    },
+    {
+      "name": "PostgreSQL",
+      "quadrant": "infrastructure",
+      "ring": "adopt",
+      "moved": 0,
+      "description": "JSONB、全文检索、窗口函数"
+    },
+    {
+      "name": "Redis",
+      "quadrant": "infrastructure",
+      "ring": "adopt",
+      "moved": 0,
+      "description": "缓存、分布式锁、会话管理"
+    },
+    {
+      "name": "Kubernetes",
+      "quadrant": "infrastructure",
+      "ring": "adopt",
+      "moved": 0,
+      "description": "容器编排，云原生标准"
+    },
+    {
+      "name": "Claude Code",
+      "quadrant": "tools",
+      "ring": "adopt",
+      "moved": 1,
+      "description": "AI 辅助编程，架构设计"
+    },
+    {
+      "name": "Hermes Agent",
+      "quadrant": "tools",
+      "ring": "trial",
+      "moved": 1,
+      "description": "多 Agent 协作，任务编排"
+    },
+    {
+      "name": "MCP",
+      "quadrant": "tools",
+      "ring": "assess",
+      "moved": 0,
+      "description": "Model Context Protocol，工具集成标准"
+    },
+    {
+      "name": "DDD",
+      "quadrant": "techniques",
+      "ring": "adopt",
+      "moved": 0,
+      "description": "领域驱动设计，复杂业务建模"
+    },
+    {
+      "name": "Event Sourcing",
+      "quadrant": "techniques",
+      "ring": "trial",
+      "moved": 0,
+      "description": "事件溯源，金融系统审计"
+    },
+    {
+      "name": "CQRS",
+      "quadrant": "techniques",
+      "ring": "trial",
+      "moved": 0,
+      "description": "读写分离，性能优化"
+    }
+  ]
+}
