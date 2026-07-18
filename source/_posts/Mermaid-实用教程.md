@@ -85,7 +85,7 @@ graph TD;
     C-->D;
 ```
 
-![img](p2chh5tny9.png)
+![img](Mermaid-实用教程/p2chh5tny9.png)
 
 ## 方向
 
@@ -99,7 +99,7 @@ graph TB
     Start --> Stop
 ```
 
-![img](rpmt1s8371.png)
+![img](Mermaid-实用教程/rpmt1s8371.png)
 
 ## 节点
 
@@ -108,42 +108,42 @@ graph LR
     id
 ```
 
-![img](k5j7lcf2he.png)
+![img](Mermaid-实用教程/k5j7lcf2he.png)
 
 ```javascript
 graph LR
     id[带文字节点]
 ```
 
-![img](5oqklmc0rz.png)
+![img](Mermaid-实用教程/5oqklmc0rz.png)
 
 ```javascript
 graph LR
     id(圆角节点)
 ```
 
-![img](m1l8w2srpz.png)
+![img](Mermaid-实用教程/m1l8w2srpz.png)
 
 ```javascript
 graph LR
     id((圆形节点))
 ```
 
-![img](hzg2snr471.png)
+![img](Mermaid-实用教程/hzg2snr471.png)
 
 ```javascript
 graph LR
     id>不对称节点]
 ```
 
-![img](d28pv3fqx3.png)
+![img](Mermaid-实用教程/d28pv3fqx3.png)
 
 ```javascript
 graph LR
     id{菱形节点}
 ```
 
-![img](3v5j4fczmb.png)
+![img](Mermaid-实用教程/3v5j4fczmb.png)
 
 ## 连接线
 
@@ -154,7 +154,7 @@ graph LR
     A-->B
 ```
 
-![img](riv4kf6dae.png)
+![img](Mermaid-实用教程/riv4kf6dae.png)
 
 ### 实线，无箭头，无文字
 
@@ -163,7 +163,7 @@ graph LR
     A---B
 ```
 
-![img](101km96s26.png)
+![img](Mermaid-实用教程/101km96s26.png)
 
 ### 实线，无箭头，文字
 
@@ -181,7 +181,7 @@ graph LR
     A--- |文字| B
 ```
 
-![img](vofik65ttt.png)
+![img](Mermaid-实用教程/vofik65ttt.png)
 
 ### 实线，箭头，文字
 
@@ -197,7 +197,7 @@ graph LR
     A--> |文字| B
 ```
 
-![img](hlimub9499.png)
+![img](Mermaid-实用教程/hlimub9499.png)
 
 ### 虚线，箭头，无文字
 
@@ -206,7 +206,7 @@ graph LR;
    A-.->B;
 ```
 
-![img](793ve0ql3.png)
+![img](Mermaid-实用教程/793ve0ql3.png)
 
 ### 虚线，箭头，文字
 
@@ -215,7 +215,7 @@ graph LR
    A-. text .-> B
 ```
 
-![img](famuxq0vqf.png)
+![img](Mermaid-实用教程/famuxq0vqf.png)
 
 ### 大箭头，无文字
 
@@ -224,7 +224,7 @@ graph LR
    A ==> B
 ```
 
-![img](0kdfo5h802.png)
+![img](Mermaid-实用教程/0kdfo5h802.png)
 
 ### 大箭头，文字
 
@@ -233,7 +233,7 @@ graph LR
    A == text ==> B
 ```
 
-![img](za7vuejw2d.png)
+![img](Mermaid-实用教程/za7vuejw2d.png)
 
 ## 特殊语法
 
@@ -246,7 +246,7 @@ graph LR
     id1["This is the (text) in the box"]
 ```
 
-![img](zcfze0sen3.png)
+![img](Mermaid-实用教程/zcfze0sen3.png)
 
 ### 实体字符
 
@@ -257,7 +257,7 @@ graph LR
      A["A double quote:#quot;"] -->B["A dec char:#9829;"]
 ```
 
-![img](fjcviqs56s.png)
+![img](Mermaid-实用教程/fjcviqs56s.png)
 
 ## 子图
 
@@ -275,7 +275,7 @@ graph TB
     end
 ```
 
-![img](z3b2vu7vmf.png)
+![img](Mermaid-实用教程/z3b2vu7vmf.png)
 
 ## 样式
 
@@ -291,7 +291,7 @@ graph TD;
     linkStyle 3 stroke:#ff3,stroke-width:4px;
 ```
 
-![img](9mwcxke502.png)
+![img](Mermaid-实用教程/9mwcxke502.png)
 
 可以设置节点背景，边框颜色，粗细，实线还是虚线
 
@@ -302,7 +302,7 @@ graph LR
     style id2 fill:#ccf,stroke:#f66,stroke-width:2px,stroke-dasharray: 5, 5
 ```
 
-![img](deqsocy55j.png)
+![img](Mermaid-实用教程/deqsocy55j.png)
 
 ### 样式类
 
@@ -317,7 +317,7 @@ graph LR
     class A className
 ```
 
-![img](pdafavbwpk.png)
+![img](Mermaid-实用教程/pdafavbwpk.png)
 
 ```javascript
 classDef default fill:#f9f,stroke:#333,stroke-width:4px;
@@ -337,7 +337,7 @@ graph TD
    B-->E(A fa:fa-camera-retro perhaps?);
 ```
 
-![img](xdstdd6e2k.png)
+![img](Mermaid-实用教程/xdstdd6e2k.png)
 
 # 时序图
 
@@ -355,7 +355,7 @@ sequenceDiagram
     Bob-->John: Jolly good!
 ```
 
-![img](180rjui5io.png)
+![img](Mermaid-实用教程/180rjui5io.png)
 
 ## 参与者
 
@@ -367,7 +367,7 @@ sequenceDiagram
     John-->>Alice: Great!
 ```
 
-![img](eleicv4hs1.png)
+![img](Mermaid-实用教程/eleicv4hs1.png)
 
 第一条语句出现了两个参与者角色，而在这条语句中，Alice 在 John 之前，所以图中也是这个顺序。如果不想根据第一次出现的顺序来排，可以主动声明以定义顺序：
 
@@ -379,7 +379,7 @@ sequenceDiagram
     John-->>Alice: Great!
 ```
 
-![img](aq8hilfa2o.png)
+![img](Mermaid-实用教程/aq8hilfa2o.png)
 
 ### 别名
 
@@ -393,7 +393,7 @@ sequenceDiagram
     J->>A: Great!
 ```
 
-![img](ys9jab2wqg.png)
+![img](Mermaid-实用教程/ys9jab2wqg.png)
 
 ## 消息
 
@@ -411,7 +411,7 @@ sequenceDiagram
     A--x B: 有箭头虚线，加上叉
 ```
 
-![img](7qplows8g4.png)
+![img](Mermaid-实用教程/7qplows8g4.png)
 
 ## 活动期
 
@@ -425,7 +425,7 @@ sequenceDiagram
     deactivate John
 ```
 
-![img](jx85ho8ny2.png)
+![img](Mermaid-实用教程/jx85ho8ny2.png)
 
 使用 `+/-` 的更方便的写法：
 
@@ -435,7 +435,7 @@ sequenceDiagram
     John-->>-Alice: Great!
 ```
 
-![img](2q1cxx79gd.png)
+![img](Mermaid-实用教程/2q1cxx79gd.png)
 
 可以嵌套：
 
@@ -447,7 +447,7 @@ sequenceDiagram
     John-->>-Alice: I feel great!
 ```
 
-![img](jee37p2zzs.png)
+![img](Mermaid-实用教程/jee37p2zzs.png)
 
 ## 备注
 
@@ -465,7 +465,7 @@ sequenceDiagram
     Note right of John: Text in note
 ```
 
-![img](vks6zmd1s5.png)
+![img](Mermaid-实用教程/vks6zmd1s5.png)
 
 over 可用于单独一个角色上，也可以用于相邻两个角色间：
 
@@ -475,7 +475,7 @@ sequenceDiagram
     Note over Alice,John: A typical interaction
 ```
 
-![img](5b8q8sacis.png)
+![img](Mermaid-实用教程/5b8q8sacis.png)
 
 ## 循环
 
@@ -494,7 +494,7 @@ sequenceDiagram
     end
 ```
 
-![img](4o0mms4o5z.png)
+![img](Mermaid-实用教程/4o0mms4o5z.png)
 
 ## 选择
 
@@ -526,4 +526,4 @@ sequenceDiagram
     end
 ```
 
-![img](ruwizvoin8.png)
+![img](Mermaid-实用教程/ruwizvoin8.png)

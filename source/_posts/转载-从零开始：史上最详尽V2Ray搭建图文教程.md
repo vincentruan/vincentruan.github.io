@@ -127,7 +127,7 @@ firewall-cmd --zone=public --add-port=80/tcp --permanent
 
 对`v2ray-windows-64.zip`进行解压，然后将下载的`V2RayN.exe`复制到解压后的目录，即两个下载好的文件需要在同一目录。
 
-![img](vmess-windows-client-dir.jpg)
+![img](转载-从零开始：史上最详尽V2Ray搭建图文教程/vmess-windows-client-dir.jpg)
 
 ## 配置
 
@@ -135,11 +135,11 @@ firewall-cmd --zone=public --add-port=80/tcp --permanent
 
 如果采用上面的默认方式安装，服务端配置是协议vmess，则配置如下：
 
-![img](new-vmess-config.jpg)
+![img](转载-从零开始：史上最详尽V2Ray搭建图文教程/new-vmess-config.jpg)
 
-![img](vmess-windows-client.jpg)
+![img](转载-从零开始：史上最详尽V2Ray搭建图文教程/vmess-windows-client.jpg)
 
-![1577006106052](1577006106052.png)
+![1577006106052](转载-从零开始：史上最详尽V2Ray搭建图文教程/1577006106052.png)
 
 ## 测试
 

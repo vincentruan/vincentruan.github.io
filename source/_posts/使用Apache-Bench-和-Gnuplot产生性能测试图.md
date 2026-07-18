@@ -79,7 +79,7 @@ done
   在上一步中生成了测试数据，我们可以通过Gnuplot这一强大的工具生成漂亮的图表了。
   在生成图表之前，我们还需要处理一下获得的数据，
   如果直接使用测试生成报表，我们可能得到这样一个图表：
-  ![响应时间](image-20200204213258370.png)
+  ![响应时间](使用Apache-Bench-和-Gnuplot产生性能测试图/image-20200204213258370.png)
 
 相应的Gnuplot文件为：
 
@@ -118,7 +118,7 @@ plot "biz4.dat" using 9 smooth sbezier with lines title "concurrency 4", \
 
 这张图有参考价值，我们可以看到大部分的请求的相应时间落在那个数值段中，但是不能以时间序列显示服务器的性能。 它是以"总用时“ (ttime) 进行排序，所以一般它会一条上升的曲线来显示。
 这篇[文章](http://www.bradlanders.com/2013/04/15/apache-bench-and-gnuplot-youre-probably-doing-it-wrong/)中指出了一种按照时间序列显示数据的方法。 Apapche ab生成的测试数据中已经包含了时间戳，可以修改Gnuplot生成按时间序列显示的响应时间图：
-[![时间序列](image-20200204213452892.png)
+[![时间序列](使用Apache-Bench-和-Gnuplot产生性能测试图/image-20200204213452892.png)
 
 Gnuplot文件为：
 
@@ -196,4 +196,4 @@ plot "epochtime4.dat" using 1:2 with lines title "concurrency 4", \
 "epochtime300.dat" using 1:2 with lines title "concurrency 300"
 ```
 
-![吞吐率](image-20200204213604555.png)
+![吞吐率](使用Apache-Bench-和-Gnuplot产生性能测试图/image-20200204213604555.png)

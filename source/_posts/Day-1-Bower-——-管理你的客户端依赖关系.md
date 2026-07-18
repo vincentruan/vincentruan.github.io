@@ -14,7 +14,7 @@ date: 2018-05-26 22:27:38
 
 <!-- more -->
 
-![img-1](bVbC4e.jpg)
+![img-1](Day-1-Bower-——-管理你的客户端依赖关系/bVbC4e.jpg)
 
 ------
 

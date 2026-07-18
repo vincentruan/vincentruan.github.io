@@ -49,6 +49,9 @@ A D3.js four-quadrant tech-radar page. Architecture:
 
 The radar reads CSS variables (`--text-color`, `--border-color`) to follow NexT's dark mode. To add a tech item, append to `items[]` in the JSON with `quadrant` ∈ {languages, infrastructure, tools, techniques} and `ring` ∈ {adopt, trial, assess, hold}. `docs/tech-radar-plan.md` has the original design doc and an unimplemented Phase 2 (GitHub-data auto-generation).
 
+### Asset prefix stripper (`scripts/strip-asset-prefix.js`)
+A `before_post_render` filter that strips the leading `<PostName>/` from markdown image links, so source `.md` files can reference assets as `![](My Post/image.png)` (renders on GitHub/preview) while the renderer still receives the bare `image.png` form that `postAsset` + the asset path fixer below expect. Runs before the asset path fixer in the pipeline.
+
 ### Asset path fixer (`scripts/fix-asset-paths.js`)
 An `after_render:html` filter that rewrites broken `<img src="/.io//filename">` paths (a `hexo-renderer-marked` + `post_asset_folder` bug) back to correct asset paths by looking up `PostAsset` records. If you touch the marked renderer config or asset handling and images break differently, this script is the place to adjust.
 
@@ -57,7 +60,7 @@ An `after_render:html` filter that rewrites broken `<img src="/.io//filename">` 
 
 ## Posts & asset folders
 
-`post_asset_folder: true` in `_config.yml` means each post can have a sibling folder of the same basename (minus `.md`) holding its images, e.g. `source/_posts/My Post.md` + `source/_posts/My Post/image.png`. Reference images in posts with `![](image.png)` (relative). The `marked` config has `prependRoot: true` and `postAsset: true` to make this work.
+`post_asset_folder: true` in `_config.yml` means each post can have a sibling folder of the same basename (minus `.md`) holding its images, e.g. `source/_posts/My Post.md` + `source/_posts/My Post/image.png`. Reference images in posts with `![](My Post/image.png)` - the folder prefix (the post's own basename) lets the `.md` render correctly on GitHub/editors; `scripts/strip-asset-prefix.js` strips that prefix at render time so the `marked` config (`prependRoot: true`, `postAsset: true`) still produces the correct `/{permalink}/image.png` deploy URL.
 
 Post front-matter convention (from scaffolds):
 ```yaml
