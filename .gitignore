@@ -5,3 +5,6 @@ db.json
 node_modules/
 public/
 .deploy*/
+
+# oh-my-claudecode operational state (not part of the Hexo site)
+.omc/
