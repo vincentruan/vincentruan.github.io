@@ -26,7 +26,7 @@ There are **no tests and no linter** configured. Verification = `npm run build` 
 
 ## Deployment
 
-Pushing to `main` triggers `.github/workflows/deploy.yml`, which runs `npm ci` → `hexo generate` → uploads `public/` as a Pages artifact → deploys via the official Pages action. There is no manual deploy step; `hexo-deployer-git` is a leftover dependency (not used) and can be removed.
+Pushing to `main` triggers `.github/workflows/deploy.yml`, which runs `npm ci` → `hexo generate` → uploads `public/` as a Pages artifact → deploys via the official Pages action. There is no manual deploy step; `hexo-deployer-git` was a leftover dependency and has been removed. The workflow pins `node-version: '22'` and uses `actions/checkout@v5`, `actions/setup-node@v5`, `actions/upload-pages-artifact@v4`, `actions/deploy-pages@v5` (Node-24 runtime actions to avoid GitHub's Node-20 deprecation).
 
 `public/` and `db.json` are gitignored — they are build outputs, do not commit them.
 
@@ -34,10 +34,10 @@ Pushing to `main` triggers `.github/workflows/deploy.yml`, which runs `npm ci` �
 
 Hexo config and NexT theme config are deliberately separated:
 
-- **`_config.yml`** — Hexo site config (site metadata, URL, permalink, generator plugins, live2d, sitemaps, search, marked renderer settings).
+- **`_config.yml`** — Hexo site config (site metadata, URL, permalink, generator plugins, live2d, sitemap, search, marked renderer settings).
 - **`_config.next.yml`** — NexT theme override config (menu, sidebar, comments, math, mermaid, motion, canvas-nest). This uses NexT's "alternate theme config" feature: a file named `_config.next.yml` in the project root automatically overrides the theme's own `_config.yml`.
 
-When changing theme behavior, edit `_config.next.yml`, not `themes/next/_config.yml`. The `themes/` directory still contains old `huuman`/`landscape`/`yilia` themes that are not in use — `theme: next` in `_config.yml` resolves to the `hexo-theme-next` npm package, not a `themes/next/` folder.
+When changing theme behavior, edit `_config.next.yml`, not `themes/next/_config.yml`. `theme: next` in `_config.yml` resolves to the `hexo-theme-next` npm package, not a `themes/next/` folder. (The unused `themes/` directory containing old `hueman`/`landscape`/`yilia` themes was removed during a Dependabot cleanup — those themes' `package.json` files were pulling in vulnerable transitive deps.)
 
 ## Custom features (not standard Hexo/NexT)
 
