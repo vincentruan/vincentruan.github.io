@@ -127,3 +127,7 @@ mermaid:
 # Flowchart
 flowchart:
   enable: true
+
+# Image zoom (click to enlarge) — applies to all post images
+# https://fancyapps.com/fancybox/
+fancybox: true
