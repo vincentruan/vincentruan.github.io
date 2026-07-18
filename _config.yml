@@ -15,7 +15,8 @@ timezone: Asia/Shanghai
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: https://vincentruan.github.io
 root: /
-permalink: :year/:month/:day/:title/
+# :name uses only the post filename; :title would include the category subfolder under _posts/ and change URLs
+permalink: :year/:month/:day/:name/
 permalink_defaults:
 
 # Directory

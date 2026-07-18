@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A personal blog built on **Hexo 7.3.0** with the **NexT 8.28.0** theme, deployed to GitHub Pages (`vincentruan.github.io`) via GitHub Actions. The site is in Simplified Chinese (`language: zh-CN`, `timezone: Asia/Shanghai`). Posts live in `source/_posts/` (104 posts); most content is pre-existing tech writing — be careful not to alter existing post prose unless asked.
+A personal blog built on **Hexo 7.3.0** with the **NexT 8.28.0** theme, deployed to GitHub Pages (`vincentruan.github.io`) via GitHub Actions. The site is in Simplified Chinese (`language: zh-CN`, `timezone: Asia/Shanghai`). Posts live in `source/_posts/` organized into category subfolders (`source/_posts/<category>/` - 58 posts across 14 categories); most content is pre-existing tech writing — be careful not to alter existing post prose unless asked.
 
 ## Commands
 
@@ -60,7 +60,7 @@ An `after_render:html` filter that rewrites broken `<img src="/.io//filename">` 
 
 ## Posts & asset folders
 
-`post_asset_folder: true` in `_config.yml` means each post can have a sibling folder of the same basename (minus `.md`) holding its images, e.g. `source/_posts/My Post.md` + `source/_posts/My Post/image.png`. Reference images in posts with `![](My Post/image.png)` - the folder prefix (the post's own basename) lets the `.md` render correctly on GitHub/editors; `scripts/strip-asset-prefix.js` strips that prefix at render time so the `marked` config (`prependRoot: true`, `postAsset: true`) still produces the correct `/{permalink}/image.png` deploy URL.
+`post_asset_folder: true` in `_config.yml` means each post can have a sibling folder of the same basename (minus `.md`) holding its images, e.g. `source/_posts/Java/My Post.md` + `source/_posts/Java/My Post/image.png`. Reference images in posts with `![](My Post/image.png)` - the folder prefix (the post's own basename) lets the `.md` render correctly on GitHub/editors; `scripts/strip-asset-prefix.js` strips that prefix at render time so the `marked` config (`prependRoot: true`, `postAsset: true`) still produces the correct `/{permalink}/image.png` deploy URL.
 
 Post front-matter convention (from scaffolds):
 ```yaml
@@ -72,7 +72,7 @@ tags:
 - tag1
 ---
 ```
-Use `<!-- more -->` to set the excerpt break on the index page. Permalink pattern is `:year/:month/:day/:title/`.
+Use `<!-- more -->` to set the excerpt break on the index page. Permalink pattern is `:year/:month/:day/:name/` - uses `:name` (filename only), not `:title`, because posts live in category subfolders and `:title` would inject the subfolder name into the URL; `:name` keeps URLs stable when posts move between folders.
 
 ## Security note
 
