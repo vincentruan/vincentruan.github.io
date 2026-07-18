@@ -12,8 +12,6 @@ categories:
 excerpt: 深入解析 Claude Code 的设计哲学：如何通过工程化手段将复杂性从主循环中剥离，实现可扩展、可治理的 Agent 系统。
 ---
 
-INTERNAL SHARING · 2026.07
-
 **Claude Code 的设计艺术**
 
 
