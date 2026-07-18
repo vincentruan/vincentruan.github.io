@@ -8,3 +8,4 @@ public/
 
 # oh-my-claudecode operational state (not part of the Hexo site)
 .omc/
+.gstack/
