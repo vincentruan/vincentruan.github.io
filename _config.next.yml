@@ -102,20 +102,20 @@ canvas_nest:
 # Comments
 # Available values: disqus | disqusjs | livere | gitalk | utterances | isso
 comments:
-  active: gitalk
+  active: utterances
   storage: true
   lazyload: false
 
-# Gitalk
-# https://github.com/gitalk/gitalk
-gitalk:
+# Utterances —— 基于 GitHub Issues,无需 client_secret
+# https://github.com/utterance/utterances
+# 前置条件:仓库 public 且开启 Issues(博客仓库默认满足)
+utterances:
   enable: true
-  github_id: vincentruan
-  repo: vincentruan.github.io
-  client_id: 77de951f4b5c331b23b4
-  client_secret: 41f88d6edb14f19e3ac0f49acc84c100debcdf7d
-  admin_user: vincentruan
-  distraction_free_mode: true
+  repo: vincentruan/vincentruan.github.io # owner/repo
+  # Available values: pathname | url | title | og:title
+  issue_term: pathname
+  # Available values: github-light | github-dark | preferred-color-scheme | github-dark-orange | icy-dark | dark-blue | photon-dark | boxy-light
+  theme: preferred-color-scheme
 
 # Mermaid
 mermaid:
