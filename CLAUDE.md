@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A personal blog built on **Hexo 7.3.0** with the **NexT 8.28.0** theme, deployed to GitHub Pages (`vincentruan.github.io`) via GitHub Actions. The site is in Simplified Chinese (`language: zh-CN`, `timezone: Asia/Shanghai`). Posts live in `source/_posts/` organized into category subfolders (`source/_posts/<category>/` - 142 posts across 15 categories); most content is pre-existing tech writing — be careful not to alter existing post prose unless asked.
+A personal blog built on **Hexo 8.1.2** with the **NexT 8.28.0** theme, deployed to GitHub Pages (`vincentruan.github.io`) via GitHub Actions. The site is in Simplified Chinese (`language: zh-CN`, `timezone: Asia/Shanghai`). Posts live in `source/_posts/` organized into category subfolders (`source/_posts/<category>/` - 142 posts across 15 categories); most content is pre-existing tech writing — be careful not to alter existing post prose unless asked.
 
 ## Commands
 
@@ -80,4 +80,4 @@ Use `<!-- more -->` to set the excerpt break on the index page. Permalink patter
 
 ## Operational state
 
-The `.omc/` directory holds oh-my-claudecode orchestration state and is **not currently gitignored** — avoid committing it. (`.gitignore` covers `db.json`, `node_modules/`, `public/`, `.deploy*/`.)
+The `.omc/` directory holds oh-my-claudecode orchestration state; `.gstack/` holds gstack operational state. Both are gitignored (see `.gitignore`), along with `db.json`, `node_modules/`, `public/`, `.deploy*/`.
