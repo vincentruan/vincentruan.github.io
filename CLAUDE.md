@@ -55,6 +55,9 @@ A `before_post_render` filter that strips the leading `<PostName>/` from markdow
 ### Asset path fixer (`scripts/fix-asset-paths.js`)
 An `after_render:html` filter that rewrites broken `<img src="/.io//filename">` paths (a `hexo-renderer-marked` + `post_asset_folder` bug) back to correct asset paths by looking up `PostAsset` records. If you touch the marked renderer config or asset handling and images break differently, this script is the place to adjust.
 
+### Mermaid fence → tag (`scripts/mermaid-fence-to-tag.js`)
+A `before_post_render` filter (priority 9, so it runs before Hexo's built-in `backtick_code_block` filter at priority 10) that rewrites fenced ` ```mermaid ` code blocks into NexT's `{% mermaid %}...{% endmermaid %}` block tag. NexT's mermaid support only fires on the tag syntax — its front-end script selects `pre > .mermaid`, which the tag emits as `<code class="mermaid">`. A bare fence is instead swallowed by `backtick_code_block` and rendered as a plain highlighted `plaintext` code block, so the diagram never appears. Converting the fence to the tag routes it through NexT's official path. Mermaid itself is configured in `_config.next.yml` under `mermaid:` (CDN-loaded, currently v11.10.1).
+
 ### Live2D widget
 `hexo-helper-live2d` renders a `xiaomai` model from `live2d_models/xiaomai/` (config in `_config.yml` under `live2d:`). `mobile.show: false`. Disabled by setting `live2d.enable: false`.
 
