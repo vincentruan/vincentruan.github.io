@@ -1,0 +1,24 @@
+# Dependabot configuration
+# Docs: https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+version: 2
+updates:
+  # Keep npm dependencies up to date
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    ignore:
+      # CVE-2024-29415 (ip SSRF in isPublic, CVSS 8.1): the `ip` package is
+      # unmaintained upstream — 2.0.1 is the latest version and itself falls
+      # inside the vulnerable range (<= 2.0.1), so there is NO fixed release
+      # to upgrade to (Dependabot reports fixed_version: null).
+      # It reaches us only through hexo-helper-live2d -> npm-check-updates
+      # -> pacote -> make-fetch-happen -> socks-proxy-agent -> socks -> ip,
+      # a chain that is only exercised by the live2d plugin's install-time
+      # update-check CLI — never during site build or runtime. Effective
+      # exposure is nil. We pin `ip` to ^2.0.1 in package.json `overrides`
+      # to prevent accidental downgrade and intentionally ignore this alert
+      # until an upstream fix is published.
+      - dependency-name: "ip"
+        update-types: ["version-update:semver-major", "version-update:semver-minor", "version-update:semver-patch"]
