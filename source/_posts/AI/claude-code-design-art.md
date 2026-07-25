@@ -2279,45 +2279,9 @@ Loop 不是让 agent 一直跑。Loop 是在目标明确、反馈可验证、风
 Permission 管危险动作，Compact 管上下文膨胀，Error Recovery 管失败状态，Task 协议管共享进度，Memory 管长期经验。没有这些机制，Loop 只是“while true 调模型”；有这些机制，Loop 才是可治理的持续系统。
 
 
-## 晓智要追的不是功能表，而是治理能力
-
-CHAPTER · 10 · 10 min
-
-
-Claude Code 的差距不在某一个工具，而在整套 harness 是否能控制成本、边界、上下文、错误和协作状态。
-
-
-### P0：先让系统可控
-
-
-P0 不是为了省一点钱，而是为了让系统有基本工程边界。
-
-
-- **开启和保护 cache 稳定**：动态字段不能污染 system prompt；历史注入要保持字节稳定。
-- **建立权限优先级**：组织 / 项目 settings deny 必须高于用户 hook allow。
-- **错误 reason code 化**：失败要能复盘，不能只是一堆 catch 和 toast。
-
-
-### P1：补上下文治理
-
-
-晓智现在长会话主要靠硬截断和重启注入历史。下一步要做的是确定性 compact：大 tool_result 落盘，历史保头保尾，旧工具结果保壳去载荷。先做 0-API 的 L1-L3，不要一上来就用 LLM 总结。
-
-
-### P2：再上长期 Memory 和多 Agent
-
-
-Memory 要先做成可审计 markdown 账本，不要一上来做黑盒向量库。多 Agent 要先有任务文件、claim 协议、消息协议和 worktree 隔离，再谈自动认领和持续 loop。
-
-
-![System Architecture](claude-code-design-art/system-architecture.svg)
-
-<figcaption style="text-align:center;font-size:.9em;color:#6c6a64">FIG. 23 · system-architecture.svg — 全链路能力最后应落到清晰架构边界</figcaption>
-
-
 ## 最后回到六个工程问题
 
-CHAPTER · 11 · 5 min
+CHAPTER · 10 · 5 min
 
 
 Claude Code 的设计艺术，可以压成六个问题。每个问题都对应一个不让复杂性进入主循环的机制。
