@@ -1,0 +1,615 @@
+<title>Ideation: TTS Voice Narration for Hexo Blog</title>
+<style>
+  :root {
+    --bg: #fafaf8;
+    --surface: #fff;
+    --text: #1a1a1a;
+    --text-secondary: #555;
+    --text-muted: #777;
+    --border: #e0ddd8;
+    --accent: #2563eb;
+    --accent-soft: #eff4ff;
+    --accent-text: #1e40af;
+    --success: #16a34a;
+    --success-soft: #f0fdf4;
+    --warn: #d97706;
+    --warn-soft: #fffbeb;
+    --info: #0891b2;
+    --info-soft: #ecfeff;
+    --code-bg: #f5f3ef;
+    --radius: 6px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1a1a1a;
+      --surface: #242424;
+      --text: #e8e6e1;
+      --text-secondary: #a8a49e;
+      --text-muted: #888;
+      --border: #3a3a3a;
+      --accent: #60a5fa;
+      --accent-soft: #1e293b;
+      --accent-text: #93bbfd;
+      --success: #4ade80;
+      --success-soft: #14291a;
+      --warn: #fbbf24;
+      --warn-soft: #292210;
+      --info: #22d3ee;
+      --info-soft: #0f2a2e;
+      --code-bg: #2a2a2a;
+    }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    padding-block: 2rem;
+    padding-inline: 1rem;
+  }
+  .container { max-width: 900px; margin-inline: auto; }
+  .prose { max-width: 70ch; }
+
+  /* Header */
+  .doc-header { margin-bottom: 2.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; }
+  .doc-header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 0.75rem; font-size: 0.85rem; color: var(--text-secondary); }
+  .meta-row span { display: inline-flex; align-items: center; gap: 0.25rem; }
+  .meta-label { font-weight: 600; color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.04em; }
+
+  /* Stats strip */
+  .stats-strip { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.75rem 1rem; flex: 1; min-width: 120px; }
+  .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+  .stat-label { font-size: 0.78rem; color: var(--text-muted); }
+
+  /* Sections */
+  section { margin-bottom: 2.5rem; }
+  h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--accent); display: inline-block; }
+  h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; }
+  p { margin-bottom: 0.75rem; }
+  ul, ol { margin-bottom: 0.75rem; padding-left: 1.5rem; }
+  li { margin-bottom: 0.3rem; }
+
+  /* Grounding */
+  .grounding-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 600px) { .grounding-grid { grid-template-columns: 1fr 1fr; } }
+  .grounding-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; }
+  .grounding-card h3 { font-size: 0.9rem; color: var(--accent-text); margin-bottom: 0.5rem; }
+  .grounding-card ul { font-size: 0.88rem; padding-left: 1.2rem; }
+  .grounding-card li { color: var(--text-secondary); }
+
+  /* Axes */
+  .axes-list { display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; padding: 0; }
+  .axis-tag { background: var(--accent-soft); color: var(--accent-text); border-radius: var(--radius); padding: 0.35rem 0.75rem; font-size: 0.82rem; font-weight: 500; border: 1px solid var(--accent); }
+
+  /* Idea nav */
+  .idea-nav { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+  .idea-nav li a { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.3rem 0.6rem; font-size: 0.8rem; color: var(--text-secondary); text-decoration: none; transition: border-color 0.15s; }
+  .idea-nav li a:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Idea cards */
+  .idea-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1.25rem; }
+  .idea-card header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .idea-rank { font-size: 0.85rem; font-weight: 700; color: var(--accent); min-width: 1.5rem; }
+  .idea-title { font-size: 1.05rem; font-weight: 700; }
+  .idea-pills { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-left: auto; }
+  .pill { font-size: 0.72rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.03em; }
+  .pill-axis { background: var(--accent-soft); color: var(--accent-text); }
+  .pill-conf-high { background: var(--success-soft); color: var(--success); }
+  .pill-conf-med { background: var(--warn-soft); color: var(--warn); }
+  .pill-complexity { background: var(--code-bg); color: var(--text-muted); }
+
+  .idea-field { margin-bottom: 0.6rem; font-size: 0.9rem; }
+  .idea-field dt { font-weight: 600; color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; display: inline; }
+  .idea-field dd { display: inline; margin-left: 0.3rem; color: var(--text-secondary); }
+  .idea-field dd p { display: inline; }
+
+  .basis-tag { font-family: "SF Mono", "Fira Code", monospace; font-size: 0.78rem; background: var(--code-bg); padding: 0.1rem 0.35rem; border-radius: 3px; color: var(--accent-text); font-weight: 600; }
+
+  /* Diagrams */
+  .diagram-container { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; margin: 1rem 0; overflow-x: auto; }
+  .diagram-container svg { max-width: 100%; height: auto; }
+
+  /* Rejection table */
+  .rejection-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .rejection-table th { text-align: left; padding: 0.5rem; border-bottom: 2px solid var(--border); color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  .rejection-table td { padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--border); color: var(--text-secondary); vertical-align: top; }
+  .rejection-table tr:last-child td { border-bottom: none; }
+
+  /* Footer */
+  .composition-signal { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--text-muted); }
+</style>
+
+<div class="container">
+
+<header class="doc-header">
+  <h1>Ideation: TTS Voice Narration for Hexo Blog</h1>
+  <div class="meta-row">
+    <span><span class="meta-label">Date</span> 2026-09-12</span>
+    <span><span class="meta-label">Topic</span> tts-voice-narration</span>
+    <span><span class="meta-label">Mode</span> repo-grounded</span>
+    <span><span class="meta-label">Focus</span> voice narration with style matching, AI image/table analysis, driving/bedtime scenarios</span>
+  </div>
+</header>
+
+<div class="stats-strip">
+  <div class="stat-card">
+    <div class="stat-value">28</div>
+    <div class="stat-label">Raw candidates</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">7</div>
+    <div class="stat-label">Survivors</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">5</div>
+    <div class="stat-label">Topic axes covered</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">21</div>
+    <div class="stat-label">Cut in filtering</div>
+  </div>
+</div>
+
+<!-- Grounding Context -->
+<section id="grounding">
+  <h2>Grounding Context</h2>
+  <div class="grounding-grid">
+    <div class="grounding-card">
+      <h3>Codebase</h3>
+      <ul>
+        <li>Hexo 8.1.2 + NexT 8.28.0 (npm package)</li>
+        <li>Two-config split: <code>_config.yml</code> + <code>_config.next.yml</code></li>
+        <li>Custom features via <code>scripts/</code> filters + <code>source/js/</code> IIFE</li>
+        <li>CDN via NexT <code>vendors</code> abstraction</li>
+        <li>GHA pipeline: <code>npm ci → hexo generate → deploy</code></li>
+        <li>12 NexT injection points via <code>source/_data/</code> (unused)</li>
+      </ul>
+    </div>
+    <div class="grounding-card">
+      <h3>Content Corpus</h3>
+      <ul>
+        <li>143 posts across 16 categories (AI 45%, 架构 17%, Java 9%)</li>
+        <li>1,219 image references, 633 image files</li>
+        <li>1,817 code blocks across 20+ languages</li>
+        <li>51 Mermaid diagrams (flowcharts)</li>
+        <li>1,366 table rows for comparisons</li>
+        <li><code>description</code> field on 84/143 posts (59%)</li>
+      </ul>
+    </div>
+    <div class="grounding-card">
+      <h3>Existing Patterns</h3>
+      <ul>
+        <li>Per-page opt-in: <code>mathjax: true</code> front-matter</li>
+        <li>Tech radar: JSON data + JS IIFE + custom page type</li>
+        <li>Mermaid: priority-9 <code>before_post_render</code> filter</li>
+        <li>Asset pipeline: strip-prefix + fix-paths two-stage</li>
+        <li>API key avoidance: Utterances over Gitalk</li>
+        <li>Zero existing audio/TTS infrastructure</li>
+      </ul>
+    </div>
+    <div class="grounding-card">
+      <h3>External Landscape</h3>
+      <ul>
+        <li>Edge-TTS: free, no API key, Azure-quality neural voices</li>
+        <li>Azure Neural: best Chinese (XiaoxiaoNeural, YunxiNeural)</li>
+        <li>Web Speech API: free, browser-native, variable quality</li>
+        <li>ElevenLabs: 1000+ voices, embeddable widget</li>
+        <li>No dominant Hexo/Jekyll TTS plugin exists</li>
+        <li>AI vision (Claude/GPT-4V) for image description</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Topic Axes -->
+<section id="axes">
+  <h2>Topic Axes</h2>
+  <ul class="axes-list">
+    <li class="axis-tag">TTS Engine Selection</li>
+    <li class="axis-tag">Voice Style Adaptation</li>
+    <li class="axis-tag">Multimodal Content Pipeline</li>
+    <li class="axis-tag">Site Integration Architecture</li>
+    <li class="axis-tag">Listening Experience Design</li>
+  </ul>
+</section>
+
+<!-- Ranked Ideas -->
+<section id="ranked-ideas">
+  <h2>Ranked Ideas</h2>
+
+  <nav>
+    <ul class="idea-nav">
+      <li><a href="#idea1">1. Build-Time Audio Pipeline</a></li>
+      <li><a href="#idea2">2. Category-to-Voice Mapping</a></li>
+      <li><a href="#idea3">3. Content Adaptation Layer</a></li>
+      <li><a href="#idea4">4. AI Vision Pipeline</a></li>
+      <li><a href="#idea5">5. Podcast RSS + Invisible Player</a></li>
+      <li><a href="#idea6">6. Layered Listening</a></li>
+      <li><a href="#idea7">7. Hybrid TTS Fallback</a></li>
+    </ul>
+  </nav>
+
+  <!-- Idea 1 -->
+  <article class="idea-card" id="idea1">
+    <header>
+      <span class="idea-rank">1.</span>
+      <span class="idea-title">Build-Time Edge-TTS Audio Pipeline</span>
+      <div class="idea-pills">
+        <span class="pill pill-axis">TTS Engine + Integration</span>
+        <span class="pill pill-conf-high">High Confidence</span>
+        <span class="pill pill-complexity">Medium Complexity</span>
+      </div>
+    </header>
+    <dl>
+      <div class="idea-field">
+        <dt>Description</dt>
+        <dd>Generate MP3 audio files during the GitHub Actions build using Edge-TTS (free, no API key, Azure-quality neural voices). After <code>hexo generate</code> completes, a post-build step iterates generated HTML, extracts clean text, and synthesizes audio. The MP3s deploy as static assets alongside HTML — zero per-listener cost, consistent quality regardless of browser, no API keys in config. Includes content-hash caching so unchanged posts skip regeneration (typical builds regenerate 1-3 MP3s instead of 143).</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Basis</dt>
+        <dd><span class="basis-tag">direct:</span> GHA pipeline is <code>npm ci → hexo generate → deploy</code> with zero media processing. Edge-TTS is Python-based, free, no API key — matches the project's API-key-avoidance pattern (Utterances chosen over Gitalk for the same reason). <span class="basis-tag">reasoned:</span> Build-time generation unlocks podcast distribution, offline listening, and CDN caching simultaneously — choosing client-side locks us out of all three.</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Rationale</dt>
+        <dd>This is the highest-leverage architectural decision. Every other idea builds on it. Once the pipeline exists, every new post automatically gets audio on push — the marginal cost of the 144th post is zero. The build-vs-client choice determines whether the feature is a permanent infrastructure or a disposable experiment.</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Downsides</dt>
+        <dd>Increases CI build time (~2 min per new/changed post). Edge-TTS voices may change without notice. Requires Python in the GHA environment. Audio files increase deploy artifact size.</dd>
+      </div>
+    </dl>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 780 180" xmlns="http://www.w3.org/2000/svg" style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px;">
+        <!-- Pipeline flow -->
+        <rect x="10" y="60" width="120" height="50" rx="6" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="70" y="82" text-anchor="middle" fill="var(--accent-text)" font-weight="600">Git Push</text>
+        <text x="70" y="98" text-anchor="middle" fill="var(--text-muted)" font-size="10">main branch</text>
+
+        <line x1="130" y1="85" x2="170" y2="85" stroke="var(--border)" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+        <rect x="170" y="60" width="120" height="50" rx="6" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="230" y="82" text-anchor="middle" fill="var(--accent-text)" font-weight="600">hexo generate</text>
+        <text x="230" y="98" text-anchor="middle" fill="var(--text-muted)" font-size="10">HTML in public/</text>
+
+        <line x1="290" y1="85" x2="330" y2="85" stroke="var(--border)" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+        <rect x="330" y="45" width="140" height="80" rx="6" fill="var(--success-soft)" stroke="var(--success)" stroke-width="2"/>
+        <text x="400" y="68" text-anchor="middle" fill="var(--success)" font-weight="700">Audio Generation</text>
+        <text x="400" y="85" text-anchor="middle" fill="var(--text-muted)" font-size="10">Extract text → Edge-TTS</text>
+        <text x="400" y="100" text-anchor="middle" fill="var(--text-muted)" font-size="10">Content-hash cache check</text>
+        <text x="400" y="115" text-anchor="middle" fill="var(--text-muted)" font-size="10">→ public/audio/*.mp3</text>
+
+        <line x1="470" y1="85" x2="510" y2="85" stroke="var(--border)" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+        <rect x="510" y="60" width="120" height="50" rx="6" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="570" y="82" text-anchor="middle" fill="var(--accent-text)" font-weight="600">Deploy Pages</text>
+        <text x="570" y="98" text-anchor="middle" fill="var(--text-muted)" font-size="10">HTML + MP3 static</text>
+
+        <line x1="630" y1="85" x2="670" y2="85" stroke="var(--border)" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+        <rect x="670" y="60" width="100" height="50" rx="6" fill="var(--info-soft)" stroke="var(--info)" stroke-width="1.5"/>
+        <text x="720" y="82" text-anchor="middle" fill="var(--info)" font-weight="600">Listeners</text>
+        <text x="720" y="98" text-anchor="middle" fill="var(--text-muted)" font-size="10">zero runtime cost</text>
+
+        <defs>
+          <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="var(--text-muted)"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+  </article>
+
+  <!-- Idea 2 -->
+  <article class="idea-card" id="idea2">
+    <header>
+      <span class="idea-rank">2.</span>
+      <span class="idea-title">Category-to-Voice Mapping via Config</span>
+      <div class="idea-pills">
+        <span class="pill pill-axis">Voice Style</span>
+        <span class="pill pill-conf-high">High Confidence</span>
+        <span class="pill pill-complexity">Low Complexity</span>
+      </div>
+    </header>
+    <dl>
+      <div class="idea-field">
+        <dt>Description</dt>
+        <dd>Define a voice map in <code>_config.next.yml</code> that assigns a neural voice to each of the 16 categories. AI posts (45%, exploratory) get YunxiNeural (technical, slightly energetic); 成长思考 (personal essays) get XiaoxiaoNeural (warm, narrative); Java/架构 get YunjianNeural (authoritative, measured). Each profile specifies: voice name, rate multiplier, pitch shift, and inter-section pause length. Per-post override via front-matter <code>voice:</code> for edge cases — opt-in, like <code>mathjax: true</code>.</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Basis</dt>
+        <dd><span class="basis-tag">direct:</span> 16 categories have distinct content personalities (voice-style dossier). No voice/tone/style fields exist in front-matter — clean slate. NexT config flag pattern (<code>enable: true/false</code>) established for every third-party service. <span class="basis-tag">reasoned:</span> Adding <code>voice_style:</code> to 143 posts is manual burden that will never be maintained — categories are already maintained. One YAML block: change one line, all 64 AI posts switch voice.</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Rationale</dt>
+        <dd>One voice for 143 posts across 16 categories creates monotony that kills long-term engagement. Category-based mapping captures the biggest voice diversity signal with zero per-post effort. New posts inherit automatically. The map is auditable, reviewable, diffable in git — following the tech-radar JSON-as-source-of-truth pattern.</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Downsides</dt>
+        <dd>Categories are coarse — posts spanning multiple categories get one voice. Some categories have only 1-2 posts, making voice assignment arbitrary. Voice "personality" matching is subjective — what sounds "technical" to one listener may not to another.</dd>
+      </div>
+    </dl>
+  </article>
+
+  <!-- Idea 3 -->
+  <article class="idea-card" id="idea3">
+    <header>
+      <span class="idea-rank">3.</span>
+      <span class="idea-title">Content Adaptation Layer ("Audio Edition")</span>
+      <div class="idea-pills">
+        <span class="pill pill-axis">Multimodal Pipeline</span>
+        <span class="pill pill-conf-high">High Confidence</span>
+        <span class="pill pill-complexity">High Complexity</span>
+      </div>
+    </header>
+    <dl>
+      <div class="idea-field">
+        <dt>Description</dt>
+        <dd>A build-time <code>before_post_render</code> filter that generates an "audio edition" of each post — a parallel content representation where code blocks become conversational summaries ("这段代码实现了一个LRU缓存，核心思路是..."), tables become narrated comparisons ("Of the five structures compared, Array provides O(1) access while LinkedList requires O(n) traversal"), and Mermaid diagrams become verbal walkthroughs. A unified content descriptor JSON per post (<code>source/data/descriptors/{slug}.json</code>) serves as the single source of truth for TTS, RSS, search, and accessibility.</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Basis</dt>
+        <dd><span class="basis-tag">direct:</span> 1,817 code blocks (66% of posts code-heavy), 1,366 table rows, 51 Mermaid diagrams. Reading these aloud verbatim is a known TTS failure mode. <span class="basis-tag">direct:</span> Existing filter pipeline in <code>scripts/</code> (mermaid-fence-to-tag at priority 9, strip-asset-prefix, fix-asset-paths) — the audio edition filter follows the exact same pattern. <span class="basis-tag">direct:</span> Tech-radar JSON pattern proves data-as-source-of-truth works in this codebase.</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Rationale</dt>
+        <dd>Without this adaptation layer, 66% of the blog is unlistenable. The descriptor compounds beyond TTS: RSS feeds can include summaries, search can index image descriptions, accessibility features consume the same data. Every feature that needs "what's in this post" reads from one source instead of building its own parser.</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Downsides</dt>
+        <dd>Highest-complexity idea. Code summarization quality varies — may need LLM for good output or settle for heuristic extraction. Table-to-narrative is hard to generalize across different table structures. Descriptor adds build-time processing and storage.</dd>
+      </div>
+    </dl>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 11px;">
+        <!-- Source -->
+        <rect x="10" y="10" width="140" height="200" rx="6" fill="var(--code-bg)" stroke="var(--border)" stroke-width="1"/>
+        <text x="80" y="32" text-anchor="middle" fill="var(--text)" font-weight="700" font-size="12">Markdown Post</text>
+        <text x="20" y="55" fill="var(--text-muted)">Prose paragraphs...</text>
+        <rect x="20" y="65" width="120" height="25" rx="3" fill="var(--warn-soft)" stroke="var(--warn)" stroke-width="0.5"/>
+        <text x="80" y="82" text-anchor="middle" fill="var(--warn)">```java code block```</text>
+        <text x="20" y="108" fill="var(--text-muted)">More text...</text>
+        <rect x="20" y="115" width="120" height="25" rx="3" fill="var(--info-soft)" stroke="var(--info)" stroke-width="0.5"/>
+        <text x="80" y="132" text-anchor="middle" fill="var(--info)">| table | data |</text>
+        <rect x="20" y="150" width="120" height="25" rx="3" fill="var(--success-soft)" stroke="var(--success)" stroke-width="0.5"/>
+        <text x="80" y="167" text-anchor="middle" fill="var(--success)">```mermaid graph```</text>
+        <rect x="20" y="185" width="120" height="18" rx="3" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="0.5"/>
+        <text x="80" y="198" text-anchor="middle" fill="var(--accent)">![image](path)</text>
+
+        <!-- Arrow -->
+        <line x1="155" y1="110" x2="210" y2="110" stroke="var(--border)" stroke-width="2" marker-end="url(#arrowhead2)"/>
+        <text x="182" y="100" text-anchor="middle" fill="var(--text-muted)" font-size="9">transform</text>
+
+        <!-- Adaptation Layer -->
+        <rect x="210" y="30" width="180" height="160" rx="6" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="300" y="52" text-anchor="middle" fill="var(--accent-text)" font-weight="700" font-size="12">Content Adaptation</text>
+        <text x="220" y="75" fill="var(--text-secondary)" font-size="10">Code → "这段代码实现了..."</text>
+        <text x="220" y="95" fill="var(--text-secondary)" font-size="10">Table → "5种结构对比..."</text>
+        <text x="220" y="115" fill="var(--text-secondary)" font-size="10">Mermaid → "流程从A到B..."</text>
+        <text x="220" y="135" fill="var(--text-secondary)" font-size="10">Image → "架构图展示了..."</text>
+        <text x="220" y="165" fill="var(--text-muted)" font-size="10">→ descriptor.json</text>
+        <text x="220" y="180" fill="var(--text-muted)" font-size="10">→ audio script text</text>
+
+        <!-- Arrow -->
+        <line x1="395" y1="110" x2="450" y2="110" stroke="var(--border)" stroke-width="2" marker-end="url(#arrowhead2)"/>
+
+        <!-- Output -->
+        <rect x="450" y="40" width="230" height="140" rx="6" fill="var(--success-soft)" stroke="var(--success)" stroke-width="1.5"/>
+        <text x="565" y="62" text-anchor="middle" fill="var(--success)" font-weight="700" font-size="12">Audio-Ready Output</text>
+        <text x="460" y="85" fill="var(--text-secondary)" font-size="10">Clean prose for TTS engine</text>
+        <text x="460" y="105" fill="var(--text-secondary)" font-size="10">Image descriptions inline</text>
+        <text x="460" y="125" fill="var(--text-secondary)" font-size="10">Table summaries as narrative</text>
+        <text x="460" y="145" fill="var(--text-secondary)" font-size="10">Code intent, not syntax</text>
+        <text x="460" y="170" fill="var(--text-muted)" font-size="10">Also feeds: RSS, search, a11y</text>
+
+        <defs>
+          <marker id="arrowhead2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="var(--text-muted)"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+  </article>
+
+  <!-- Idea 4 -->
+  <article class="idea-card" id="idea4">
+    <header>
+      <span class="idea-rank">4.</span>
+      <span class="idea-title">AI Vision Pipeline for Image Narration</span>
+      <div class="idea-pills">
+        <span class="pill pill-axis">Multimodal Pipeline</span>
+        <span class="pill pill-conf-med">Medium Confidence</span>
+        <span class="pill pill-complexity">High Complexity</span>
+      </div>
+    </header>
+    <dl>
+      <div class="idea-field">
+        <dt>Description</dt>
+        <dd>At build time, use a vision model (Claude or GPT-4V) to generate 1-2 sentence descriptions for each of the 1,219 images. Store as sidecar JSON in <code>source/data/image-descriptions/{post-slug}.json</code>. The Content Adaptation Layer (Idea 3) reads these descriptions when generating the audio edition. For the "红黑树" post with 30 diagrams, each illustration gets a spoken description: "This shows a red-black tree with node 7 as root..." Algorithm diagrams get structural descriptions; UI screenshots get content descriptions; flowcharts get path descriptions.</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Basis</dt>
+        <dd><span class="basis-tag">direct:</span> 1,219 image references, 633 actual image files. Posts like "30张图带你彻底理解红黑树" are fundamentally visual — without descriptions, the audio version loses the entire point. <span class="basis-tag">external:</span> Claude Vision and GPT-4V can describe technical diagrams with high accuracy. Cost: ~$2-5 for all 633 images at current rates.</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Rationale</dt>
+        <dd>80% of posts contain images. For visual-heavy posts (algorithms, architecture), images ARE the content. Without narration, these posts are half-empty in audio form. The vision API cost is a one-time build-time expense, and descriptions cache with the content-hash system (Idea 1).</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Downsides</dt>
+        <dd>Requires API key for vision service (tension with the project's API-key-avoidance pattern — but build-time only, in GitHub Secrets). Description quality may vary for complex diagrams. External image URLs (many posts reference external images) can't be processed. Regeneration needed when images change.</dd>
+      </div>
+    </dl>
+  </article>
+
+  <!-- Idea 5 -->
+  <article class="idea-card" id="idea5">
+    <header>
+      <span class="idea-rank">5.</span>
+      <span class="idea-title">Podcast RSS + Invisible Audio Player</span>
+      <div class="idea-pills">
+        <span class="pill pill-axis">Integration + UX</span>
+        <span class="pill pill-conf-high">High Confidence</span>
+        <span class="pill pill-complexity">Medium Complexity</span>
+      </div>
+    </header>
+    <dl>
+      <div class="idea-field">
+        <dt>Description</dt>
+        <dd>Two complementary moves in one idea. First: generate an RSS feed at <code>/feed/audio.xml</code> with <code>&lt;enclosure&gt;</code> tags for each post's MP3 — the blog becomes a podcast subscribable in Apple Podcasts, Spotify, and Overcast. Second: inject an invisible audio player via NexT's <code>postBodyEnd</code> + Media Session API — car Bluetooth shows it as a track, phone lock screen shows play/pause/skip, browser media keys work globally. No visible player UI needed for the primary listening scenario (driving/bedtime).</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Basis</dt>
+        <dd><span class="basis-tag">direct:</span> Permalink pattern <code>:year/:month/:day/:name/</code> maps naturally to podcast episode URLs. 12 NexT injection points via <code>source/_data/</code> are unused. <span class="basis-tag">external:</span> Podcast RSS spec requires <code>&lt;enclosure&gt;</code> tags — once the feed has enclosures, any podcast app subscribes. <span class="basis-tag">reasoned:</span> The user said "driving and bedtime" — that's a podcast, not a web player. Nobody opens a browser at 30km/h or in bed.</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Rationale</dt>
+        <dd>A custom audio player on the blog page serves readers who also want audio. A podcast feed serves listeners who may never read the blog. The audio files already exist from Idea 1 — adding enclosures is ~20 lines of code. The Media Session API integration means the driving scenario works with zero custom UI — the phone's native media controls become the blog's audio interface.</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Downsides</dt>
+        <dd>Podcast directory submission requires manual setup (Apple, Spotify). RSS enclosures increase feed size significantly. Media Session API behavior varies across browsers and OS. "Invisible player" may confuse users who expect a visible control.</dd>
+      </div>
+    </dl>
+  </article>
+
+  <!-- Idea 6 -->
+  <article class="idea-card" id="idea6">
+    <header>
+      <span class="idea-rank">6.</span>
+      <span class="idea-title">Layered Listening (概览 / 详解 / 深入)</span>
+      <div class="idea-pills">
+        <span class="pill pill-axis">Listening UX</span>
+        <span class="pill pill-conf-high">High Confidence</span>
+        <span class="pill pill-complexity">Medium Complexity</span>
+      </div>
+    </header>
+    <dl>
+      <div class="idea-field">
+        <dt>Description</dt>
+        <dd>Like museum audio guides offering 3 narration layers per exhibit, each post gets three listening depths: "概览" (overview — reads only the <code>description</code> field, ~1 min), "详解" (detailed — prose + code summaries + table narrations, ~8 min), "深入" (deep dive — full content with structural audio cues). A 15-second pre-listening briefing auto-generated from front-matter plays first: category, content structure, key takeaway. The layer selector lives on the audio player. For 84 posts with descriptions, the overview layer is available today with zero additional authoring.</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Basis</dt>
+        <dd><span class="basis-tag">direct:</span> <code>description</code> field exists on 84 posts (59%) — 2-4 sentence abstracts. <span class="basis-tag">reasoned:</span> Museum audio guides face the identical structural problem — one exhibit serving passerby, learner, and expert through the same audio channel. Their solution (layered depth, user-selected) is battle-tested across millions of visitors. <span class="basis-tag">reasoned:</span> Bedtime favors "概览" (short, conceptual); commute favors "详解"; study session uses "深入".</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Rationale</dt>
+        <dd>Audio consumption is commitment-heavy — you can't skim audio the way you skim text. Without layers, listeners either bounce (never trying audio) or commit to a 40-minute architecture post when they only have 15 minutes. The pre-listening briefing eliminates the "I don't know what I'm listening to" disorientation. One audio pipeline, three consumption modes, zero additional content for posts that already have descriptions.</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Downsides</dt>
+        <dd>Requires generating 3 audio versions per post (3x storage and build time). The 59 posts without <code>description</code> get no overview layer unless descriptions are backfilled. Layer selection adds UI complexity. The "depth" levels need clear boundaries — what's "detailed" vs "deep" for a given post?</dd>
+      </div>
+    </dl>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 600 140" xmlns="http://www.w3.org/2000/svg" style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 11px;">
+        <!-- Three layers -->
+        <rect x="20" y="20" width="160" height="100" rx="8" fill="var(--info-soft)" stroke="var(--info)" stroke-width="1.5"/>
+        <text x="100" y="45" text-anchor="middle" fill="var(--info)" font-weight="700" font-size="14">概览</text>
+        <text x="100" y="65" text-anchor="middle" fill="var(--text-muted)">~1 min</text>
+        <text x="100" y="85" text-anchor="middle" fill="var(--text-secondary)" font-size="10">description field</text>
+        <text x="100" y="100" text-anchor="middle" fill="var(--text-secondary)" font-size="10">+ pre-listening briefing</text>
+
+        <rect x="210" y="10" width="170" height="120" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="295" y="38" text-anchor="middle" fill="var(--accent-text)" font-weight="700" font-size="14">详解</text>
+        <text x="295" y="58" text-anchor="middle" fill="var(--text-muted)">~8 min</text>
+        <text x="295" y="78" text-anchor="middle" fill="var(--text-secondary)" font-size="10">prose + code summaries</text>
+        <text x="295" y="93" text-anchor="middle" fill="var(--text-secondary)" font-size="10">+ table narrations</text>
+        <text x="295" y="108" text-anchor="middle" fill="var(--text-secondary)" font-size="10">+ diagram descriptions</text>
+
+        <rect x="410" y="5" width="175" height="130" rx="8" fill="var(--success-soft)" stroke="var(--success)" stroke-width="1.5"/>
+        <text x="497" y="35" text-anchor="middle" fill="var(--success)" font-weight="700" font-size="14">深入</text>
+        <text x="497" y="55" text-anchor="middle" fill="var(--text-muted)">~15+ min</text>
+        <text x="497" y="75" text-anchor="middle" fill="var(--text-secondary)" font-size="10">full content</text>
+        <text x="497" y="90" text-anchor="middle" fill="var(--text-secondary)" font-size="10">+ structural audio cues</text>
+        <text x="497" y="105" text-anchor="middle" fill="var(--text-secondary)" font-size="10">+ SSML prosody shifts</text>
+        <text x="497" y="120" text-anchor="middle" fill="var(--text-secondary)" font-size="10">+ chapter navigation</text>
+
+        <!-- Bedtime/commute/study labels -->
+        <text x="100" y="137" text-anchor="middle" fill="var(--info)" font-size="10" font-style="italic">睡前模式</text>
+        <text x="295" y="145" text-anchor="middle" fill="var(--accent)" font-size="10" font-style="italic">通勤模式</text>
+        <text x="497" y="150" text-anchor="middle" fill="var(--success)" font-size="10" font-style="italic">深度学习</text>
+      </svg>
+    </div>
+  </article>
+
+  <!-- Idea 7 -->
+  <article class="idea-card" id="idea7">
+    <header>
+      <span class="idea-rank">7.</span>
+      <span class="idea-title">Hybrid TTS Fallback</span>
+      <div class="idea-pills">
+        <span class="pill pill-axis">TTS Engine</span>
+        <span class="pill pill-conf-med">Medium Confidence</span>
+        <span class="pill pill-complexity">Low Complexity</span>
+      </div>
+    </header>
+    <dl>
+      <div class="idea-field">
+        <dt>Description</dt>
+        <dd>When a post loads, a small JS widget checks if a pre-generated audio file exists at <code>/audio/{year}/{month}/{day}/{name}.mp3</code>. If yes, play it (Edge-TTS quality). If no (new post not yet deployed, or first visit), fall back to the Web Speech API for instant browser-native narration — lower quality, but available immediately with zero latency. This gives the author instant feedback while writing; the reader gets high-quality audio once deployed.</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Basis</dt>
+        <dd><span class="basis-tag">reasoned:</span> The two engines solve different problems — Web Speech is "instant, local, preview" while Edge-TTS is "high-quality, deployed, permanent." During authoring, the writer wants to hear their post immediately to check flow — waiting for a GHA deploy cycle (2-5 minutes) to test narration is a dealbreaker. <span class="basis-tag">direct:</span> Web Speech API is free and browser-native; Edge-TTS is free and no-key.</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Rationale</dt>
+        <dd>Removes the "pick one TTS engine" decision. Degrades gracefully: if Edge-TTS fails in CI, the post still has Web Speech fallback; if Web Speech is unavailable (older browser), the post still has Edge-TTS. The author gets instant feedback; the reader gets production quality. Zero additional cost since both are free.</dd>
+      </div>
+      <div class="idea-field">
+        <dt>Downsides</dt>
+        <dd>Two different voice qualities for the same post may feel inconsistent. Web Speech API Chinese quality varies wildly by browser/OS — may sound worse than no audio at all on some devices. Adds complexity to the player JS for engine detection and switching.</dd>
+      </div>
+    </dl>
+  </article>
+</section>
+
+<!-- Rejection Summary -->
+<section id="rejections">
+  <h2>Rejection Summary</h2>
+  <table class="rejection-table">
+    <thead>
+      <tr>
+        <th style="width: 30%">Idea</th>
+        <th>Reason Rejected</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Aviation Readback for Code</td><td>Weak basis — the aviation analogy is creative but the mapping to concrete TTS behavior is forced; unclear what this produces beyond "read comments first"</td></tr>
+      <tr><td>Scroll-Triggered Auto-Play</td><td>Weak basis — the connection between "66% code-heavy posts" and scroll-triggered audio is tenuous; auto-play UX is a separate decision</td></tr>
+      <tr><td>The Silence Architecture</td><td>Too abstract for a blog TTS feature — typed pauses are a radio production concept that doesn't map to concrete implementation</td></tr>
+      <tr><td>Multi-Voice Choreography</td><td>Too ambitious for a static blog — conversation overlap patterns require multi-speaker TTS, no basis for implementation with build-time edge-tts</td></tr>
+      <tr><td>Unreliable Narrator Protocol</td><td>Not applicable — blog posts are edited, finished thoughts, not live reasoning; self-correction doesn't fit the content model</td></tr>
+      <tr><td>Listener Model as Implicit Contract</td><td>Describes a design principle, not a concrete feature — too abstract to implement as a discrete improvement</td></tr>
+      <tr><td>Replay Affordance</td><td>Undefined as a feature — unclear what concrete TTS behavior would make content "reward re-listening"</td></tr>
+      <tr><td>SSML Context-Sensitive Delivery</td><td>Subsumed by Category-to-Voice Mapping (#2) — per-section prosody is a refinement of the voice mapping, not a separate direction</td></tr>
+      <tr><td>Cross-Post Transition Bridges</td><td>Luxury for v1 — DJ-style transitions are valuable but only after multi-post playlist listening is established</td></tr>
+      <tr><td>Screen Reader Landmark Navigation</td><td>Merged into Podcast + Invisible Player (#5) — chapter markers are a component of the listening experience, not a standalone direction</td></tr>
+      <tr><td>Pre-Listening Briefing</td><td>Merged into Layered Listening (#6) — the briefing is the intro to the overview layer, not a separate idea</td></tr>
+      <tr><td>Content-Hash Audio Caching</td><td>Merged into Build-Time Pipeline (#1) — caching is an implementation detail of the build pipeline, not a separate direction</td></tr>
+      <tr><td>GHA-Native Pipeline</td><td>Duplicates Build-Time Pipeline (#1) — "no local tooling" is an attribute of the build-time decision, not a separate idea</td></tr>
+      <tr><td>GPS Progressive Disclosure</td><td>Subsumed by Content Adaptation Layer (#3) — "audio breadcrumbs" are the adaptation strategy for code/tables</td></tr>
+      <tr><td>Museum Multi-Layer Narration</td><td>Merged into Layered Listening (#6) — same idea, absorbed as the primary framing</td></tr>
+      <tr><td>ATC Information Staging</td><td>Merged into Layered Listening (#6) — the briefing is the pre-content intro in the overview layer</td></tr>
+      <tr><td>DJ Harmonic Mixing</td><td>Same as Cross-Post Bridges — deferred to v2 as a playlist refinement</td></tr>
+      <tr><td>Video Game Context-Sensitive Cues</td><td>Subsumed by Category-to-Voice Mapping (#2) — section-type audio shifts are a refinement of voice profiles</td></tr>
+      <tr><td>Scenario-Adaptive Player</td><td>Subsumed by Layered Listening (#6) — "commute" and "wind-down" modes map to the 详解 and 概览 layers</td></tr>
+      <tr><td>Listening-First Summary Card</td><td>Merged into Layered Listening (#6) — the preview/summary is the overview layer entry point</td></tr>
+      <tr><td>Mermaid-to-Narration Filter</td><td>Merged into Content Adaptation Layer (#3) — mermaid narration is one content type in the adaptation pipeline</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer class="composition-signal">
+  Composed 2026-09-12T13:30Z by ce-ideate from focus: <code>tts-voice-narration</code> · 28 raw candidates → 7 survivors across 5 axes · Basis verified by independent auditor (19 sound, 7 weak, 0 refuted)
+</footer>
+
+</div>
