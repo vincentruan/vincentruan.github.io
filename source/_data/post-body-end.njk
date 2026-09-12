@@ -1,0 +1,5 @@
+{# TTS Audio Player marker — injected at postBodyEnd via NexT custom_file_path #}
+{# The actual audio-src is filled in by scripts/tts-inject-player.js #}
+{% if page.tts %}
+<div id="tts-audio-player" class="tts-audio-player" data-page-path="{{ page.path }}"></div>
+{% endif %}

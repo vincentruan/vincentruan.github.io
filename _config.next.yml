@@ -131,3 +131,20 @@ flowchart:
 # Image zoom (click to enlarge) — applies to all post images
 # https://fancyapps.com/fancybox/
 fancybox: true
+
+# ---------------------------------------------------------------
+# TTS Voice Narration
+# ---------------------------------------------------------------
+# Build-time audio generation for posts with front-matter `tts: true`.
+# Requires ANTHROPIC_API_KEY and Python deps in CI (see deploy.yml).
+tts:
+  enable: true
+  voice: "zh-CN-YunjianNeural"   # Azure neural voice
+  rate: "+0%"                     # speech rate adjustment
+  model: "claude-haiku-4-5-20251001"  # Claude model for content adaptation
+
+# Custom file injection points
+custom_file_path:
+  postBodyEnd: source/_data/post-body-end.njk
+  bodyEnd: source/_data/body-end.njk
+  style: source/_data/styles.styl
