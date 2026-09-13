@@ -28,7 +28,20 @@ jobs:
       
       - name: Build site
         run: npx hexo generate
-      
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install TTS dependencies
+        run: pip install -r requirements-tts.txt
+
+      - name: Generate TTS audio
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python tools/tts/generate_audio.py
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
