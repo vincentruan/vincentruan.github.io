@@ -31,7 +31,7 @@
     "hexo-renderer-stylus": "^3.0.1",
     "hexo-server": "^3.0.0",
     "hexo-symbols-count-time": "^0.7.1",
-    "hexo-theme-next": "^8.28.0",
+    "hexo-theme-next": "^8.29.0",
     "highlight.js": "^11.11.1",
     "live2d-widget-model-shizuku": "^1.0.5",
     "md5": "^2.3.0"
@@ -54,7 +54,7 @@
     "striptags": "^3.2.0",
     "js-yaml": "^4.3.2",
     "brace-expansion": "^1.1.18",
-    "dompurify": "^3.4.15",
+    "dompurify": "^3.4.16",
     "morgan": "^1.12.1",
     "nanoid": "^3.3.19"
   }
